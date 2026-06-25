@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import { Children, type PropsWithChildren } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors, spacing, typography } from '../styles/theme';
@@ -15,7 +15,9 @@ export function Screen({ title, subtitle, children }: ScreenProps) {
         <Text style={styles.title}>{title}</Text>
         {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
       </View>
-      {children}
+      {Children.map(children, (child, index) => (
+        <View style={index === 0 ? styles.firstItem : styles.item}>{child}</View>
+      ))}
     </ScrollView>
   );
 }
@@ -26,12 +28,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    gap: spacing.lg,
     padding: spacing.lg,
     paddingBottom: spacing.xxl,
   },
   header: {
-    gap: spacing.sm,
+    marginBottom: spacing.lg,
     paddingTop: spacing.sm,
   },
   title: {
@@ -43,5 +44,12 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.body,
     lineHeight: 22,
+    marginTop: spacing.sm,
+  },
+  firstItem: {
+    marginTop: 0,
+  },
+  item: {
+    marginTop: spacing.lg,
   },
 });

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
@@ -8,6 +8,7 @@ import { Screen } from '../components/Screen';
 import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { RoleplayId, RoleplayScenario } from '../types';
+import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 
 type RoleplayScreenProps = {
   roleplay: RoleplayScenario;
@@ -15,7 +16,21 @@ type RoleplayScreenProps = {
 };
 
 export function RoleplayScreen({ roleplay, onSelectRoleplay }: RoleplayScreenProps) {
-  const [showFeedback, setShowFeedback] = useState(true);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [draftAnswer, setDraftAnswer] = useState('');
+  const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
+
+  function reviewAnswer() {
+    const review = summarizePracticeAnswer(draftAnswer);
+    setAnswerReview(review);
+    setShowFeedback(review.isReadyForFeedback);
+  }
+
+  function clearAnswer() {
+    setDraftAnswer('');
+    setAnswerReview(null);
+    setShowFeedback(false);
+  }
 
   return (
     <Screen
@@ -70,12 +85,35 @@ export function RoleplayScreen({ roleplay, onSelectRoleplay }: RoleplayScreenPro
         </View>
       </Card>
 
+      <Card>
+        <Text style={styles.detailLabel}>Your answer</Text>
+        <TextInput
+          accessibilityLabel="Practice answer"
+          multiline
+          onChangeText={setDraftAnswer}
+          placeholder="Write your first response here..."
+          placeholderTextColor={colors.textMuted}
+          style={styles.answerInput}
+          textAlignVertical="top"
+          value={draftAnswer}
+        />
+        {answerReview ? (
+          <View style={styles.answerReview}>
+            <View style={styles.reviewHeader}>
+              <Text style={styles.reviewLabel}>{answerReview.readinessLabel}</Text>
+              <Text style={styles.wordCount}>{answerReview.wordCount} words</Text>
+            </View>
+            <Text style={styles.reviewNote}>{answerReview.reviewNote}</Text>
+          </View>
+        ) : null}
+      </Card>
+
       <View style={styles.actions}>
         <AppButton
-          label={showFeedback ? 'Hide mock feedback' : 'Show mock feedback'}
-          onPress={() => setShowFeedback((value) => !value)}
+          label="Review answer"
+          onPress={reviewAnswer}
         />
-        <AppButton label="Backend later" onPress={() => setShowFeedback(true)} variant="secondary" />
+        <AppButton label="Clear" onPress={clearAnswer} variant="secondary" />
       </View>
 
       {showFeedback ? <FeedbackPanel feedback={roleplay.feedback} /> : null}
@@ -87,7 +125,6 @@ const styles = StyleSheet.create({
   selector: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
   },
   selectorItem: {
     backgroundColor: colors.surface,
@@ -148,14 +185,52 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   phraseList: {
-    gap: spacing.sm,
+    marginTop: spacing.sm,
   },
   phrase: {
     color: colors.text,
     fontSize: typography.body,
     lineHeight: 22,
   },
+  answerInput: {
+    backgroundColor: colors.background,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    minHeight: 132,
+    padding: spacing.md,
+  },
+  answerReview: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  reviewHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  reviewLabel: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  wordCount: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  reviewNote: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+  },
   actions: {
-    gap: spacing.md,
+    marginTop: spacing.md,
   },
 });

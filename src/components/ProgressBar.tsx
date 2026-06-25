@@ -1,4 +1,3 @@
-import type { DimensionValue } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { colors, radii, spacing, typography } from '../styles/theme';
@@ -9,7 +8,7 @@ type ProgressBarProps = {
 };
 
 export function ProgressBar({ label, value }: ProgressBarProps) {
-  const width = `${Math.max(0, Math.min(value, 100))}%` as DimensionValue;
+  const width = `${Math.max(0, Math.min(value, 100))}%`;
 
   return (
     <View>

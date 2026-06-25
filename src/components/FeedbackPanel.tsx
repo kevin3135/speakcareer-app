@@ -56,16 +56,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   scoreList: {
-    gap: spacing.md,
     marginTop: spacing.lg,
   },
   columns: {
-    gap: spacing.lg,
     marginTop: spacing.lg,
   },
-  column: {
-    gap: spacing.sm,
-  },
+  column: {},
   columnTitle: {
     color: colors.ink,
     fontSize: typography.h3,

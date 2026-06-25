@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   },
   statGrid: {
     flexDirection: 'row',
-    gap: spacing.md,
   },
   statNumber: {
     color: colors.accent,
@@ -118,7 +117,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   progressBlock: {
-    gap: spacing.md,
     marginTop: spacing.lg,
   },
 });

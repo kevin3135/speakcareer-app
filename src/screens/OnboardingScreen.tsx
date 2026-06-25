@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
   },
   brandBlock: {
-    gap: spacing.md,
     paddingTop: spacing.xxl,
   },
   brand: {
@@ -59,6 +58,7 @@ const styles = StyleSheet.create({
     fontSize: typography.h2,
     fontWeight: '700',
     lineHeight: 28,
+    marginTop: spacing.md,
   },
   cardTitle: {
     color: colors.primaryDark,
@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     lineHeight: 23,
   },
   list: {
-    gap: spacing.sm,
     marginTop: spacing.lg,
   },
   item: {
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   footer: {
-    gap: spacing.md,
+    marginTop: spacing.md,
   },
   note: {
     color: colors.textMuted,

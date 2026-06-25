@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
   moduleHeader: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.md,
     justifyContent: 'space-between',
   },
   moduleTitle: {
@@ -79,7 +78,6 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   drills: {
-    gap: spacing.sm,
     marginTop: spacing.md,
   },
   drill: {

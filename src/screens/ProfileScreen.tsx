@@ -59,9 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginBottom: spacing.md,
   },
-  languageList: {
-    gap: spacing.sm,
-  },
+  languageList: {},
   activeLanguage: {
     color: colors.primaryDark,
     fontSize: typography.body,
@@ -71,10 +69,9 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.body,
     fontWeight: '700',
+    marginTop: spacing.sm,
   },
-  integrationList: {
-    gap: spacing.sm,
-  },
+  integrationList: {},
   integration: {
     color: colors.text,
     fontSize: typography.body,

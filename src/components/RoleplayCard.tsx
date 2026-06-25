@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.sm,
     padding: spacing.lg,
   },
   pressed: {
@@ -41,7 +40,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.md,
     justifyContent: 'space-between',
   },
   title: {
@@ -59,15 +57,18 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
     fontSize: typography.body,
     fontWeight: '700',
+    marginTop: spacing.sm,
   },
   description: {
     color: colors.textMuted,
     fontSize: typography.body,
     lineHeight: 22,
+    marginTop: spacing.sm,
   },
   meta: {
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '700',
+    marginTop: spacing.sm,
   },
 });

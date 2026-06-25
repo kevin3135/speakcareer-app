@@ -55,7 +55,6 @@ export function ProgressScreen() {
 const styles = StyleSheet.create({
   statGrid: {
     flexDirection: 'row',
-    gap: spacing.md,
   },
   statNumber: {
     color: colors.accent,
@@ -74,7 +73,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   progressBlock: {
-    gap: spacing.md,
     marginTop: spacing.lg,
   },
   nextFocus: {
@@ -86,7 +84,6 @@ const styles = StyleSheet.create({
   mistakeHeader: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.md,
     justifyContent: 'space-between',
   },
   category: {
