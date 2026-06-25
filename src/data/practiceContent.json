@@ -1,0 +1,247 @@
+{
+  "positioning": "Practice job interviews, meetings and professional conversations with AI.",
+  "firstTargetLanguage": "English",
+  "plannedLanguages": ["Spanish", "French", "Mandarin Chinese"],
+  "practiceModules": [
+    {
+      "id": "interview-basics",
+      "title": "Interview Basics",
+      "outcome": "Answer common interview questions with a clear structure.",
+      "minutes": 12,
+      "level": "Beginner to Intermediate",
+      "drills": [
+        "Tell me about yourself",
+        "Why do you want this role?",
+        "Describe a difficult work situation"
+      ]
+    },
+    {
+      "id": "meeting-updates",
+      "title": "Meeting Updates",
+      "outcome": "Give concise updates and ask useful follow-up questions.",
+      "minutes": 10,
+      "level": "Intermediate",
+      "drills": [
+        "Share a project status update",
+        "Clarify a deadline",
+        "Politely challenge a decision"
+      ]
+    },
+    {
+      "id": "presentation-flow",
+      "title": "Presentation Flow",
+      "outcome": "Open, structure and close a short professional presentation.",
+      "minutes": 15,
+      "level": "Intermediate",
+      "drills": [
+        "Introduce the topic",
+        "Move between points",
+        "Handle one audience question"
+      ]
+    },
+    {
+      "id": "sales-discovery",
+      "title": "Sales Discovery",
+      "outcome": "Ask better discovery questions and respond to objections.",
+      "minutes": 14,
+      "level": "Intermediate",
+      "drills": [
+        "Open a discovery call",
+        "Ask about pain points",
+        "Respond to price hesitation"
+      ]
+    }
+  ],
+  "roleplays": [
+    {
+      "id": "job-interview",
+      "title": "Job Interview",
+      "focus": "Structured answers and confident tone",
+      "targetLanguage": "English",
+      "targetLevel": "B1-B2",
+      "durationMinutes": 12,
+      "description": "Practice a first-round interview for a product or operations role.",
+      "workplaceContext": "A hiring manager wants to understand your experience, motivation and communication style.",
+      "userGoal": "Give focused answers using situation, action and result.",
+      "aiPersona": "Hiring Manager",
+      "openingLine": "Thanks for joining today. Could you start by telling me a little about yourself?",
+      "suggestedPhrases": [
+        "In my previous role, I was responsible for...",
+        "The main challenge was...",
+        "As a result, we improved..."
+      ],
+      "feedback": {
+        "summary": "Your answer is professional and easy to follow. The next improvement is to add one specific result.",
+        "strengths": [
+          "Clear opening sentence",
+          "Good professional vocabulary",
+          "Calm and direct tone"
+        ],
+        "improvements": [
+          "Add one measurable outcome",
+          "Avoid repeating 'I think' too often",
+          "Close with why the role fits your next step"
+        ],
+        "suggestedRewrite": "In my previous role, I coordinated weekly customer feedback reviews. The main challenge was turning scattered notes into clear product priorities. I created a simple scoring system, and as a result, the team reduced follow-up time by about 20%.",
+        "scores": [
+          { "label": "Clarity", "value": 82 },
+          { "label": "Confidence", "value": 74 },
+          { "label": "Structure", "value": 78 },
+          { "label": "Vocabulary", "value": 80 }
+        ]
+      }
+    },
+    {
+      "id": "meeting-practice",
+      "title": "Meeting Practice",
+      "focus": "Concise updates and clarification",
+      "targetLanguage": "English",
+      "targetLevel": "B1-B2",
+      "durationMinutes": 10,
+      "description": "Practice joining a weekly project meeting and giving a useful update.",
+      "workplaceContext": "Your team needs a short update on progress, blockers and next steps.",
+      "userGoal": "Explain what is done, what is blocked and what support you need.",
+      "aiPersona": "Project Lead",
+      "openingLine": "Let's start with your update. What changed since our last meeting?",
+      "suggestedPhrases": [
+        "Since our last meeting, I completed...",
+        "The main blocker is...",
+        "The next step is..."
+      ],
+      "feedback": {
+        "summary": "The update is clear, but it needs a sharper ask at the end.",
+        "strengths": [
+          "Good timeline language",
+          "Clear mention of the blocker",
+          "Polite tone"
+        ],
+        "improvements": [
+          "Make the request more specific",
+          "Separate progress and blockers",
+          "Use fewer filler words"
+        ],
+        "suggestedRewrite": "Since our last meeting, I finished the first draft and shared it with design. The main blocker is that I need final pricing details from finance. Could we confirm who owns that by tomorrow?",
+        "scores": [
+          { "label": "Clarity", "value": 79 },
+          { "label": "Confidence", "value": 70 },
+          { "label": "Structure", "value": 84 },
+          { "label": "Vocabulary", "value": 76 }
+        ]
+      }
+    },
+    {
+      "id": "presentation-practice",
+      "title": "Presentation Practice",
+      "focus": "Opening, transitions and closing",
+      "targetLanguage": "English",
+      "targetLevel": "B2",
+      "durationMinutes": 15,
+      "description": "Practice a short presentation about a business idea or project update.",
+      "workplaceContext": "You are presenting a recommendation to a small leadership group.",
+      "userGoal": "Give a structured opening and transition smoothly between points.",
+      "aiPersona": "Audience Member",
+      "openingLine": "Before you begin, what should we pay attention to during your presentation?",
+      "suggestedPhrases": [
+        "Today I will cover three points...",
+        "This leads to the second point...",
+        "The key takeaway is..."
+      ],
+      "feedback": {
+        "summary": "The presentation has a strong opening. Add clearer signposting before each main point.",
+        "strengths": [
+          "Confident first sentence",
+          "Relevant business language",
+          "Good closing intention"
+        ],
+        "improvements": [
+          "Preview the structure earlier",
+          "Use transition phrases between sections",
+          "End with one specific recommendation"
+        ],
+        "suggestedRewrite": "Today I will cover the customer problem, the proposed solution and the next decision we need. The key takeaway is that we can test this with a small pilot before making a larger investment.",
+        "scores": [
+          { "label": "Clarity", "value": 76 },
+          { "label": "Confidence", "value": 81 },
+          { "label": "Structure", "value": 72 },
+          { "label": "Vocabulary", "value": 83 }
+        ]
+      }
+    },
+    {
+      "id": "sales-call",
+      "title": "Sales Call",
+      "focus": "Discovery questions and objection handling",
+      "targetLanguage": "English",
+      "targetLevel": "B2",
+      "durationMinutes": 14,
+      "description": "Practice a consultative sales conversation with a potential customer.",
+      "workplaceContext": "A prospect is interested but unsure whether the solution is worth the cost.",
+      "userGoal": "Ask about business pain, confirm value and respond calmly to price concerns.",
+      "aiPersona": "Potential Customer",
+      "openingLine": "I understand what your product does, but I'm not sure the price makes sense for us.",
+      "suggestedPhrases": [
+        "Could you tell me more about...",
+        "What would the impact be if...",
+        "It sounds like the main concern is..."
+      ],
+      "feedback": {
+        "summary": "You acknowledged the concern well. Ask one more discovery question before defending the product.",
+        "strengths": [
+          "Good empathy",
+          "Natural objection handling",
+          "Professional tone"
+        ],
+        "improvements": [
+          "Ask about current cost of the problem",
+          "Avoid answering too quickly",
+          "Tie value to the customer's words"
+        ],
+        "suggestedRewrite": "That makes sense. Before we talk about price, could you tell me what this problem currently costs your team in time or missed opportunities?",
+        "scores": [
+          { "label": "Clarity", "value": 80 },
+          { "label": "Confidence", "value": 77 },
+          { "label": "Structure", "value": 75 },
+          { "label": "Vocabulary", "value": 82 }
+        ]
+      }
+    },
+    {
+      "id": "workplace-small-talk",
+      "title": "Workplace Small Talk",
+      "focus": "Natural openings and polite follow-up",
+      "targetLanguage": "English",
+      "targetLevel": "A2-B1",
+      "durationMinutes": 8,
+      "description": "Practice short workplace conversations before meetings or with new colleagues.",
+      "workplaceContext": "You are joining a call a few minutes early with a colleague you do not know well.",
+      "userGoal": "Start a natural conversation and keep it professional.",
+      "aiPersona": "New Colleague",
+      "openingLine": "Hi, I don't think we've met before. How's your day going?",
+      "suggestedPhrases": [
+        "Nice to meet you.",
+        "How long have you been working on this project?",
+        "That sounds interesting."
+      ],
+      "feedback": {
+        "summary": "The conversation sounds friendly and appropriate. Add one follow-up question to keep it moving.",
+        "strengths": [
+          "Warm greeting",
+          "Simple and correct sentences",
+          "Good level of formality"
+        ],
+        "improvements": [
+          "Ask a follow-up question",
+          "Avoid very short one-word answers",
+          "Use the person's name if you know it"
+        ],
+        "suggestedRewrite": "Nice to meet you. My day is going well, thanks. How long have you been working with this team?",
+        "scores": [
+          { "label": "Clarity", "value": 85 },
+          { "label": "Confidence", "value": 68 },
+          { "label": "Structure", "value": 73 },
+          { "label": "Vocabulary", "value": 70 }
+        ]
+      }
+    }
+  ]
+}

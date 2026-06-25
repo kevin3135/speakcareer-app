@@ -1,0 +1,44 @@
+{
+  "summary": {
+    "sessionsCompleted": 7,
+    "minutesPracticed": 84,
+    "currentStreakDays": 3,
+    "confidenceScore": 74,
+    "clarityScore": 81,
+    "nextFocus": "Add measurable results to interview answers."
+  },
+  "mistakeBank": [
+    {
+      "id": "m-001",
+      "category": "Interview Structure",
+      "original": "I worked on many things and it was good for the company.",
+      "correction": "I worked on customer feedback analysis, which helped the team prioritize product fixes.",
+      "note": "Replace vague phrases with a specific action and result.",
+      "priority": "High"
+    },
+    {
+      "id": "m-002",
+      "category": "Meeting Clarity",
+      "original": "Maybe I need something from finance soon.",
+      "correction": "I need the final pricing file from finance by Thursday to finish the proposal.",
+      "note": "Make requests specific: owner, item and deadline.",
+      "priority": "High"
+    },
+    {
+      "id": "m-003",
+      "category": "Sales Calls",
+      "original": "Our product is not expensive because it is good.",
+      "correction": "The price is connected to the time your team can save each month.",
+      "note": "Connect pricing to the customer's business value.",
+      "priority": "Medium"
+    },
+    {
+      "id": "m-004",
+      "category": "Small Talk",
+      "original": "Yes. Good.",
+      "correction": "Yes, it has been a good week. How about yours?",
+      "note": "Add a short follow-up question to keep the conversation natural.",
+      "priority": "Low"
+    }
+  ]
+}

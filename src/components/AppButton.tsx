@@ -1,0 +1,62 @@
+import { Pressable, StyleSheet, Text } from 'react-native';
+
+import { colors, radii, spacing, typography } from '../styles/theme';
+
+type AppButtonProps = {
+  label: string;
+  onPress: () => void;
+  variant?: 'primary' | 'secondary' | 'quiet';
+};
+
+export function AppButton({ label, onPress, variant = 'primary' }: AppButtonProps) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.base,
+        styles[variant],
+        pressed && styles.pressed,
+      ]}
+    >
+      <Text style={[styles.label, variant === 'primary' ? styles.primaryLabel : styles.secondaryLabel]}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  base: {
+    alignItems: 'center',
+    borderRadius: radii.md,
+    justifyContent: 'center',
+    minHeight: 48,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  primary: {
+    backgroundColor: colors.primary,
+  },
+  secondary: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderWidth: 1,
+  },
+  quiet: {
+    backgroundColor: colors.surfaceMuted,
+  },
+  pressed: {
+    opacity: 0.82,
+  },
+  label: {
+    fontSize: typography.body,
+    fontWeight: '700',
+  },
+  primaryLabel: {
+    color: colors.surface,
+  },
+  secondaryLabel: {
+    color: colors.text,
+  },
+});
