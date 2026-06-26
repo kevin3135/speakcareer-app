@@ -115,3 +115,12 @@ test('creates a professional daily mission from progress data', async () => {
   assert.ok(mission.progressPercent >= 0);
   assert.ok(mission.progressPercent <= 100);
 });
+
+test('formats the five-minute focus timer', async () => {
+  const { FOCUS_SESSION_SECONDS, formatFocusTime } = await import('../src/utils/focusTimer.ts');
+
+  assert.equal(FOCUS_SESSION_SECONDS, 300);
+  assert.equal(formatFocusTime(300), '5:00');
+  assert.equal(formatFocusTime(61), '1:01');
+  assert.equal(formatFocusTime(-20), '0:00');
+});

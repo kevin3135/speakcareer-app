@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
+import { LearningPath, type LearningPathStep } from '../components/LearningPath';
 import { ProgressBar } from '../components/ProgressBar';
 import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
@@ -17,12 +18,51 @@ type HomeScreenProps = {
 export function HomeScreen({ onOpenRoleplay }: HomeScreenProps) {
   const featured = practiceContent.roleplays[0];
   const dailyMission = createDailyMission(progressData.summary);
+  const pathSteps: LearningPathStep[] = [
+    {
+      id: 'warm-up',
+      title: 'Warm up phrases',
+      caption: 'Review three strong interview phrases.',
+      state: 'done',
+      xpLabel: '+10 XP',
+    },
+    {
+      id: 'roleplay',
+      title: featured.title,
+      caption: 'Complete one 5-minute career sprint.',
+      state: 'active',
+      xpLabel: dailyMission.rewardLabel,
+      onPress: () => onOpenRoleplay(featured.id),
+    },
+    {
+      id: 'feedback',
+      title: 'Review feedback',
+      caption: 'Save the session and bank one mistake to improve.',
+      state: 'locked',
+      xpLabel: '+15 XP',
+    },
+  ];
 
   return (
     <Screen
       title="SpeakCareer"
       subtitle="Daily career English practice, built for momentum."
     >
+      <View style={styles.statusRail}>
+        <View style={styles.statusItem}>
+          <Text style={styles.statusValue}>{dailyMission.streakDays}</Text>
+          <Text style={styles.statusLabel}>Streak</Text>
+        </View>
+        <View style={styles.statusItem}>
+          <Text style={styles.statusValue}>{dailyMission.level}</Text>
+          <Text style={styles.statusLabel}>Level</Text>
+        </View>
+        <View style={styles.statusItem}>
+          <Text style={styles.statusValue}>{dailyMission.xpToday}</Text>
+          <Text style={styles.statusLabel}>Today XP</Text>
+        </View>
+      </View>
+
       <View style={styles.hero}>
         <View style={styles.heroTopRow}>
           <View style={styles.heroTitleBlock}>
@@ -77,27 +117,12 @@ export function HomeScreen({ onOpenRoleplay }: HomeScreenProps) {
       </Card>
 
       <Card muted>
-        <Text style={styles.sectionTitle}>Career path</Text>
-        <View style={styles.pathStep}>
-          <Text style={styles.stepBadge}>1</Text>
-          <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Read the prompt</Text>
-            <Text style={styles.stepCopy}>Understand the workplace situation.</Text>
-          </View>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Daily path</Text>
+          <Text style={styles.sectionMeta}>3 steps</Text>
         </View>
-        <View style={styles.pathStep}>
-          <Text style={styles.stepBadge}>2</Text>
-          <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Answer out loud or type</Text>
-            <Text style={styles.stepCopy}>Use clear structure and professional phrases.</Text>
-          </View>
-        </View>
-        <View style={styles.pathStep}>
-          <Text style={styles.stepBadge}>3</Text>
-          <View style={styles.stepBody}>
-            <Text style={styles.stepTitle}>Save the session</Text>
-            <Text style={styles.stepCopy}>Build your progress history and mistake bank.</Text>
-          </View>
+        <View style={styles.pathBlock}>
+          <LearningPath steps={pathSteps} />
         </View>
       </Card>
 
@@ -122,6 +147,30 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     marginBottom: spacing.sm,
+    textTransform: 'uppercase',
+  },
+  statusRail: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: 'row',
+    padding: spacing.sm,
+  },
+  statusItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statusValue: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  statusLabel: {
+    color: colors.textMuted,
+    fontSize: 11,
+    fontWeight: '800',
+    marginTop: spacing.xs,
     textTransform: 'uppercase',
   },
   hero: {
@@ -251,35 +300,7 @@ const styles = StyleSheet.create({
   progressBlock: {
     marginTop: spacing.lg,
   },
-  pathStep: {
-    flexDirection: 'row',
-    marginTop: spacing.lg,
-  },
-  stepBadge: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    color: colors.surface,
-    fontSize: typography.body,
-    fontWeight: '900',
-    height: 34,
-    lineHeight: 34,
-    marginRight: spacing.md,
-    overflow: 'hidden',
-    textAlign: 'center',
-    width: 34,
-  },
-  stepBody: {
-    flex: 1,
-  },
-  stepTitle: {
-    color: colors.ink,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  stepCopy: {
-    color: colors.textMuted,
-    fontSize: typography.small,
-    lineHeight: 18,
-    marginTop: spacing.xs,
+  pathBlock: {
+    marginTop: spacing.md,
   },
 });

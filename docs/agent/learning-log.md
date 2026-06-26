@@ -208,3 +208,52 @@ Agent memory for next time:
 Next suggested task:
 
 - Add follow-up prompt variants for one roleplay so the experience feels more conversational.
+
+## 2026-06-26: Businesslike Language-App Design Pass
+
+Built one focused improvement: SpeakCareer now uses a more polished language-app inspired design system while staying professional. The Home screen has a status rail, daily path and XP-focused mission flow. Practice cards now show XP rewards and scan-friendly drill chips. Roleplay now includes a real 5-minute focus sprint timer with start, pause and reset controls.
+
+Design inspiration reviewed:
+
+- Duolingo-style path, streak, XP and bite-sized progression.
+- Babbel-style adult minimal lesson cards and clear primary action.
+- Busuu-style progress dashboard and learning milestones.
+
+What went well:
+
+- The app feels more habit-forming without adding childish characters or copying another brand.
+- The 5-minute timer makes the practice loop more functional: sprint, answer, review, save.
+- Added a reusable `LearningPath` component and isolated focus timer utility.
+- Existing Expo SDK 54 compatibility stayed intact.
+
+What went wrong:
+
+- The design is still code-only with no custom brand imagery yet.
+- The timer and XP are local only and do not persist after app restart.
+- React lint flagged direct state reset inside an effect; the Roleplay screen now remounts by scenario key instead.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep using learning-app patterns: path, streak, XP, short sessions and immediate feedback.
+- Do not copy Duolingo, Babbel or Busuu visuals directly; use them only as product inspiration.
+- The next step should make Roleplay feel more interactive with follow-up prompts, not add backend yet.
+
+Next suggested task:
+
+- Add one follow-up question after feedback so each roleplay becomes a two-turn conversation.

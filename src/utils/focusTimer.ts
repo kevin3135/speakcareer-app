@@ -1,0 +1,9 @@
+export const FOCUS_SESSION_SECONDS = 5 * 60;
+
+export function formatFocusTime(totalSeconds: number) {
+  const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+  const minutes = Math.floor(safeSeconds / 60);
+  const seconds = safeSeconds % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}

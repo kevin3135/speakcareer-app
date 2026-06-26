@@ -43,6 +43,7 @@ export function AppNavigator() {
         {activeScreen === 'Practice' ? <PracticeScreen onOpenRoleplay={openRoleplay} /> : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
+            key={selectedRoleplay.id}
             onSaveSession={savePracticeSession}
             roleplay={selectedRoleplay}
             onSelectRoleplay={openRoleplay}

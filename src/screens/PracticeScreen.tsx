@@ -20,14 +20,21 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
       {practiceContent.practiceModules.map((module) => (
         <Card key={module.id}>
           <View style={styles.moduleHeader}>
-            <Text style={styles.moduleTitle}>{module.title}</Text>
-            <Text style={styles.minutes}>{module.minutes} min</Text>
+            <View style={styles.moduleTitleBlock}>
+              <Text style={styles.moduleTitle}>{module.title}</Text>
+              <Text style={styles.level}>{module.level}</Text>
+            </View>
+            <View style={styles.rewardPill}>
+              <Text style={styles.rewardValue}>+{module.minutes * 3} XP</Text>
+              <Text style={styles.minutes}>{module.minutes} min</Text>
+            </View>
           </View>
           <Text style={styles.outcome}>{module.outcome}</Text>
-          <Text style={styles.level}>{module.level}</Text>
           <View style={styles.drills}>
             {module.drills.map((drill) => (
-              <Text key={drill} style={styles.drill}>- {drill}</Text>
+              <View key={drill} style={styles.drillChip}>
+                <Text style={styles.drill}>{drill}</Text>
+              </View>
             ))}
           </View>
         </Card>
@@ -50,20 +57,37 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
 
 const styles = StyleSheet.create({
   moduleHeader: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  moduleTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
   moduleTitle: {
     color: colors.ink,
-    flex: 1,
     fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  rewardPill: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: 8,
+    minWidth: 76,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  rewardValue: {
+    color: colors.ink,
+    fontSize: typography.small,
     fontWeight: '900',
   },
   minutes: {
     color: colors.accent,
-    fontSize: typography.small,
+    fontSize: 11,
     fontWeight: '900',
+    marginTop: spacing.xs,
   },
   outcome: {
     color: colors.textMuted,
@@ -75,15 +99,25 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '800',
-    marginTop: spacing.md,
+    marginTop: spacing.xs,
   },
   drills: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: spacing.md,
+  },
+  drillChip: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: 8,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   drill: {
     color: colors.text,
-    fontSize: typography.body,
-    lineHeight: 22,
+    fontSize: typography.small,
+    fontWeight: '800',
   },
   sectionHeader: {
     alignItems: 'center',

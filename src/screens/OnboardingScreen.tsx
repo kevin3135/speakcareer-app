@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
@@ -11,10 +11,26 @@ type OnboardingScreenProps = {
 
 export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.brandBlock}>
+        <Text style={styles.kicker}>Career English trainer</Text>
         <Text style={styles.brand}>SpeakCareer</Text>
         <Text style={styles.positioning}>{practiceContent.positioning}</Text>
+      </View>
+
+      <View style={styles.previewRail}>
+        <View style={styles.previewTile}>
+          <Text style={styles.previewValue}>5</Text>
+          <Text style={styles.previewLabel}>roleplays</Text>
+        </View>
+        <View style={styles.previewTile}>
+          <Text style={styles.previewValue}>5:00</Text>
+          <Text style={styles.previewLabel}>sprints</Text>
+        </View>
+        <View style={styles.previewTile}>
+          <Text style={styles.previewValue}>XP</Text>
+          <Text style={styles.previewLabel}>feedback</Text>
+        </View>
       </View>
 
       <Card>
@@ -34,19 +50,26 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
         <AppButton label="Start practicing" onPress={onContinue} />
         <Text style={styles.note}>Spanish, French and Mandarin Chinese are planned after the English MVP is solid.</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'space-between',
     padding: spacing.xl,
   },
   brandBlock: {
     paddingTop: spacing.xxl,
+  },
+  kicker: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.sm,
+    textTransform: 'uppercase',
   },
   brand: {
     color: colors.ink,
@@ -59,6 +82,31 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 28,
     marginTop: spacing.md,
+  },
+  previewRail: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 8,
+    borderWidth: 1,
+    flexDirection: 'row',
+    padding: spacing.sm,
+  },
+  previewTile: {
+    alignItems: 'center',
+    flex: 1,
+    paddingVertical: spacing.sm,
+  },
+  previewValue: {
+    color: colors.primaryDark,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  previewLabel: {
+    color: colors.textMuted,
+    fontSize: 11,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+    textTransform: 'uppercase',
   },
   cardTitle: {
     color: colors.primaryDark,

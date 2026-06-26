@@ -9,6 +9,7 @@ import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
+import { FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 
@@ -24,10 +25,27 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
   const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
+  const [timerSeconds, setTimerSeconds] = useState(FOCUS_SESSION_SECONDS);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   useEffect(() => {
-    clearAnswer();
-  }, [roleplay.id]);
+    if (!isTimerRunning) {
+      return undefined;
+    }
+
+    const timer = setInterval(() => {
+      setTimerSeconds((seconds) => {
+        if (seconds <= 1) {
+          setIsTimerRunning(false);
+          return 0;
+        }
+
+        return seconds - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isTimerRunning]);
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
@@ -39,12 +57,26 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     setSavedSessionId(null);
   }
 
+  function toggleFocusTimer() {
+    if (timerSeconds === 0) {
+      setTimerSeconds(FOCUS_SESSION_SECONDS);
+    }
+
+    setIsTimerRunning((running) => !running);
+  }
+
+  function resetFocusTimer() {
+    setIsTimerRunning(false);
+    setTimerSeconds(FOCUS_SESSION_SECONDS);
+  }
+
   function clearAnswer() {
     setDraftAnswer('');
     setAnswerReview(null);
     setFeedbackResult(null);
     setShowFeedback(false);
     setSavedSessionId(null);
+    resetFocusTimer();
   }
 
   function saveSession() {
@@ -61,6 +93,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     });
 
     setSavedSessionId(session.id);
+    setIsTimerRunning(false);
     onSaveSession(session);
   }
 
@@ -106,6 +139,39 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
       <Card muted>
         <Text style={styles.detailLabel}>{roleplay.aiPersona} opens with</Text>
         <Text style={styles.openingLine}>{roleplay.openingLine}</Text>
+      </Card>
+
+      <Card>
+        <View style={styles.timerHeader}>
+          <View>
+            <Text style={styles.detailLabel}>Focus timer</Text>
+            <Text style={styles.timerTitle}>5-minute career sprint</Text>
+          </View>
+          <View style={styles.timerPill}>
+            <Text style={styles.timerValue}>{formatFocusTime(timerSeconds)}</Text>
+          </View>
+        </View>
+        <Text style={styles.timerCopy}>
+          Stay in one realistic conversation, write the answer, then review for XP.
+        </Text>
+        <View style={styles.timerActions}>
+          <Pressable
+            accessibilityRole="button"
+            onPress={toggleFocusTimer}
+            style={({ pressed }) => [styles.timerButton, pressed && styles.timerButtonPressed]}
+          >
+            <Text style={styles.timerButtonText}>
+              {isTimerRunning ? 'Pause' : timerSeconds === 0 ? 'Restart' : 'Start'}
+            </Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            onPress={resetFocusTimer}
+            style={({ pressed }) => [styles.timerButtonSecondary, pressed && styles.timerButtonPressed]}
+          >
+            <Text style={styles.timerButtonSecondaryText}>Reset</Text>
+          </Pressable>
+        </View>
       </Card>
 
       <Card>
@@ -231,6 +297,73 @@ const styles = StyleSheet.create({
     fontSize: typography.h2,
     fontWeight: '700',
     lineHeight: 28,
+  },
+  timerHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  timerTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  timerPill: {
+    alignItems: 'center',
+    backgroundColor: colors.infoSoft,
+    borderRadius: radii.md,
+    minWidth: 86,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  timerValue: {
+    color: colors.info,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  timerCopy: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  timerActions: {
+    flexDirection: 'row',
+    marginTop: spacing.lg,
+  },
+  timerButton: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radii.md,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: spacing.lg,
+  },
+  timerButtonSecondary: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    marginLeft: spacing.md,
+    minHeight: 44,
+    paddingHorizontal: spacing.lg,
+  },
+  timerButtonPressed: {
+    opacity: 0.82,
+  },
+  timerButtonText: {
+    color: colors.surface,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  timerButtonSecondaryText: {
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '900',
   },
   phraseList: {
     marginTop: spacing.sm,

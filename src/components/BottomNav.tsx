@@ -24,6 +24,7 @@ export function BottomNav({ activeScreen, onChange }: BottomNavProps) {
             onPress={() => onChange(tab)}
             style={[styles.tab, isActive && styles.activeTab]}
           >
+            <View style={[styles.indicator, isActive && styles.activeIndicator]} />
             <Text style={[styles.label, isActive && styles.activeLabel]}>{tab}</Text>
           </Pressable>
         );
@@ -39,18 +40,29 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     flexDirection: 'row',
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.sm,
   },
   tab: {
     alignItems: 'center',
-    borderRadius: 6,
+    borderRadius: 8,
     flex: 1,
     minHeight: 44,
     justifyContent: 'center',
     paddingHorizontal: 2,
   },
   activeTab: {
-    backgroundColor: colors.surfaceMuted,
+    backgroundColor: colors.primarySoft,
+  },
+  indicator: {
+    backgroundColor: 'transparent',
+    borderRadius: 4,
+    height: 3,
+    marginBottom: spacing.xs,
+    width: 22,
+  },
+  activeIndicator: {
+    backgroundColor: colors.primary,
   },
   label: {
     color: colors.textMuted,

@@ -17,7 +17,12 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.md,
     borderWidth: 1,
+    elevation: 1,
     padding: spacing.lg,
+    shadowColor: colors.ink,
+    shadowOffset: { height: 1, width: 0 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
   },
   muted: {
     backgroundColor: colors.surfaceMuted,
