@@ -1459,3 +1459,44 @@ Agent memory for next time:
 Next suggested task:
 
 - Visually test the Roleplay completion flow in Expo and adjust spacing if needed.
+
+## 2026-06-26: Completion Card Stat Spacing
+
+Built one focused improvement: the roleplay completion card now adds spacing between the Reward and Saved in stat boxes so the card reads more cleanly on narrow mobile screens.
+
+What went well:
+
+- The change keeps the completion UI calmer and easier to scan.
+- It stayed extremely small and did not change navigation, data or reward logic.
+- The existing completion-card flow remains intact.
+
+What went wrong:
+
+- This was a code-level spacing polish, not a full Expo visual QA pass.
+- The completion card still needs a real mobile screenshot check.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The completion stat row uses `completionStatSecondary` for horizontal spacing.
+- A real Expo mobile visual check is still worth doing before larger UI changes.
+- Keep mobile completion UI uncluttered because the card already has three actions.
+
+Next suggested task:
+
+- Run a real Expo visual check of the completion card and adjust action layout if it feels too busy.

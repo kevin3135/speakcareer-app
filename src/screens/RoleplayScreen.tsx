@@ -358,7 +358,7 @@ export function RoleplayScreen({
               <Text style={styles.completionStatLabel}>Reward</Text>
               <Text style={styles.completionStatValue}>{completionSummary.rewardLabel}</Text>
             </View>
-            <View style={styles.completionStat}>
+            <View style={[styles.completionStat, styles.completionStatSecondary]}>
               <Text style={styles.completionStatLabel}>Saved in</Text>
               <Text style={styles.completionStatValue}>Progress</Text>
             </View>
@@ -805,6 +805,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     padding: spacing.md,
+  },
+  completionStatSecondary: {
+    marginLeft: spacing.sm,
   },
   completionStatLabel: {
     color: colors.textMuted,
