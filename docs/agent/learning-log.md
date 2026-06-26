@@ -515,3 +515,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add simple Practice filters for scenario category or level.
+
+## 2026-06-26: Practice Level Filters
+
+Built one focused improvement: the Practice screen now has level filters for the roleplay library. Users can choose All, B1-B2, B2 or A2-B1 and immediately see the matching scenarios.
+
+What went well:
+
+- The filter uses existing content data and does not require a larger content model.
+- The UI is simple and familiar, using professional filter chips.
+- The filtering logic is isolated in `src/utils/roleplayFilters.ts`.
+- Added tests for available filters and filtered roleplay results.
+
+What went wrong:
+
+- Filters are only level-based for now; category filters can come next.
+- Filter state is local to the Practice screen and resets when the screen remounts.
+- The roleplay library is still small, so the filter is more useful as foundation than immediate necessity.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Practice now has the foundation for better content browsing.
+- A useful next step is adding category tags/filters for Interview, Meeting, Presentation, Sales and Small Talk.
+- Keep the filter system simple until the roleplay library grows.
+
+Next suggested task:
+
+- Add category tags and category filters to the Practice roleplay library.

@@ -1,17 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Card } from '../components/Card';
 import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
 import { practiceContent } from '../data/content';
-import { colors, spacing, typography } from '../styles/theme';
+import { colors, radii, spacing, typography } from '../styles/theme';
 import type { RoleplayId } from '../types';
+import {
+  ALL_LEVELS_FILTER,
+  filterRoleplaysByLevel,
+  getRoleplayLevelFilters,
+  type RoleplayLevelFilter,
+} from '../utils/roleplayFilters';
 
 type PracticeScreenProps = {
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
 };
 
 export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
+  const [selectedLevel, setSelectedLevel] = useState<RoleplayLevelFilter>(ALL_LEVELS_FILTER);
+  const levelFilters = getRoleplayLevelFilters(practiceContent.roleplays);
+  const filteredRoleplays = filterRoleplaysByLevel(practiceContent.roleplays, selectedLevel);
+
   return (
     <Screen
       title="Practice"
@@ -42,9 +53,30 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
 
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Roleplays</Text>
-        <Text style={styles.sectionMeta}>{practiceContent.roleplays.length} scenarios</Text>
+        <Text style={styles.sectionMeta}>{filteredRoleplays.length} scenarios</Text>
       </View>
-      {practiceContent.roleplays.map((roleplay) => (
+      <View style={styles.filterRow}>
+        {levelFilters.map((level) => {
+          const isActive = level === selectedLevel;
+
+          return (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ selected: isActive }}
+              key={level}
+              onPress={() => setSelectedLevel(level)}
+              style={({ pressed }) => [
+                styles.filterChip,
+                isActive && styles.filterChipActive,
+                pressed && styles.filterChipPressed,
+              ]}
+            >
+              <Text style={[styles.filterText, isActive && styles.filterTextActive]}>{level}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      {filteredRoleplays.map((roleplay) => (
         <RoleplayCard
           key={roleplay.id}
           roleplay={roleplay}
@@ -134,5 +166,34 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '700',
+  },
+  filterRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  filterChip: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.sm,
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  filterChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  filterChipPressed: {
+    opacity: 0.82,
+  },
+  filterText: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  filterTextActive: {
+    color: colors.surface,
   },
 });

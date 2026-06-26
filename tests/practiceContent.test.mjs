@@ -153,6 +153,24 @@ test('adds saved sessions to local progress and daily mission', async () => {
   assert.ok(twoRoleplayMission.progressPercent < 100);
 });
 
+test('filters roleplays by target level', async () => {
+  const {
+    ALL_LEVELS_FILTER,
+    filterRoleplaysByLevel,
+    getRoleplayLevelFilters,
+  } = await import('../src/utils/roleplayFilters.ts');
+
+  assert.deepEqual(getRoleplayLevelFilters(practiceContent.roleplays), [
+    ALL_LEVELS_FILTER,
+    'B1-B2',
+    'B2',
+    'A2-B1',
+  ]);
+  assert.equal(filterRoleplaysByLevel(practiceContent.roleplays, ALL_LEVELS_FILTER).length, 5);
+  assert.equal(filterRoleplaysByLevel(practiceContent.roleplays, 'B2').length, 2);
+  assert.equal(filterRoleplaysByLevel(practiceContent.roleplays, 'A2-B1')[0].title, 'Workplace Small Talk');
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
