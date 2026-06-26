@@ -62,8 +62,8 @@
       "targetLevel": "B1-B2",
       "durationMinutes": 12,
       "description": "Practice a first-round interview for a product or operations role.",
-      "workplaceContext": "A hiring manager wants to understand your experience, motivation and communication style.",
-      "userGoal": "Give focused answers using situation, action and result.",
+      "workplaceContext": "A hiring manager asks about your experience and motivation.",
+      "userGoal": "Answer with situation, action and result.",
       "aiPersona": "Hiring Manager",
       "openingLine": "Thanks for joining today. Could you start by telling me a little about yourself?",
       "promptVariants": [
@@ -71,7 +71,7 @@
           "id": "tell-me-about-yourself",
           "title": "Tell me about yourself",
           "openingLine": "Thanks for joining today. Could you start by telling me a little about yourself?",
-          "userGoal": "Give a concise career story with your role, strongest proof point and reason for applying.",
+          "userGoal": "Give a short career story: role, proof point and why this role.",
           "coachingNote": "Use present, past and future: who you are now, what experience proves it and why this role is next.",
           "suggestedPhrases": [
             "Currently, I focus on...",
@@ -89,7 +89,7 @@
           "id": "role-motivation",
           "title": "Why this role?",
           "openingLine": "What interests you most about this role and our company?",
-          "userGoal": "Connect your motivation to the role, the company and your next professional step.",
+          "userGoal": "Link your motivation to the role and your next step.",
           "coachingNote": "Avoid a generic answer. Mention one role requirement and one reason it fits your experience.",
           "suggestedPhrases": [
             "What interests me most is...",
@@ -107,7 +107,7 @@
           "id": "difficult-situation",
           "title": "Difficult situation",
           "openingLine": "Can you describe a difficult work situation and how you handled it?",
-          "userGoal": "Use situation, action and result with one clear lesson learned.",
+          "userGoal": "Use situation, action, result and one lesson learned.",
           "coachingNote": "Keep the problem short, spend most of the answer on what you did and end with the result.",
           "suggestedPhrases": [
             "The situation was challenging because...",
@@ -161,8 +161,8 @@
       "targetLevel": "B1-B2",
       "durationMinutes": 10,
       "description": "Practice joining a weekly project meeting and giving a useful update.",
-      "workplaceContext": "Your team needs a short update on progress, blockers and next steps.",
-      "userGoal": "Explain what is done, what is blocked and what support you need.",
+      "workplaceContext": "Your team needs a quick update on progress and blockers.",
+      "userGoal": "Share progress, blocker and the support you need.",
       "aiPersona": "Project Lead",
       "openingLine": "Let's start with your update. What changed since our last meeting?",
       "promptVariants": [
@@ -170,7 +170,7 @@
           "id": "status-update",
           "title": "Status update",
           "openingLine": "Let's start with your update. What changed since our last meeting?",
-          "userGoal": "Explain what is done, what is blocked and what support you need.",
+          "userGoal": "Share progress, blocker and the support you need.",
           "coachingNote": "Use three short parts: progress, blocker and next step.",
           "suggestedPhrases": [
             "Since our last meeting, I completed...",
@@ -188,7 +188,7 @@
           "id": "clarify-deadline",
           "title": "Clarify deadline",
           "openingLine": "The timeline looks tight. What deadline or dependency do you need clarified?",
-          "userGoal": "Ask for one specific clarification without sounding defensive.",
+          "userGoal": "Ask one clear question without sounding defensive.",
           "coachingNote": "Name the dependency, explain the risk briefly and ask for a clear owner or date.",
           "suggestedPhrases": [
             "Could we clarify the deadline for...",
@@ -206,7 +206,7 @@
           "id": "challenge-decision",
           "title": "Challenge decision",
           "openingLine": "I think we should move forward with the current plan. Do you see any risks?",
-          "userGoal": "Politely challenge the plan with one risk and one constructive alternative.",
+          "userGoal": "Challenge politely with one risk and one alternative.",
           "coachingNote": "Start by acknowledging the plan, then add your concern and suggest a practical next step.",
           "suggestedPhrases": [
             "I understand the reason for that decision.",
@@ -260,8 +260,8 @@
       "targetLevel": "B2",
       "durationMinutes": 15,
       "description": "Practice a short presentation about a business idea or project update.",
-      "workplaceContext": "You are presenting a recommendation to a small leadership group.",
-      "userGoal": "Give a structured opening and transition smoothly between points.",
+      "workplaceContext": "You are presenting a recommendation to leaders.",
+      "userGoal": "Open clearly and move smoothly between points.",
       "aiPersona": "Audience Member",
       "openingLine": "Before you begin, what should we pay attention to during your presentation?",
       "promptVariants": [
@@ -269,7 +269,7 @@
           "id": "opening-agenda",
           "title": "Opening agenda",
           "openingLine": "Before you begin, what should we pay attention to during your presentation?",
-          "userGoal": "Open with the topic, the three-part structure and the decision you want from the audience.",
+          "userGoal": "Open with topic, structure and the decision you need.",
           "coachingNote": "Start with the purpose, preview the structure and tell the audience what decision or takeaway matters.",
           "suggestedPhrases": [
             "Today I will cover three points...",
@@ -287,7 +287,7 @@
           "id": "smooth-transition",
           "title": "Smooth transition",
           "openingLine": "You finished your first point. How would you move naturally into the second point?",
-          "userGoal": "Use a clear transition that connects the previous point to the next business reason.",
+          "userGoal": "Connect the previous point to the next business reason.",
           "coachingNote": "Avoid saying only 'next'. Link the ideas with a phrase like 'This matters because...' or 'That leads to...'.",
           "suggestedPhrases": [
             "This leads to the next point...",
@@ -305,7 +305,7 @@
           "id": "handle-challenge",
           "title": "Handle challenge",
           "openingLine": "I understand the recommendation, but why should we prioritize this now?",
-          "userGoal": "Answer a skeptical question with calm reasoning, evidence and one practical next step.",
+          "userGoal": "Answer calmly with evidence and one next step.",
           "coachingNote": "Acknowledge the concern first, then give one reason, one proof point and a small next step.",
           "suggestedPhrases": [
             "That is a fair concern.",
@@ -359,8 +359,8 @@
       "targetLevel": "B2",
       "durationMinutes": 14,
       "description": "Practice a consultative sales conversation with a potential customer.",
-      "workplaceContext": "A prospect is interested but unsure whether the solution is worth the cost.",
-      "userGoal": "Ask about business pain, confirm value and respond calmly to price concerns.",
+      "workplaceContext": "A prospect likes the idea but questions the cost.",
+      "userGoal": "Ask about pain, confirm value and handle price calmly.",
       "aiPersona": "Potential Customer",
       "openingLine": "I understand what your product does, but I'm not sure the price makes sense for us.",
       "promptVariants": [
@@ -368,7 +368,7 @@
           "id": "price-concern",
           "title": "Price concern",
           "openingLine": "I understand what your product does, but I'm not sure the price makes sense for us.",
-          "userGoal": "Acknowledge the price concern, ask one discovery question and connect value to business impact.",
+          "userGoal": "Acknowledge price, ask one question and link value to impact.",
           "coachingNote": "Do not defend the price immediately. First learn what the problem currently costs them.",
           "suggestedPhrases": [
             "That makes sense. Can I ask what this problem currently costs you?",
@@ -386,7 +386,7 @@
           "id": "timing-concern",
           "title": "Timing concern",
           "openingLine": "This looks interesting, but I don't think this is the right time for us.",
-          "userGoal": "Explore the timing concern and identify whether there is a smaller next step.",
+          "userGoal": "Explore timing and suggest a smaller next step.",
           "coachingNote": "Ask what would need to change for this to become a priority, then suggest a low-pressure next action.",
           "suggestedPhrases": [
             "What would need to change for this to become a priority?",
@@ -404,7 +404,7 @@
           "id": "existing-tool",
           "title": "Existing tool",
           "openingLine": "We already use another tool for this, so I'm not sure we need to change anything.",
-          "userGoal": "Respect the current setup, ask what is working and uncover one gap or improvement area.",
+          "userGoal": "Respect their setup and uncover one gap.",
           "coachingNote": "Do not attack their current tool. Compare outcomes, workflow friction or missed opportunities.",
           "suggestedPhrases": [
             "It's good that you already have a process in place.",
@@ -458,8 +458,8 @@
       "targetLevel": "A2-B1",
       "durationMinutes": 8,
       "description": "Practice short workplace conversations before meetings or with new colleagues.",
-      "workplaceContext": "You are joining a call a few minutes early with a colleague you do not know well.",
-      "userGoal": "Start a natural conversation and keep it professional.",
+      "workplaceContext": "You join a call early with a new colleague.",
+      "userGoal": "Start naturally and keep it professional.",
       "aiPersona": "New Colleague",
       "openingLine": "Hi, I don't think we've met before. How's your day going?",
       "promptVariants": [
@@ -467,7 +467,7 @@
           "id": "quick-introduction",
           "title": "Quick introduction",
           "openingLine": "Hi, I don't think we've met before. How's your day going?",
-          "userGoal": "Introduce yourself warmly, say your role and ask one simple professional question.",
+          "userGoal": "Introduce yourself, your role and one simple work question.",
           "coachingNote": "Keep it light: greeting, name, role and one easy question about their work or project.",
           "suggestedPhrases": [
             "Nice to meet you. I work on the product team.",
@@ -485,7 +485,7 @@
           "id": "friendly-follow-up",
           "title": "Friendly follow-up",
           "openingLine": "I'm doing well, thanks. I've been busy with this project all week.",
-          "userGoal": "Respond naturally and ask a friendly follow-up question without becoming too personal.",
+          "userGoal": "Respond naturally and ask a friendly work question.",
           "coachingNote": "Show interest in the work, not private details. A good follow-up keeps the conversation moving.",
           "suggestedPhrases": [
             "That sounds like a busy week.",
@@ -503,7 +503,7 @@
           "id": "move-to-meeting",
           "title": "Move to meeting",
           "openingLine": "It was nice chatting. I think everyone is joining now.",
-          "userGoal": "Politely close the small talk and move into the meeting topic.",
+          "userGoal": "Close the chat politely and move to the meeting topic.",
           "coachingNote": "Use a short bridge phrase like 'Shall we get started?' or 'Maybe we can begin with the agenda.'",
           "suggestedPhrases": [
             "It was nice chatting before the meeting.",

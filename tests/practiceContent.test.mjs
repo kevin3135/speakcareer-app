@@ -668,6 +668,22 @@ test('creates one read-first card from roleplay prompt details', async () => {
   assert.ok(variantCard.context.includes('hiring manager'));
 });
 
+test('keeps read-first card copy concise for mobile scanning', async () => {
+  const { createRoleplayReadCard } = await import('../src/utils/roleplayReadCard.ts');
+
+  for (const roleplay of practiceContent.roleplays) {
+    const defaultCard = createRoleplayReadCard({ roleplay });
+    assert.ok(defaultCard.details[0].text.length <= 70);
+    assert.ok(defaultCard.details[1].text.length <= 72);
+
+    for (const variant of roleplay.promptVariants) {
+      const variantCard = createRoleplayReadCard({ activePromptVariant: variant, roleplay });
+      assert.ok(variantCard.details[0].text.length <= 70);
+      assert.ok(variantCard.details[1].text.length <= 72);
+    }
+  }
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');

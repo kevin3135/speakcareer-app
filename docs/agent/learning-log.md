@@ -2186,3 +2186,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Shorten the roleplay workplace context and user goal copy so each read-first row stays under two mobile lines where possible.
+
+## 2026-06-26: Short Read-First Copy
+
+Built one focused improvement: the Situation and Goal copy for all five English roleplays and their practice angles is shorter and easier to scan on mobile.
+
+What went well:
+
+- The Job Interview read-first card now shows shorter Situation and Goal rows in the mobile preview.
+- The wording keeps the professional practice intent while removing extra phrasing.
+- A new test keeps read-first card detail rows under concise mobile-friendly limits.
+- The change stays inside local mock content and does not touch backend, auth, payments or secrets.
+
+What went wrong:
+
+- Shorter copy can lose nuance, so future content work should verify each roleplay still feels realistic.
+- The opening-line card is still visually heavier than the Situation and Goal rows.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 34 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep mobile read-first rows short enough to scan before writing.
+- If copy gets shorter, preserve the business action the user should practice.
+- The next small task should reduce the visual weight of the AI opening line or make Step 2 even easier to start.
+
+Next suggested task:
+
+- Make the AI opening line in the read-first card more compact so Step 2 moves closer on mobile.
