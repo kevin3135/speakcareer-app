@@ -53,3 +53,23 @@ test('reviews typed roleplay answers with simple local rules', async () => {
   assert.equal(review.isReadyForFeedback, true);
   assert.ok(review.wordCount >= 12);
 });
+
+test('creates local practice sessions from reviewed answers', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createPracticeSession } = await import('../src/utils/sessionHistory.ts');
+  const roleplay = practiceContent.roleplays[0];
+  const answer = 'In my previous role, I coordinated customer feedback reviews and helped the team prioritize product improvements.';
+  const review = summarizePracticeAnswer(answer);
+  const session = createPracticeSession({
+    answer,
+    review,
+    roleplay,
+    completedAt: new Date('2026-06-26T10:00:00.000Z'),
+  });
+
+  assert.equal(session.roleplayTitle, 'Job Interview');
+  assert.equal(session.roleplayId, 'job-interview');
+  assert.equal(session.wordCount, review.wordCount);
+  assert.ok(session.answerPreview.includes('customer feedback'));
+  assert.equal(session.completedAt, '2026-06-26T10:00:00.000Z');
+});

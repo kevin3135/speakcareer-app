@@ -5,8 +5,14 @@ import { ProgressBar } from '../components/ProgressBar';
 import { Screen } from '../components/Screen';
 import { progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
+import type { PracticeSession } from '../types';
+import { formatSessionDate } from '../utils/sessionHistory';
 
-export function ProgressScreen() {
+type ProgressScreenProps = {
+  sessions: PracticeSession[];
+};
+
+export function ProgressScreen({ sessions }: ProgressScreenProps) {
   const { summary, mistakeBank } = progressData;
 
   return (
@@ -33,6 +39,30 @@ export function ProgressScreen() {
         </View>
         <Text style={styles.nextFocus}>Next focus: {summary.nextFocus}</Text>
       </Card>
+
+      <Text style={styles.sectionTitle}>Session history</Text>
+      {sessions.length === 0 ? (
+        <Card muted>
+          <Text style={styles.emptyTitle}>No saved sessions yet</Text>
+          <Text style={styles.emptyCopy}>
+            Complete a roleplay answer, review it and save the session to build a simple local history.
+          </Text>
+        </Card>
+      ) : (
+        sessions.map((session) => (
+          <Card key={session.id}>
+            <View style={styles.sessionHeader}>
+              <Text style={styles.sessionTitle}>{session.roleplayTitle}</Text>
+              <Text style={styles.sessionDate}>{formatSessionDate(session.completedAt)}</Text>
+            </View>
+            <Text style={styles.sessionMeta}>
+              {session.readinessLabel} - {session.wordCount} words
+            </Text>
+            <Text style={styles.sessionPreview}>{session.answerPreview}</Text>
+            <Text style={styles.sessionFeedback}>{session.feedbackSummary}</Text>
+          </Card>
+        ))
+      )}
 
       <Text style={styles.sectionTitle}>Mistake bank</Text>
       {mistakeBank.map((mistake) => (
@@ -80,6 +110,51 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.lg,
+  },
+  emptyTitle: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  emptyCopy: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.sm,
+  },
+  sessionHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  sessionTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  sessionDate: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  sessionMeta: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.sm,
+  },
+  sessionPreview: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  sessionFeedback: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    lineHeight: 18,
+    marginTop: spacing.md,
   },
   mistakeHeader: {
     alignItems: 'center',

@@ -82,3 +82,45 @@ Agent memory for next time:
 Next suggested task:
 
 - Save completed mock roleplay sessions locally and show them in Progress.
+
+## 2026-06-26: Local Mock Session History
+
+Built one focused improvement: users can save a reviewed roleplay answer as a local mock practice session, and Progress now shows a simple session history. The session history is in app memory only; it does not use device storage, Supabase or any backend.
+
+What went well:
+
+- The feature closes the first useful practice loop: answer, review, save, then inspect progress.
+- The session creation logic is isolated in `src/utils/sessionHistory.ts`.
+- Added a focused test for creating local practice sessions.
+- Expo Go is working on Kevin's phone with SDK 54.
+
+What went wrong:
+
+- The phone's Expo Go reports SDK 54 support, so SDK 56 caused an update prompt even though the phone app appeared current.
+- The app had to be aligned to Expo SDK 54 locally: `expo@54.0.35`, `react@19.1.0`, `react-native@0.81.5`.
+- Tests still print a harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the app on Expo SDK 54 while Kevin's Expo Go shows SDK 54 support.
+- Continue improving the local practice loop before adding real auth, AI, analytics or payments.
+- Session history is currently in-memory only; persistent local storage can come later if explicitly useful.
+
+Next suggested task:
+
+- Connect the typed answer to more specific rule-based mock feedback.

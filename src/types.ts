@@ -77,3 +77,14 @@ export type ProgressData = {
   summary: ProgressSummary;
   mistakeBank: MistakeItem[];
 };
+
+export type PracticeSession = {
+  id: string;
+  roleplayId: RoleplayId;
+  roleplayTitle: string;
+  completedAt: string;
+  answerPreview: string;
+  wordCount: number;
+  readinessLabel: string;
+  feedbackSummary: string;
+};

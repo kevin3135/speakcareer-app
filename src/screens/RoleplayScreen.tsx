@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
@@ -7,29 +7,53 @@ import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Screen } from '../components/Screen';
 import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
-import type { RoleplayId, RoleplayScenario } from '../types';
+import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
+import { createPracticeSession } from '../utils/sessionHistory';
 
 type RoleplayScreenProps = {
   roleplay: RoleplayScenario;
   onSelectRoleplay: (roleplayId: RoleplayId) => void;
+  onSaveSession: (session: PracticeSession) => void;
 };
 
-export function RoleplayScreen({ roleplay, onSelectRoleplay }: RoleplayScreenProps) {
+export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: RoleplayScreenProps) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [draftAnswer, setDraftAnswer] = useState('');
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
+  const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
+
+  useEffect(() => {
+    clearAnswer();
+  }, [roleplay.id]);
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
     setAnswerReview(review);
     setShowFeedback(review.isReadyForFeedback);
+    setSavedSessionId(null);
   }
 
   function clearAnswer() {
     setDraftAnswer('');
     setAnswerReview(null);
     setShowFeedback(false);
+    setSavedSessionId(null);
+  }
+
+  function saveSession() {
+    if (!answerReview?.isReadyForFeedback) {
+      return;
+    }
+
+    const session = createPracticeSession({
+      answer: draftAnswer,
+      review: answerReview,
+      roleplay,
+    });
+
+    setSavedSessionId(session.id);
+    onSaveSession(session);
   }
 
   return (
@@ -113,8 +137,14 @@ export function RoleplayScreen({ roleplay, onSelectRoleplay }: RoleplayScreenPro
           label="Review answer"
           onPress={reviewAnswer}
         />
+        {answerReview?.isReadyForFeedback && !savedSessionId ? (
+          <View style={styles.secondaryAction}>
+            <AppButton label="Save session" onPress={saveSession} variant="quiet" />
+          </View>
+        ) : null}
         <AppButton label="Clear" onPress={clearAnswer} variant="secondary" />
       </View>
+      {savedSessionId ? <Text style={styles.savedNote}>Session saved to Progress.</Text> : null}
 
       {showFeedback ? <FeedbackPanel feedback={roleplay.feedback} /> : null}
     </Screen>
@@ -232,5 +262,15 @@ const styles = StyleSheet.create({
   },
   actions: {
     marginTop: spacing.md,
+  },
+  secondaryAction: {
+    marginTop: spacing.md,
+  },
+  savedNote: {
+    color: colors.success,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.sm,
+    textAlign: 'center',
   },
 });

@@ -9,12 +9,13 @@ import { PracticeScreen } from '../screens/PracticeScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { RoleplayScreen } from '../screens/RoleplayScreen';
-import type { MainScreen, RoleplayId } from '../types';
+import type { MainScreen, PracticeSession, RoleplayId } from '../types';
 
 export function AppNavigator() {
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [activeScreen, setActiveScreen] = useState<MainScreen>('Home');
   const [selectedRoleplayId, setSelectedRoleplayId] = useState<RoleplayId>('job-interview');
+  const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
 
   const selectedRoleplay = useMemo(
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
@@ -24,6 +25,11 @@ export function AppNavigator() {
   function openRoleplay(roleplayId: RoleplayId) {
     setSelectedRoleplayId(roleplayId);
     setActiveScreen('Roleplay');
+  }
+
+  function savePracticeSession(session: PracticeSession) {
+    setPracticeSessions((sessions) => [session, ...sessions].slice(0, 10));
+    setActiveScreen('Progress');
   }
 
   if (!hasSeenOnboarding) {
@@ -37,11 +43,12 @@ export function AppNavigator() {
         {activeScreen === 'Practice' ? <PracticeScreen onOpenRoleplay={openRoleplay} /> : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
+            onSaveSession={savePracticeSession}
             roleplay={selectedRoleplay}
             onSelectRoleplay={openRoleplay}
           />
         ) : null}
-        {activeScreen === 'Progress' ? <ProgressScreen /> : null}
+        {activeScreen === 'Progress' ? <ProgressScreen sessions={practiceSessions} /> : null}
         {activeScreen === 'Profile' ? <ProfileScreen /> : null}
       </View>
       <BottomNav activeScreen={activeScreen} onChange={setActiveScreen} />
