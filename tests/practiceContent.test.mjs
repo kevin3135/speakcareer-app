@@ -461,7 +461,7 @@ test('creates a simple answer coach for the roleplay answer card', async () => {
   assert.equal(coach.phraseLabel, 'Helpful phrases');
   assert.equal(coach.transitionTitle, 'Now write your answer');
   assert.ok(coach.transitionBody.includes('short'));
-  assert.ok(coach.instruction.includes('Hiring Manager'));
+  assert.equal(coach.instruction, 'Answer in 2-4 spoken sentences.');
   assert.deepEqual(coach.checklist, [
     'Answer the question directly.',
     'Add one concrete detail or result.',

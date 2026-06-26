@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Short Step 2 Instruction
+
+Built one focused improvement: the Roleplay Step 2 instruction is now shorter and easier to scan on mobile. It changed from a full explanatory sentence to the direct instruction "Answer in 2-4 spoken sentences."
+
+What went well:
+
+- The answer card now gets to Writing support and the answer box faster.
+- The change stays inside `src/utils/answerCoach.ts`, so the screen layout did not need more complexity.
+- A focused test now locks the concise instruction copy.
+- Mobile preview at 390x844 confirmed the new line appears correctly and the old longer wording is gone.
+
+What went wrong:
+
+- This is still a copy-only simplification, so feedback depth and personalization did not change.
+- The Step 2 card still has optional support controls before the input; they remain collapsed by default.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 36 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Short action copy works better for the guided mobile flow than explanatory paragraphs.
+- Keep the answer box close to Step 2, even when optional support remains available.
+- The next small task should improve the first completion reward or make the post-review action clearer.
+
+Next suggested task:
+
+- Make the post-review save action feel more like completing a lesson, without adding a new screen.
+
 ## 2026-06-26: Inline Answer Input Cue
 
 Built one focused improvement: the Roleplay answer card no longer shows "Now write your answer" as a separate green panel. The cue is now a simple header directly above the answer text box, so Step 2 feels less stacked and the typing area is more central.

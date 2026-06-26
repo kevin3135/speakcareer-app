@@ -21,7 +21,7 @@ export function createAnswerCoachContent({ persona }: AnswerCoachInput): AnswerC
       'Add one concrete detail or result.',
       'Finish with a clear next step.',
     ],
-    instruction: `Write a short spoken answer to the ${persona}. Two to four sentences is enough.`,
+    instruction: 'Answer in 2-4 spoken sentences.',
     placeholder: 'Start with: Currently, I focus on... One result I am proud of is... That is why...',
     phraseLabel: 'Helpful phrases',
     reviewCtaLabel: 'Review answer',
