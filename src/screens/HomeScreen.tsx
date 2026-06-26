@@ -8,19 +8,20 @@ import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
-import type { PracticeSession, RoleplayId } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
 import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
+  dailyTarget: DailyPracticeTarget;
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
   sessions: PracticeSession[];
 };
 
-export function HomeScreen({ onOpenRoleplay, sessions }: HomeScreenProps) {
+export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreenProps) {
   const featured = practiceContent.roleplays[0];
-  const dailyMission = createDailyMission(progressData.summary, sessions);
-  const localProgress = createLocalProgressStats(progressData.summary, sessions);
+  const dailyMission = createDailyMission(progressData.summary, sessions, dailyTarget);
+  const localProgress = createLocalProgressStats(progressData.summary, sessions, dailyTarget);
   const hasSavedSession = sessions.length > 0;
   const pathSteps: LearningPathStep[] = [
     {
@@ -121,7 +122,7 @@ export function HomeScreen({ onOpenRoleplay, sessions }: HomeScreenProps) {
         </View>
         <Text style={styles.copy}>
           {hasSavedSession
-            ? `${sessions.length} saved session${sessions.length === 1 ? '' : 's'} this run. ${localProgress.totalLocalXp} local XP added.`
+            ? `${sessions.length}/${dailyTarget} target session${dailyTarget === 1 ? '' : 's'} done this run. ${localProgress.totalLocalXp} local XP added.`
             : progressData.summary.nextFocus}
         </Text>
       </Card>

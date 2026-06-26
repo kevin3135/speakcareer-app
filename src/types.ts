@@ -1,5 +1,7 @@
 export type MainScreen = 'Home' | 'Practice' | 'Roleplay' | 'Progress' | 'Profile';
 
+export type DailyPracticeTarget = 1 | 2 | 3;
+
 export type RoleplayId =
   | 'job-interview'
   | 'meeting-practice'

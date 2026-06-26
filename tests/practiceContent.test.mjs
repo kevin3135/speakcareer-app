@@ -140,6 +140,14 @@ test('adds saved sessions to local progress and daily mission', async () => {
   assert.equal(localProgress.totalLocalXp, 55);
   assert.equal(mission.rewardLabel, '+55 XP');
   assert.equal(mission.xpToday, mission.xpGoal);
+
+  const twoRoleplayMission = createDailyMission(progressMock.summary, sessions, 2);
+  const twoRoleplayProgress = createLocalProgressStats(progressMock.summary, sessions, 2);
+
+  assert.equal(twoRoleplayMission.title, 'Complete 2 career roleplays');
+  assert.equal(twoRoleplayMission.xpGoal, 120);
+  assert.equal(twoRoleplayProgress.xpGoal, 120);
+  assert.ok(twoRoleplayMission.progressPercent < 100);
 });
 
 test('creates rule-based feedback and XP from typed answers', async () => {

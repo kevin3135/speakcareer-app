@@ -429,3 +429,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add a simple local daily practice target setting in Profile and use it for the Home daily goal.
+
+## 2026-06-26: Local Daily Target Setting
+
+Built one focused improvement: Profile now has a local daily practice target setting for 1, 2 or 3 roleplays per day. Home uses that target to update the daily mission title, XP goal and progress calculation during the current app run.
+
+What went well:
+
+- The setting gives users more control over the habit loop without adding accounts, storage or backend work.
+- The Profile UI uses a simple segmented control and keeps the tone professional.
+- Home now reflects both saved sessions and the chosen daily target.
+- Tests cover the 2-roleplay target and XP-goal calculation.
+
+What went wrong:
+
+- The target is in-memory only and resets after app restart.
+- Progress does not yet show the chosen target directly; Home is the main place where it is visible.
+- The daily target is XP-based rather than fully session-completion based.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Profile now owns a useful local setting and passes it through the app state.
+- A good next step is to make Progress show target completion clearly.
+- Keep settings in-memory until persistence is explicitly approved.
+
+Next suggested task:
+
+- Show daily target completion in Progress, such as 1/2 roleplays completed today.

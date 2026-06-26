@@ -9,13 +9,14 @@ import { PracticeScreen } from '../screens/PracticeScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { RoleplayScreen } from '../screens/RoleplayScreen';
-import type { MainScreen, PracticeSession, RoleplayId } from '../types';
+import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId } from '../types';
 
 export function AppNavigator() {
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [activeScreen, setActiveScreen] = useState<MainScreen>('Home');
   const [selectedRoleplayId, setSelectedRoleplayId] = useState<RoleplayId>('job-interview');
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
+  const [dailyTarget, setDailyTarget] = useState<DailyPracticeTarget>(1);
 
   const selectedRoleplay = useMemo(
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
@@ -40,7 +41,11 @@ export function AppNavigator() {
     <View style={styles.container}>
       <View style={styles.body}>
         {activeScreen === 'Home' ? (
-          <HomeScreen onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
+          <HomeScreen
+            dailyTarget={dailyTarget}
+            onOpenRoleplay={openRoleplay}
+            sessions={practiceSessions}
+          />
         ) : null}
         {activeScreen === 'Practice' ? <PracticeScreen onOpenRoleplay={openRoleplay} /> : null}
         {activeScreen === 'Roleplay' ? (
@@ -52,7 +57,9 @@ export function AppNavigator() {
           />
         ) : null}
         {activeScreen === 'Progress' ? <ProgressScreen sessions={practiceSessions} /> : null}
-        {activeScreen === 'Profile' ? <ProfileScreen /> : null}
+        {activeScreen === 'Profile' ? (
+          <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={setDailyTarget} />
+        ) : null}
       </View>
       <BottomNav activeScreen={activeScreen} onChange={setActiveScreen} />
     </View>

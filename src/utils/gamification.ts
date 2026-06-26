@@ -1,4 +1,4 @@
-import type { PracticeSession, ProgressSummary } from '../types';
+import type { DailyPracticeTarget, PracticeSession, ProgressSummary } from '../types';
 
 export type DailyMission = {
   level: number;
@@ -14,8 +14,9 @@ export type DailyMission = {
 export function createDailyMission(
   summary: ProgressSummary,
   sessions: PracticeSession[] = [],
+  dailyTarget: DailyPracticeTarget = 1,
 ): DailyMission {
-  const xpGoal = 60;
+  const xpGoal = dailyTarget * 60;
   const totalLocalXp = sessions.reduce((total, session) => total + session.xpReward, 0);
   const xpTotal = summary.sessionsCompleted * 40 + summary.minutesPracticed * 2 + totalLocalXp;
   const xpToday = Math.min(xpGoal, summary.currentStreakDays * 12 + 18 + totalLocalXp);
@@ -28,7 +29,9 @@ export function createDailyMission(
     xpToday,
     xpGoal,
     streakDays,
-    title: 'Complete one career roleplay',
+    title: dailyTarget === 1
+      ? 'Complete one career roleplay'
+      : `Complete ${dailyTarget} career roleplays`,
     rewardLabel: sessions[0] ? `+${sessions[0].xpReward} XP` : '+40 XP',
     progressPercent: Math.round((xpToday / xpGoal) * 100),
   };
