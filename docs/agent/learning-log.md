@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Workplace Project Follow-Up Small Talk
+
+Built one focused practice improvement: Workplace Small Talk now includes a "Project follow-up" angle. The user practices responding to a colleague's work update, adding one useful detail and asking a friendly professional question back.
+
+What went well:
+
+- Added a realistic small-talk follow-up without expanding into a full course.
+- Reused the existing prompt variant, quick starter and rule-based feedback structure.
+- Tests verify the new title, phrase guidance, rewrite and angle-specific feedback.
+- Mobile preview confirmed the new angle appears in the picker and updates the prompt, goal and quick starter.
+
+What went wrong:
+
+- Workplace Small Talk now has four angles, so future small-talk additions should be chosen carefully.
+- The scenario is still a one-turn mock practice flow, not a live back-and-forth conversation.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 44 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Small talk should stay professional and work-adjacent, not personal.
+- Follow-up variants should teach an answer, one detail and one question back.
+- More English MVP value should come from realistic workplace moments before adding backend or integrations.
+
+Next suggested task:
+
+- Add one concise Meeting clarification or interruption angle so meeting practice has more guided depth.
+
 ## 2026-06-27: Sales Budget Value Objection
 
 Built one focused practice improvement: Sales Call now includes a "Budget value" objection angle. The user practices acknowledging a budget constraint, asking how budget decisions are approved and connecting value to one measurable business result.

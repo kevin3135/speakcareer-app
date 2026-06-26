@@ -554,6 +554,24 @@
           }
         },
         {
+          "id": "project-follow-up",
+          "title": "Project follow-up",
+          "openingLine": "You mentioned last week you were preparing a client update. How did it go?",
+          "userGoal": "Respond briefly, share one work detail and ask a follow-up question.",
+          "coachingNote": "Keep it friendly and professional: answer the question, add one detail and ask about their work.",
+          "suggestedPhrases": [
+            "It went well, thanks for asking.",
+            "The main update was about the client timeline.",
+            "How is your project going this week?"
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This small talk answer should respond to the follow-up, add one work detail and ask a friendly question back.",
+            "strengthFocus": "You answered the follow-up naturally and kept the topic work-appropriate.",
+            "improvementFocus": "Add one specific work detail before asking a question back.",
+            "suggestedRewrite": "It went well, thanks for asking. The main update was that the client approved the next step, so we can move into planning. How is your project going this week?"
+          }
+        },
+        {
           "id": "move-to-meeting",
           "title": "Move to meeting",
           "openingLine": "It was nice chatting. I think everyone is joining now.",

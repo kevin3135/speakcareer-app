@@ -157,7 +157,7 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
   );
   assert.deepEqual(
     smallTalk.promptVariants.map((variant) => variant.title),
-    ['Quick introduction', 'Friendly follow-up', 'Move to meeting'],
+    ['Quick introduction', 'Friendly follow-up', 'Project follow-up', 'Move to meeting'],
   );
 
   for (const variant of [
@@ -335,6 +335,16 @@ test('adds small-talk-specific phrases for each workplace small talk angle', () 
     smallTalk.promptVariants
       .find((variant) => variant.id === 'friendly-follow-up')
       .suggestedPhrases.some((phrase) => phrase.includes('project')),
+  );
+  assert.ok(
+    smallTalk.promptVariants
+      .find((variant) => variant.id === 'project-follow-up')
+      .suggestedPhrases.some((phrase) => phrase.includes('main update')),
+  );
+  assert.ok(
+    smallTalk.promptVariants
+      .find((variant) => variant.id === 'project-follow-up')
+      .feedbackGuidance.suggestedRewrite.includes('How is your project going'),
   );
   assert.ok(
     smallTalk.promptVariants
@@ -1348,6 +1358,7 @@ test('adapts small talk feedback to the selected practice angle', async () => {
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
   const roleplay = practiceContent.roleplays.find((item) => item.id === 'workplace-small-talk');
   const introVariant = roleplay.promptVariants.find((variant) => variant.id === 'quick-introduction');
+  const projectVariant = roleplay.promptVariants.find((variant) => variant.id === 'project-follow-up');
   const meetingVariant = roleplay.promptVariants.find((variant) => variant.id === 'move-to-meeting');
   const answer = [
     'Nice to meet you, I work with the customer team.',
@@ -1356,6 +1367,7 @@ test('adapts small talk feedback to the selected practice angle', async () => {
   ].join(' ');
   const review = summarizePracticeAnswer(answer);
   const introFeedback = createRuleBasedFeedback(roleplay, answer, review, introVariant);
+  const projectFeedback = createRuleBasedFeedback(roleplay, answer, review, projectVariant);
   const meetingFeedback = createRuleBasedFeedback(roleplay, answer, review, meetingVariant);
 
   assert.ok(introFeedback.feedback.summary.includes('"Quick introduction"'));
@@ -1371,9 +1383,19 @@ test('adapts small talk feedback to the selected practice angle', async () => {
   assert.ok(
     meetingFeedback.feedback.strengths.includes(meetingVariant.feedbackGuidance.strengthFocus),
   );
+  assert.ok(projectFeedback.feedback.summary.includes('"Project follow-up"'));
+  assert.ok(
+    projectFeedback.feedback.improvements.includes(
+      projectVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
   assert.notEqual(
     introFeedback.feedback.suggestedRewrite,
     meetingFeedback.feedback.suggestedRewrite,
+  );
+  assert.notEqual(
+    projectFeedback.feedback.suggestedRewrite,
+    introFeedback.feedback.suggestedRewrite,
   );
 });
 
