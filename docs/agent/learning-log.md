@@ -729,3 +729,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add workplace small talk prompt variants for introductions, friendly follow-up and moving into the meeting topic.
+
+## 2026-06-26: Workplace Small Talk Prompt Variants
+
+Built one focused improvement: Workplace Small Talk now has three repeatable practice angles: Quick introduction, Friendly follow-up and Move to meeting. Each variant changes the colleague's opening line, the user's goal and the coaching note through the existing Roleplay UI.
+
+What went well:
+
+- All five core roleplays now have repeatable prompt variants, making the MVP feel more like a real practice app.
+- Small Talk stays professional and workplace-safe instead of becoming casual chat.
+- The change reused the existing local content model and required no new dependencies.
+- Tests now protect prompt variants across Interview, Meeting, Presentation, Sales and Small Talk.
+
+What went wrong:
+
+- Suggested phrases and mock feedback are still shared at the scenario level instead of changing per variant.
+- The app still clears drafts when switching variants, which protects state but may feel abrupt.
+- Prompt variants are still local mock content, not adaptive lesson sequencing.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The core content now has breadth; the next high-value work should improve feedback depth or first-time progress clarity.
+- A good next step is a clean empty state for first-time Progress, then better variant-specific phrases.
+- Keep Small Talk bounded to professional workplace moments.
+
+Next suggested task:
+
+- Add a clean first-time Progress empty state with a clear call to start one roleplay.

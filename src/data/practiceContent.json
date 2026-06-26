@@ -330,6 +330,29 @@
       "userGoal": "Start a natural conversation and keep it professional.",
       "aiPersona": "New Colleague",
       "openingLine": "Hi, I don't think we've met before. How's your day going?",
+      "promptVariants": [
+        {
+          "id": "quick-introduction",
+          "title": "Quick introduction",
+          "openingLine": "Hi, I don't think we've met before. How's your day going?",
+          "userGoal": "Introduce yourself warmly, say your role and ask one simple professional question.",
+          "coachingNote": "Keep it light: greeting, name, role and one easy question about their work or project."
+        },
+        {
+          "id": "friendly-follow-up",
+          "title": "Friendly follow-up",
+          "openingLine": "I'm doing well, thanks. I've been busy with this project all week.",
+          "userGoal": "Respond naturally and ask a friendly follow-up question without becoming too personal.",
+          "coachingNote": "Show interest in the work, not private details. A good follow-up keeps the conversation moving."
+        },
+        {
+          "id": "move-to-meeting",
+          "title": "Move to meeting",
+          "openingLine": "It was nice chatting. I think everyone is joining now.",
+          "userGoal": "Politely close the small talk and move into the meeting topic.",
+          "coachingNote": "Use a short bridge phrase like 'Shall we get started?' or 'Maybe we can begin with the agenda.'"
+        }
+      ],
       "suggestedPhrases": [
         "Nice to meet you.",
         "How long have you been working on this project?",

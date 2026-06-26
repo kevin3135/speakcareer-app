@@ -49,11 +49,13 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
   const meeting = practiceContent.roleplays.find((roleplay) => roleplay.id === 'meeting-practice');
   const presentation = practiceContent.roleplays.find((roleplay) => roleplay.id === 'presentation-practice');
   const sales = practiceContent.roleplays.find((roleplay) => roleplay.id === 'sales-call');
+  const smallTalk = practiceContent.roleplays.find((roleplay) => roleplay.id === 'workplace-small-talk');
 
   assert.ok(interview.promptVariants.length >= 3);
   assert.ok(meeting.promptVariants.length >= 3);
   assert.ok(presentation.promptVariants.length >= 3);
   assert.ok(sales.promptVariants.length >= 3);
+  assert.ok(smallTalk.promptVariants.length >= 3);
   assert.deepEqual(
     interview.promptVariants.map((variant) => variant.title),
     ['Tell me about yourself', 'Why this role?', 'Difficult situation'],
@@ -70,12 +72,17 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
     sales.promptVariants.map((variant) => variant.title),
     ['Price concern', 'Timing concern', 'Existing tool'],
   );
+  assert.deepEqual(
+    smallTalk.promptVariants.map((variant) => variant.title),
+    ['Quick introduction', 'Friendly follow-up', 'Move to meeting'],
+  );
 
   for (const variant of [
     ...interview.promptVariants,
     ...meeting.promptVariants,
     ...presentation.promptVariants,
     ...sales.promptVariants,
+    ...smallTalk.promptVariants,
   ]) {
     assert.ok(variant.openingLine.length > 20);
     assert.ok(variant.userGoal.length > 20);
