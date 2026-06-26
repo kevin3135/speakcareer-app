@@ -2057,3 +2057,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the helpful phrases block collapsible so the answer input can sit closer to the top of the answer card.
+
+## 2026-06-26: Collapsible Helpful Phrases
+
+Built one focused improvement: the Roleplay answer card now keeps helpful phrases collapsed by default, with a compact Show/Hide control for optional sentence starters.
+
+What went well:
+
+- The answer flow is simpler because users see the writing box sooner and only open phrase help when they need it.
+- The helper lives inside the existing answer card, so this reduces visual noise without adding navigation or a new step.
+- The helper state is covered by a small unit test in `tests/practiceContent.test.mjs`.
+- Mobile preview at 390x844 confirmed the collapsed helper, Show button and answer input fit cleanly.
+
+What went wrong:
+
+- The Roleplay screen is still a long mobile page, so future work should continue simplifying the first-run path.
+- An interrupted prior run had already started this feature, so I had to remove one duplicate helper file before checks.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 33 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep optional help collapsed when it is not required to complete the next action.
+- Preserve the guided Step 1-4 structure, but make each card shorter and more direct.
+- The next small task should make the first-time Roleplay page feel less long, likely by shortening or folding secondary context.
+
+Next suggested task:
+
+- Simplify the top of the Roleplay page by collapsing secondary scenario details after the user has chosen a scenario.
