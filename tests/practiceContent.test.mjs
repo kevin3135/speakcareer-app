@@ -682,6 +682,45 @@ test('keeps the Home library quiet until the first saved practice', async () => 
   assert.equal(activeLibrary.previewRoleplays[0].id, 'job-interview');
 });
 
+test('creates a simple game-like Home quest path', async () => {
+  const { createHomeQuestPath } = await import('../src/utils/homeQuestPath.ts');
+  const recommendedRoleplay = practiceContent.roleplays.find((roleplay) => roleplay.id === 'job-interview');
+  const previewRoleplays = practiceContent.roleplays.filter((roleplay) =>
+    ['meeting-practice', 'presentation-practice', 'sales-call'].includes(roleplay.id),
+  );
+
+  const firstRunPath = createHomeQuestPath({
+    previewRoleplays,
+    recommendedRoleplay,
+    sessions: [],
+  });
+
+  assert.equal(firstRunPath.title, 'Career path');
+  assert.equal(firstRunPath.meta, 'Start simple');
+  assert.deepEqual(
+    firstRunPath.nodes.map((node) => node.status),
+    ['active', 'locked', 'locked'],
+  );
+  assert.equal(firstRunPath.nodes[0].tag, 'Now');
+  assert.equal(firstRunPath.nodes[1].title, 'Meeting Practice');
+  assert.ok(firstRunPath.nodes[1].body.includes('focused'));
+
+  const returningPath = createHomeQuestPath({
+    previewRoleplays,
+    recommendedRoleplay,
+    sessions: [{ id: 'job-interview-1' }],
+  });
+
+  assert.equal(returningPath.meta, 'Next quest ready');
+  assert.deepEqual(
+    returningPath.nodes.map((node) => node.status),
+    ['done', 'active', 'locked'],
+  );
+  assert.equal(returningPath.nodes[0].tag, 'Done');
+  assert.equal(returningPath.nodes[1].tag, 'Next');
+  assert.ok(returningPath.nodes[2].body.includes('5-minute sprint'));
+});
+
 test('creates one clear Home daily mission card', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createHomeDailyMissionCard } = await import('../src/utils/homeDailyMission.ts');

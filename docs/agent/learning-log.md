@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Gamified Home Quest
+
+Built one focused UX improvement after Kevin said the app felt too cluttered and not game-like enough. Home now opens with a clear daily quest, streak, level, target, reward and a three-step career path instead of separate "How it works", mission and library sections.
+
+What went well:
+
+- Made the first screen feel more like a guided learning game without making it childish.
+- Removed Home overload by moving away from multiple explanatory cards and roleplay previews.
+- Added `createHomeQuestPath` so the career path behavior is tested and easy to extend.
+- Mobile preview confirmed Home shows Today's quest, Streak, Level, Career path and no old "How it works" block.
+
+What went wrong:
+
+- This is still static local gamification; streaks and XP are based on local/mock progress until backend work is approved.
+- The Practice tab still needs a more game-like path view later, because Home is now cleaner than the library experience.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 45 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants more professional game feel: quests, levels, streaks, unlocks and a clear path.
+- Reduce clutter before adding more content.
+- The next high-value visual step is turning Practice into a simple path/map instead of a plain library.
+
+Next suggested task:
+
+- Redesign the Practice screen into a simple career path map with locked/unlocked modules.
+
 ## 2026-06-27: Simpler Guided Angle Picker
 
 Built one focused UX improvement: the Roleplay practice angle card now shows progress like "1 of 5", a "Next recommended" hint and option labels that identify the recommended next angle. This makes scenarios with four or five angles feel more guided on mobile.

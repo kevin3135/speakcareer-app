@@ -3,10 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
 import { ProgressBar } from '../components/ProgressBar';
-import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
-import { guidedIntroSteps, guidedStart } from '../data/guidedIntro';
+import { guidedStart } from '../data/guidedIntro';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
@@ -14,6 +13,7 @@ import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeHeroFocusLabels } from '../utils/homeHeroLabels';
 import { createHomeLibraryState } from '../utils/homeLibrary';
 import { createHomePracticeRecommendation } from '../utils/homeRecommendation';
+import { createHomeQuestPath } from '../utils/homeQuestPath';
 import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
@@ -46,19 +46,26 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
     sessions,
   });
   const homeLibrary = createHomeLibraryState(sessions, practiceContent.roleplays, guidedStart.roleplayId);
-  const homeLibraryRoleplayIds = new Set(homeLibrary.previewRoleplays.map((roleplay) => roleplay.id));
-  const visibleRoleplayCards = practiceContent.roleplays.filter((roleplay) =>
-    homeLibraryRoleplayIds.has(roleplay.id),
-  );
+  const homeQuestPath = createHomeQuestPath({
+    previewRoleplays: homeLibrary.previewRoleplays,
+    recommendedRoleplay: featured,
+    sessions,
+  });
 
   return (
     <Screen
       title="SpeakCareer"
-      subtitle="Practice professional English one clear step at a time."
+      subtitle="Your daily career English quest."
     >
       <View style={styles.hero}>
-        <Text style={styles.heroKicker}>Start here</Text>
-        <Text style={styles.heroTitle}>{homeRecommendation.title}</Text>
+        <View style={styles.heroTopRow}>
+          <Text style={styles.heroKicker}>{"Today's quest"}</Text>
+          <View style={styles.streakPill}>
+            <Text style={styles.streakPillLabel}>Streak</Text>
+            <Text style={styles.streakPillValue}>{dailyMission.streakDays} days</Text>
+          </View>
+        </View>
+        <Text style={styles.heroTitle}>{homeDailyMission.title}</Text>
         <Text style={styles.heroCopy}>{homeRecommendation.subtitle}</Text>
         <View style={styles.focusRow}>
           {heroFocusLabels.map((label) => (
@@ -67,108 +74,105 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
             </View>
           ))}
         </View>
+        <View style={styles.levelPanel}>
+          <View style={styles.levelStat}>
+            <Text style={styles.levelStatLabel}>Level</Text>
+            <Text style={styles.levelStatValue}>{dailyMission.level}</Text>
+          </View>
+          <View style={styles.levelProgress}>
+            <ProgressBar
+              label={homeDailyMission.progressLabel}
+              value={homeDailyMission.progressPercent}
+            />
+          </View>
+        </View>
+        <View style={styles.questStatRow}>
+          <View style={styles.questStat}>
+            <Text style={styles.questStatLabel}>Target</Text>
+            <Text style={styles.questStatValue}>{homeDailyMission.targetLabel}</Text>
+          </View>
+          <View style={styles.questStat}>
+            <Text style={styles.questStatLabel}>Reward</Text>
+            <Text style={styles.questStatValue}>{homeDailyMission.rewardLabel}</Text>
+          </View>
+        </View>
         <View style={styles.buttonRow}>
           <AppButton
             accessibilityHint={`Opens the recommended ${featured.title} roleplay`}
-            label={homeRecommendation.ctaLabel}
+            label={homeRecommendation.ctaLabel.replace('sprint', 'quest')}
             onPress={() => onOpenRoleplay(featured.id)}
           />
         </View>
       </View>
 
-      <Card muted>
+      <Card>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>How it works</Text>
-          <Text style={styles.sectionMeta}>3 steps</Text>
+          <Text style={styles.sectionTitle}>{homeQuestPath.title}</Text>
+          <Text style={styles.sectionMeta}>{homeQuestPath.meta}</Text>
         </View>
-        <View style={styles.stepList}>
-          {guidedIntroSteps.map((step, index) => (
-            <View key={step.id} style={styles.stepRow}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>{index + 1}</Text>
+        <View style={styles.questPath}>
+          {homeQuestPath.nodes.map((node, index) => (
+            <View key={node.id} style={styles.questNodeRow}>
+              <View
+                style={[
+                  styles.questNodeMarker,
+                  node.status === 'active' && styles.questNodeMarkerActive,
+                  node.status === 'done' && styles.questNodeMarkerDone,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.questNodeMarkerText,
+                    node.status !== 'locked' && styles.questNodeMarkerTextActive,
+                  ]}
+                >
+                  {index + 1}
+                </Text>
               </View>
-              <View style={styles.stepTextBlock}>
-                <Text style={styles.stepTitle}>{step.title}</Text>
-                <Text style={styles.stepBody}>{step.body}</Text>
+              <View style={styles.questNodeCard}>
+                <View style={styles.questNodeHeader}>
+                  <Text style={styles.questNodeTitle}>{node.title}</Text>
+                  <Text
+                    style={[
+                      styles.questNodeTag,
+                      node.status === 'active' && styles.questNodeTagActive,
+                      node.status === 'done' && styles.questNodeTagDone,
+                    ]}
+                  >
+                    {node.tag}
+                  </Text>
+                </View>
+                <Text style={styles.questNodeBody}>{node.body}</Text>
               </View>
             </View>
           ))}
         </View>
       </Card>
 
-      <Card>
+      <Card muted>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>{homeDailyMission.title}</Text>
+          <Text style={styles.sectionTitle}>Why practice now</Text>
           <Text style={styles.sectionMeta}>{homeDailyMission.meta}</Text>
         </View>
-        <View style={styles.progressBlock}>
-          <ProgressBar
-            label={homeDailyMission.progressLabel}
-            value={homeDailyMission.progressPercent}
-          />
-        </View>
         <Text style={styles.copy}>{homeDailyMission.body}</Text>
-        <View style={styles.missionStatRow}>
-          <View style={styles.missionStat}>
-            <Text style={styles.missionStatLabel}>Target</Text>
-            <Text style={styles.missionStatValue}>{homeDailyMission.targetLabel}</Text>
-          </View>
-          <View style={styles.missionStat}>
-            <Text style={styles.missionStatLabel}>Reward</Text>
-            <Text style={styles.missionStatValue}>{homeDailyMission.rewardLabel}</Text>
-          </View>
-        </View>
-        <View style={styles.missionReason}>
-          <Text style={styles.missionStatLabel}>Why now</Text>
-          <Text style={styles.missionReasonText}>{homeDailyMission.reason}</Text>
-        </View>
+        <Text style={styles.reasonText}>{homeDailyMission.reason}</Text>
       </Card>
-
-      {homeLibrary.showRoleplayCards ? (
-        <>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{homeLibrary.title}</Text>
-            <Text style={styles.sectionMeta}>{homeLibrary.meta}</Text>
-          </View>
-          {visibleRoleplayCards.map((roleplay) => (
-            <RoleplayCard
-              key={roleplay.id}
-              roleplay={roleplay}
-              onPress={() => onOpenRoleplay(roleplay.id)}
-            />
-          ))}
-        </>
-      ) : (
-        <Card muted>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{homeLibrary.title}</Text>
-            <Text style={styles.sectionMeta}>{homeLibrary.meta}</Text>
-          </View>
-          <Text style={styles.copy}>{homeLibrary.body}</Text>
-          <View style={styles.libraryPreviewList}>
-            {homeLibrary.previewRoleplays.map((roleplay) => (
-              <View key={roleplay.id} style={styles.libraryPreviewCard}>
-                <Text style={styles.libraryPreviewTitle}>{roleplay.title}</Text>
-                <Text style={styles.libraryPreviewBody}>{roleplay.focus}</Text>
-                <Text style={styles.libraryPreviewMeta}>
-                  {roleplay.category} / {roleplay.targetLevel}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </Card>
-      )}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   hero: {
-    backgroundColor: colors.primarySoft,
-    borderColor: '#BDE7DC',
+    backgroundColor: '#EAF7F2',
+    borderColor: '#A9DCCF',
     borderRadius: radii.md,
     borderWidth: 1,
     padding: spacing.xl,
+  },
+  heroTopRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   heroKicker: {
     color: colors.primaryDark,
@@ -212,43 +216,173 @@ const styles = StyleSheet.create({
   buttonRow: {
     marginTop: spacing.md,
   },
-  stepList: {
-    marginTop: spacing.lg,
-  },
-  stepRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: spacing.md,
-  },
-  stepNumber: {
+  levelPanel: {
     alignItems: 'center',
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 999,
+    borderRadius: radii.md,
     borderWidth: 1,
-    height: 34,
+    flexDirection: 'row',
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  levelProgress: {
+    flex: 1,
+  },
+  levelStat: {
+    alignItems: 'center',
+    backgroundColor: colors.ink,
+    borderRadius: radii.md,
     justifyContent: 'center',
     marginRight: spacing.md,
-    width: 34,
+    minHeight: 64,
+    width: 72,
   },
-  stepNumberText: {
+  levelStatLabel: {
+    color: colors.accentSoft,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  levelStatValue: {
+    color: colors.surface,
+    fontSize: typography.h1,
+    fontWeight: '900',
+    lineHeight: 30,
+    marginTop: 2,
+  },
+  questPath: {
+    marginTop: spacing.lg,
+  },
+  questNodeBody: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 19,
+    marginTop: spacing.xs,
+  },
+  questNodeCard: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    flex: 1,
+    padding: spacing.md,
+  },
+  questNodeHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  questNodeMarker: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 38,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    marginTop: spacing.sm,
+    width: 38,
+  },
+  questNodeMarkerActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  questNodeMarkerDone: {
+    backgroundColor: colors.ink,
+    borderColor: colors.ink,
+  },
+  questNodeMarkerText: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  questNodeMarkerTextActive: {
+    color: colors.surface,
+  },
+  questNodeRow: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+  },
+  questNodeTag: {
+    backgroundColor: colors.infoSoft,
+    borderRadius: radii.sm,
+    color: colors.info,
+    flexShrink: 0,
+    fontSize: typography.small,
+    fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+  },
+  questNodeTagActive: {
+    backgroundColor: colors.accentSoft,
+    color: colors.primaryDark,
+  },
+  questNodeTagDone: {
+    backgroundColor: colors.primarySoft,
+    color: colors.primaryDark,
+  },
+  questNodeTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  questStat: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    flex: 1,
+    padding: spacing.md,
+  },
+  questStatLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  questStatRow: {
+    columnGap: spacing.sm,
+    flexDirection: 'row',
+    marginTop: spacing.md,
+  },
+  questStatValue: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  reasonText: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
-  },
-  stepTextBlock: {
-    flex: 1,
-  },
-  stepTitle: {
-    color: colors.ink,
-    fontSize: typography.h3,
-    fontWeight: '900',
-  },
-  stepBody: {
-    color: colors.textMuted,
-    fontSize: typography.small,
     lineHeight: 19,
-    marginTop: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  streakPill: {
+    alignItems: 'flex-end',
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  streakPillLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  streakPillValue: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+    marginTop: 1,
   },
   copy: {
     color: colors.textMuted,
@@ -270,73 +404,5 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '700',
-  },
-  progressBlock: {
-    marginTop: spacing.lg,
-  },
-  missionReason: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radii.md,
-    marginTop: spacing.md,
-    padding: spacing.md,
-  },
-  missionReasonText: {
-    color: colors.text,
-    fontSize: typography.small,
-    fontWeight: '700',
-    lineHeight: 19,
-    marginTop: spacing.xs,
-  },
-  missionStat: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radii.md,
-    flex: 1,
-    padding: spacing.md,
-  },
-  missionStatLabel: {
-    color: colors.textMuted,
-    fontSize: typography.small,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  missionStatRow: {
-    columnGap: spacing.sm,
-    flexDirection: 'row',
-    marginTop: spacing.md,
-  },
-  missionStatValue: {
-    color: colors.ink,
-    fontSize: typography.body,
-    fontWeight: '900',
-    marginTop: spacing.xs,
-  },
-  libraryPreviewCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    marginTop: spacing.sm,
-    padding: spacing.md,
-  },
-  libraryPreviewList: {
-    marginTop: spacing.md,
-  },
-  libraryPreviewTitle: {
-    color: colors.ink,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  libraryPreviewBody: {
-    color: colors.text,
-    fontSize: typography.small,
-    fontWeight: '700',
-    lineHeight: 19,
-    marginTop: spacing.xs,
-  },
-  libraryPreviewMeta: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '800',
-    marginTop: spacing.sm,
   },
 });
