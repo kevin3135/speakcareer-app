@@ -275,7 +275,13 @@
             "Today I will cover three points...",
             "The main decision we need is...",
             "By the end, I want you to understand..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This presentation answer should set the topic, structure and decision clearly at the start.",
+            "strengthFocus": "You gave the audience a clear reason to listen before going into details.",
+            "improvementFocus": "State the decision or takeaway you want before listing the presentation points.",
+            "suggestedRewrite": "Today I will cover three points: the customer problem, the proposed solution and the decision we need. By the end, I want you to understand why a small pilot is the safest next step."
+          }
         },
         {
           "id": "smooth-transition",
@@ -287,7 +293,13 @@
             "This leads to the next point...",
             "The reason this matters is...",
             "Let me connect this to..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This presentation answer should connect the previous point to the next business reason.",
+            "strengthFocus": "You used signposting that helps the audience follow the structure.",
+            "improvementFocus": "Explain why the transition matters instead of only saying what comes next.",
+            "suggestedRewrite": "This leads to the next point: execution risk. The reason this matters is that even a strong idea needs a realistic rollout plan, so let me connect the recommendation to the timeline."
+          }
         },
         {
           "id": "handle-challenge",
@@ -299,7 +311,13 @@
             "That is a fair concern.",
             "The reason I still recommend this is...",
             "A low-risk next step would be..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This presentation answer should acknowledge the challenge, give evidence and propose a practical next step.",
+            "strengthFocus": "You responded to skepticism calmly instead of becoming defensive.",
+            "improvementFocus": "Add one proof point before recommending the next step.",
+            "suggestedRewrite": "That is a fair concern. The reason I still recommend this is that the customer feedback points to a clear opportunity, and a low-risk next step would be a two-week pilot before a larger investment."
+          }
         }
       ],
       "suggestedPhrases": [

@@ -1201,3 +1201,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-aware feedback guidance for Presentation Practice.
+
+## 2026-06-26: Presentation Variant-Aware Feedback
+
+Built one focused improvement: Presentation Practice feedback now adapts to the selected practice angle. Opening agenda, Smooth transition and Handle challenge each provide their own feedback emphasis and suggested rewrite.
+
+What went well:
+
+- Presentation feedback now supports opening structure, transitions and skeptical Q&A more directly.
+- The change reused the existing `RoleplayPromptVariant.feedbackGuidance` field.
+- The Roleplay UI needed no new code because active variants already pass into rule-based feedback.
+- Added focused tests for presentation-specific feedback guidance and variant-aware feedback output.
+
+What went wrong:
+
+- Variant-aware feedback guidance now exists for Interview, Meeting and Presentation only.
+- Sales and Small Talk still use generic rule-based feedback even though their phrases are variant-specific.
+- Score logic remains general-purpose and does not yet change per presentation angle.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Presentation guidance should focus on structure, signposting, evidence and a clear next decision.
+- Keep adding feedback guidance scenario by scenario until all five core roleplays have variant-aware coaching.
+- Do not change the default non-variant feedback path while expanding this content layer.
+
+Next suggested task:
+
+- Add variant-aware feedback guidance for Sales Call.

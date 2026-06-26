@@ -149,6 +149,10 @@ test('adds presentation-specific phrases for each presentation practice angle', 
   for (const variant of presentation.promptVariants) {
     assert.equal(variant.suggestedPhrases.length, 3);
     assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+    assert.ok(variant.feedbackGuidance.summaryHint.length > 20);
+    assert.ok(variant.feedbackGuidance.strengthFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.improvementFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.suggestedRewrite.length > 40);
   }
 
   assert.ok(
@@ -465,6 +469,40 @@ test('adapts meeting feedback to the selected practice angle', async () => {
   );
   assert.notEqual(
     statusFeedback.feedback.suggestedRewrite,
+    challengeFeedback.feedback.suggestedRewrite,
+  );
+});
+
+test('adapts presentation feedback to the selected practice angle', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
+  const roleplay = practiceContent.roleplays.find((item) => item.id === 'presentation-practice');
+  const transitionVariant = roleplay.promptVariants.find((variant) => variant.id === 'smooth-transition');
+  const challengeVariant = roleplay.promptVariants.find((variant) => variant.id === 'handle-challenge');
+  const answer = [
+    'This leads to the next point about customer impact.',
+    'First, I would explain the decision we need and then connect it to the timeline.',
+    'As a result, the leadership team can choose a low-risk next step.',
+  ].join(' ');
+  const review = summarizePracticeAnswer(answer);
+  const transitionFeedback = createRuleBasedFeedback(roleplay, answer, review, transitionVariant);
+  const challengeFeedback = createRuleBasedFeedback(roleplay, answer, review, challengeVariant);
+
+  assert.ok(transitionFeedback.feedback.summary.includes('"Smooth transition"'));
+  assert.equal(
+    transitionFeedback.feedback.suggestedRewrite,
+    transitionVariant.feedbackGuidance.suggestedRewrite,
+  );
+  assert.ok(
+    transitionFeedback.feedback.improvements.includes(
+      transitionVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.ok(
+    challengeFeedback.feedback.strengths.includes(challengeVariant.feedbackGuidance.strengthFocus),
+  );
+  assert.notEqual(
+    transitionFeedback.feedback.suggestedRewrite,
     challengeFeedback.feedback.suggestedRewrite,
   );
 });
