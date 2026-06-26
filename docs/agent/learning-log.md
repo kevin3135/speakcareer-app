@@ -987,3 +987,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-specific suggested phrases for Sales Call.
+
+## 2026-06-26: Sales Variant-Specific Phrases
+
+Built one focused improvement: Sales Call objection angles now show their own useful phrases. Price concern, Timing concern and Existing tool each have three tailored sentence starters for calmer discovery and objection handling.
+
+What went well:
+
+- Sales Call now gives more precise language support for high-pressure buyer objections.
+- The change reused the existing optional `suggestedPhrases` field on prompt variants.
+- The Roleplay UI needed no changes because variant-specific phrases already flow through the screen.
+- Added focused tests for sales-specific objection phrases.
+
+What went wrong:
+
+- Sales phrases are still curated local content, not personalized to the user's answer.
+- Workplace Small Talk is the only remaining roleplay still using only scenario-level phrases.
+- Feedback is still scenario-level and does not yet react to the selected sales objection.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Variant-specific phrase support is now useful for Interview, Meeting, Presentation and Sales.
+- The next logical content step is Workplace Small Talk because it is the last scenario without variant-specific phrases.
+- Keep sales language consultative: acknowledge first, ask a discovery question and avoid sounding pushy.
+
+Next suggested task:
+
+- Add variant-specific suggested phrases for Workplace Small Talk.

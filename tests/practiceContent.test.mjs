@@ -160,6 +160,31 @@ test('adds presentation-specific phrases for each presentation practice angle', 
   );
 });
 
+test('adds sales-specific phrases for each sales objection angle', () => {
+  const sales = practiceContent.roleplays.find((roleplay) => roleplay.id === 'sales-call');
+
+  for (const variant of sales.promptVariants) {
+    assert.equal(variant.suggestedPhrases.length, 3);
+    assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+  }
+
+  assert.ok(
+    sales.promptVariants
+      .find((variant) => variant.id === 'price-concern')
+      .suggestedPhrases.some((phrase) => phrase.includes('price')),
+  );
+  assert.ok(
+    sales.promptVariants
+      .find((variant) => variant.id === 'timing-concern')
+      .suggestedPhrases.some((phrase) => phrase.includes('priority')),
+  );
+  assert.ok(
+    sales.promptVariants
+      .find((variant) => variant.id === 'existing-tool')
+      .suggestedPhrases.some((phrase) => phrase.includes('current tool')),
+  );
+});
+
 test('reviews typed roleplay answers with simple local rules', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
 

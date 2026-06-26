@@ -315,21 +315,36 @@
           "title": "Price concern",
           "openingLine": "I understand what your product does, but I'm not sure the price makes sense for us.",
           "userGoal": "Acknowledge the price concern, ask one discovery question and connect value to business impact.",
-          "coachingNote": "Do not defend the price immediately. First learn what the problem currently costs them."
+          "coachingNote": "Do not defend the price immediately. First learn what the problem currently costs them.",
+          "suggestedPhrases": [
+            "That makes sense. Can I ask what this problem currently costs you?",
+            "Before we discuss price, what outcome would make this worthwhile?",
+            "If we could reduce that cost, would the investment feel different?"
+          ]
         },
         {
           "id": "timing-concern",
           "title": "Timing concern",
           "openingLine": "This looks interesting, but I don't think this is the right time for us.",
           "userGoal": "Explore the timing concern and identify whether there is a smaller next step.",
-          "coachingNote": "Ask what would need to change for this to become a priority, then suggest a low-pressure next action."
+          "coachingNote": "Ask what would need to change for this to become a priority, then suggest a low-pressure next action.",
+          "suggestedPhrases": [
+            "What would need to change for this to become a priority?",
+            "Would a smaller pilot be easier to evaluate now?",
+            "Can we agree on a low-pressure next step?"
+          ]
         },
         {
           "id": "existing-tool",
           "title": "Existing tool",
           "openingLine": "We already use another tool for this, so I'm not sure we need to change anything.",
           "userGoal": "Respect the current setup, ask what is working and uncover one gap or improvement area.",
-          "coachingNote": "Do not attack their current tool. Compare outcomes, workflow friction or missed opportunities."
+          "coachingNote": "Do not attack their current tool. Compare outcomes, workflow friction or missed opportunities.",
+          "suggestedPhrases": [
+            "It's good that you already have a process in place.",
+            "What works well with your current tool?",
+            "Where does the current workflow still create friction?"
+          ]
         }
       ],
       "suggestedPhrases": [
