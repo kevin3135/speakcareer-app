@@ -467,6 +467,7 @@ test('creates a simple answer coach for the roleplay answer card', async () => {
     'Add one concrete detail or result.',
     'Finish with a clear next step.',
   ]);
+  assert.ok(coach.placeholder.startsWith('Start with:'));
   assert.ok(coach.placeholder.includes('Currently'));
 });
 

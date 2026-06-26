@@ -1972,3 +1972,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the answer text box feel more active by improving its placeholder and visual emphasis without adding new flow steps.
+
+## 2026-06-26: Active Answer Text Box
+
+Built one focused improvement: the Roleplay answer text box now has a clearer starter placeholder and becomes visually active when focused or when it contains text.
+
+What went well:
+
+- The placeholder now starts with "Start with:", making it easier for a beginner to begin typing.
+- The answer input uses a white background and green border when active or filled, so it feels like the primary action.
+- The change reuses the existing answer card and `src/utils/answerCoach.ts` instead of adding another step.
+- Mobile preview at 390px confirmed the placeholder and active state work without horizontal overflow.
+
+What went wrong:
+
+- The active-state visual check needed a filled input before the computed style reflected the new border.
+- The answer card still has several support elements above the text box.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 32 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep starter copy concrete and close to the typing surface.
+- Filled/focused fields should keep a stronger visual state without changing layout dimensions.
+- The next small task should reduce support clutter above the answer input or make helper phrases collapsible.
+
+Next suggested task:
+
+- Make the helpful phrases block collapsible so the answer input can sit closer to the top of the answer card.

@@ -51,6 +51,7 @@ export function RoleplayScreen({
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
   const [isScenarioPickerOpen, setIsScenarioPickerOpen] = useState(false);
   const [isAnglePickerOpen, setIsAnglePickerOpen] = useState(false);
+  const [isAnswerFocused, setIsAnswerFocused] = useState(false);
   const [activePromptVariantId, setActivePromptVariantId] = useState(
     roleplay.promptVariants?.[0]?.id ?? null,
   );
@@ -429,10 +430,15 @@ export function RoleplayScreen({
           accessibilityLabel="Practice answer"
           accessibilityHint="Write your first spoken-style response to the roleplay prompt"
           multiline
+          onBlur={() => setIsAnswerFocused(false)}
           onChangeText={setDraftAnswer}
+          onFocus={() => setIsAnswerFocused(true)}
           placeholder={answerCoach.placeholder}
           placeholderTextColor={colors.textMuted}
-          style={styles.answerInput}
+          style={[
+            styles.answerInput,
+            (isAnswerFocused || draftAnswer.trim().length > 0) && styles.answerInputActive,
+          ]}
           textAlignVertical="top"
           value={draftAnswer}
         />
@@ -1045,6 +1051,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     minHeight: 132,
     padding: spacing.md,
+  },
+  answerInputActive: {
+    backgroundColor: colors.surface,
+    borderColor: colors.primary,
+    shadowColor: colors.primaryDark,
+    shadowOffset: { height: 2, width: 0 },
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
   },
   followUpPersona: {
     color: colors.primaryDark,
