@@ -5,17 +5,20 @@ import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
 import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Screen } from '../components/Screen';
-import { practiceContent } from '../data/content';
+import { practiceContent, progressData } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
-import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { createAnswerCoachContent } from '../utils/answerCoach';
 import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createFocusTimerControls, FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
+import { createLocalProgressStats } from '../utils/localProgress';
 import {
+  createPracticeCompletionMilestone,
   createNextPracticeRecommendation,
   createPracticeCompletionSummary,
+  createPracticeSavePrompt,
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createRoleplayAnglePickerState } from '../utils/roleplayAnglePicker';
@@ -30,23 +33,27 @@ import { createPracticeSession } from '../utils/sessionHistory';
 import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
+  dailyTarget: DailyPracticeTarget;
   roleplay: RoleplayScenario;
   onOpenProgress: () => void;
   onSelectRoleplay: (roleplayId: RoleplayId) => void;
   onSaveSession: (session: PracticeSession) => void;
+  sessions: PracticeSession[];
 };
 
 export function RoleplayScreen({
+  dailyTarget,
   onOpenProgress,
   onSaveSession,
   roleplay,
   onSelectRoleplay,
+  sessions,
 }: RoleplayScreenProps) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [draftAnswer, setDraftAnswer] = useState('');
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
-  const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
+  const [savedSession, setSavedSession] = useState<PracticeSession | null>(null);
   const [timerSeconds, setTimerSeconds] = useState(FOCUS_SESSION_SECONDS);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [followUpAnswer, setFollowUpAnswer] = useState('');
@@ -101,21 +108,39 @@ export function RoleplayScreen({
   });
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
-  const completionSummary = savedSessionId
+  const completionSummary = savedSession
     ? createPracticeCompletionSummary({
         includedFollowUp: Boolean(followUpReview?.isReadyForFeedback),
         roleplayTitle: roleplay.title,
         xpReward: totalXpReward,
       })
     : null;
+  const completionSessions = savedSession
+    ? sessions.some((session) => session.id === savedSession.id)
+      ? sessions
+      : [savedSession, ...sessions]
+    : sessions;
+  const completionMilestone = savedSession
+    ? createPracticeCompletionMilestone({
+        dailyTarget,
+        progress: createLocalProgressStats(progressData.summary, completionSessions, dailyTarget),
+      })
+    : null;
   const nextPracticeRecommendation = completionSummary
     ? createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays)
     : null;
+  const savePrompt =
+    answerReview?.isReadyForFeedback && !savedSession
+      ? createPracticeSavePrompt({
+          includedFollowUp: Boolean(followUpReview?.isReadyForFeedback),
+          xpReward: totalXpReward,
+        })
+      : null;
   const roleplayGuide = createRoleplayGuideState({
     hasDraftAnswer: draftAnswer.trim().length > 0,
     hasReviewedAnswer: Boolean(answerReview),
     isReadyForFeedback: Boolean(answerReview?.isReadyForFeedback && feedbackResult),
-    isSaved: Boolean(savedSessionId),
+    isSaved: Boolean(savedSession),
   });
 
   useEffect(() => {
@@ -148,20 +173,20 @@ export function RoleplayScreen({
     setShowFeedback(review.isReadyForFeedback);
     setFollowUpAnswer('');
     setFollowUpReview(null);
-    setSavedSessionId(null);
+    setSavedSession(null);
   }
 
   function updateFollowUpAnswer(answer: string) {
     setFollowUpAnswer(answer);
     setFollowUpReview(null);
-    setSavedSessionId(null);
+    setSavedSession(null);
   }
 
   function reviewFollowUpAnswer() {
     const review = summarizePracticeAnswer(followUpAnswer);
 
     setFollowUpReview(review);
-    setSavedSessionId(null);
+    setSavedSession(null);
   }
 
   function toggleFocusTimer() {
@@ -194,7 +219,7 @@ export function RoleplayScreen({
     setAnswerReview(null);
     setFeedbackResult(null);
     setShowFeedback(false);
-    setSavedSessionId(null);
+    setSavedSession(null);
     setIsAnswerPlanOpen(false);
     setIsPhraseHelperOpen(false);
     setFollowUpAnswer('');
@@ -220,7 +245,7 @@ export function RoleplayScreen({
       xpReward: totalXpReward,
     });
 
-    setSavedSessionId(session.id);
+    setSavedSession(session);
     setIsTimerRunning(false);
     onSaveSession(session);
   }
@@ -584,10 +609,21 @@ export function RoleplayScreen({
               <Text style={styles.completionStatValue}>{completionSummary.rewardLabel}</Text>
             </View>
             <View style={[styles.completionStat, styles.completionStatSecondary]}>
-              <Text style={styles.completionStatLabel}>Saved in</Text>
-              <Text style={styles.completionStatValue}>Progress</Text>
+              <Text style={styles.completionStatLabel}>Today</Text>
+              <Text style={styles.completionStatValue}>
+                {completionMilestone ? completionMilestone.todayValue : 'Saved'}
+              </Text>
             </View>
           </View>
+          {completionMilestone ? (
+            <View style={styles.completionMilestone}>
+              <View style={styles.completionMilestoneHeader}>
+                <Text style={styles.completionMilestoneTitle}>{completionMilestone.title}</Text>
+                <Text style={styles.completionMilestoneValue}>{completionMilestone.streakValue}</Text>
+              </View>
+              <Text style={styles.completionMilestoneBody}>{completionMilestone.body}</Text>
+            </View>
+          ) : null}
           <Text style={styles.completionNext}>{completionSummary.nextAction}</Text>
           {nextPracticeRecommendation ? (
             <View style={styles.recommendationPanel}>
@@ -679,14 +715,34 @@ export function RoleplayScreen({
         </Card>
       ) : null}
 
-      {answerReview?.isReadyForFeedback && !savedSessionId ? (
-        <View style={styles.finalSaveAction}>
-          <AppButton
-            accessibilityHint="Saves this practice session to Progress"
-            label={`Save full session (+${totalXpReward} XP)`}
-            onPress={saveSession}
-          />
-        </View>
+      {savePrompt ? (
+        <Card muted>
+          <View style={styles.lessonSaveHeader}>
+            <View style={styles.lessonSaveTitleBlock}>
+              <Text style={styles.lessonSaveEyebrow}>{savePrompt.eyebrow}</Text>
+              <Text style={styles.lessonSaveTitle}>{savePrompt.title}</Text>
+            </View>
+            <View style={styles.lessonSaveXpPill}>
+              <Text style={styles.lessonSaveXp}>{savePrompt.xpLabel}</Text>
+            </View>
+          </View>
+          <Text style={styles.lessonSaveBody}>{savePrompt.body}</Text>
+          <View style={styles.lessonSaveStatusRow}>
+            <View style={styles.lessonSaveStatusPill}>
+              <Text style={styles.lessonSaveStatusText}>Feedback reviewed</Text>
+            </View>
+            <View style={[styles.lessonSaveStatusPill, styles.lessonSaveStatusSecondary]}>
+              <Text style={styles.lessonSaveStatusText}>{savePrompt.followUpLabel}</Text>
+            </View>
+          </View>
+          <View style={styles.lessonSaveAction}>
+            <AppButton
+              accessibilityHint="Saves this practice session to Progress"
+              label={savePrompt.ctaLabel}
+              onPress={saveSession}
+            />
+          </View>
+        </Card>
       ) : null}
     </Screen>
   );
@@ -1348,8 +1404,72 @@ const styles = StyleSheet.create({
   answerClearAction: {
     marginTop: spacing.sm,
   },
-  finalSaveAction: {
+  lessonSaveHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  lessonSaveTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  lessonSaveEyebrow: {
+    color: colors.success,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.xs,
+    textTransform: 'uppercase',
+  },
+  lessonSaveTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  lessonSaveXpPill: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.md,
+    minWidth: 78,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  lessonSaveXp: {
+    color: colors.accent,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  lessonSaveBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
     marginTop: spacing.md,
+  },
+  lessonSaveStatusRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: spacing.md,
+  },
+  lessonSaveStatusPill: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  lessonSaveStatusSecondary: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#BDE7DC',
+  },
+  lessonSaveStatusText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  lessonSaveAction: {
+    marginTop: spacing.sm,
   },
   completionHeader: {
     alignItems: 'center',
@@ -1421,6 +1541,38 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     marginTop: spacing.xs,
+  },
+  completionMilestone: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  completionMilestoneHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  completionMilestoneTitle: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontSize: typography.body,
+    fontWeight: '900',
+    paddingRight: spacing.md,
+  },
+  completionMilestoneValue: {
+    color: colors.accent,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  completionMilestoneBody: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
   },
   completionNext: {
     color: colors.primaryDark,

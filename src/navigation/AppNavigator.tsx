@@ -50,8 +50,10 @@ export function AppNavigator() {
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
             key={selectedRoleplay.id}
+            dailyTarget={dailyTarget}
             onOpenProgress={() => setActiveScreen('Progress')}
             onSaveSession={savePracticeSession}
+            sessions={practiceSessions}
             roleplay={selectedRoleplay}
             onSelectRoleplay={openRoleplay}
           />

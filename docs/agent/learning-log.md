@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-26: Lesson-Complete Milestone
+
+Built one focused improvement: the Roleplay completion flow now feels more like finishing a lesson. After review, the app frames the final save as lesson completion, and after saving it shows daily-target progress plus streak context so the next step feels more motivating.
+
+What went well:
+
+- The save moment is now more aligned with the habit-forming product direction: complete lesson, bank XP, then see whether today's target is done.
+- The completion milestone logic lives in `src/utils/practiceCompletion.ts`, so the UI copy stays simple and testable.
+- Roleplay now receives the current sessions and daily target, which lets the saved-state card reflect real in-run progress without adding persistence or backend logic.
+- Added focused coverage for both the finish-lesson save prompt and the new completion milestone states.
+
+What went wrong:
+
+- Daily target and streak are still local in-memory progress, so they reset after app restart.
+- Draft PR creation is blocked in this environment because GitHub CLI `gh` is not installed, which is required by the publishing workflow skill used here.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 36 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- End-of-lesson feedback should show progress toward today's target, not only that a session was saved.
+- Keep motivational progress cues tied to professional practice outcomes like streak, target completion and next roleplay.
+- The app remains compatible with Kevin's Expo Go on SDK 54; do not upgrade unless the learning log says that changed.
+
+Next suggested task:
+
+- Add persistent onboarding completion with local storage so repeat opens feel more product-ready.
+
 ## 2026-06-26: Short Step 2 Instruction
 
 Built one focused improvement: the Roleplay Step 2 instruction is now shorter and easier to scan on mobile. It changed from a full explanatory sentence to the direct instruction "Answer in 2-4 spoken sentences."

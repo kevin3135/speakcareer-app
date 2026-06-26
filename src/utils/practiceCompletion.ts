@@ -1,4 +1,5 @@
-import type { RoleplayId, RoleplayScenario } from '../types';
+import type { DailyPracticeTarget, RoleplayId, RoleplayScenario } from '../types';
+import type { LocalProgressStats } from './localProgress';
 
 export type PracticeCompletionSummary = {
   title: string;
@@ -8,6 +9,15 @@ export type PracticeCompletionSummary = {
   progressCtaLabel: string;
 };
 
+export type PracticeSavePrompt = {
+  body: string;
+  ctaLabel: string;
+  eyebrow: string;
+  followUpLabel: string;
+  title: string;
+  xpLabel: string;
+};
+
 export type NextPracticeRecommendation = {
   roleplayId: RoleplayId;
   title: string;
@@ -15,11 +25,41 @@ export type NextPracticeRecommendation = {
   ctaLabel: string;
 };
 
+export type PracticeCompletionMilestone = {
+  title: string;
+  body: string;
+  todayValue: string;
+  streakValue: string;
+};
+
 type CreatePracticeCompletionSummaryInput = {
   roleplayTitle: string;
   xpReward: number;
   includedFollowUp: boolean;
 };
+
+type CreatePracticeSavePromptInput = {
+  includedFollowUp: boolean;
+  xpReward: number;
+};
+
+export function createPracticeSavePrompt({
+  includedFollowUp,
+  xpReward,
+}: CreatePracticeSavePromptInput): PracticeSavePrompt {
+  const safeXpReward = Math.max(0, xpReward);
+
+  return {
+    body: includedFollowUp
+      ? 'Save both turns to Progress and lock in this practice win.'
+      : 'Save now, or answer the follow-up first for bonus XP.',
+    ctaLabel: `Complete lesson (+${safeXpReward} XP)`,
+    eyebrow: 'Finish lesson',
+    followUpLabel: includedFollowUp ? 'Follow-up included' : 'Follow-up optional',
+    title: 'Ready to complete this lesson',
+    xpLabel: `+${safeXpReward} XP`,
+  };
+}
 
 export function createPracticeCompletionSummary({
   roleplayTitle,
@@ -56,6 +96,34 @@ export function createNextPracticeRecommendation(
     title: nextRoleplay.title,
     reason: `Train a different ${nextRoleplay.category.toLowerCase()} skill: ${nextRoleplay.focus}.`,
     ctaLabel: 'Start next roleplay',
+  };
+}
+
+type CreatePracticeCompletionMilestoneInput = {
+  dailyTarget: DailyPracticeTarget;
+  progress: Pick<
+    LocalProgressStats,
+    'currentStreakDays' | 'targetSessionsCompleted' | 'targetSessionsRemaining'
+  >;
+};
+
+export function createPracticeCompletionMilestone({
+  dailyTarget,
+  progress,
+}: CreatePracticeCompletionMilestoneInput): PracticeCompletionMilestone {
+  const isTargetComplete = progress.targetSessionsRemaining === 0;
+  const remainingLabel =
+    progress.targetSessionsRemaining === 1 ? 'One more sprint today' : `${progress.targetSessionsRemaining} sprints left today`;
+
+  return {
+    title: isTargetComplete ? 'Daily target complete' : remainingLabel,
+    body: isTargetComplete
+      ? 'You closed today\'s practice target. Start one new roleplay or review Progress while the feedback is still fresh.'
+      : progress.targetSessionsRemaining === 1
+        ? 'One more short roleplay will complete today\'s target.'
+        : `${progress.targetSessionsRemaining} more short roleplays will complete today\'s target.`,
+    todayValue: `${progress.targetSessionsCompleted}/${dailyTarget} done`,
+    streakValue: `${progress.currentStreakDays} ${progress.currentStreakDays === 1 ? 'day' : 'days'}`,
   };
 }
 

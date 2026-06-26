@@ -321,8 +321,30 @@ test('creates a lesson-complete summary from saved sessions', async () => {
 test('creates a rewarding roleplay completion summary', async () => {
   const {
     createNextPracticeRecommendation,
+    createPracticeCompletionMilestone,
     createPracticeCompletionSummary,
+    createPracticeSavePrompt,
   } = await import('../src/utils/practiceCompletion.ts');
+
+  const firstAnswerPrompt = createPracticeSavePrompt({
+    includedFollowUp: false,
+    xpReward: 55,
+  });
+
+  assert.equal(firstAnswerPrompt.eyebrow, 'Finish lesson');
+  assert.equal(firstAnswerPrompt.title, 'Ready to complete this lesson');
+  assert.equal(firstAnswerPrompt.xpLabel, '+55 XP');
+  assert.equal(firstAnswerPrompt.ctaLabel, 'Complete lesson (+55 XP)');
+  assert.equal(firstAnswerPrompt.followUpLabel, 'Follow-up optional');
+  assert.ok(firstAnswerPrompt.body.includes('bonus XP'));
+
+  const followUpPrompt = createPracticeSavePrompt({
+    includedFollowUp: true,
+    xpReward: 70,
+  });
+
+  assert.equal(followUpPrompt.followUpLabel, 'Follow-up included');
+  assert.ok(followUpPrompt.body.includes('both turns'));
 
   const firstAnswerSummary = createPracticeCompletionSummary({
     includedFollowUp: false,
@@ -345,6 +367,34 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(fullSessionSummary.rewardLabel, 'Career-ready sprint');
   assert.ok(fullSessionSummary.body.includes('follow-up'));
   assert.ok(fullSessionSummary.nextAction.includes('fresh practice angle'));
+
+  const milestoneComplete = createPracticeCompletionMilestone({
+    dailyTarget: 1,
+    progress: {
+      currentStreakDays: 5,
+      targetSessionsCompleted: 1,
+      targetSessionsRemaining: 0,
+    },
+  });
+
+  assert.equal(milestoneComplete.title, 'Daily target complete');
+  assert.equal(milestoneComplete.todayValue, '1/1 done');
+  assert.equal(milestoneComplete.streakValue, '5 days');
+  assert.ok(milestoneComplete.body.includes('today\'s practice target'));
+
+  const milestoneRemaining = createPracticeCompletionMilestone({
+    dailyTarget: 3,
+    progress: {
+      currentStreakDays: 1,
+      targetSessionsCompleted: 1,
+      targetSessionsRemaining: 2,
+    },
+  });
+
+  assert.equal(milestoneRemaining.title, '2 sprints left today');
+  assert.equal(milestoneRemaining.todayValue, '1/3 done');
+  assert.equal(milestoneRemaining.streakValue, '1 day');
+  assert.ok(milestoneRemaining.body.includes('2 more short roleplays'));
 
   const nextAfterSales = createNextPracticeRecommendation('sales-call', practiceContent.roleplays);
   assert.equal(nextAfterSales.roleplayId, 'workplace-small-talk');
