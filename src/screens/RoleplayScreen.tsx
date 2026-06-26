@@ -389,12 +389,18 @@ export function RoleplayScreen({
               />
             </View>
             <View style={styles.completionSecondaryAction}>
-              <AppButton
+              <Pressable
                 accessibilityHint="Clears this completed session and starts a fresh answer"
-                label="Practice another answer"
+                accessibilityLabel="Practice another answer"
+                accessibilityRole="button"
                 onPress={clearAnswer}
-                variant="quiet"
-              />
+                style={({ pressed }) => [
+                  styles.completionTertiaryAction,
+                  pressed && styles.completionTertiaryActionPressed,
+                ]}
+              >
+                <Text style={styles.completionTertiaryActionText}>Practice another answer</Text>
+              </Pressable>
             </View>
           </View>
         </Card>
@@ -858,5 +864,18 @@ const styles = StyleSheet.create({
   },
   completionSecondaryAction: {
     marginTop: spacing.sm,
+  },
+  completionTertiaryAction: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+  },
+  completionTertiaryActionPressed: {
+    opacity: 0.72,
+  },
+  completionTertiaryActionText: {
+    color: colors.primaryDark,
+    fontSize: typography.body,
+    fontWeight: '900',
   },
 });

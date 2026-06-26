@@ -1500,3 +1500,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Run a real Expo visual check of the completion card and adjust action layout if it feels too busy.
+
+## 2026-06-26: Completion Action Hierarchy
+
+Built one focused improvement: the completion card now treats "Practice another answer" as a lighter tertiary text action instead of a full button. The primary next-roleplay action and secondary Progress action remain clear, while the card feels less crowded on mobile.
+
+What went well:
+
+- The completion card now has a clearer action hierarchy.
+- The primary "Start next roleplay" habit-loop action is easier to notice.
+- The same-roleplay retry option remains accessible without adding visual weight.
+- The change stayed limited to UI styling and did not touch data, payments, auth or integrations.
+
+What went wrong:
+
+- This is still code-level UI polish, not a true Expo screenshot pass.
+- The completion card still needs real mobile visual QA.
+- There is no component-level test for the tertiary action press state.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion card actions are now primary next roleplay, secondary Progress and tertiary same-roleplay retry.
+- Keep the completion card visually calm because it already carries reward, stats, recommendation and actions.
+- A real Expo visual check is still the next best UI validation step.
+
+Next suggested task:
+
+- Start Expo and visually verify the completion card flow on a phone-sized viewport.
