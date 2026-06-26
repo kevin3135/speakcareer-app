@@ -1124,9 +1124,14 @@ test('creates a calm roleplay angle picker state', async () => {
 
   assert.equal(closedPicker.currentAngle.title, 'Tell me about yourself');
   assert.equal(closedPicker.toggleLabel, 'Change');
+  assert.equal(closedPicker.progressLabel, '1 of 3');
+  assert.equal(closedPicker.nextAngleTitle, 'Why this role?');
+  assert.ok(closedPicker.closedGuidance.includes('Why this role?'));
   assert.equal(closedPicker.options.length, interviewVariants.length - 1);
-  assert.equal(closedPicker.options.some((option) => option.id === 'career-story'), false);
-  assert.ok(closedPicker.helperText.includes('this angle first'));
+  assert.equal(closedPicker.options.some((option) => option.variant.id === 'career-story'), false);
+  assert.equal(closedPicker.options[0].metaLabel, 'Recommended next');
+  assert.equal(closedPicker.options[0].isRecommendedNext, true);
+  assert.ok(closedPicker.helperText.includes('one step at a time'));
   assert.equal(closedPicker.showHelperText, false);
 
   const openPicker = createRoleplayAnglePickerState({
@@ -1139,6 +1144,25 @@ test('creates a calm roleplay angle picker state', async () => {
   assert.equal(openPicker.toggleLabel, 'Hide');
   assert.equal(openPicker.toggleAccessibilityLabel, 'Hide practice angle choices');
   assert.equal(openPicker.showHelperText, true);
+
+  const presentationVariants = practiceContent.roleplays.find(
+    (roleplay) => roleplay.id === 'presentation-practice',
+  ).promptVariants;
+  const fiveAnglePicker = createRoleplayAnglePickerState({
+    activeVariantId: 'audience-question',
+    isOpen: true,
+    variants: presentationVariants,
+  });
+
+  assert.equal(fiveAnglePicker.progressLabel, '4 of 5');
+  assert.equal(fiveAnglePicker.nextAngleTitle, 'Q&A follow-up');
+  assert.equal(
+    fiveAnglePicker.options.find((option) => option.variant.id === 'qa-follow-up').metaLabel,
+    'Recommended next',
+  );
+  assert.ok(
+    fiveAnglePicker.options.some((option) => option.metaLabel === 'Option 1 of 5'),
+  );
 });
 
 test('creates one read-first card from roleplay prompt details', async () => {

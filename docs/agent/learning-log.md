@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Simpler Guided Angle Picker
+
+Built one focused UX improvement: the Roleplay practice angle card now shows progress like "1 of 5", a "Next recommended" hint and option labels that identify the recommended next angle. This makes scenarios with four or five angles feel more guided on mobile.
+
+What went well:
+
+- Improved choice clarity without adding a new screen or changing the practice flow.
+- Reused the existing roleplay angle picker helper and kept UI logic simple.
+- Tests now verify progress labels, recommended-next metadata and five-angle picker behavior.
+- Mobile preview confirmed Presentation Practice shows "1 of 5", "Next recommended: Smooth transition" and "Recommended next" in the picker.
+
+What went wrong:
+
+- The angle picker still shows all alternate angles when expanded; later it may need grouping if scenarios grow beyond five angles.
+- The preview click target needed DOM-based selection because the in-app browser scaled the mobile tab bar oddly.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 44 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants the app to feel simpler and more guided, especially before adding more content.
+- Five-angle scenarios should show the recommended next move instead of forcing users to choose from a flat list.
+- The next useful UX step is to make the first saved-session empty state or onboarding handoff even clearer.
+
+Next suggested task:
+
+- Add a cleaner first-time Progress empty state or improve the first practice handoff after onboarding.
+
 ## 2026-06-27: Presentation Q&A Follow-Up Angle
 
 Built one focused practice improvement: Presentation Practice now includes a "Q&A follow-up" angle. The user practices answering a second audience question, naming the next step and inviting agreement.

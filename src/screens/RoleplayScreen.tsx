@@ -397,7 +397,10 @@ export function RoleplayScreen({
         <Card>
           <View style={styles.angleHeader}>
             <View style={styles.angleCopyBlock}>
-              <Text style={styles.detailLabel}>{anglePicker.eyebrow}</Text>
+              <View style={styles.angleMetaRow}>
+                <Text style={styles.detailLabel}>{anglePicker.eyebrow}</Text>
+                <Text style={styles.angleProgressPill}>{anglePicker.progressLabel}</Text>
+              </View>
               <Text style={styles.angleTitle}>{anglePicker.currentAngle.title}</Text>
             </View>
             {anglePicker.options.length > 0 ? (
@@ -414,23 +417,36 @@ export function RoleplayScreen({
             ) : null}
           </View>
           <Text style={styles.angleNote}>{anglePicker.currentAngle.coachingNote}</Text>
+          {anglePicker.nextAngleTitle ? (
+            <Text style={styles.angleNextHint}>{anglePicker.closedGuidance}</Text>
+          ) : null}
           {isAnglePickerOpen ? (
             <>
               {anglePicker.showHelperText ? (
                 <Text style={styles.angleHelper}>{anglePicker.helperText}</Text>
               ) : null}
               <View style={styles.angleOptions}>
-                {anglePicker.options.map((variant) => (
+                {anglePicker.options.map((option) => (
                   <Pressable
                     accessibilityHint="Changes the opening prompt and clears the current draft answer"
-                    accessibilityLabel={`Use ${variant.title} practice angle`}
+                    accessibilityLabel={`Use ${option.variant.title} practice angle`}
                     accessibilityRole="button"
-                    key={variant.id}
-                    onPress={() => selectPromptVariant(variant.id)}
+                    key={option.variant.id}
+                    onPress={() => selectPromptVariant(option.variant.id)}
                     style={({ pressed }) => [styles.angleOption, pressed && styles.angleOptionPressed]}
                   >
-                    <Text style={styles.angleOptionTitle}>{variant.title}</Text>
-                    <Text style={styles.angleOptionNote}>{variant.coachingNote}</Text>
+                    <View style={styles.angleOptionHeader}>
+                      <Text style={styles.angleOptionTitle}>{option.variant.title}</Text>
+                      <Text
+                        style={[
+                          styles.angleOptionMeta,
+                          option.isRecommendedNext && styles.angleOptionMetaRecommended,
+                        ]}
+                      >
+                        {option.metaLabel}
+                      </Text>
+                    </View>
+                    <Text style={styles.angleOptionNote}>{option.variant.coachingNote}</Text>
                   </Pressable>
                 ))}
               </View>
@@ -1086,6 +1102,22 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: spacing.md,
   },
+  angleMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  angleProgressPill: {
+    backgroundColor: colors.infoSoft,
+    borderRadius: radii.sm,
+    color: colors.info,
+    fontSize: typography.small,
+    fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+  },
   angleTitle: {
     color: colors.ink,
     fontSize: typography.h3,
@@ -1114,6 +1146,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.sm,
   },
+  angleNextHint: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: 18,
+    marginTop: spacing.xs,
+  },
   angleHelper: {
     color: colors.textMuted,
     fontSize: typography.small,
@@ -1135,10 +1174,32 @@ const styles = StyleSheet.create({
   angleOptionPressed: {
     opacity: 0.82,
   },
+  angleOptionHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
   angleOptionTitle: {
     color: colors.ink,
+    flexShrink: 1,
     fontSize: typography.body,
     fontWeight: '900',
+  },
+  angleOptionMeta: {
+    backgroundColor: colors.infoSoft,
+    borderRadius: radii.sm,
+    color: colors.info,
+    fontSize: typography.small,
+    fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+  },
+  angleOptionMetaRecommended: {
+    backgroundColor: colors.accentSoft,
+    color: colors.primaryDark,
   },
   angleOptionNote: {
     color: colors.textMuted,
