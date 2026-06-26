@@ -316,24 +316,27 @@ export function RoleplayScreen({
           </Pressable>
         </View>
         {isScenarioPickerOpen ? (
-          <View style={styles.scenarioChoices}>
-            {scenarioPicker.options.map((item) => (
-              <Pressable
-                accessibilityHint="Switches the active roleplay scenario"
-                accessibilityLabel={`Open ${item.title} roleplay`}
-                accessibilityRole="button"
-                key={item.id}
-                onPress={() => selectRoleplay(item.id)}
-                style={({ pressed }) => [styles.scenarioChoice, pressed && styles.scenarioChoicePressed]}
-              >
-                <Text style={styles.scenarioChoiceTitle}>{item.title}</Text>
-                <Text style={styles.scenarioChoiceMeta}>{formatRoleplayScenarioMeta(item)}</Text>
-              </Pressable>
-            ))}
-          </View>
-        ) : (
-          <Text style={styles.scenarioHelper}>{scenarioPicker.helperText}</Text>
-        )}
+          <>
+            {scenarioPicker.showHelperText ? (
+              <Text style={styles.scenarioHelper}>{scenarioPicker.helperText}</Text>
+            ) : null}
+            <View style={styles.scenarioChoices}>
+              {scenarioPicker.options.map((item) => (
+                <Pressable
+                  accessibilityHint="Switches the active roleplay scenario"
+                  accessibilityLabel={`Open ${item.title} roleplay`}
+                  accessibilityRole="button"
+                  key={item.id}
+                  onPress={() => selectRoleplay(item.id)}
+                  style={({ pressed }) => [styles.scenarioChoice, pressed && styles.scenarioChoicePressed]}
+                >
+                  <Text style={styles.scenarioChoiceTitle}>{item.title}</Text>
+                  <Text style={styles.scenarioChoiceMeta}>{formatRoleplayScenarioMeta(item)}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </>
+        ) : null}
       </View>
 
       {roleplayPromptVariants.length > 0 && anglePicker.currentAngle ? (
@@ -358,24 +361,27 @@ export function RoleplayScreen({
           </View>
           <Text style={styles.angleNote}>{anglePicker.currentAngle.coachingNote}</Text>
           {isAnglePickerOpen ? (
-            <View style={styles.angleOptions}>
-              {anglePicker.options.map((variant) => (
-                <Pressable
-                  accessibilityHint="Changes the opening prompt and clears the current draft answer"
-                  accessibilityLabel={`Use ${variant.title} practice angle`}
-                  accessibilityRole="button"
-                  key={variant.id}
-                  onPress={() => selectPromptVariant(variant.id)}
-                  style={({ pressed }) => [styles.angleOption, pressed && styles.angleOptionPressed]}
-                >
-                  <Text style={styles.angleOptionTitle}>{variant.title}</Text>
-                  <Text style={styles.angleOptionNote}>{variant.coachingNote}</Text>
-                </Pressable>
-              ))}
-            </View>
-          ) : (
-            <Text style={styles.angleHelper}>{anglePicker.helperText}</Text>
-          )}
+            <>
+              {anglePicker.showHelperText ? (
+                <Text style={styles.angleHelper}>{anglePicker.helperText}</Text>
+              ) : null}
+              <View style={styles.angleOptions}>
+                {anglePicker.options.map((variant) => (
+                  <Pressable
+                    accessibilityHint="Changes the opening prompt and clears the current draft answer"
+                    accessibilityLabel={`Use ${variant.title} practice angle`}
+                    accessibilityRole="button"
+                    key={variant.id}
+                    onPress={() => selectPromptVariant(variant.id)}
+                    style={({ pressed }) => [styles.angleOption, pressed && styles.angleOptionPressed]}
+                  >
+                    <Text style={styles.angleOptionTitle}>{variant.title}</Text>
+                    <Text style={styles.angleOptionNote}>{variant.coachingNote}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            </>
+          ) : null}
         </Card>
       ) : null}
 

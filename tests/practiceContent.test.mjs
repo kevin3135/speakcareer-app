@@ -597,6 +597,7 @@ test('creates a calm roleplay scenario picker state', async () => {
   assert.equal(closedPicker.options.length, 4);
   assert.equal(closedPicker.options.some((option) => option.id === 'job-interview'), false);
   assert.ok(closedPicker.helperText.includes('one scenario'));
+  assert.equal(closedPicker.showHelperText, false);
   assert.equal(formatRoleplayScenarioMeta(closedPicker.currentScenario), 'B1-B2 / 12 min / Interview');
 
   const openPicker = createRoleplayScenarioPickerState({
@@ -608,6 +609,7 @@ test('creates a calm roleplay scenario picker state', async () => {
   assert.equal(openPicker.currentScenario.title, 'Sales Call');
   assert.equal(openPicker.toggleLabel, 'Hide');
   assert.equal(openPicker.toggleAccessibilityLabel, 'Hide roleplay scenario choices');
+  assert.equal(openPicker.showHelperText, true);
 });
 
 test('creates a calm roleplay angle picker state', async () => {
@@ -625,6 +627,7 @@ test('creates a calm roleplay angle picker state', async () => {
   assert.equal(closedPicker.options.length, interviewVariants.length - 1);
   assert.equal(closedPicker.options.some((option) => option.id === 'career-story'), false);
   assert.ok(closedPicker.helperText.includes('this angle first'));
+  assert.equal(closedPicker.showHelperText, false);
 
   const openPicker = createRoleplayAnglePickerState({
     activeVariantId: 'role-motivation',
@@ -635,6 +638,7 @@ test('creates a calm roleplay angle picker state', async () => {
   assert.equal(openPicker.currentAngle.title, 'Why this role?');
   assert.equal(openPicker.toggleLabel, 'Hide');
   assert.equal(openPicker.toggleAccessibilityLabel, 'Hide practice angle choices');
+  assert.equal(openPicker.showHelperText, true);
 });
 
 test('creates one read-first card from roleplay prompt details', async () => {

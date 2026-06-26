@@ -22,6 +22,7 @@ export function createRoleplayAnglePickerState({
     eyebrow: 'Practice angle',
     helperText: 'Start with this angle first. Change only if you want a different version of the same scenario.',
     options,
+    showHelperText: isOpen,
     toggleAccessibilityLabel: isOpen ? 'Hide practice angle choices' : 'Change practice angle',
     toggleLabel: isOpen ? 'Hide' : 'Change',
   };

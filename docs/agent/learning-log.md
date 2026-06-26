@@ -2057,3 +2057,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the helpful phrases block collapsible so the answer input can sit closer to the top of the answer card.
+
+## 2026-06-26: Compact Roleplay Setup
+
+Built one focused improvement: the Roleplay setup area now hides secondary scenario and angle helper text until the user opens a Change control.
+
+What went well:
+
+- The closed Roleplay start is shorter and calmer: scenario and angle now read like compact setup cards.
+- The extra guidance is still available when a user opens the scenario or angle chooser.
+- The picker helpers expose `showHelperText`, so this UI rule is covered by the existing unit tests.
+- Mobile preview at 390x844 confirmed the long helper text is gone in the closed state and returns when the scenario picker opens.
+
+What went wrong:
+
+- The first patch missed two JSX `: null` branches, which broke typecheck and lint before being fixed.
+- The top of Roleplay is cleaner, but the optional timer still takes meaningful vertical space.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed after the JSX fix.
+- `npm.cmd run test` passed with 33 tests.
+- `npm.cmd run lint` passed after the JSX fix.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional guidance should be nearby but collapsed when it is not the next action.
+- When simplifying mobile UI, verify both the closed state and the expanded state.
+- The next small task should make the optional timer less visually heavy, because it still pushes the first roleplay prompt down.
+
+Next suggested task:
+
+- Collapse the optional timer into a compact row or move it below the answer action so Step 1 starts faster.

@@ -25,6 +25,7 @@ export function createRoleplayScenarioPickerState({
     eyebrow: 'Current scenario',
     helperText: 'Stay with one scenario for this short sprint. Change only if another work situation matters today.',
     options,
+    showHelperText: isOpen,
     toggleAccessibilityLabel: isOpen ? 'Hide roleplay scenario choices' : 'Change roleplay scenario',
     toggleLabel: isOpen ? 'Hide' : 'Change',
   };
