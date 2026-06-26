@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Angle-Specific Answer Placeholders
+
+Built one focused improvement: the Roleplay answer box now uses the selected practice angle's suggested phrases as its placeholder. Meeting Practice no longer shows the generic interview-style "Currently, I focus..." starter.
+
+What went well:
+
+- The change reuses existing `suggestedPhrases`, so content and UI stay in sync without extra data fields.
+- Meeting Practice now shows useful starters like "Since our last meeting..." and "I see the goal, but I am concerned about...".
+- Added test coverage for the default answer coach and the Polite disagreement meeting placeholder.
+- Mobile preview confirmed the placeholder changes after selecting the Polite disagreement angle.
+
+What went wrong:
+
+- The placeholder can become a little long on small screens because it joins all three suggested phrases.
+- This improves the first answer box only; the follow-up answer placeholder is still generic.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 41 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Use existing content fields before adding new data structure.
+- Placeholders should guide the user into the exact workplace skill they selected.
+- Keep watching mobile text length as prompts and placeholders become more specific.
+
+Next suggested task:
+
+- Add one concise Presentation Practice Q&A follow-up variant, since the roadmap calls out presentation follow-up prompts next.
+
 ## 2026-06-26: Meeting Polite Disagreement Variant
 
 Built one focused improvement: Meeting Practice now includes a new "Polite disagreement" practice angle. It trains users to disagree respectfully, name one risk and ask for a focused clarification before suggesting a safer next step.

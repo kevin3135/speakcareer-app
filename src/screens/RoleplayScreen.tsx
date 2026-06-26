@@ -73,7 +73,10 @@ export function RoleplayScreen({
     roleplayPromptVariants.find((variant) => variant.id === activePromptVariantId) ??
     roleplayPromptVariants[0];
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
-  const answerCoach = createAnswerCoachContent({ persona: roleplay.aiPersona });
+  const answerCoach = createAnswerCoachContent({
+    persona: roleplay.aiPersona,
+    promptVariant: activePromptVariant,
+  });
   const answerPlan = createAnswerPlanHelperState({
     isOpen: isAnswerPlanOpen,
     steps: answerCoach.checklist,

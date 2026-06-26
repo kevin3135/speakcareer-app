@@ -622,6 +622,12 @@ test('guides roleplay practice through one simple step at a time', async () => {
 test('creates a simple answer coach for the roleplay answer card', async () => {
   const { createAnswerCoachContent } = await import('../src/utils/answerCoach.ts');
   const coach = createAnswerCoachContent({ persona: 'Hiring Manager' });
+  const meeting = practiceContent.roleplays.find((roleplay) => roleplay.id === 'meeting-practice');
+  const disagreementVariant = meeting.promptVariants.find((variant) => variant.id === 'polite-disagreement');
+  const meetingCoach = createAnswerCoachContent({
+    persona: 'Project Lead',
+    promptVariant: disagreementVariant,
+  });
 
   assert.equal(coach.title, 'Write your answer');
   assert.equal(coach.wordTargetLabel, '2-4 sentences');
@@ -637,6 +643,10 @@ test('creates a simple answer coach for the roleplay answer card', async () => {
   ]);
   assert.ok(coach.placeholder.startsWith('Start with:'));
   assert.ok(coach.placeholder.includes('Currently'));
+  assert.ok(meetingCoach.placeholder.startsWith('Start with:'));
+  assert.ok(meetingCoach.placeholder.includes('I see the goal'));
+  assert.ok(meetingCoach.placeholder.includes('Could we clarify'));
+  assert.ok(!meetingCoach.placeholder.includes('Currently'));
 });
 
 test('creates a collapsible helpful phrase helper state', async () => {

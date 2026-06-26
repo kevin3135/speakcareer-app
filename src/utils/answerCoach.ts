@@ -1,3 +1,5 @@
+import type { RoleplayPromptVariant } from '../types';
+
 export type AnswerCoachContent = {
   checklist: string[];
   instruction: string;
@@ -12,9 +14,10 @@ export type AnswerCoachContent = {
 
 type AnswerCoachInput = {
   persona: string;
+  promptVariant?: RoleplayPromptVariant;
 };
 
-export function createAnswerCoachContent({ persona }: AnswerCoachInput): AnswerCoachContent {
+export function createAnswerCoachContent({ persona, promptVariant }: AnswerCoachInput): AnswerCoachContent {
   return {
     checklist: [
       'Answer the question directly.',
@@ -22,7 +25,7 @@ export function createAnswerCoachContent({ persona }: AnswerCoachInput): AnswerC
       'Finish with a clear next step.',
     ],
     instruction: 'Answer in 2-4 spoken sentences.',
-    placeholder: 'Start with: Currently, I focus on... One result I am proud of is... That is why...',
+    placeholder: createAnswerPlaceholder(promptVariant),
     phraseLabel: 'Helpful phrases',
     reviewCtaLabel: 'Review answer',
     title: 'Write your answer',
@@ -30,4 +33,12 @@ export function createAnswerCoachContent({ persona }: AnswerCoachInput): AnswerC
     transitionTitle: 'Now write your answer',
     wordTargetLabel: '2-4 sentences',
   };
+}
+
+function createAnswerPlaceholder(promptVariant?: RoleplayPromptVariant) {
+  if (promptVariant?.suggestedPhrases?.length) {
+    return `Start with: ${promptVariant.suggestedPhrases.join(' ')}`;
+  }
+
+  return 'Start with: Currently, I focus on... One result I am proud of is... That is why...';
 }
