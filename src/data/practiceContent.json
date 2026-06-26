@@ -372,6 +372,24 @@
             "improvementFocus": "Close with the next step so the audience knows what decision or action you want.",
             "suggestedRewrite": "That is a fair question. The main reason this is worth the extra work is that it reduces launch risk before we commit more resources. The next step I recommend is a short pilot so we can test the impact with a smaller group first."
           }
+        },
+        {
+          "id": "qa-follow-up",
+          "title": "Q&A follow-up",
+          "openingLine": "Thanks, and one follow-up: what happens if the pilot results are unclear?",
+          "userGoal": "Answer the follow-up, name the next step and invite agreement.",
+          "coachingNote": "Do not restart the full presentation. Answer the follow-up directly, then guide the group to the next decision.",
+          "suggestedPhrases": [
+            "To build on that answer...",
+            "The next step after the pilot is...",
+            "Does that address your concern?"
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This presentation answer should handle the follow-up question and guide the audience toward the next decision.",
+            "strengthFocus": "You answered the follow-up without losing the structure of the presentation.",
+            "improvementFocus": "Name the decision rule or next step so the audience knows how uncertainty will be handled.",
+            "suggestedRewrite": "To build on that answer, if the pilot results are unclear, I would review the strongest signal and agree one decision rule with the team. The next step after the pilot is to compare results against our success metric. Does that address your concern?"
+          }
         }
       ],
       "suggestedPhrases": [

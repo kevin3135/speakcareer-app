@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Presentation Q&A Follow-Up Angle
+
+Built one focused practice improvement: Presentation Practice now includes a "Q&A follow-up" angle. The user practices answering a second audience question, naming the next step and inviting agreement.
+
+What went well:
+
+- Added a realistic presentation moment without changing screens or app architecture.
+- Reused the existing prompt variant, phrase starter and rule-based feedback pattern.
+- Tests verify the title order, phrase guidance, rewrite and angle-specific feedback.
+- The content keeps the exercise focused on one professional communication move.
+
+What went wrong:
+
+- Presentation Practice now has five angles, so future additions should focus on selection clarity before adding many more.
+- This remains a one-turn written mock exercise rather than a live presentation Q&A.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 44 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Presentation Q&A practice should teach direct answer, next step and audience alignment.
+- Several scenarios now have four or five angles; improving picker simplicity may soon matter more than adding content.
+- Keep backend, auth, payments and analytics untouched until the local practice loop feels clearly valuable.
+
+Next suggested task:
+
+- Improve the roleplay angle picker so scenarios with five angles still feel simple and guided on mobile.
+
 ## 2026-06-27: Meeting Polite Interruption Angle
 
 Built one focused practice improvement: Meeting Practice now includes a "Polite interruption" angle. The user practices interrupting respectfully, adding one relevant point and handing the conversation back.
