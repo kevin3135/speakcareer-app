@@ -2,6 +2,7 @@ export type AnswerCoachContent = {
   checklist: string[];
   instruction: string;
   placeholder: string;
+  phraseLabel: string;
   reviewCtaLabel: string;
   title: string;
   wordTargetLabel: string;
@@ -20,6 +21,7 @@ export function createAnswerCoachContent({ persona }: AnswerCoachInput): AnswerC
     ],
     instruction: `Write a short spoken answer to the ${persona}. Two to four sentences is enough.`,
     placeholder: 'Example: Currently, I focus on... One result I am proud of is... That is why...',
+    phraseLabel: 'Helpful phrases',
     reviewCtaLabel: 'Review answer',
     title: 'Write your answer',
     wordTargetLabel: '2-4 sentences',

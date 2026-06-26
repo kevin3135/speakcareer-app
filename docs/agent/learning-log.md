@@ -1715,3 +1715,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Move the most useful phrases closer to the answer card or make them easier to scan without adding another large section.
+
+## 2026-06-26: Inline Answer Phrase Help
+
+Built one focused improvement: the separate Useful phrases card was removed from Roleplay, and the same phrase help now appears inside the answer card as compact chips under "Helpful phrases". This reduces one extra section before the user writes and keeps the writing help next to the input.
+
+What went well:
+
+- The Roleplay writing flow now has one fewer card before the answer input.
+- Useful phrases are easier to connect to the answer because they sit inside the same action card.
+- The copy remains local and simple through `src/utils/answerCoach.ts`.
+- The updated answer card was visually checked at a 390x844 phone viewport.
+
+What went wrong:
+
+- The phrase chips can wrap to multiple lines on narrow screens, so long future phrases should stay short.
+- The answer area is improved, but the overall Roleplay screen still has several cards before completion.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 29 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep examples and phrase support next to the place where the user writes.
+- Watch chip length on mobile; shorter phrase labels scan better.
+- The next small step should reduce clutter around the timer or make the active roleplay selector less visually heavy.
+
+Next suggested task:
+
+- Simplify the Roleplay timer card or make it secondary so the writing task remains the main focus.

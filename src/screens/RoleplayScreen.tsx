@@ -342,15 +342,6 @@ export function RoleplayScreen({
       </Card>
 
       <Card>
-        <Text style={styles.detailLabel}>Useful phrases</Text>
-        <View style={styles.phraseList}>
-          {activeSuggestedPhrases.map((phrase) => (
-            <Text key={phrase} style={styles.phrase}>- {phrase}</Text>
-          ))}
-        </View>
-      </Card>
-
-      <Card>
         <View style={styles.answerHeader}>
           <View style={styles.answerTitleBlock}>
             <Text style={styles.detailLabel}>Step 2</Text>
@@ -370,6 +361,16 @@ export function RoleplayScreen({
               <Text style={styles.answerChecklistText}>{item}</Text>
             </View>
           ))}
+        </View>
+        <View style={styles.inlinePhraseBlock}>
+          <Text style={styles.inlinePhraseLabel}>{answerCoach.phraseLabel}</Text>
+          <View style={styles.inlinePhraseList}>
+            {activeSuggestedPhrases.map((phrase) => (
+              <View key={phrase} style={styles.inlinePhraseChip}>
+                <Text style={styles.inlinePhraseText}>{phrase}</Text>
+              </View>
+            ))}
+          </View>
         </View>
         <TextInput
           accessibilityLabel="Practice answer"
@@ -783,14 +784,6 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
   },
-  phraseList: {
-    marginTop: spacing.sm,
-  },
-  phrase: {
-    color: colors.text,
-    fontSize: typography.body,
-    lineHeight: 22,
-  },
   answerHeader: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -850,6 +843,38 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: 19,
+  },
+  inlinePhraseBlock: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  inlinePhraseLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.sm,
+    textTransform: 'uppercase',
+  },
+  inlinePhraseList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  inlinePhraseChip: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  inlinePhraseText: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '800',
   },
   answerInput: {
     backgroundColor: colors.background,
