@@ -772,3 +772,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add a clean first-time Progress empty state with a clear call to start one roleplay.
+
+## 2026-06-26: First-Time Progress Empty State
+
+Built one focused improvement: Progress now shows a polished first-time action card when there are no saved sessions. The card explains the three-step loop, recommends starting Job Interview and opens that roleplay directly from Progress.
+
+What went well:
+
+- New users now have a clear next action instead of only seeing an empty session history.
+- The feature strengthens the practice-save-progress loop without adding storage, auth or backend work.
+- The CTA reuses the existing roleplay navigation path.
+- Added a small tested helper for the first-time Progress recommendation.
+
+What went wrong:
+
+- The recommended first roleplay is fixed to Job Interview rather than personalized.
+- Progress is still in-memory only, so the empty state returns after app restart.
+- The empty-state helper is simple and may later be replaced by real onboarding or user preference logic.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The app now guides a first-time user from Progress into the practice loop.
+- The next useful improvement is basic accessibility labels on interactive controls, because more chips and CTA buttons have been added.
+- Keep first-time states action-oriented and founder-readable.
+
+Next suggested task:
+
+- Add accessibility labels to the main interactive controls and roleplay filter chips.

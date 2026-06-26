@@ -164,6 +164,20 @@ test('creates a lesson-complete summary from saved sessions', async () => {
   assert.equal(createLessonCompleteSummary([]), null);
 });
 
+test('creates a first-time progress action for new users', async () => {
+  const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
+  const emptyState = createProgressEmptyState();
+
+  assert.equal(emptyState.roleplayId, 'job-interview');
+  assert.equal(emptyState.ctaLabel, 'Start Job Interview');
+  assert.ok(emptyState.body.includes('save'));
+  assert.deepEqual(emptyState.steps, [
+    'Choose a scenario',
+    'Write a spoken-style answer',
+    'Review and save for XP',
+  ]);
+});
+
 test('adds saved sessions to local progress and daily mission', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');

@@ -1,30 +1,59 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
 import { ProgressBar } from '../components/ProgressBar';
 import { Screen } from '../components/Screen';
 import { progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
-import type { DailyPracticeTarget, PracticeSession } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
+import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
   dailyTarget: DailyPracticeTarget;
+  onOpenRoleplay: (roleplayId: RoleplayId) => void;
   sessions: PracticeSession[];
 };
 
-export function ProgressScreen({ dailyTarget, sessions }: ProgressScreenProps) {
+export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: ProgressScreenProps) {
   const { summary, mistakeBank } = progressData;
   const completionSummary = createLessonCompleteSummary(sessions);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
+  const progressEmptyState = createProgressEmptyState();
+  const hasNoSavedSessions = sessions.length === 0;
 
   return (
     <Screen
       title="Progress"
       subtitle="A simple mistake bank for recurring English career communication patterns."
     >
+      {hasNoSavedSessions ? (
+        <View style={styles.emptyHero}>
+          <Text style={styles.emptyKicker}>First progress step</Text>
+          <Text style={styles.emptyHeroTitle}>{progressEmptyState.title}</Text>
+          <Text style={styles.emptyHeroCopy}>{progressEmptyState.body}</Text>
+          <View style={styles.emptySteps}>
+            {progressEmptyState.steps.map((step, index) => (
+              <View key={step} style={styles.emptyStepRow}>
+                <View style={styles.emptyStepNumber}>
+                  <Text style={styles.emptyStepNumberText}>{index + 1}</Text>
+                </View>
+                <Text style={styles.emptyStepText}>{step}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={styles.emptyAction}>
+            <AppButton
+              label={progressEmptyState.ctaLabel}
+              onPress={() => onOpenRoleplay(progressEmptyState.roleplayId)}
+            />
+          </View>
+        </View>
+      ) : null}
+
       {completionSummary ? (
         <View style={styles.completeCard}>
           <View style={styles.completeHeader}>
@@ -98,7 +127,7 @@ export function ProgressScreen({ dailyTarget, sessions }: ProgressScreenProps) {
         <Card muted>
           <Text style={styles.emptyTitle}>No saved sessions yet</Text>
           <Text style={styles.emptyCopy}>
-            Complete a roleplay answer, review it and save the session to build a simple local history.
+            Your saved roleplay sessions will appear here after your first review.
           </Text>
         </Card>
       ) : (
@@ -139,6 +168,62 @@ export function ProgressScreen({ dailyTarget, sessions }: ProgressScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  emptyHero: {
+    backgroundColor: colors.ink,
+    borderRadius: 8,
+    padding: spacing.xl,
+  },
+  emptyKicker: {
+    color: colors.accent,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  emptyHeroTitle: {
+    color: colors.surface,
+    fontSize: typography.h1,
+    fontWeight: '900',
+    lineHeight: 31,
+    marginTop: spacing.sm,
+  },
+  emptyHeroCopy: {
+    color: '#D7DEE8',
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  emptySteps: {
+    marginTop: spacing.lg,
+  },
+  emptyStepRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: spacing.sm,
+  },
+  emptyStepNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+    height: 28,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    width: 28,
+  },
+  emptyStepNumberText: {
+    color: colors.surface,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  emptyStepText: {
+    color: colors.surface,
+    flex: 1,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 21,
+  },
+  emptyAction: {
+    marginTop: spacing.lg,
+  },
   completeCard: {
     backgroundColor: colors.primaryDark,
     borderRadius: 8,
