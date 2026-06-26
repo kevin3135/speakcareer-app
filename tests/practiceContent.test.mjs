@@ -185,6 +185,31 @@ test('adds sales-specific phrases for each sales objection angle', () => {
   );
 });
 
+test('adds small-talk-specific phrases for each workplace small talk angle', () => {
+  const smallTalk = practiceContent.roleplays.find((roleplay) => roleplay.id === 'workplace-small-talk');
+
+  for (const variant of smallTalk.promptVariants) {
+    assert.equal(variant.suggestedPhrases.length, 3);
+    assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+  }
+
+  assert.ok(
+    smallTalk.promptVariants
+      .find((variant) => variant.id === 'quick-introduction')
+      .suggestedPhrases.some((phrase) => phrase.includes('role')),
+  );
+  assert.ok(
+    smallTalk.promptVariants
+      .find((variant) => variant.id === 'friendly-follow-up')
+      .suggestedPhrases.some((phrase) => phrase.includes('project')),
+  );
+  assert.ok(
+    smallTalk.promptVariants
+      .find((variant) => variant.id === 'move-to-meeting')
+      .suggestedPhrases.some((phrase) => phrase.includes('agenda')),
+  );
+});
+
 test('reviews typed roleplay answers with simple local rules', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
 

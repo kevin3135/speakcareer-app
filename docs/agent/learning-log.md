@@ -1030,3 +1030,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-specific suggested phrases for Workplace Small Talk.
+
+## 2026-06-26: Workplace Small Talk Variant-Specific Phrases
+
+Built one focused improvement: Workplace Small Talk practice angles now show their own useful phrases. Quick introduction, Friendly follow-up and Move to meeting each have three tailored sentence starters for professional, natural small talk.
+
+What went well:
+
+- All five core MVP roleplays now have variant-specific useful phrases.
+- Small Talk now supports the exact moments users struggle with: introducing themselves, following up and moving into the meeting.
+- The change reused the existing optional `suggestedPhrases` field on prompt variants.
+- Added focused tests for workplace small-talk phrases.
+
+What went wrong:
+
+- Small Talk phrases are still curated local content, not personalized to the user's answer.
+- Feedback remains scenario-level and does not yet react to the selected small-talk angle.
+- The content is useful but still text-first; there is no spoken or timed practice yet.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Every core roleplay now has tailored phrases per prompt variant.
+- The next high-value improvement should move beyond static content, likely variant-aware feedback or a stronger practice completion loop.
+- Keep the experience professional and habit-forming without making it feel childish.
+
+Next suggested task:
+
+- Make mock feedback adapt to the selected prompt variant.
