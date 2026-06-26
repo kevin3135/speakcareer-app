@@ -153,7 +153,7 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
   );
   assert.deepEqual(
     sales.promptVariants.map((variant) => variant.title),
-    ['Price concern', 'Timing concern', 'Existing tool'],
+    ['Price concern', 'Budget value', 'Timing concern', 'Existing tool'],
   );
   assert.deepEqual(
     smallTalk.promptVariants.map((variant) => variant.title),
@@ -291,6 +291,16 @@ test('adds sales-specific phrases for each sales objection angle', () => {
     sales.promptVariants
       .find((variant) => variant.id === 'price-concern')
       .suggestedPhrases.some((phrase) => phrase.includes('price')),
+  );
+  assert.ok(
+    sales.promptVariants
+      .find((variant) => variant.id === 'budget-value')
+      .suggestedPhrases.some((phrase) => phrase.includes('budget decisions')),
+  );
+  assert.ok(
+    sales.promptVariants
+      .find((variant) => variant.id === 'budget-value')
+      .feedbackGuidance.suggestedRewrite.includes('compare the cost'),
   );
   assert.ok(
     sales.promptVariants
@@ -1292,6 +1302,7 @@ test('adapts sales feedback to the selected objection angle', async () => {
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
   const roleplay = practiceContent.roleplays.find((item) => item.id === 'sales-call');
   const priceVariant = roleplay.promptVariants.find((variant) => variant.id === 'price-concern');
+  const budgetVariant = roleplay.promptVariants.find((variant) => variant.id === 'budget-value');
   const timingVariant = roleplay.promptVariants.find((variant) => variant.id === 'timing-concern');
   const answer = [
     'That makes sense, and I would first clarify the business priority.',
@@ -1300,6 +1311,7 @@ test('adapts sales feedback to the selected objection angle', async () => {
   ].join(' ');
   const review = summarizePracticeAnswer(answer);
   const priceFeedback = createRuleBasedFeedback(roleplay, answer, review, priceVariant);
+  const budgetFeedback = createRuleBasedFeedback(roleplay, answer, review, budgetVariant);
   const timingFeedback = createRuleBasedFeedback(roleplay, answer, review, timingVariant);
 
   assert.ok(priceFeedback.feedback.summary.includes('"Price concern"'));
@@ -1318,6 +1330,16 @@ test('adapts sales feedback to the selected objection angle', async () => {
   assert.notEqual(
     priceFeedback.feedback.suggestedRewrite,
     timingFeedback.feedback.suggestedRewrite,
+  );
+  assert.ok(budgetFeedback.feedback.summary.includes('"Budget value"'));
+  assert.ok(
+    budgetFeedback.feedback.improvements.includes(
+      budgetVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.notEqual(
+    budgetFeedback.feedback.suggestedRewrite,
+    priceFeedback.feedback.suggestedRewrite,
   );
 });
 

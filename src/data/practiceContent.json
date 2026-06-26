@@ -419,6 +419,24 @@
           }
         },
         {
+          "id": "budget-value",
+          "title": "Budget value",
+          "openingLine": "The value is clear, but we do not have budget for another tool right now.",
+          "userGoal": "Clarify budget limits and tie value to one measurable result.",
+          "coachingNote": "Acknowledge the budget limit, ask how budget is approved and connect the decision to measurable impact.",
+          "suggestedPhrases": [
+            "I understand budget is a real constraint.",
+            "How are budget decisions usually approved?",
+            "Could we compare the cost with the impact you want?"
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This sales answer should respect the budget limit and connect value to one measurable business result.",
+            "strengthFocus": "You treated budget as a real constraint and kept the conversation consultative.",
+            "improvementFocus": "Ask how budget is approved before suggesting a value comparison.",
+            "suggestedRewrite": "I understand budget is a real constraint. How are budget decisions usually approved on your team? If it helps, we can compare the cost with the impact you want before deciding whether this belongs in the budget."
+          }
+        },
+        {
           "id": "timing-concern",
           "title": "Timing concern",
           "openingLine": "This looks interesting, but I don't think this is the right time for us.",

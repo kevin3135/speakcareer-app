@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Sales Budget Value Objection
+
+Built one focused practice improvement: Sales Call now includes a "Budget value" objection angle. The user practices acknowledging a budget constraint, asking how budget decisions are approved and connecting value to one measurable business result.
+
+What went well:
+
+- Added one realistic sales objection without changing app architecture.
+- The variant includes opening line, goal, coaching note, three phrase starters and tailored feedback guidance.
+- Tests now verify the new title, phrase guidance and angle-specific feedback.
+- Mobile preview confirmed Budget value appears in the Sales Call angle picker and updates the prompt and quick starter after selection.
+
+What went wrong:
+
+- Sales Call now has four angles while Small Talk still has three; this is intentional because the roadmap calls out sales objection variants.
+- This is still a mock one-turn exercise, not a real buyer conversation.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 44 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Sales objections should stay consultative: acknowledge, ask one useful question, then connect value to business impact.
+- Keep variant user goals short because the read-first mobile card has length limits.
+- More practice value should come from realistic workplace moments before adding backend or integrations.
+
+Next suggested task:
+
+- Add one concise Workplace Small Talk follow-up variant so casual workplace conversation also has more guided depth.
+
 ## 2026-06-27: Consistent First Sprint Hero Labels
 
 Built one focused improvement: the Home hero now reuses the same first-sprint labels as Onboarding for first-time users: "5 minutes", "2-4 sentences" and "Clear rewrite". Returning users still see the practical Home labels with language, time and reward.
