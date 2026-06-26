@@ -7,6 +7,7 @@ import { progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
 import type { PracticeSession } from '../types';
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
+import { createLocalProgressStats } from '../utils/localProgress';
 import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
@@ -16,6 +17,7 @@ type ProgressScreenProps = {
 export function ProgressScreen({ sessions }: ProgressScreenProps) {
   const { summary, mistakeBank } = progressData;
   const completionSummary = createLessonCompleteSummary(sessions);
+  const localProgress = createLocalProgressStats(summary, sessions);
 
   return (
     <Screen
@@ -54,11 +56,11 @@ export function ProgressScreen({ sessions }: ProgressScreenProps) {
 
       <View style={styles.statGrid}>
         <Card>
-          <Text style={styles.statNumber}>{summary.minutesPracticed}</Text>
+          <Text style={styles.statNumber}>{localProgress.minutesPracticed}</Text>
           <Text style={styles.statLabel}>Minutes</Text>
         </Card>
         <Card>
-          <Text style={styles.statNumber}>{summary.sessionsCompleted}</Text>
+          <Text style={styles.statNumber}>{localProgress.sessionsCompleted}</Text>
           <Text style={styles.statLabel}>Sessions</Text>
         </Card>
       </View>

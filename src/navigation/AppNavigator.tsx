@@ -39,7 +39,9 @@ export function AppNavigator() {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        {activeScreen === 'Home' ? <HomeScreen onOpenRoleplay={openRoleplay} /> : null}
+        {activeScreen === 'Home' ? (
+          <HomeScreen onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
+        ) : null}
         {activeScreen === 'Practice' ? <PracticeScreen onOpenRoleplay={openRoleplay} /> : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen

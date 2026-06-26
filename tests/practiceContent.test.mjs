@@ -116,6 +116,32 @@ test('creates a lesson-complete summary from saved sessions', async () => {
   assert.equal(createLessonCompleteSummary([]), null);
 });
 
+test('adds saved sessions to local progress and daily mission', async () => {
+  const { createDailyMission } = await import('../src/utils/gamification.ts');
+  const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');
+  const sessions = [
+    {
+      id: 'sales-call-1',
+      roleplayId: 'sales-call',
+      roleplayTitle: 'Sales Call',
+      completedAt: '2026-06-26T11:00:00.000Z',
+      answerPreview: 'I would ask about the current cost of the problem.',
+      wordCount: 38,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Clear response with a good next step.',
+      xpReward: 55,
+    },
+  ];
+  const localProgress = createLocalProgressStats(progressMock.summary, sessions);
+  const mission = createDailyMission(progressMock.summary, sessions);
+
+  assert.equal(localProgress.sessionsCompleted, progressMock.summary.sessionsCompleted + 1);
+  assert.equal(localProgress.minutesPracticed, progressMock.summary.minutesPracticed + 5);
+  assert.equal(localProgress.totalLocalXp, 55);
+  assert.equal(mission.rewardLabel, '+55 XP');
+  assert.equal(mission.xpToday, mission.xpGoal);
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');

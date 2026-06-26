@@ -8,16 +8,20 @@ import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
-import type { RoleplayId } from '../types';
+import type { PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
+  sessions: PracticeSession[];
 };
 
-export function HomeScreen({ onOpenRoleplay }: HomeScreenProps) {
+export function HomeScreen({ onOpenRoleplay, sessions }: HomeScreenProps) {
   const featured = practiceContent.roleplays[0];
-  const dailyMission = createDailyMission(progressData.summary);
+  const dailyMission = createDailyMission(progressData.summary, sessions);
+  const localProgress = createLocalProgressStats(progressData.summary, sessions);
+  const hasSavedSession = sessions.length > 0;
   const pathSteps: LearningPathStep[] = [
     {
       id: 'warm-up',
@@ -29,16 +33,18 @@ export function HomeScreen({ onOpenRoleplay }: HomeScreenProps) {
     {
       id: 'roleplay',
       title: featured.title,
-      caption: 'Complete one 5-minute career sprint.',
-      state: 'active',
+      caption: hasSavedSession ? 'Your latest sprint is saved.' : 'Complete one 5-minute career sprint.',
+      state: hasSavedSession ? 'done' : 'active',
       xpLabel: dailyMission.rewardLabel,
       onPress: () => onOpenRoleplay(featured.id),
     },
     {
       id: 'feedback',
       title: 'Review feedback',
-      caption: 'Save the session and bank one mistake to improve.',
-      state: 'locked',
+      caption: hasSavedSession
+        ? 'Progress is updated from your saved session.'
+        : 'Save the session and bank one mistake to improve.',
+      state: hasSavedSession ? 'active' : 'locked',
       xpLabel: '+15 XP',
     },
   ];
@@ -96,11 +102,11 @@ export function HomeScreen({ onOpenRoleplay }: HomeScreenProps) {
 
       <View style={styles.statGrid}>
         <View style={[styles.statCard, styles.statCardLeft]}>
-          <Text style={styles.statNumber}>{progressData.summary.sessionsCompleted}</Text>
+          <Text style={styles.statNumber}>{localProgress.sessionsCompleted}</Text>
           <Text style={styles.statLabel}>Sessions</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{progressData.summary.currentStreakDays}</Text>
+          <Text style={styles.statNumber}>{localProgress.currentStreakDays}</Text>
           <Text style={styles.statLabel}>Day streak</Text>
         </View>
       </View>
@@ -113,7 +119,11 @@ export function HomeScreen({ onOpenRoleplay }: HomeScreenProps) {
         <View style={styles.progressBlock}>
           <ProgressBar label="Mission progress" value={dailyMission.progressPercent} />
         </View>
-        <Text style={styles.copy}>{progressData.summary.nextFocus}</Text>
+        <Text style={styles.copy}>
+          {hasSavedSession
+            ? `${sessions.length} saved session${sessions.length === 1 ? '' : 's'} this run. ${localProgress.totalLocalXp} local XP added.`
+            : progressData.summary.nextFocus}
+        </Text>
       </Card>
 
       <Card muted>

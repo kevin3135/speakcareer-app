@@ -386,3 +386,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make Home and Progress use saved local sessions to calculate current-session XP and streak-like progress.
+
+## 2026-06-26: Local Session Progress Stats
+
+Built one focused improvement: Home and Progress now react to locally saved sessions during the current app run. Saved sessions increase visible session count, practice minutes, daily XP, career XP and streak-like progress without adding persistence, backend, auth or database work.
+
+What went well:
+
+- The app feels more responsive to user action: after saving a session, Home no longer looks fully static.
+- Progress stat cards now align with the local session history and lesson-complete card.
+- Added `src/utils/localProgress.ts` for the local session math and tests for mission/progress calculations.
+- Kept everything in-memory and Expo SDK 54 compatible.
+
+What went wrong:
+
+- Progress still resets after app restart because no local storage has been added yet.
+- `gamification.ts` duplicates a small amount of progress math so the direct Node tests can keep importing TypeScript helpers without changing TypeScript config.
+- The streak is still "streak-like" local progress, not a real date-based streak.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The local practice loop now has answer, feedback, follow-up, save, reward and reactive progress.
+- A good next step is a small daily target setting in Profile, still local and in-memory.
+- Do not add persistence packages until Kevin explicitly wants progress to survive restart.
+
+Next suggested task:
+
+- Add a simple local daily practice target setting in Profile and use it for the Home daily goal.
