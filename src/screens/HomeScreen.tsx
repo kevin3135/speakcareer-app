@@ -11,6 +11,7 @@ import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
+import { createHomeHeroFocusLabels } from '../utils/homeHeroLabels';
 import { createHomeLibraryState } from '../utils/homeLibrary';
 import { createHomePracticeRecommendation } from '../utils/homeRecommendation';
 import { createLocalProgressStats } from '../utils/localProgress';
@@ -39,6 +40,11 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
     localProgress,
     sessions,
   });
+  const heroFocusLabels = createHomeHeroFocusLabels({
+    detailLabels: guidedStart.detailLabels,
+    rewardLabel: dailyMission.rewardLabel,
+    sessions,
+  });
   const homeLibrary = createHomeLibraryState(sessions, practiceContent.roleplays, guidedStart.roleplayId);
   const homeLibraryRoleplayIds = new Set(homeLibrary.previewRoleplays.map((roleplay) => roleplay.id));
   const visibleRoleplayCards = practiceContent.roleplays.filter((roleplay) =>
@@ -55,15 +61,11 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
         <Text style={styles.heroTitle}>{homeRecommendation.title}</Text>
         <Text style={styles.heroCopy}>{homeRecommendation.subtitle}</Text>
         <View style={styles.focusRow}>
-          <View style={styles.focusBadge}>
-            <Text style={styles.focusBadgeText}>English</Text>
-          </View>
-          <View style={styles.focusBadge}>
-            <Text style={styles.focusBadgeText}>5 minutes</Text>
-          </View>
-          <View style={styles.focusBadge}>
-            <Text style={styles.focusBadgeText}>{dailyMission.rewardLabel}</Text>
-          </View>
+          {heroFocusLabels.map((label) => (
+            <View key={label} style={styles.focusBadge}>
+              <Text style={styles.focusBadgeText}>{label}</Text>
+            </View>
+          ))}
         </View>
         <View style={styles.buttonRow}>
           <AppButton

@@ -580,6 +580,27 @@ test('recommends the real next roleplay on Home after a saved session', async ()
   assert.ok(continueRecommendation.subtitle.includes('meeting'));
 });
 
+test('reuses guided first sprint labels in the Home hero', async () => {
+  const { guidedStart } = await import('../src/data/guidedIntro.ts');
+  const { createHomeHeroFocusLabels } = await import('../src/utils/homeHeroLabels.ts');
+
+  const firstRunLabels = createHomeHeroFocusLabels({
+    detailLabels: guidedStart.detailLabels,
+    rewardLabel: '+40 XP',
+    sessions: [],
+  });
+
+  assert.deepEqual(firstRunLabels, ['5 minutes', '2-4 sentences', 'Clear rewrite']);
+
+  const returningLabels = createHomeHeroFocusLabels({
+    detailLabels: guidedStart.detailLabels,
+    rewardLabel: '+55 XP',
+    sessions: [{ id: 'job-interview-1' }],
+  });
+
+  assert.deepEqual(returningLabels, ['English', '5 minutes', '+55 XP']);
+});
+
 test('keeps the Home library quiet until the first saved practice', async () => {
   const { createHomeLibraryState } = await import('../src/utils/homeLibrary.ts');
 

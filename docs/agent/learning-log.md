@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Consistent First Sprint Hero Labels
+
+Built one focused improvement: the Home hero now reuses the same first-sprint labels as Onboarding for first-time users: "5 minutes", "2-4 sentences" and "Clear rewrite". Returning users still see the practical Home labels with language, time and reward.
+
+What went well:
+
+- Home and Onboarding now speak with the same simple first-practice language.
+- Added `src/utils/homeHeroLabels.ts` so first-run and returning hero labels are easy to test.
+- The change removes a small source of inconsistency without adding backend, auth, payments or new product scope.
+- Mobile preview confirmed the Home hero shows "First sprint: Job Interview", "5 minutes", "2-4 sentences" and "Clear rewrite".
+
+What went wrong:
+
+- This is a polish task, so it improves clarity more than it adds new practice depth.
+- The first-run state still depends on local saved-session state, so browser previews need a clean local origin or Home tab selection.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 44 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Reuse existing guided-start data before adding more copy.
+- Small consistency fixes matter because Kevin wants the app to feel simple and guided.
+- Next improvements should add more actual practice value after this polish pass.
+
+Next suggested task:
+
+- Add one concise Sales Call budget/value objection variant to deepen the English MVP content without changing architecture.
+
 ## 2026-06-27: Simple Home Daily Mission
 
 Built one focused improvement: the Home `Today` card is now a single daily mission card instead of a broad XP progress summary. First-time users see one clear target: save one Job Interview answer, with a 5-minute sprint, target, reward and a short reason to practice now.
