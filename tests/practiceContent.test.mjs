@@ -495,6 +495,35 @@ test('creates a collapsible helpful phrase helper state', async () => {
   assert.ok(openHelper.helperText.includes('natural answer'));
 });
 
+test('creates a collapsible answer plan helper state', async () => {
+  const { createAnswerPlanHelperState } = await import('../src/utils/answerPlanHelper.ts');
+  const steps = [
+    'Answer the question directly.',
+    'Add one concrete detail or result.',
+    'Finish with a clear next step.',
+  ];
+
+  const closedHelper = createAnswerPlanHelperState({
+    isOpen: false,
+    steps,
+  });
+
+  assert.equal(closedHelper.title, 'Answer plan');
+  assert.equal(closedHelper.stepCountLabel, '3-step plan');
+  assert.equal(closedHelper.toggleLabel, 'Show');
+  assert.equal(closedHelper.toggleAccessibilityLabel, 'Show answer plan');
+  assert.deepEqual(closedHelper.steps, []);
+
+  const openHelper = createAnswerPlanHelperState({
+    isOpen: true,
+    steps,
+  });
+
+  assert.equal(openHelper.toggleLabel, 'Hide');
+  assert.equal(openHelper.toggleAccessibilityLabel, 'Hide answer plan');
+  assert.deepEqual(openHelper.steps, steps);
+});
+
 test('creates a first-time progress action for new users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();

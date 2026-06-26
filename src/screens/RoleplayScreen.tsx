@@ -9,6 +9,7 @@ import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { createAnswerCoachContent } from '../utils/answerCoach';
+import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createFocusTimerControls, FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
@@ -52,6 +53,7 @@ export function RoleplayScreen({
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
   const [isScenarioPickerOpen, setIsScenarioPickerOpen] = useState(false);
   const [isAnglePickerOpen, setIsAnglePickerOpen] = useState(false);
+  const [isAnswerPlanOpen, setIsAnswerPlanOpen] = useState(false);
   const [isPhraseHelperOpen, setIsPhraseHelperOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
   const [activePromptVariantId, setActivePromptVariantId] = useState(
@@ -64,6 +66,10 @@ export function RoleplayScreen({
     roleplayPromptVariants[0];
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
   const answerCoach = createAnswerCoachContent({ persona: roleplay.aiPersona });
+  const answerPlan = createAnswerPlanHelperState({
+    isOpen: isAnswerPlanOpen,
+    steps: answerCoach.checklist,
+  });
   const timerControls = createFocusTimerControls({
     isRunning: isTimerRunning,
     secondsRemaining: timerSeconds,
@@ -182,6 +188,7 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setShowFeedback(false);
     setSavedSessionId(null);
+    setIsAnswerPlanOpen(false);
     setIsPhraseHelperOpen(false);
     setFollowUpAnswer('');
     setFollowUpReview(null);
@@ -424,15 +431,36 @@ export function RoleplayScreen({
           </View>
         </View>
         <Text style={styles.answerInstruction}>{answerCoach.instruction}</Text>
-        <View style={styles.answerChecklist}>
-          {answerCoach.checklist.map((item, index) => (
-            <View key={item} style={styles.answerChecklistItem}>
-              <View style={styles.answerChecklistNumber}>
-                <Text style={styles.answerChecklistNumberText}>{index + 1}</Text>
-              </View>
-              <Text style={styles.answerChecklistText}>{item}</Text>
+        <View style={styles.answerPlanBlock}>
+          <View style={styles.answerPlanHeader}>
+            <View style={styles.answerPlanCopy}>
+              <Text style={styles.answerPlanTitle}>{answerPlan.title}</Text>
+              <Text style={styles.answerPlanSummary}>{answerPlan.stepCountLabel}</Text>
             </View>
-          ))}
+            <Pressable
+              accessibilityHint="Shows or hides the answer structure checklist"
+              accessibilityLabel={answerPlan.toggleAccessibilityLabel}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: isAnswerPlanOpen }}
+              onPress={() => setIsAnswerPlanOpen((isOpen) => !isOpen)}
+              style={({ pressed }) => [styles.answerPlanToggle, pressed && styles.answerPlanTogglePressed]}
+            >
+              <Text style={styles.answerPlanToggleText}>{answerPlan.toggleLabel}</Text>
+            </Pressable>
+          </View>
+          <Text style={styles.answerPlanHelper}>{answerPlan.helperText}</Text>
+          {isAnswerPlanOpen ? (
+            <View style={styles.answerChecklist}>
+              {answerPlan.steps.map((item, index) => (
+                <View key={item} style={styles.answerChecklistItem}>
+                  <View style={styles.answerChecklistNumber}>
+                    <Text style={styles.answerChecklistNumberText}>{index + 1}</Text>
+                  </View>
+                  <Text style={styles.answerChecklistText}>{item}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
         </View>
         <View style={styles.inlinePhraseBlock}>
           <View style={styles.inlinePhraseHeader}>
@@ -1043,8 +1071,59 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.md,
   },
-  answerChecklist: {
+  answerPlanBlock: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.md,
     marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  answerPlanHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  answerPlanCopy: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  answerPlanTitle: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  answerPlanSummary: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  answerPlanToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 36,
+    paddingHorizontal: spacing.md,
+  },
+  answerPlanTogglePressed: {
+    opacity: 0.82,
+  },
+  answerPlanToggleText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  answerPlanHelper: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
+  },
+  answerChecklist: {
+    marginTop: spacing.sm,
   },
   answerChecklistItem: {
     alignItems: 'center',

@@ -2272,3 +2272,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the answer checklist collapsible or more compact so the text input appears sooner.
+
+## 2026-06-26: Collapsible Answer Plan
+
+Built one focused improvement: the Roleplay answer checklist is now collapsed by default as a compact `Answer plan` row, with Show/Hide for the full three-step structure.
+
+What went well:
+
+- The text input appears sooner because the three checklist rows are hidden until the user asks for structure.
+- The answer plan follows the same optional-help pattern as helpful phrases, keeping the UI consistent.
+- A new helper and test cover the closed/open answer-plan state.
+- Mobile preview at 390x844 confirmed the compact default state and the Show toggle work.
+
+What went wrong:
+
+- The answer card still has two optional help blocks before the input: answer plan and helpful phrases.
+- The compact answer-plan row adds one more Show button, so future polish should avoid making the card feel too control-heavy.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 35 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional writing support should stay available but collapsed until needed.
+- Keep collapsible helper patterns consistent across answer plan and helpful phrases.
+- The next small task should reduce duplicate optional-help blocks or make the write input the visual center of Step 2.
+
+Next suggested task:
+
+- Combine the Answer plan and Helpful phrases helper blocks into one compact writing support area.
