@@ -12,6 +12,7 @@ import { ProgressScreen } from '../screens/ProgressScreen';
 import { RoleplayScreen } from '../screens/RoleplayScreen';
 import { colors } from '../styles/theme';
 import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId } from '../types';
+import { readDailyTarget, saveDailyTarget } from '../utils/dailyTargetStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 
 export function AppNavigator() {
@@ -30,10 +31,14 @@ export function AppNavigator() {
   useEffect(() => {
     let isMounted = true;
 
-    readOnboardingCompletion(AsyncStorage)
-      .then((isComplete) => {
+    Promise.all([
+      readOnboardingCompletion(AsyncStorage),
+      readDailyTarget(AsyncStorage),
+    ])
+      .then(([isComplete, storedDailyTarget]) => {
         if (isMounted) {
           setHasSeenOnboarding(isComplete);
+          setDailyTarget(storedDailyTarget);
         }
       })
       .finally(() => {
@@ -54,6 +59,11 @@ export function AppNavigator() {
 
   function savePracticeSession(session: PracticeSession) {
     setPracticeSessions((sessions) => [session, ...sessions].slice(0, 10));
+  }
+
+  function changeDailyTarget(target: DailyPracticeTarget) {
+    setDailyTarget(target);
+    void saveDailyTarget(AsyncStorage, target).catch(() => undefined);
   }
 
   function completeOnboarding() {
@@ -103,7 +113,7 @@ export function AppNavigator() {
           />
         ) : null}
         {activeScreen === 'Profile' ? (
-          <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={setDailyTarget} />
+          <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={changeDailyTarget} />
         ) : null}
       </View>
       <BottomNav activeScreen={activeScreen} onChange={setActiveScreen} />

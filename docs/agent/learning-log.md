@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Persistent Daily Target
+
+Built one focused improvement: the Profile daily practice target is now saved locally with AsyncStorage. If a user chooses 2 or 3 roleplays per day, that target survives reloads and app restarts.
+
+What went well:
+
+- The feature reuses the same narrow local-storage pattern as onboarding, without adding auth, Supabase or backend work.
+- The target parser only accepts valid MVP values: 1, 2 or 3.
+- Profile copy now correctly says the setting is saved on this device.
+- Mobile preview confirmed target 3 remains selected after reload.
+
+What went wrong:
+
+- Only the daily target persists; sessions, XP and streak still reset after restart.
+- AsyncStorage on web does not expose the saved value as the plain localStorage key during preview, so the visual Profile reload state was the strongest verification.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 38 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Use AsyncStorage only for low-risk local MVP preferences and progress, not secrets.
+- Keep persisted values validated before they enter app state.
+- The next high-value persistence step is saved practice sessions, because that would make Progress and XP survive restarts.
+
+Next suggested task:
+
+- Persist local practice sessions so Progress, XP and completion history survive app restart.
+
 ## 2026-06-26: Persistent Onboarding Completion
 
 Built one focused improvement: onboarding completion is now saved locally with AsyncStorage. After a user taps Start guided practice once, reopening or reloading the app skips onboarding and starts directly on Home.

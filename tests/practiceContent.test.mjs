@@ -76,6 +76,41 @@ test('stores onboarding completion in local storage', async () => {
   );
 });
 
+test('stores the daily practice target in local storage', async () => {
+  const {
+    DAILY_TARGET_KEY,
+    parseDailyTargetValue,
+    readDailyTarget,
+    saveDailyTarget,
+  } = await import('../src/utils/dailyTargetStorage.ts');
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  assert.equal(parseDailyTargetValue('2'), 2);
+  assert.equal(parseDailyTargetValue('3'), 3);
+  assert.equal(parseDailyTargetValue('8'), 1);
+  assert.equal(await readDailyTarget(storage), 1);
+
+  await saveDailyTarget(storage, 3);
+
+  assert.equal(values.get(DAILY_TARGET_KEY), '3');
+  assert.equal(await readDailyTarget(storage), 3);
+  assert.equal(
+    await readDailyTarget({
+      getItem: async () => {
+        throw new Error('Storage unavailable');
+      },
+      setItem: async () => undefined,
+    }),
+    1,
+  );
+});
+
 test('provides mock feedback and mistake-bank data', () => {
   for (const roleplay of practiceContent.roleplays) {
     assert.ok(roleplay.feedback.summary.length > 20);

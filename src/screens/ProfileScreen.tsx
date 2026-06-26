@@ -57,7 +57,7 @@ export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScree
           })}
         </View>
         <Text style={styles.targetNote}>
-          This updates Home during this app run. Persistence comes later.
+          Saved on this device. Home and Progress update automatically.
         </Text>
       </Card>
 
