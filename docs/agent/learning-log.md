@@ -22,7 +22,7 @@ Checks run:
 - `npm.cmd run typecheck` passed.
 - `npm.cmd run test` passed with 42 tests.
 - `npm.cmd run lint` passed.
-- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport; the live returning-state app still rendered correctly, and the first-run Home unlock-preview state was covered by unit tests.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport; first-run Home showed a compact unlock-preview list instead of the full roleplay card library.
 
 Rubric self-evaluation:
 
