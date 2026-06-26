@@ -1073,3 +1073,88 @@ Agent memory for next time:
 Next suggested task:
 
 - Make mock feedback adapt to the selected prompt variant.
+
+## 2026-06-26: Interview Variant-Aware Feedback
+
+Built one focused improvement: Job Interview mock feedback now adapts to the selected practice angle. "Tell me about yourself", "Why this role?" and "Difficult situation" each now provide their own feedback emphasis and suggested rewrite, so the review feels more specific to the prompt the user chose.
+
+What went well:
+
+- The feature improved feedback depth without adding any backend AI, storage or new architecture.
+- The change stayed lightweight by extending existing prompt-variant content with optional feedback guidance.
+- Roleplay only needed one integration change because the current screen already tracks the active practice angle.
+- Added focused tests that protect both the new interview guidance content and the variant-aware feedback output.
+
+What went wrong:
+
+- Variant-aware feedback is only implemented for Job Interview so far; other scenarios still use scenario-level feedback.
+- Score logic is still general-purpose and does not yet change per interview angle.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Variant-aware feedback works well as a thin content layer on top of the existing rule-based engine.
+- Extending the same pattern scenario by scenario is lower risk than redesigning the feedback model.
+- Keep feedback guidance tightly tied to the selected prompt so the review feels obviously relevant.
+
+Next suggested task:
+
+- Extend variant-aware mock feedback to Meeting Practice.
+
+## 2026-06-26: Interview Variant-Aware Feedback
+
+Built one focused improvement: Job Interview feedback now adapts to the selected practice angle. The Roleplay screen passes the active interview variant into local rule-based feedback, and each interview angle can provide its own summary hint, strength focus, improvement focus and suggested rewrite.
+
+What went well:
+
+- Interview feedback now feels less generic for Tell me about yourself, Why this role and Difficult situation.
+- The implementation stayed local and mock-only, with no OpenAI, Supabase or secrets.
+- Existing behavior without a selected variant remains supported.
+- Added focused tests for variant-aware interview feedback.
+
+What went wrong:
+
+- The first test run caught a small regression where the default non-variant summary text changed.
+- Variant-aware feedback guidance exists only for Job Interview so far.
+- Other roleplays still use generic rule-based feedback even though their phrases are variant-specific.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed after fixing the summary regression.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- `RoleplayPromptVariant.feedbackGuidance` is the extension point for variant-aware feedback.
+- Keep default feedback behavior unchanged when no variant is passed.
+- Add guidance scenario by scenario instead of trying to personalize every roleplay at once.
+
+Next suggested task:
+
+- Add variant-aware feedback guidance for Meeting Practice.

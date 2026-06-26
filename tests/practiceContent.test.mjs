@@ -96,6 +96,10 @@ test('adds interview-specific phrases for each interview practice angle', () => 
   for (const variant of interview.promptVariants) {
     assert.equal(variant.suggestedPhrases.length, 3);
     assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+    assert.ok(variant.feedbackGuidance.summaryHint.length > 20);
+    assert.ok(variant.feedbackGuidance.strengthFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.improvementFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.suggestedRewrite.length > 40);
   }
 
   assert.ok(
@@ -391,6 +395,40 @@ test('creates rule-based feedback and XP from typed answers', async () => {
   assert.ok(strongFeedback.xpReward >= 50);
   assert.ok(strongFeedback.feedback.summary.includes('Strong job interview answer'));
   assert.ok(strongFeedback.feedback.scores.find((score) => score.label === 'Structure').value >= 80);
+});
+
+test('adapts interview feedback to the selected practice angle', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
+  const roleplay = practiceContent.roleplays.find((item) => item.id === 'job-interview');
+  const motivationVariant = roleplay.promptVariants.find((variant) => variant.id === 'role-motivation');
+  const difficultVariant = roleplay.promptVariants.find((variant) => variant.id === 'difficult-situation');
+  const answer = [
+    'What interests me most is the chance to work closer to product decisions.',
+    'First, I would use my customer feedback experience to help the team prioritize the right problems.',
+    'As a result, the team could make clearer decisions and move faster.',
+  ].join(' ');
+  const review = summarizePracticeAnswer(answer);
+  const motivationFeedback = createRuleBasedFeedback(roleplay, answer, review, motivationVariant);
+  const difficultFeedback = createRuleBasedFeedback(roleplay, answer, review, difficultVariant);
+
+  assert.ok(motivationFeedback.feedback.summary.includes('"Why this role?"'));
+  assert.equal(
+    motivationFeedback.feedback.suggestedRewrite,
+    motivationVariant.feedbackGuidance.suggestedRewrite,
+  );
+  assert.ok(
+    motivationFeedback.feedback.improvements.includes(
+      motivationVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.ok(
+    difficultFeedback.feedback.strengths.includes(difficultVariant.feedbackGuidance.strengthFocus),
+  );
+  assert.notEqual(
+    motivationFeedback.feedback.suggestedRewrite,
+    difficultFeedback.feedback.suggestedRewrite,
+  );
 });
 
 test('adapts follow-up prompts to the first answer weakness', async () => {

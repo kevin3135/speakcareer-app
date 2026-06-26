@@ -1,4 +1,4 @@
-import type { AIFeedback, RoleplayScenario } from '../types';
+import type { AIFeedback, RoleplayPromptVariant, RoleplayScenario } from '../types';
 import type { AnswerReview } from './answerReview';
 
 export type RuleBasedFeedbackResult = {
@@ -54,6 +54,7 @@ export function createRuleBasedFeedback(
   roleplay: RoleplayScenario,
   answer: string,
   review: AnswerReview,
+  promptVariant?: RoleplayPromptVariant,
 ): RuleBasedFeedbackResult {
   const normalizedAnswer = answer.trim().toLowerCase();
   const hasResult = hasAnyMarker(normalizedAnswer, resultMarkers) || /\d|%/.test(normalizedAnswer);
@@ -64,10 +65,23 @@ export function createRuleBasedFeedback(
 
   const baseScore = review.isReadyForFeedback ? 66 : 42;
   const feedback: AIFeedback = {
-    summary: createSummary(roleplay, review, hasResult, hasStructure),
-    strengths: createStrengths(review, hasResult, hasStructure, hasProfessionalLanguage),
-    improvements: createImprovements(review, hasResult, hasStructure, hasHesitation, isTooLong),
-    suggestedRewrite: createSuggestedRewrite(roleplay),
+    summary: createSummary(roleplay, review, hasResult, hasStructure, promptVariant),
+    strengths: createStrengths(
+      review,
+      hasResult,
+      hasStructure,
+      hasProfessionalLanguage,
+      promptVariant,
+    ),
+    improvements: createImprovements(
+      review,
+      hasResult,
+      hasStructure,
+      hasHesitation,
+      isTooLong,
+      promptVariant,
+    ),
+    suggestedRewrite: createSuggestedRewrite(roleplay, promptVariant),
     scores: [
       {
         label: 'Clarity',
@@ -110,24 +124,44 @@ function createSummary(
   review: AnswerReview,
   hasResult: boolean,
   hasStructure: boolean,
+  promptVariant?: RoleplayPromptVariant,
 ) {
+  const contextLabel = promptVariant ? `"${promptVariant.title}"` : roleplay.title.toLowerCase();
+  const summaryHint = promptVariant?.feedbackGuidance?.summaryHint;
+
   if (!review.isReadyForFeedback) {
-    return `This is a start for ${roleplay.title.toLowerCase()}, but it needs one concrete work example before it sounds ready.`;
+    return `This is a start for ${contextLabel}, but it needs one concrete work example before it sounds ready.`;
   }
 
   if (hasResult && hasStructure) {
-    return `Strong ${roleplay.title.toLowerCase()} answer. It gives structure and impact, so it sounds close to a professional spoken response.`;
+    if (!promptVariant) {
+      return `Strong ${roleplay.title.toLowerCase()} answer. It gives structure and impact, so it sounds close to a professional spoken response.`;
+    }
+
+    return `Strong answer for ${contextLabel}. ${summaryHint ?? 'It gives structure and impact, so it sounds close to a professional spoken response.'}`;
   }
 
   if (hasResult) {
-    return `Good answer with clear impact. Add one simple structure marker like "First" or "Next" to make it easier to follow.`;
+    if (!promptVariant) {
+      return 'Good answer with clear impact. Add one simple structure marker like "First" or "Next" to make it easier to follow.';
+    }
+
+    return `Good answer for ${contextLabel} with clear impact. Add one simple structure marker like "First" or "Next" to make it easier to follow.`;
   }
 
   if (hasStructure) {
-    return `Clear structure. Add one measurable result or business outcome so the answer feels more convincing.`;
+    if (!promptVariant) {
+      return 'Clear structure. Add one measurable result or business outcome so the answer feels more convincing.';
+    }
+
+    return `Clear structure for ${contextLabel}. Add one measurable result or business outcome so the answer feels more convincing.`;
   }
 
-  return `Useful first answer. Add a clearer beginning, action and result to make it sound more polished at work.`;
+  if (!promptVariant) {
+    return 'Useful first answer. Add a clearer beginning, action and result to make it sound more polished at work.';
+  }
+
+  return `Useful first answer for ${contextLabel}. Add a clearer beginning, action and result to make it sound more polished at work.`;
 }
 
 function createStrengths(
@@ -135,8 +169,14 @@ function createStrengths(
   hasResult: boolean,
   hasStructure: boolean,
   hasProfessionalLanguage: boolean,
+  promptVariant?: RoleplayPromptVariant,
 ) {
   const strengths: string[] = [];
+  const strengthFocus = promptVariant?.feedbackGuidance?.strengthFocus;
+
+  if (strengthFocus) {
+    strengths.push(strengthFocus);
+  }
 
   if (review.wordCount >= 35) {
     strengths.push('The answer has enough detail for meaningful feedback.');
@@ -167,11 +207,17 @@ function createImprovements(
   hasStructure: boolean,
   hasHesitation: boolean,
   isTooLong: boolean,
+  promptVariant?: RoleplayPromptVariant,
 ) {
   const improvements: string[] = [];
+  const improvementFocus = promptVariant?.feedbackGuidance?.improvementFocus;
 
   if (!review.isReadyForFeedback) {
     improvements.push('Add one concrete action you took or would take.');
+  }
+
+  if (improvementFocus) {
+    improvements.push(improvementFocus);
   }
 
   if (!hasStructure) {
@@ -193,7 +239,11 @@ function createImprovements(
   return improvements.slice(0, 3);
 }
 
-function createSuggestedRewrite(roleplay: RoleplayScenario) {
+function createSuggestedRewrite(roleplay: RoleplayScenario, promptVariant?: RoleplayPromptVariant) {
+  if (promptVariant?.feedbackGuidance?.suggestedRewrite) {
+    return promptVariant.feedbackGuidance.suggestedRewrite;
+  }
+
   switch (roleplay.id) {
     case 'job-interview':
       return 'In my previous role, I handled a similar challenge by clarifying the goal first, then taking ownership of the next steps. As a result, the team had a clearer plan and we could move faster.';

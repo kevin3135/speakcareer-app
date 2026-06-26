@@ -77,7 +77,13 @@
             "Currently, I focus on...",
             "Before that, I built experience in...",
             "That is why this role feels like a strong next step."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This interview answer should sound like a concise career story, not a full biography.",
+            "strengthFocus": "You framed your background around relevant experience instead of listing every past role.",
+            "improvementFocus": "Close by linking your background to why this role is the right next step.",
+            "suggestedRewrite": "Currently, I work in operations where I focus on improving cross-team workflows. Before that, I built experience coordinating customer feedback and turning it into clear priorities. That mix of communication and execution is why this role feels like a strong next step for me."
+          }
         },
         {
           "id": "role-motivation",
@@ -89,7 +95,13 @@
             "What interests me most is...",
             "This connects well with my experience in...",
             "I am looking for a role where I can..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This interview answer should connect your motivation to the role requirements and the company.",
+            "strengthFocus": "You linked your interest to the role instead of giving a generic motivation answer.",
+            "improvementFocus": "Name one specific part of the role or company that matches your experience.",
+            "suggestedRewrite": "What interests me most is that this role combines customer insight with cross-functional execution. That connects well with my experience turning feedback into clear product priorities, and I am looking for a role where I can keep growing in that direction."
+          }
         },
         {
           "id": "difficult-situation",
@@ -101,7 +113,13 @@
             "The situation was challenging because...",
             "I took responsibility for...",
             "The result was that we..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This interview answer should stay structured around situation, action, result and one short lesson.",
+            "strengthFocus": "You focused on your actions under pressure, which is what interviewers want to hear here.",
+            "improvementFocus": "End with one clear lesson learned so the example sounds complete.",
+            "suggestedRewrite": "The situation was challenging because two teams disagreed on the launch timeline. I took responsibility for aligning the open issues, setting a shorter decision meeting and clarifying the owner for each action. As a result, we launched on time, and I learned that calm structure matters most when pressure is high."
+          }
         }
       ],
       "suggestedPhrases": [

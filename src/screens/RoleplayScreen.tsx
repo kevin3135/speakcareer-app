@@ -66,7 +66,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
-    const nextFeedbackResult = createRuleBasedFeedback(roleplay, draftAnswer, review);
+    const nextFeedbackResult = createRuleBasedFeedback(roleplay, draftAnswer, review, activePromptVariant);
     const nextFollowUp = createAdaptiveFollowUpPrompt(roleplay, draftAnswer, review);
 
     setAnswerReview(review);

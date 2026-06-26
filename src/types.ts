@@ -24,6 +24,13 @@ export type AIFeedback = {
   scores: FeedbackScore[];
 };
 
+export type RoleplayPromptVariantFeedbackGuidance = {
+  summaryHint: string;
+  strengthFocus: string;
+  improvementFocus: string;
+  suggestedRewrite: string;
+};
+
 export type PracticeModule = {
   id: string;
   title: string;
@@ -47,6 +54,7 @@ export type RoleplayPromptVariant = {
   userGoal: string;
   coachingNote: string;
   suggestedPhrases?: string[];
+  feedbackGuidance?: RoleplayPromptVariantFeedbackGuidance;
 };
 
 export type RoleplayScenario = {
