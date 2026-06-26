@@ -2,14 +2,15 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
-import { LearningPath, type LearningPathStep } from '../components/LearningPath';
 import { ProgressBar } from '../components/ProgressBar';
 import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
-import { colors, spacing, typography } from '../styles/theme';
+import { guidedIntroSteps, guidedStart } from '../data/guidedIntro';
+import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createHomePracticeRecommendation } from '../utils/homeRecommendation';
 import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
@@ -19,126 +20,81 @@ type HomeScreenProps = {
 };
 
 export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreenProps) {
-  const featured = practiceContent.roleplays[0];
+  const homeRecommendation = createHomePracticeRecommendation(sessions, practiceContent.roleplays, {
+    ctaLabel: guidedStart.ctaLabel,
+    roleplayId: guidedStart.roleplayId,
+    subtitle: guidedStart.subtitle,
+    title: guidedStart.title,
+  });
+  const featured =
+    practiceContent.roleplays.find((roleplay) => roleplay.id === homeRecommendation.roleplayId) ??
+    practiceContent.roleplays[0];
   const dailyMission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(progressData.summary, sessions, dailyTarget);
   const hasSavedSession = sessions.length > 0;
-  const pathSteps: LearningPathStep[] = [
-    {
-      id: 'warm-up',
-      title: 'Warm up phrases',
-      caption: 'Review three strong interview phrases.',
-      state: 'done',
-      xpLabel: '+10 XP',
-    },
-    {
-      id: 'roleplay',
-      title: featured.title,
-      caption: hasSavedSession ? 'Your latest sprint is saved.' : 'Complete one 5-minute career sprint.',
-      state: hasSavedSession ? 'done' : 'active',
-      xpLabel: dailyMission.rewardLabel,
-      onPress: () => onOpenRoleplay(featured.id),
-    },
-    {
-      id: 'feedback',
-      title: 'Review feedback',
-      caption: hasSavedSession
-        ? 'Progress is updated from your saved session.'
-        : 'Save the session and bank one mistake to improve.',
-      state: hasSavedSession ? 'active' : 'locked',
-      xpLabel: '+15 XP',
-    },
-  ];
 
   return (
     <Screen
       title="SpeakCareer"
-      subtitle="Daily career English practice, built for momentum."
+      subtitle="Practice professional English one clear step at a time."
     >
-      <View style={styles.statusRail}>
-        <View style={styles.statusItem}>
-          <Text style={styles.statusValue}>{dailyMission.streakDays}</Text>
-          <Text style={styles.statusLabel}>Streak</Text>
-        </View>
-        <View style={styles.statusItem}>
-          <Text style={styles.statusValue}>{dailyMission.level}</Text>
-          <Text style={styles.statusLabel}>Level</Text>
-        </View>
-        <View style={styles.statusItem}>
-          <Text style={styles.statusValue}>{dailyMission.xpToday}</Text>
-          <Text style={styles.statusLabel}>Today XP</Text>
-        </View>
-      </View>
-
       <View style={styles.hero}>
-        <View style={styles.heroTopRow}>
-          <View style={styles.heroTitleBlock}>
-            <Text style={styles.heroKicker}>Daily mission</Text>
-            <Text style={styles.heroTitle}>{dailyMission.title}</Text>
+        <Text style={styles.heroKicker}>Start here</Text>
+        <Text style={styles.heroTitle}>{homeRecommendation.title}</Text>
+        <Text style={styles.heroCopy}>{homeRecommendation.subtitle}</Text>
+        <View style={styles.focusRow}>
+          <View style={styles.focusBadge}>
+            <Text style={styles.focusBadgeText}>English</Text>
           </View>
-          <View style={styles.levelPill}>
-            <Text style={styles.levelLabel}>Level</Text>
-            <Text style={styles.levelNumber}>{dailyMission.level}</Text>
+          <View style={styles.focusBadge}>
+            <Text style={styles.focusBadgeText}>5 minutes</Text>
           </View>
-        </View>
-        <Text style={styles.heroCopy}>{featured.userGoal}</Text>
-        <View style={styles.heroStats}>
-          <View style={styles.heroStat}>
-            <Text style={styles.heroStatValue}>{dailyMission.streakDays}</Text>
-            <Text style={styles.heroStatLabel}>day streak</Text>
-          </View>
-          <View style={styles.heroStat}>
-            <Text style={styles.heroStatValue}>{dailyMission.xpTotal}</Text>
-            <Text style={styles.heroStatLabel}>career XP</Text>
-          </View>
-          <View style={styles.heroStat}>
-            <Text style={styles.heroStatValue}>{dailyMission.rewardLabel}</Text>
-            <Text style={styles.heroStatLabel}>reward</Text>
+          <View style={styles.focusBadge}>
+            <Text style={styles.focusBadgeText}>{dailyMission.rewardLabel}</Text>
           </View>
         </View>
         <View style={styles.buttonRow}>
           <AppButton
             accessibilityHint={`Opens the recommended ${featured.title} roleplay`}
-            label="Start mission"
+            label={homeRecommendation.ctaLabel}
             onPress={() => onOpenRoleplay(featured.id)}
           />
         </View>
       </View>
 
-      <View style={styles.statGrid}>
-        <View style={[styles.statCard, styles.statCardLeft]}>
-          <Text style={styles.statNumber}>{localProgress.sessionsCompleted}</Text>
-          <Text style={styles.statLabel}>Sessions</Text>
+      <Card muted>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>How it works</Text>
+          <Text style={styles.sectionMeta}>3 steps</Text>
         </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{localProgress.currentStreakDays}</Text>
-          <Text style={styles.statLabel}>Day streak</Text>
+        <View style={styles.stepList}>
+          {guidedIntroSteps.map((step, index) => (
+            <View key={step.id} style={styles.stepRow}>
+              <View style={styles.stepNumber}>
+                <Text style={styles.stepNumberText}>{index + 1}</Text>
+              </View>
+              <View style={styles.stepTextBlock}>
+                <Text style={styles.stepTitle}>{step.title}</Text>
+                <Text style={styles.stepBody}>{step.body}</Text>
+              </View>
+            </View>
+          ))}
         </View>
-      </View>
+      </Card>
 
       <Card>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Daily goal</Text>
+          <Text style={styles.sectionTitle}>Today</Text>
           <Text style={styles.sectionMeta}>{dailyMission.xpToday}/{dailyMission.xpGoal} XP</Text>
         </View>
         <View style={styles.progressBlock}>
-          <ProgressBar label="Mission progress" value={dailyMission.progressPercent} />
+          <ProgressBar label="Practice progress" value={dailyMission.progressPercent} />
         </View>
         <Text style={styles.copy}>
           {hasSavedSession
-            ? `${sessions.length}/${dailyTarget} target session${dailyTarget === 1 ? '' : 's'} done this run. ${localProgress.totalLocalXp} local XP added.`
-            : progressData.summary.nextFocus}
+            ? `${sessions.length}/${dailyTarget} short practice${dailyTarget === 1 ? '' : 's'} done. ${localProgress.totalLocalXp} XP added this run.`
+            : 'Your first step is one short Job Interview practice. Nothing else is required today.'}
         </Text>
-      </Card>
-
-      <Card muted>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Daily path</Text>
-          <Text style={styles.sectionMeta}>3 steps</Text>
-        </View>
-        <View style={styles.pathBlock}>
-          <LearningPath steps={pathSteps} />
-        </View>
       </Card>
 
       <View style={styles.sectionHeader}>
@@ -157,145 +113,98 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
 }
 
 const styles = StyleSheet.create({
-  eyebrow: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '900',
-    marginBottom: spacing.sm,
-    textTransform: 'uppercase',
-  },
-  statusRail: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    flexDirection: 'row',
-    padding: spacing.sm,
-  },
-  statusItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statusValue: {
-    color: colors.ink,
-    fontSize: typography.h3,
-    fontWeight: '900',
-  },
-  statusLabel: {
-    color: colors.textMuted,
-    fontSize: 11,
-    fontWeight: '800',
-    marginTop: spacing.xs,
-    textTransform: 'uppercase',
-  },
   hero: {
-    backgroundColor: colors.primaryDark,
-    borderRadius: 8,
+    backgroundColor: colors.primarySoft,
+    borderColor: '#BDE7DC',
+    borderRadius: radii.md,
+    borderWidth: 1,
     padding: spacing.xl,
   },
-  heroTopRow: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  heroTitleBlock: {
-    flex: 1,
-    paddingRight: spacing.md,
-  },
   heroKicker: {
-    color: '#BFE7E1',
+    color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   heroTitle: {
-    color: colors.surface,
+    color: colors.ink,
     fontSize: typography.h1,
     fontWeight: '900',
     lineHeight: 32,
     marginTop: spacing.sm,
   },
   heroCopy: {
-    color: '#E4F4F1',
+    color: colors.text,
     fontSize: typography.body,
     lineHeight: 22,
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
   },
-  heroStats: {
+  focusRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: spacing.lg,
   },
-  heroStat: {
+  focusBadge: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  focusBadgeText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  buttonRow: {
+    marginTop: spacing.md,
+  },
+  stepList: {
+    marginTop: spacing.lg,
+  },
+  stepRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+  },
+  stepNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 34,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    width: 34,
+  },
+  stepNumberText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  stepTextBlock: {
     flex: 1,
   },
-  heroStatValue: {
-    color: colors.surface,
+  stepTitle: {
+    color: colors.ink,
     fontSize: typography.h3,
     fontWeight: '900',
   },
-  heroStatLabel: {
-    color: '#BFE7E1',
+  stepBody: {
+    color: colors.textMuted,
     fontSize: typography.small,
-    fontWeight: '700',
+    lineHeight: 19,
     marginTop: spacing.xs,
-  },
-  levelPill: {
-    alignItems: 'center',
-    backgroundColor: '#F5C46B',
-    borderRadius: 8,
-    minWidth: 62,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-  },
-  levelLabel: {
-    color: colors.ink,
-    fontSize: 10,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  levelNumber: {
-    color: colors.ink,
-    fontSize: typography.h2,
-    fontWeight: '900',
-  },
-  headline: {
-    color: colors.ink,
-    fontSize: typography.h1,
-    fontWeight: '900',
   },
   copy: {
     color: colors.textMuted,
     fontSize: typography.body,
     lineHeight: 22,
-    marginTop: spacing.sm,
-  },
-  buttonRow: {
-    marginTop: spacing.lg,
-  },
-  statGrid: {
-    flexDirection: 'row',
-  },
-  statCard: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    flex: 1,
-    padding: spacing.lg,
-  },
-  statCardLeft: {
-    marginRight: spacing.md,
-  },
-  statNumber: {
-    color: colors.accent,
-    fontSize: typography.h1,
-    fontWeight: '900',
-  },
-  statLabel: {
-    color: colors.textMuted,
-    fontSize: typography.small,
-    fontWeight: '700',
-    marginTop: spacing.xs,
+    marginTop: spacing.md,
   },
   sectionHeader: {
     alignItems: 'center',
@@ -314,8 +223,5 @@ const styles = StyleSheet.create({
   },
   progressBlock: {
     marginTop: spacing.lg,
-  },
-  pathBlock: {
-    marginTop: spacing.md,
   },
 });

@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-26: Home Next Practice Recommendation
+
+Built one focused improvement: the Home hero now recommends the actual next roleplay after a saved session instead of reopening the default Job Interview scenario. This keeps the practice loop moving forward with a clearer next action and a more useful repeat-practice habit.
+
+What went well:
+
+- The change fixed a real practice-flow gap without adding persistence, backend work or new navigation architecture.
+- Added `src/utils/homeRecommendation.ts` so the Home recommendation logic stays small and testable.
+- The Home CTA, title and supporting copy now stay aligned with the same next-step recommendation.
+- Added focused coverage for first-visit and post-save Home recommendations.
+
+What went wrong:
+
+- The next recommendation is still a simple rotation through the roleplay library, not yet personalized by mistakes, scores or session history depth.
+- The Node test run still prints the known harmless `MODULE_TYPELESS_PACKAGE_JSON` warning when importing TypeScript modules directly.
+- GitHub CLI is not installed in this environment, so draft PR creation may require connector support or remain blocked.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home should keep pointing to the next useful practice action, not fall back to the first roleplay after a save.
+- `createHomePracticeRecommendation` is now the place to evolve Home recommendations without touching screen layout logic.
+- Keep recommendation logic local and predictable until real persistence or personalization is explicitly needed.
+
+Next suggested task:
+
+- Add persistent onboarding completion with local storage so repeat opens feel production-ready.
+
 ## 2026-06-25
 
 Built the initial SpeakCareer Expo TypeScript foundation.
@@ -1543,3 +1585,47 @@ Agent memory for next time:
 Next suggested task:
 
 - Start Expo and visually verify the completion card flow on a phone-sized viewport.
+
+## 2026-06-26: Guided First Experience Simplification
+
+Built one focused improvement: the first launch and Home screen now guide the user through SpeakCareer in three simple steps. Onboarding explains the product as choose one work situation, write one short answer and review simple feedback. Home now has one clear "Start guided practice" action, a calmer first-practice card, a simple Today progress card and the roleplay library below the fold. Expo web preview support was added so UI changes can be checked in a browser-sized phone viewport.
+
+What went well:
+
+- The first experience is much easier to understand and no longer starts with several competing stats, missions and path concepts.
+- The same guided intro content is shared between Onboarding and Home through `src/data/guidedIntro.ts`.
+- Home can now recommend the real next roleplay after a saved session using a small local utility.
+- The simplified Home screen was visually checked at a 390x844 phone viewport with no overlap.
+
+What went wrong:
+
+- The previous Home screen had become too dense from stacked gamification layers.
+- A concurrent local `homeRecommendation` change appeared during the run, so checks had to be rerun after including it.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 27 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants the app to feel very guided and simple before it feels rich or advanced.
+- Keep one obvious primary action on first launch and Home.
+- Add habit-loop elements only when they support the next simple step; avoid stacking many stats at the top.
+- A good next step is to simplify the Roleplay screen into a clear step-by-step flow: read prompt, write answer, review feedback, save.
+
+Next suggested task:
+
+- Simplify the Roleplay screen with a guided step indicator and less dense instruction copy.

@@ -31,6 +31,20 @@ test('keeps the first MVP focused on English', () => {
   }
 });
 
+test('keeps the guided first experience simple and action oriented', async () => {
+  const { guidedIntroSteps, guidedStart } = await import('../src/data/guidedIntro.ts');
+
+  assert.deepEqual(
+    guidedIntroSteps.map((step) => step.id),
+    ['choose', 'answer', 'review'],
+  );
+  assert.equal(guidedIntroSteps.length, 3);
+  assert.equal(guidedStart.roleplayId, 'job-interview');
+  assert.equal(guidedStart.ctaLabel, 'Start guided practice');
+  assert.ok(guidedStart.subtitle.includes('first English sprint'));
+  assert.ok(guidedIntroSteps.every((step) => step.title.length <= 32));
+});
+
 test('provides mock feedback and mistake-bank data', () => {
   for (const roleplay of practiceContent.roleplays) {
     assert.ok(roleplay.feedback.summary.length > 20);
@@ -339,6 +353,50 @@ test('creates a rewarding roleplay completion summary', async () => {
 
   const nextAfterSmallTalk = createNextPracticeRecommendation('workplace-small-talk', practiceContent.roleplays);
   assert.equal(nextAfterSmallTalk.roleplayId, 'job-interview');
+});
+
+test('recommends the real next roleplay on Home after a saved session', async () => {
+  const { createHomePracticeRecommendation } = await import('../src/utils/homeRecommendation.ts');
+  const { guidedStart } = await import('../src/data/guidedIntro.ts');
+  const firstVisitRecommendation = createHomePracticeRecommendation([], practiceContent.roleplays, {
+    ctaLabel: guidedStart.ctaLabel,
+    roleplayId: guidedStart.roleplayId,
+    subtitle: guidedStart.subtitle,
+    title: guidedStart.title,
+  });
+
+  assert.equal(firstVisitRecommendation.roleplayId, 'job-interview');
+  assert.equal(firstVisitRecommendation.ctaLabel, 'Start guided practice');
+  assert.ok(firstVisitRecommendation.title.includes('Job Interview'));
+
+  const continueRecommendation = createHomePracticeRecommendation(
+    [
+      {
+        id: 'job-interview-1',
+        roleplayId: 'job-interview',
+        roleplayTitle: 'Job Interview',
+        completedAt: '2026-06-26T10:00:00.000Z',
+        answerPreview: 'I improved the weekly customer feedback process.',
+        wordCount: 24,
+        readinessLabel: 'Ready for feedback',
+        feedbackSummary: 'Good structure and result.',
+        xpReward: 55,
+      },
+    ],
+    practiceContent.roleplays,
+    {
+      ctaLabel: guidedStart.ctaLabel,
+      roleplayId: guidedStart.roleplayId,
+      subtitle: guidedStart.subtitle,
+      title: guidedStart.title,
+    },
+  );
+
+  assert.equal(continueRecommendation.roleplayId, 'meeting-practice');
+  assert.equal(continueRecommendation.ctaLabel, 'Start next roleplay');
+  assert.equal(continueRecommendation.title, 'Next: Meeting Practice');
+  assert.ok(continueRecommendation.subtitle.includes('saved'));
+  assert.ok(continueRecommendation.subtitle.includes('meeting'));
 });
 
 test('creates a first-time progress action for new users', async () => {

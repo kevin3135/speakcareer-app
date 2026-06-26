@@ -2,8 +2,9 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
+import { guidedIntroSteps, guidedStart } from '../data/guidedIntro';
 import { practiceContent } from '../data/content';
-import { colors, spacing, typography } from '../styles/theme';
+import { colors, radii, spacing, typography } from '../styles/theme';
 
 type OnboardingScreenProps = {
   onContinue: () => void;
@@ -13,60 +14,64 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.brandBlock}>
-        <Text style={styles.kicker}>Career English trainer</Text>
+        <Text style={styles.kicker}>English career practice</Text>
         <Text style={styles.brand}>SpeakCareer</Text>
-        <Text style={styles.positioning}>{practiceContent.positioning}</Text>
-      </View>
-
-      <View style={styles.previewRail}>
-        <View style={styles.previewTile}>
-          <Text style={styles.previewValue}>5</Text>
-          <Text style={styles.previewLabel}>roleplays</Text>
-        </View>
-        <View style={styles.previewTile}>
-          <Text style={styles.previewValue}>5:00</Text>
-          <Text style={styles.previewLabel}>sprints</Text>
-        </View>
-        <View style={styles.previewTile}>
-          <Text style={styles.previewValue}>XP</Text>
-          <Text style={styles.previewLabel}>feedback</Text>
-        </View>
-      </View>
-
-      <Card>
-        <Text style={styles.cardTitle}>English MVP focus</Text>
-        <Text style={styles.body}>
-          Practice the professional conversations that create real career leverage:
-          interviews, meetings, presentations, sales calls and workplace small talk.
+        <Text style={styles.positioning}>Practice work English in 3 simple steps.</Text>
+        <Text style={styles.intro}>
+          Choose a real workplace situation, write one answer and get clear feedback.
         </Text>
-        <View style={styles.list}>
-          <Text style={styles.item}>- Roleplay with realistic workplace prompts</Text>
-          <Text style={styles.item}>- Review mock AI feedback before real API work</Text>
-          <Text style={styles.item}>- Track recurring mistakes in one mistake bank</Text>
-        </View>
-      </Card>
+      </View>
+
+      <View style={styles.firstPracticeCard}>
+        <Card muted>
+          <Text style={styles.cardKicker}>First guided practice</Text>
+          <Text style={styles.cardTitle}>{guidedStart.title}</Text>
+          <Text style={styles.body}>{guidedStart.subtitle}</Text>
+        </Card>
+      </View>
+
+      <View style={styles.stepsBlock}>
+        {guidedIntroSteps.map((step, index) => (
+          <View key={step.id} style={styles.stepRow}>
+            <View style={[styles.stepNumber, stepAccentStyles[index]]}>
+              <Text style={styles.stepNumberText}>{index + 1}</Text>
+            </View>
+            <View style={styles.stepTextBlock}>
+              <Text style={styles.stepTitle}>{step.title}</Text>
+              <Text style={styles.stepBody}>{step.body}</Text>
+            </View>
+          </View>
+        ))}
+      </View>
 
       <View style={styles.footer}>
         <AppButton
           accessibilityHint="Moves from onboarding to the Home screen"
-          label="Start practicing"
+          label={guidedStart.ctaLabel}
           onPress={onContinue}
         />
-        <Text style={styles.note}>Spanish, French and Mandarin Chinese are planned after the English MVP is solid.</Text>
+        <Text style={styles.note}>
+          {practiceContent.firstTargetLanguage} first. Spanish, French and Mandarin Chinese come later.
+        </Text>
       </View>
     </ScrollView>
   );
 }
 
+const stepAccentStyles = [
+  { backgroundColor: colors.primarySoft },
+  { backgroundColor: colors.accentSoft },
+  { backgroundColor: colors.infoSoft },
+];
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
     flexGrow: 1,
-    justifyContent: 'space-between',
     padding: spacing.xl,
   },
   brandBlock: {
-    paddingTop: spacing.xxl,
+    paddingTop: spacing.xl,
   },
   kicker: {
     color: colors.primaryDark,
@@ -87,49 +92,72 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     marginTop: spacing.md,
   },
-  previewRail: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 8,
-    borderWidth: 1,
-    flexDirection: 'row',
-    padding: spacing.sm,
-  },
-  previewTile: {
-    alignItems: 'center',
-    flex: 1,
-    paddingVertical: spacing.sm,
-  },
-  previewValue: {
-    color: colors.primaryDark,
-    fontSize: typography.h2,
-    fontWeight: '900',
-  },
-  previewLabel: {
+  intro: {
     color: colors.textMuted,
-    fontSize: 11,
-    fontWeight: '800',
-    marginTop: spacing.xs,
+    fontSize: typography.body,
+    lineHeight: 23,
+    marginTop: spacing.md,
+  },
+  cardKicker: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.sm,
     textTransform: 'uppercase',
   },
   cardTitle: {
-    color: colors.primaryDark,
+    color: colors.ink,
     fontSize: typography.h2,
     fontWeight: '900',
-    marginBottom: spacing.md,
   },
   body: {
     color: colors.textMuted,
     fontSize: typography.body,
     lineHeight: 23,
+    marginTop: spacing.sm,
   },
-  list: {
+  firstPracticeCard: {
+    marginTop: spacing.xl,
+  },
+  stepsBlock: {
     marginTop: spacing.lg,
   },
-  item: {
+  stepRow: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+    padding: spacing.lg,
+  },
+  stepNumber: {
+    alignItems: 'center',
+    borderRadius: 999,
+    height: 38,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    width: 38,
+  },
+  stepNumberText: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  stepTextBlock: {
+    flex: 1,
+  },
+  stepTitle: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  stepBody: {
     color: colors.text,
-    fontSize: typography.body,
-    lineHeight: 22,
+    fontSize: typography.small,
+    lineHeight: 19,
+    marginTop: spacing.xs,
   },
   footer: {
     marginTop: spacing.md,
@@ -138,6 +166,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.small,
     lineHeight: 18,
+    marginTop: spacing.md,
     textAlign: 'center',
   },
 });
