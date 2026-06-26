@@ -16,6 +16,12 @@ export type MistakePracticeDrill = {
   title: string;
 };
 
+export type MistakePracticeStatus = {
+  body: string;
+  ctaLabel: string;
+  label: string;
+};
+
 const PRIORITY_ORDER: Record<MistakeItem['priority'], number> = {
   High: 0,
   Medium: 1,
@@ -52,6 +58,22 @@ export function createMistakePracticeDrill(mistakes: MistakeItem[]): MistakePrac
       'Use the same pattern in your next answer.',
     ],
     title: `Practice this correction: ${mistake.category}`,
+  };
+}
+
+export function createMistakePracticeStatus(isPracticed: boolean): MistakePracticeStatus {
+  if (isPracticed) {
+    return {
+      body: 'Nice. Use this same pattern in one short roleplay sprint while it is fresh.',
+      ctaLabel: 'Practiced once',
+      label: 'Practice win',
+    };
+  }
+
+  return {
+    body: 'Say the better sentence out loud once, then mark it as practiced.',
+    ctaLabel: 'Mark practiced',
+    label: 'Ready to repeat',
   };
 }
 

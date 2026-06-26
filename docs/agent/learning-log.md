@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Mark Mistake Drill Practiced
+
+Built one focused improvement: the Progress mistake drill now has a local "Mark practiced" mini-win. After the user says the correction out loud, they can mark it practiced and the card changes to a short "Practice win" state.
+
+What went well:
+
+- Added a small reward loop without auth, backend, payments or stored private data.
+- The interaction stays focused on professional English: repeat one better sentence, then use it in a roleplay.
+- The state is intentionally local to the current screen session, keeping the MVP simple.
+- Mobile preview confirmed "Mark practiced" changes to "Practice win" and "Practiced once".
+
+What went wrong:
+
+- The practiced state is not persisted yet, so it resets after reload.
+- The button is not disabled after completion; it stays harmless but still tappable.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 41 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Tiny completion states make the app feel more alive without turning it childish.
+- Keep micro-rewards tied to real learning behavior, not empty points.
+- If this pattern works, later persist practiced corrections locally after the product flow is stable.
+
+Next suggested task:
+
+- Add one more workplace-specific prompt variant for Meeting Practice focused on polite disagreement or clarification.
+
 ## 2026-06-26: Actionable Mistake Practice Drill
 
 Built one focused improvement: Progress now turns the top mistake-bank item into a short practice drill. Users see what to avoid, what to say instead, three micro-steps and a CTA into the connected roleplay.

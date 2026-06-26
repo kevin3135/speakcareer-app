@@ -769,7 +769,7 @@ test('creates a guided next step for progress states', async () => {
 });
 
 test('creates an actionable mistake practice drill', async () => {
-  const { createMistakePracticeDrill } = await import('../src/utils/mistakePracticeDrill.ts');
+  const { createMistakePracticeDrill, createMistakePracticeStatus } = await import('../src/utils/mistakePracticeDrill.ts');
   const interviewDrill = createMistakePracticeDrill(progressMock.mistakeBank);
 
   assert.equal(interviewDrill.roleplayId, 'job-interview');
@@ -797,6 +797,16 @@ test('creates an actionable mistake practice drill', async () => {
   assert.equal(salesDrill.roleplayId, 'sales-call');
   assert.equal(salesDrill.ctaLabel, 'Practice Sales Call');
   assert.equal(createMistakePracticeDrill([]), null);
+
+  const readyStatus = createMistakePracticeStatus(false);
+  assert.equal(readyStatus.label, 'Ready to repeat');
+  assert.equal(readyStatus.ctaLabel, 'Mark practiced');
+  assert.ok(readyStatus.body.includes('out loud'));
+
+  const practicedStatus = createMistakePracticeStatus(true);
+  assert.equal(practicedStatus.label, 'Practice win');
+  assert.equal(practicedStatus.ctaLabel, 'Practiced once');
+  assert.ok(practicedStatus.body.includes('fresh'));
 });
 
 test('adds saved sessions to local progress and daily mission', async () => {

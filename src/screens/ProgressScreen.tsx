@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
@@ -9,7 +10,7 @@ import { colors, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
-import { createMistakePracticeDrill } from '../utils/mistakePracticeDrill';
+import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { formatSessionDate } from '../utils/sessionHistory';
 
@@ -20,10 +21,12 @@ type ProgressScreenProps = {
 };
 
 export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: ProgressScreenProps) {
+  const [isMistakeDrillPracticed, setIsMistakeDrillPracticed] = useState(false);
   const { summary, mistakeBank } = progressData;
   const completionSummary = createLessonCompleteSummary(sessions);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
   const mistakeDrill = createMistakePracticeDrill(mistakeBank);
+  const mistakePracticeStatus = createMistakePracticeStatus(isMistakeDrillPracticed);
   const progressGuide = createProgressNextStepGuide({
     dailyTarget,
     roleplays: practiceContent.roleplays,
@@ -177,7 +180,19 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
               </View>
             ))}
           </View>
+          <View style={styles.drillStatus}>
+            <Text style={styles.drillStatusLabel}>{mistakePracticeStatus.label}</Text>
+            <Text style={styles.drillStatusBody}>{mistakePracticeStatus.body}</Text>
+          </View>
           <View style={styles.drillAction}>
+            <AppButton
+              accessibilityHint="Marks this correction drill as practiced for this session"
+              label={mistakePracticeStatus.ctaLabel}
+              onPress={() => setIsMistakeDrillPracticed(true)}
+              variant={isMistakeDrillPracticed ? 'quiet' : 'primary'}
+            />
+          </View>
+          <View style={styles.drillSecondaryAction}>
             <AppButton
               accessibilityHint="Opens the roleplay connected to this mistake correction"
               label={mistakeDrill.ctaLabel}
@@ -534,6 +549,27 @@ const styles = StyleSheet.create({
   },
   drillAction: {
     marginTop: spacing.lg,
+  },
+  drillSecondaryAction: {
+    marginTop: spacing.sm,
+  },
+  drillStatus: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: 8,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  drillStatusLabel: {
+    color: colors.ink,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  drillStatusBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.xs,
   },
   mistakeHeader: {
     alignItems: 'center',
