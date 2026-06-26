@@ -513,9 +513,9 @@ export function RoleplayScreen({
             </View>
           ) : null}
         </View>
-        <View style={styles.answerTransition}>
-          <Text style={styles.answerTransitionTitle}>{answerCoach.transitionTitle}</Text>
-          <Text style={styles.answerTransitionBody}>{answerCoach.transitionBody}</Text>
+        <View style={styles.answerInputHeader}>
+          <Text style={styles.answerInputHeaderTitle}>{answerCoach.transitionTitle}</Text>
+          <Text style={styles.answerInputHeaderBody}>{answerCoach.transitionBody}</Text>
         </View>
         <TextInput
           accessibilityLabel="Practice answer"
@@ -1208,18 +1208,15 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
   },
-  answerTransition: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radii.md,
+  answerInputHeader: {
     marginTop: spacing.md,
-    padding: spacing.md,
   },
-  answerTransitionTitle: {
+  answerInputHeaderTitle: {
     color: colors.primaryDark,
     fontSize: typography.body,
     fontWeight: '900',
   },
-  answerTransitionBody: {
+  answerInputHeaderBody: {
     color: colors.text,
     fontSize: typography.small,
     fontWeight: '700',

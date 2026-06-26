@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-26: Inline Answer Input Cue
+
+Built one focused improvement: the Roleplay answer card no longer shows "Now write your answer" as a separate green panel. The cue is now a simple header directly above the answer text box, so Step 2 feels less stacked and the typing area is more central.
+
+What went well:
+
+- The change removed one visual block before typing without removing beginner guidance.
+- The existing answer-coach copy stays reused, so the behavior remains simple and consistent.
+- Mobile preview at 390x844 confirmed the input cue sits under Writing support and above the answer box.
+
+What went wrong:
+
+- The answer card is cleaner, but Step 2 still has several elements before the keyboard: instruction, support, cue and input.
+- This was a UI-only simplification, so it does not improve feedback depth yet.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 36 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Put action cues as close as possible to the control they explain.
+- Removing visual panels can make the guided flow feel simpler without deleting useful guidance.
+- The next small task should make the first roleplay completion more satisfying or reduce Step 2 copy further.
+
+Next suggested task:
+
+- Shorten the Step 2 instruction copy so the answer box appears even faster on mobile.
+
 ## 2026-06-26: Combined Writing Support
 
 Built one focused improvement: the Roleplay answer card now combines the old Answer plan and Helpful phrases sections into one compact Writing support area. Plan and phrases remain optional, but they no longer feel like two separate stacked tasks before the user can write.
