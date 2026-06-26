@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Guided Home Unlock Preview
+
+Built one focused improvement: first-time Home now previews the real next English roleplays in one compact `What unlocks next` card instead of using abstract preview pills or a full roleplay wall.
+
+What went well:
+
+- The first-run Home screen now stays guided while still showing where the product goes after the first saved answer.
+- The preview uses actual roleplays like Meeting Practice and Presentation Practice, which makes the MVP feel more concrete and useful.
+- Returning users still keep the normal roleplay-card library, so this change does not slow down repeat practice.
+- The logic lives in `src/utils/homeLibrary.ts`, which kept the behavior easy to test without adding component-test setup.
+
+What went wrong:
+
+- This improvement builds on an existing first-run Home simplification already present on the branch, so the final change was a refinement rather than a brand-new screen pattern.
+- The Home hero still hard-codes `English` and `5 minutes` instead of fully reusing guided-start detail labels.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 42 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport; the live returning-state app still rendered correctly, and the first-run Home unlock-preview state was covered by unit tests.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run Home should tease the next value clearly without asking the user to browse a big library yet.
+- Real scenario names work better than abstract labels when previewing what comes after the first sprint.
+- The next small task should make the first-run hero and Today card feel even more like one guided daily mission.
+
+Next suggested task:
+
+- Turn the first-run Today card into a simpler daily mission card with one completion target and one reason to practice now.
+
 ## 2026-06-26: Simpler First Practice Guidance
 
 Built one focused UX improvement: the first practice path now feels more guided and less busy. Onboarding points users to one 5-minute Job Interview sprint with 2-4 sentences and a clear rewrite, and the Roleplay answer card now shows one "Quick starter" before hiding extra help behind a single More button.

@@ -10,6 +10,7 @@ import { guidedIntroSteps, guidedStart } from '../data/guidedIntro';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createHomeLibraryState } from '../utils/homeLibrary';
 import { createHomePracticeRecommendation } from '../utils/homeRecommendation';
 import { createLocalProgressStats } from '../utils/localProgress';
 
@@ -32,6 +33,11 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
   const dailyMission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(progressData.summary, sessions, dailyTarget);
   const hasSavedSession = sessions.length > 0;
+  const homeLibrary = createHomeLibraryState(sessions, practiceContent.roleplays, guidedStart.roleplayId);
+  const homeLibraryRoleplayIds = new Set(homeLibrary.previewRoleplays.map((roleplay) => roleplay.id));
+  const visibleRoleplayCards = practiceContent.roleplays.filter((roleplay) =>
+    homeLibraryRoleplayIds.has(roleplay.id),
+  );
 
   return (
     <Screen
@@ -97,17 +103,40 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
         </Text>
       </Card>
 
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Roleplay library</Text>
-        <Text style={styles.sectionMeta}>English MVP</Text>
-      </View>
-      {practiceContent.roleplays.slice(0, 3).map((roleplay) => (
-        <RoleplayCard
-          key={roleplay.id}
-          roleplay={roleplay}
-          onPress={() => onOpenRoleplay(roleplay.id)}
-        />
-      ))}
+      {homeLibrary.showRoleplayCards ? (
+        <>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>{homeLibrary.title}</Text>
+            <Text style={styles.sectionMeta}>{homeLibrary.meta}</Text>
+          </View>
+          {visibleRoleplayCards.map((roleplay) => (
+            <RoleplayCard
+              key={roleplay.id}
+              roleplay={roleplay}
+              onPress={() => onOpenRoleplay(roleplay.id)}
+            />
+          ))}
+        </>
+      ) : (
+        <Card muted>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>{homeLibrary.title}</Text>
+            <Text style={styles.sectionMeta}>{homeLibrary.meta}</Text>
+          </View>
+          <Text style={styles.copy}>{homeLibrary.body}</Text>
+          <View style={styles.libraryPreviewList}>
+            {homeLibrary.previewRoleplays.map((roleplay) => (
+              <View key={roleplay.id} style={styles.libraryPreviewCard}>
+                <Text style={styles.libraryPreviewTitle}>{roleplay.title}</Text>
+                <Text style={styles.libraryPreviewBody}>{roleplay.focus}</Text>
+                <Text style={styles.libraryPreviewMeta}>
+                  {roleplay.category} / {roleplay.targetLevel}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </Card>
+      )}
     </Screen>
   );
 }
@@ -223,5 +252,34 @@ const styles = StyleSheet.create({
   },
   progressBlock: {
     marginTop: spacing.lg,
+  },
+  libraryPreviewCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  libraryPreviewList: {
+    marginTop: spacing.md,
+  },
+  libraryPreviewTitle: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  libraryPreviewBody: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 19,
+    marginTop: spacing.xs,
+  },
+  libraryPreviewMeta: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.sm,
   },
 });

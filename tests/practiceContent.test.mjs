@@ -580,6 +580,41 @@ test('recommends the real next roleplay on Home after a saved session', async ()
   assert.ok(continueRecommendation.subtitle.includes('meeting'));
 });
 
+test('keeps the Home library quiet until the first saved practice', async () => {
+  const { createHomeLibraryState } = await import('../src/utils/homeLibrary.ts');
+
+  const firstRunLibrary = createHomeLibraryState(
+    [],
+    practiceContent.roleplays,
+    'job-interview',
+  );
+
+  assert.equal(firstRunLibrary.showRoleplayCards, false);
+  assert.equal(firstRunLibrary.title, 'What unlocks next');
+  assert.equal(firstRunLibrary.meta, 'Keep it simple');
+  assert.ok(firstRunLibrary.body.includes('Save your first answer'));
+  assert.ok(firstRunLibrary.body.includes('meetings'));
+  assert.equal(firstRunLibrary.previewRoleplays.length, 3);
+  assert.equal(firstRunLibrary.previewRoleplays[0].id, 'meeting-practice');
+  assert.equal(firstRunLibrary.previewRoleplays.some((roleplay) => roleplay.id === 'job-interview'), false);
+
+  const activeLibrary = createHomeLibraryState(
+    [
+      {
+        id: 'job-interview-1',
+      },
+    ],
+    practiceContent.roleplays,
+    'job-interview',
+  );
+
+  assert.equal(activeLibrary.showRoleplayCards, true);
+  assert.equal(activeLibrary.title, 'Roleplay library');
+  assert.equal(activeLibrary.meta, 'English MVP');
+  assert.equal(activeLibrary.previewRoleplays.length, 3);
+  assert.equal(activeLibrary.previewRoleplays[0].id, 'job-interview');
+});
+
 test('guides roleplay practice through one simple step at a time', async () => {
   const { createRoleplayGuideState } = await import('../src/utils/roleplayGuide.ts');
   const firstStep = createRoleplayGuideState({
