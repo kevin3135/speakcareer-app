@@ -471,6 +471,30 @@ test('creates a simple answer coach for the roleplay answer card', async () => {
   assert.ok(coach.placeholder.includes('Currently'));
 });
 
+test('creates a collapsible helpful phrase helper state', async () => {
+  const { createRoleplayPhraseHelperState } = await import('../src/utils/roleplayPhraseHelper.ts');
+
+  const closedHelper = createRoleplayPhraseHelperState({
+    isOpen: false,
+    phraseCount: 3,
+  });
+
+  assert.equal(closedHelper.toggleLabel, 'Show');
+  assert.equal(closedHelper.toggleAccessibilityLabel, 'Show helpful phrases');
+  assert.equal(closedHelper.summaryLabel, '3 phrases');
+  assert.ok(closedHelper.helperText.includes('optional'));
+
+  const openHelper = createRoleplayPhraseHelperState({
+    isOpen: true,
+    phraseCount: 1,
+  });
+
+  assert.equal(openHelper.toggleLabel, 'Hide');
+  assert.equal(openHelper.toggleAccessibilityLabel, 'Hide helpful phrases');
+  assert.equal(openHelper.summaryLabel, '1 phrase');
+  assert.ok(openHelper.helperText.includes('natural answer'));
+});
+
 test('creates a first-time progress action for new users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();

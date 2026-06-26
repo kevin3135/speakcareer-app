@@ -19,6 +19,7 @@ import {
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createRoleplayAnglePickerState } from '../utils/roleplayAnglePicker';
 import { createRoleplayGuideState } from '../utils/roleplayGuide';
+import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
 import { createRoleplayReadCard } from '../utils/roleplayReadCard';
 import {
   createRoleplayScenarioPickerState,
@@ -51,6 +52,7 @@ export function RoleplayScreen({
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
   const [isScenarioPickerOpen, setIsScenarioPickerOpen] = useState(false);
   const [isAnglePickerOpen, setIsAnglePickerOpen] = useState(false);
+  const [isPhraseHelperOpen, setIsPhraseHelperOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
   const [activePromptVariantId, setActivePromptVariantId] = useState(
     roleplay.promptVariants?.[0]?.id ?? null,
@@ -75,6 +77,10 @@ export function RoleplayScreen({
     activeVariantId: activePromptVariant?.id ?? null,
     isOpen: isAnglePickerOpen,
     variants: roleplayPromptVariants,
+  });
+  const phraseHelper = createRoleplayPhraseHelperState({
+    isOpen: isPhraseHelperOpen,
+    phraseCount: activeSuggestedPhrases.length,
   });
   const readCard = createRoleplayReadCard({
     activePromptVariant,
@@ -165,6 +171,7 @@ export function RoleplayScreen({
 
   function selectPromptVariant(variantId: string) {
     setIsAnglePickerOpen(false);
+    setIsPhraseHelperOpen(false);
     setActivePromptVariantId(variantId);
     clearAnswer();
   }
@@ -175,6 +182,7 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setShowFeedback(false);
     setSavedSessionId(null);
+    setIsPhraseHelperOpen(false);
     setFollowUpAnswer('');
     setFollowUpReview(null);
     setAdaptiveFollowUp(null);
@@ -413,14 +421,32 @@ export function RoleplayScreen({
           ))}
         </View>
         <View style={styles.inlinePhraseBlock}>
-          <Text style={styles.inlinePhraseLabel}>{answerCoach.phraseLabel}</Text>
-          <View style={styles.inlinePhraseList}>
-            {activeSuggestedPhrases.map((phrase) => (
-              <View key={phrase} style={styles.inlinePhraseChip}>
-                <Text style={styles.inlinePhraseText}>{phrase}</Text>
-              </View>
-            ))}
+          <View style={styles.inlinePhraseHeader}>
+            <View style={styles.inlinePhraseCopy}>
+              <Text style={styles.inlinePhraseLabel}>{answerCoach.phraseLabel}</Text>
+              <Text style={styles.inlinePhraseSummary}>{phraseHelper.summaryLabel}</Text>
+            </View>
+            <Pressable
+              accessibilityHint="Shows or hides optional phrase starters for your answer"
+              accessibilityLabel={phraseHelper.toggleAccessibilityLabel}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: isPhraseHelperOpen }}
+              onPress={() => setIsPhraseHelperOpen((isOpen) => !isOpen)}
+              style={({ pressed }) => [styles.inlinePhraseToggle, pressed && styles.inlinePhraseTogglePressed]}
+            >
+              <Text style={styles.inlinePhraseToggleText}>{phraseHelper.toggleLabel}</Text>
+            </Pressable>
           </View>
+          <Text style={styles.inlinePhraseHelper}>{phraseHelper.helperText}</Text>
+          {isPhraseHelperOpen ? (
+            <View style={styles.inlinePhraseList}>
+              {activeSuggestedPhrases.map((phrase) => (
+                <View key={phrase} style={styles.inlinePhraseChip}>
+                  <Text style={styles.inlinePhraseText}>{phrase}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
         </View>
         <View style={styles.answerTransition}>
           <Text style={styles.answerTransitionTitle}>{answerCoach.transitionTitle}</Text>
@@ -996,16 +1022,55 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     padding: spacing.md,
   },
+  inlinePhraseHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  inlinePhraseCopy: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
   inlinePhraseLabel: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
-    marginBottom: spacing.sm,
     textTransform: 'uppercase',
+  },
+  inlinePhraseSummary: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  inlinePhraseToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 36,
+    paddingHorizontal: spacing.md,
+  },
+  inlinePhraseTogglePressed: {
+    opacity: 0.82,
+  },
+  inlinePhraseToggleText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  inlinePhraseHelper: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
   },
   inlinePhraseList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginTop: spacing.sm,
   },
   inlinePhraseChip: {
     backgroundColor: colors.surface,

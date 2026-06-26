@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-26: Collapsible Helpful Phrases
+
+Built one focused improvement: the Roleplay answer card now keeps helpful phrases collapsed by default behind a small Show/Hide control. This keeps the answer input closer to the top of the writing step while still preserving optional phrase support for users who want it.
+
+What went well:
+
+- The change directly improves the writing flow without adding another screen, dependency or persistence layer.
+- Phrase-toggle copy and accessibility labels are isolated in `src/utils/roleplayPhraseHelper.ts`, so the UI stays small and testable.
+- The answer card still shows phrase availability with a compact summary, which keeps the support discoverable without forcing more scrolling.
+- Added focused test coverage for the closed and open phrase-helper states.
+
+What went wrong:
+
+- This is still a simple disclosure pattern; phrases are not yet personalized to the user's weakness or hidden automatically after typing starts.
+- The answer card remains content-rich even after collapsing phrase help, so a later pass may still trim guidance further if the writing step feels dense.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 33 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep optional coaching behind progressive disclosure when the writing task should stay primary.
+- Small roleplay-flow improvements are working best when they reduce vertical clutter without removing useful guidance.
+- The next step can simplify another dense support area inside Roleplay before adding more content or integrations.
+
+Next suggested task:
+
+- Make the follow-up round feel more guided with a compact step cue and shorter helper copy.
+
 ## 2026-06-26: Home Next Practice Recommendation
 
 Built one focused improvement: the Home hero now recommends the actual next roleplay after a saved session instead of reopening the default Job Interview scenario. This keeps the practice loop moving forward with a clearer next action and a more useful repeat-practice habit.
