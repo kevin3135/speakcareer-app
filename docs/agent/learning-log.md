@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Guided Progress Next Step
+
+Built one focused improvement: Progress now starts with a simple guided next-step card for first-time and returning users. It tells the user what to do next, shows three small steps and opens the recommended next roleplay.
+
+What went well:
+
+- Replaced the heavier first-progress hero with a calmer, lighter guided card.
+- Returning users now see a clear next action such as "2 sprints left today" instead of only stats.
+- The CTA correctly opens the next recommended roleplay after the latest saved session.
+- Added focused tests for first-time, in-progress and daily-target-complete states.
+
+What went wrong:
+
+- Progress still has several stats below the guide, so the screen can be simplified further later.
+- The daily target logic is still local-session based, not true calendar-day tracking.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 40 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport; Progress showed the new guide and its CTA opened Meeting Practice.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants the app to feel more guided and less complex; every screen should make the next action obvious.
+- Keep the habit loop professional: small sprints, clear progress and useful next steps without childish game UI.
+- Progress can still be simplified by grouping stats lower on the page and making the mistake bank feel more actionable.
+
+Next suggested task:
+
+- Make the mistake bank more actionable by turning the top mistake into one short "practice this correction" drill.
+
 ## 2026-06-26: Persistent Practice Sessions
 
 Built one focused improvement: completed mock practice sessions are now saved locally with AsyncStorage. Progress, local XP and recent completion history can survive a browser reload or app restart.

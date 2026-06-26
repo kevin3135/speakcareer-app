@@ -4,12 +4,12 @@ import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
 import { ProgressBar } from '../components/ProgressBar';
 import { Screen } from '../components/Screen';
-import { progressData } from '../data/content';
+import { practiceContent, progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
-import { createProgressEmptyState } from '../utils/progressEmptyState';
+import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
@@ -22,38 +22,39 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
   const { summary, mistakeBank } = progressData;
   const completionSummary = createLessonCompleteSummary(sessions);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
-  const progressEmptyState = createProgressEmptyState();
-  const hasNoSavedSessions = sessions.length === 0;
+  const progressGuide = createProgressNextStepGuide({
+    dailyTarget,
+    roleplays: practiceContent.roleplays,
+    sessions,
+  });
 
   return (
     <Screen
       title="Progress"
       subtitle="A simple mistake bank for recurring English career communication patterns."
     >
-      {hasNoSavedSessions ? (
-        <View style={styles.emptyHero}>
-          <Text style={styles.emptyKicker}>First progress step</Text>
-          <Text style={styles.emptyHeroTitle}>{progressEmptyState.title}</Text>
-          <Text style={styles.emptyHeroCopy}>{progressEmptyState.body}</Text>
-          <View style={styles.emptySteps}>
-            {progressEmptyState.steps.map((step, index) => (
-              <View key={step} style={styles.emptyStepRow}>
-                <View style={styles.emptyStepNumber}>
-                  <Text style={styles.emptyStepNumberText}>{index + 1}</Text>
-                </View>
-                <Text style={styles.emptyStepText}>{step}</Text>
+      <View style={styles.guideCard}>
+        <Text style={styles.guideKicker}>{progressGuide.eyebrow}</Text>
+        <Text style={styles.guideTitle}>{progressGuide.title}</Text>
+        <Text style={styles.guideBody}>{progressGuide.body}</Text>
+        <View style={styles.guideSteps}>
+          {progressGuide.steps.map((step, index) => (
+            <View key={step} style={styles.guideStepRow}>
+              <View style={styles.guideStepNumber}>
+                <Text style={styles.guideStepNumberText}>{index + 1}</Text>
               </View>
-            ))}
-          </View>
-          <View style={styles.emptyAction}>
-            <AppButton
-              accessibilityHint="Opens the recommended first roleplay from the empty progress state"
-              label={progressEmptyState.ctaLabel}
-              onPress={() => onOpenRoleplay(progressEmptyState.roleplayId)}
-            />
-          </View>
+              <Text style={styles.guideStepText}>{step}</Text>
+            </View>
+          ))}
         </View>
-      ) : null}
+        <View style={styles.guideAction}>
+          <AppButton
+            accessibilityHint="Opens the recommended next roleplay from Progress"
+            label={progressGuide.ctaLabel}
+            onPress={() => onOpenRoleplay(progressGuide.roleplayId)}
+          />
+        </View>
+      </View>
 
       {completionSummary ? (
         <View style={styles.completeCard}>
@@ -169,60 +170,64 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
 }
 
 const styles = StyleSheet.create({
-  emptyHero: {
-    backgroundColor: colors.ink,
+  guideCard: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#BDE7DC',
     borderRadius: 8,
+    borderWidth: 1,
     padding: spacing.xl,
   },
-  emptyKicker: {
-    color: colors.accent,
+  guideKicker: {
+    color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
-  emptyHeroTitle: {
-    color: colors.surface,
+  guideTitle: {
+    color: colors.ink,
     fontSize: typography.h1,
     fontWeight: '900',
     lineHeight: 31,
     marginTop: spacing.sm,
   },
-  emptyHeroCopy: {
-    color: '#D7DEE8',
+  guideBody: {
+    color: colors.text,
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.md,
   },
-  emptySteps: {
+  guideSteps: {
     marginTop: spacing.lg,
   },
-  emptyStepRow: {
+  guideStepRow: {
     alignItems: 'center',
     flexDirection: 'row',
     marginTop: spacing.sm,
   },
-  emptyStepNumber: {
+  guideStepNumber: {
     alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: 8,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
     height: 28,
     justifyContent: 'center',
     marginRight: spacing.md,
     width: 28,
   },
-  emptyStepNumberText: {
-    color: colors.surface,
+  guideStepNumberText: {
+    color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  emptyStepText: {
-    color: colors.surface,
+  guideStepText: {
+    color: colors.ink,
     flex: 1,
     fontSize: typography.body,
     fontWeight: '800',
     lineHeight: 21,
   },
-  emptyAction: {
+  guideAction: {
     marginTop: spacing.lg,
   },
   completeCard: {

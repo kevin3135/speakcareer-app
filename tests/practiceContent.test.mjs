@@ -720,6 +720,54 @@ test('creates a first-time progress action for new users', async () => {
   ]);
 });
 
+test('creates a guided next step for progress states', async () => {
+  const { createProgressNextStepGuide } = await import('../src/utils/progressNextStep.ts');
+  const firstTimeGuide = createProgressNextStepGuide({
+    dailyTarget: 2,
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+  });
+
+  assert.equal(firstTimeGuide.roleplayId, 'job-interview');
+  assert.equal(firstTimeGuide.ctaLabel, 'Start Job Interview');
+  assert.equal(firstTimeGuide.title, 'Save your first answer');
+  assert.ok(firstTimeGuide.body.includes('first saved answer'));
+
+  const oneSavedSession = [
+    {
+      id: 'job-interview-1',
+      roleplayId: 'job-interview',
+      roleplayTitle: 'Job Interview',
+      completedAt: '2026-06-26T10:00:00.000Z',
+      answerPreview: 'I improved onboarding handoffs.',
+      wordCount: 36,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Clear answer with useful detail.',
+      xpReward: 50,
+    },
+  ];
+  const returningGuide = createProgressNextStepGuide({
+    dailyTarget: 3,
+    roleplays: practiceContent.roleplays,
+    sessions: oneSavedSession,
+  });
+
+  assert.equal(returningGuide.roleplayId, 'meeting-practice');
+  assert.equal(returningGuide.title, '2 sprints left today');
+  assert.ok(returningGuide.body.includes('Job Interview'));
+  assert.ok(returningGuide.steps.some((step) => step.includes('Meeting Practice')));
+
+  const completeGuide = createProgressNextStepGuide({
+    dailyTarget: 1,
+    roleplays: practiceContent.roleplays,
+    sessions: oneSavedSession,
+  });
+
+  assert.equal(completeGuide.title, 'Daily target complete');
+  assert.equal(completeGuide.ctaLabel, 'Start optional sprint');
+  assert.ok(completeGuide.body.includes('1/1 target'));
+});
+
 test('adds saved sessions to local progress and daily mission', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');
