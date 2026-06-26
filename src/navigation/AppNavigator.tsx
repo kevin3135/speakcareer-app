@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { BottomNav } from '../components/BottomNav';
 import { practiceContent } from '../data/content';
@@ -9,9 +10,12 @@ import { PracticeScreen } from '../screens/PracticeScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { RoleplayScreen } from '../screens/RoleplayScreen';
+import { colors } from '../styles/theme';
 import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId } from '../types';
+import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 
 export function AppNavigator() {
+  const [isOnboardingLoading, setIsOnboardingLoading] = useState(true);
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [activeScreen, setActiveScreen] = useState<MainScreen>('Home');
   const [selectedRoleplayId, setSelectedRoleplayId] = useState<RoleplayId>('job-interview');
@@ -23,6 +27,26 @@ export function AppNavigator() {
     [selectedRoleplayId],
   );
 
+  useEffect(() => {
+    let isMounted = true;
+
+    readOnboardingCompletion(AsyncStorage)
+      .then((isComplete) => {
+        if (isMounted) {
+          setHasSeenOnboarding(isComplete);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsOnboardingLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   function openRoleplay(roleplayId: RoleplayId) {
     setSelectedRoleplayId(roleplayId);
     setActiveScreen('Roleplay');
@@ -32,8 +56,21 @@ export function AppNavigator() {
     setPracticeSessions((sessions) => [session, ...sessions].slice(0, 10));
   }
 
+  function completeOnboarding() {
+    setHasSeenOnboarding(true);
+    void saveOnboardingCompletion(AsyncStorage).catch(() => undefined);
+  }
+
+  if (isOnboardingLoading) {
+    return (
+      <View style={[styles.container, styles.loading]}>
+        <ActivityIndicator color={colors.primary} />
+      </View>
+    );
+  }
+
   if (!hasSeenOnboarding) {
-    return <OnboardingScreen onContinue={() => setHasSeenOnboarding(true)} />;
+    return <OnboardingScreen onContinue={completeOnboarding} />;
   }
 
   return (
@@ -80,5 +117,10 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
+  },
+  loading: {
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    justifyContent: 'center',
   },
 });

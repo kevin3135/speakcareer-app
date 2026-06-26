@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Persistent Onboarding Completion
+
+Built one focused improvement: onboarding completion is now saved locally with AsyncStorage. After a user taps Start guided practice once, reopening or reloading the app skips onboarding and starts directly on Home.
+
+What went well:
+
+- This makes the MVP feel more product-ready without adding auth, Supabase or a backend.
+- The storage logic lives in `src/utils/onboardingStorage.ts`, with a focused in-memory storage test.
+- `AppNavigator` now waits for the local onboarding flag before choosing Onboarding or Home, avoiding a first-screen flicker.
+- Mobile web preview confirmed a clean first launch shows onboarding, then reload after Start guided practice opens Home directly.
+
+What went wrong:
+
+- Installing AsyncStorage via Expo reported existing moderate npm audit warnings; no automatic audit fix was run because that could introduce unrelated dependency churn.
+- Only onboarding completion persists so far; sessions, XP, daily target and streak are still in-memory.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 37 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- AsyncStorage is now available and should only be used for low-risk local MVP state, not secrets.
+- Keep persistence narrowly scoped and testable through small storage helpers.
+- Repeat-open polish matters: avoid making users redo onboarding once they have started practicing.
+
+Next suggested task:
+
+- Persist the selected daily practice target locally so Profile settings survive app restart.
+
 ## 2026-06-26: Lesson-Complete Milestone
 
 Built one focused improvement: the Roleplay completion flow now feels more like finishing a lesson. After review, the app frames the final save as lesson completion, and after saving it shows daily-target progress plus streak context so the next step feels more motivating.

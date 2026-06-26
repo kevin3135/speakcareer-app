@@ -45,6 +45,37 @@ test('keeps the guided first experience simple and action oriented', async () =>
   assert.ok(guidedIntroSteps.every((step) => step.title.length <= 32));
 });
 
+test('stores onboarding completion in local storage', async () => {
+  const {
+    ONBOARDING_COMPLETED_KEY,
+    readOnboardingCompletion,
+    saveOnboardingCompletion,
+  } = await import('../src/utils/onboardingStorage.ts');
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  assert.equal(await readOnboardingCompletion(storage), false);
+
+  await saveOnboardingCompletion(storage);
+
+  assert.equal(values.get(ONBOARDING_COMPLETED_KEY), 'true');
+  assert.equal(await readOnboardingCompletion(storage), true);
+  assert.equal(
+    await readOnboardingCompletion({
+      getItem: async () => {
+        throw new Error('Storage unavailable');
+      },
+      setItem: async () => undefined,
+    }),
+    false,
+  );
+});
+
 test('provides mock feedback and mistake-bank data', () => {
   for (const roleplay of practiceContent.roleplays) {
     assert.ok(roleplay.feedback.summary.length > 20);
