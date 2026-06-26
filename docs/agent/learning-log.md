@@ -686,3 +686,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add sales objection prompt variants for Sales Call.
+
+## 2026-06-26: Sales Objection Prompt Variants
+
+Built one focused improvement: Sales Call now has three repeatable objection practice angles: Price concern, Timing concern and Existing tool. Each variant changes the customer's opening line, the user's goal and the coaching note through the existing Roleplay UI.
+
+What went well:
+
+- The sales scenario now trains realistic consultative sales moments instead of only one price objection.
+- The change reused the local prompt-variant system and needed no new architecture.
+- Tests now protect prompt variants for Interview, Meeting, Presentation and Sales.
+- The content stays focused on professional English conversation practice.
+
+What went wrong:
+
+- Sales variants still share the same suggested phrases and generic mock feedback.
+- Small Talk is now the only core roleplay without prompt variants.
+- Switching variants still clears the current answer to prevent mixed prompt/session state.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The prompt-variant rollout is almost complete across core scenarios.
+- Small Talk should get professional follow-up variants next, then the app can shift from content breadth to feedback depth.
+- Keep sales training consultative and respectful, not pushy.
+
+Next suggested task:
+
+- Add workplace small talk prompt variants for introductions, friendly follow-up and moving into the meeting topic.
