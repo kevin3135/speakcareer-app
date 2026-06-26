@@ -9,14 +9,25 @@ export function createRoleplayReadCard({
   activePromptVariant,
   roleplay,
 }: RoleplayReadCardInput) {
+  const context = roleplay.workplaceContext;
+  const goal = activePromptVariant?.userGoal ?? roleplay.userGoal;
+
   return {
-    context: roleplay.workplaceContext,
-    contextLabel: 'Context',
+    context,
     description: roleplay.description,
+    details: [
+      {
+        label: 'Situation',
+        text: context,
+      },
+      {
+        label: 'Goal',
+        text: goal,
+      },
+    ],
     eyebrow: 'Read this first',
     focus: roleplay.focus,
-    goal: activePromptVariant?.userGoal ?? roleplay.userGoal,
-    goalLabel: 'Your goal',
+    goal,
     openingLabel: `${roleplay.aiPersona} says`,
     openingLine: activePromptVariant?.openingLine ?? roleplay.openingLine,
   };

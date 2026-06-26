@@ -651,12 +651,19 @@ test('creates one read-first card from roleplay prompt details', async () => {
   assert.equal(defaultCard.focus, 'Structured answers and confident tone');
   assert.equal(defaultCard.openingLabel, 'Hiring Manager says');
   assert.equal(defaultCard.openingLine, roleplay.openingLine);
+  assert.deepEqual(
+    defaultCard.details.map((detail) => detail.label),
+    ['Situation', 'Goal'],
+  );
+  assert.equal(defaultCard.details[0].text, roleplay.workplaceContext);
+  assert.equal(defaultCard.details[1].text, roleplay.userGoal);
 
   const variantCard = createRoleplayReadCard({
     activePromptVariant: roleMotivationVariant,
     roleplay,
   });
   assert.equal(variantCard.goal, roleMotivationVariant.userGoal);
+  assert.equal(variantCard.details[1].text, roleMotivationVariant.userGoal);
   assert.equal(variantCard.openingLine, roleMotivationVariant.openingLine);
   assert.ok(variantCard.context.includes('hiring manager'));
 });

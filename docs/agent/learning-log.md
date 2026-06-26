@@ -2143,3 +2143,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the read-first card more scannable by turning context and goal into shorter labeled bullets.
+
+## 2026-06-26: Scannable Read-First Card
+
+Built one focused improvement: the Roleplay "Read this first" card now shows Situation and Goal as two numbered scan rows instead of two plain text blocks.
+
+What went well:
+
+- The card is easier to scan on mobile before writing an answer.
+- The active practice angle still controls the Goal row through `src/utils/roleplayReadCard.ts`.
+- The old Context/Your goal labels were removed from the UI, reducing repeated reading work.
+- Mobile preview at 390x844 confirmed the Situation, Goal and opening-line blocks fit cleanly before Step 2.
+
+What went wrong:
+
+- The card may be slightly taller visually because each row now has its own white surface.
+- The underlying text is still the same length; future content work can shorten individual scenario copy.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 33 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Prefer numbered scan rows when a beginner needs to understand a prompt quickly.
+- Keep the selected practice angle connected to the visible Goal, because it makes variants feel real.
+- The next small task should shorten scenario copy at the content level, starting with the read-first card text.
+
+Next suggested task:
+
+- Shorten the roleplay workplace context and user goal copy so each read-first row stays under two mobile lines where possible.

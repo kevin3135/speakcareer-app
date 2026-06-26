@@ -391,15 +391,18 @@ export function RoleplayScreen({
         <Text style={styles.detailLabel}>{readCard.eyebrow}</Text>
         <Text style={styles.readTitle}>{readCard.focus}</Text>
         <Text style={styles.readDescription}>{readCard.description}</Text>
-        <View style={styles.readDetailGrid}>
-          <View style={styles.readDetailBlock}>
-            <Text style={styles.detailLabel}>{readCard.contextLabel}</Text>
-            <Text style={styles.detailText}>{readCard.context}</Text>
-          </View>
-          <View style={styles.readDetailBlock}>
-            <Text style={styles.detailLabel}>{readCard.goalLabel}</Text>
-            <Text style={styles.detailText}>{readCard.goal}</Text>
-          </View>
+        <View style={styles.readChecklist}>
+          {readCard.details.map((detail, index) => (
+            <View key={detail.label} style={styles.readChecklistItem}>
+              <View style={styles.readChecklistNumber}>
+                <Text style={styles.readChecklistNumberText}>{index + 1}</Text>
+              </View>
+              <View style={styles.readChecklistCopy}>
+                <Text style={styles.readChecklistLabel}>{detail.label}</Text>
+                <Text style={styles.readChecklistText}>{detail.text}</Text>
+              </View>
+            </View>
+          ))}
         </View>
         <View style={styles.readOpeningBlock}>
           <Text style={styles.readOpeningLabel}>{readCard.openingLabel}</Text>
@@ -863,11 +866,46 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.sm,
   },
-  readDetailGrid: {
-    marginTop: spacing.sm,
-  },
-  readDetailBlock: {
+  readChecklist: {
     marginTop: spacing.md,
+  },
+  readChecklistItem: {
+    alignItems: 'flex-start',
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    flexDirection: 'row',
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  readChecklistNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.primarySoft,
+    borderRadius: 999,
+    height: 26,
+    justifyContent: 'center',
+    marginRight: spacing.sm,
+    width: 26,
+  },
+  readChecklistNumberText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  readChecklistCopy: {
+    flex: 1,
+  },
+  readChecklistLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  readChecklistText: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 19,
+    marginTop: spacing.xs,
   },
   detailLabel: {
     color: colors.ink,
@@ -875,11 +913,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginBottom: spacing.xs,
     textTransform: 'uppercase',
-  },
-  detailText: {
-    color: colors.text,
-    fontSize: typography.body,
-    lineHeight: 22,
   },
   readOpeningBlock: {
     backgroundColor: colors.surface,
