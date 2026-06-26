@@ -1373,3 +1373,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add a simple next-practice recommendation after session completion.
+
+## 2026-06-26: Next Practice Recommendation
+
+Built one focused improvement: the roleplay completion card now recommends the next scenario in the practice library. After saving a session, the user sees a recommended next roleplay, why it helps and a direct "Start next roleplay" action.
+
+What went well:
+
+- The completion moment now has a clearer habit loop: reward, saved state and one next practice action.
+- The recommendation logic stays simple by rotating through the existing English roleplay library.
+- The change reused the existing `onSelectRoleplay` flow instead of adding new navigation architecture.
+- Added test coverage for the next-practice recommendation utility.
+
+What went wrong:
+
+- Recommendations are not personalized yet; they simply move to the next roleplay in the library.
+- The completion card still cannot jump directly to Progress.
+- The UI has not been visually checked in Expo during this heartbeat.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- `createNextPracticeRecommendation` keeps the next-step loop testable and simple.
+- The next high-value UI step is making Progress access clearer after completion.
+- Keep recommendation logic local and predictable until real session history/personalization exists.
+
+Next suggested task:
+
+- Add a completion-card action to review Progress after saving a session.

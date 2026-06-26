@@ -305,7 +305,10 @@ test('creates a lesson-complete summary from saved sessions', async () => {
 });
 
 test('creates a rewarding roleplay completion summary', async () => {
-  const { createPracticeCompletionSummary } = await import('../src/utils/practiceCompletion.ts');
+  const {
+    createNextPracticeRecommendation,
+    createPracticeCompletionSummary,
+  } = await import('../src/utils/practiceCompletion.ts');
 
   const firstAnswerSummary = createPracticeCompletionSummary({
     includedFollowUp: false,
@@ -327,6 +330,14 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(fullSessionSummary.rewardLabel, 'Career-ready sprint');
   assert.ok(fullSessionSummary.body.includes('follow-up'));
   assert.ok(fullSessionSummary.nextAction.includes('fresh practice angle'));
+
+  const nextAfterSales = createNextPracticeRecommendation('sales-call', practiceContent.roleplays);
+  assert.equal(nextAfterSales.roleplayId, 'workplace-small-talk');
+  assert.equal(nextAfterSales.ctaLabel, 'Start next roleplay');
+  assert.ok(nextAfterSales.reason.includes('small talk'));
+
+  const nextAfterSmallTalk = createNextPracticeRecommendation('workplace-small-talk', practiceContent.roleplays);
+  assert.equal(nextAfterSmallTalk.roleplayId, 'job-interview');
 });
 
 test('creates a first-time progress action for new users', async () => {

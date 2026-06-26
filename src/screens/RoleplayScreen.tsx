@@ -11,7 +11,10 @@ import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
-import { createPracticeCompletionSummary } from '../utils/practiceCompletion';
+import {
+  createNextPracticeRecommendation,
+  createPracticeCompletionSummary,
+} from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 
@@ -51,6 +54,9 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
         roleplayTitle: roleplay.title,
         xpReward: totalXpReward,
       })
+    : null;
+  const nextPracticeRecommendation = completionSummary
+    ? createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays)
     : null;
 
   useEffect(() => {
@@ -149,6 +155,15 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     setSavedSessionId(session.id);
     setIsTimerRunning(false);
     onSaveSession(session);
+  }
+
+  function startRecommendedPractice() {
+    if (!nextPracticeRecommendation) {
+      return;
+    }
+
+    clearAnswer();
+    onSelectRoleplay(nextPracticeRecommendation.roleplayId);
   }
 
   return (
@@ -343,13 +358,30 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
             </View>
           </View>
           <Text style={styles.completionNext}>{completionSummary.nextAction}</Text>
+          {nextPracticeRecommendation ? (
+            <View style={styles.recommendationPanel}>
+              <Text style={styles.recommendationLabel}>Recommended next</Text>
+              <Text style={styles.recommendationTitle}>{nextPracticeRecommendation.title}</Text>
+              <Text style={styles.recommendationReason}>{nextPracticeRecommendation.reason}</Text>
+            </View>
+          ) : null}
           <View style={styles.completionAction}>
-            <AppButton
-              accessibilityHint="Clears this completed session and starts a fresh answer"
-              label="Practice another answer"
-              onPress={clearAnswer}
-              variant="quiet"
-            />
+            {nextPracticeRecommendation ? (
+              <AppButton
+                accessibilityHint={`Opens ${nextPracticeRecommendation.title} as the next practice scenario`}
+                accessibilityLabel={`Start ${nextPracticeRecommendation.title}`}
+                label={nextPracticeRecommendation.ctaLabel}
+                onPress={startRecommendedPractice}
+              />
+            ) : null}
+            <View style={nextPracticeRecommendation ? styles.completionSecondaryAction : undefined}>
+              <AppButton
+                accessibilityHint="Clears this completed session and starts a fresh answer"
+                label="Practice another answer"
+                onPress={clearAnswer}
+                variant="quiet"
+              />
+            </View>
           </View>
         </Card>
       ) : null}
@@ -778,7 +810,36 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.md,
   },
+  recommendationPanel: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  recommendationLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  recommendationTitle: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  recommendationReason: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.xs,
+  },
   completionAction: {
     marginTop: spacing.md,
+  },
+  completionSecondaryAction: {
+    marginTop: spacing.sm,
   },
 });

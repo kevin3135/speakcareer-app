@@ -1,8 +1,17 @@
+import type { RoleplayId, RoleplayScenario } from '../types';
+
 export type PracticeCompletionSummary = {
   title: string;
   rewardLabel: string;
   body: string;
   nextAction: string;
+};
+
+export type NextPracticeRecommendation = {
+  roleplayId: RoleplayId;
+  title: string;
+  reason: string;
+  ctaLabel: string;
 };
 
 type CreatePracticeCompletionSummaryInput = {
@@ -25,6 +34,26 @@ export function createPracticeCompletionSummary({
     nextAction: includedFollowUp
       ? 'Start a fresh practice angle while the conversation is still warm.'
       : 'Try the follow-up round next time to earn bonus XP and deepen the answer.',
+  };
+}
+
+export function createNextPracticeRecommendation(
+  currentRoleplayId: RoleplayId,
+  roleplays: Pick<RoleplayScenario, 'category' | 'focus' | 'id' | 'title'>[],
+): NextPracticeRecommendation | null {
+  if (roleplays.length === 0) {
+    return null;
+  }
+
+  const currentIndex = roleplays.findIndex((roleplay) => roleplay.id === currentRoleplayId);
+  const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % roleplays.length;
+  const nextRoleplay = roleplays[nextIndex];
+
+  return {
+    roleplayId: nextRoleplay.id,
+    title: nextRoleplay.title,
+    reason: `Train a different ${nextRoleplay.category.toLowerCase()} skill: ${nextRoleplay.focus}.`,
+    ctaLabel: 'Start next roleplay',
   };
 }
 
