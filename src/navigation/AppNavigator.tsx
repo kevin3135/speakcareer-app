@@ -14,6 +14,7 @@ import { colors } from '../styles/theme';
 import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId } from '../types';
 import { readDailyTarget, saveDailyTarget } from '../utils/dailyTargetStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
+import { readPracticeSessions, savePracticeSessions } from '../utils/practiceSessionStorage';
 
 export function AppNavigator() {
   const [isOnboardingLoading, setIsOnboardingLoading] = useState(true);
@@ -34,11 +35,13 @@ export function AppNavigator() {
     Promise.all([
       readOnboardingCompletion(AsyncStorage),
       readDailyTarget(AsyncStorage),
+      readPracticeSessions(AsyncStorage),
     ])
-      .then(([isComplete, storedDailyTarget]) => {
+      .then(([isComplete, storedDailyTarget, storedPracticeSessions]) => {
         if (isMounted) {
           setHasSeenOnboarding(isComplete);
           setDailyTarget(storedDailyTarget);
+          setPracticeSessions(storedPracticeSessions);
         }
       })
       .finally(() => {
@@ -58,7 +61,13 @@ export function AppNavigator() {
   }
 
   function savePracticeSession(session: PracticeSession) {
-    setPracticeSessions((sessions) => [session, ...sessions].slice(0, 10));
+    setPracticeSessions((sessions) => {
+      const nextSessions = [session, ...sessions].slice(0, 10);
+
+      void savePracticeSessions(AsyncStorage, nextSessions).catch(() => undefined);
+
+      return nextSessions;
+    });
   }
 
   function changeDailyTarget(target: DailyPracticeTarget) {

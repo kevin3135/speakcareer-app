@@ -350,6 +350,48 @@ test('creates local practice sessions from reviewed answers', async () => {
   assert.equal(session.completedAt, '2026-06-26T10:00:00.000Z');
 });
 
+test('stores local practice sessions safely', async () => {
+  const {
+    PRACTICE_SESSIONS_KEY,
+    MAX_STORED_PRACTICE_SESSIONS,
+    normalizePracticeSessions,
+    readPracticeSessions,
+    savePracticeSessions,
+  } = await import('../src/utils/practiceSessionStorage.ts');
+  const sessions = Array.from({ length: 12 }, (_, index) => ({
+    id: `job-interview-${index}`,
+    roleplayId: 'job-interview',
+    roleplayTitle: 'Job Interview',
+    completedAt: `2026-06-26T10:${String(index).padStart(2, '0')}:00.000Z`,
+    answerPreview: `Answer preview ${index}`,
+    wordCount: 20 + index,
+    readinessLabel: 'Ready for feedback',
+    feedbackSummary: 'Clear answer with useful detail.',
+    xpReward: 40 + index,
+  }));
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  await savePracticeSessions(storage, sessions);
+
+  assert.equal(JSON.parse(values.get(PRACTICE_SESSIONS_KEY)).length, MAX_STORED_PRACTICE_SESSIONS);
+  assert.equal((await readPracticeSessions(storage)).length, MAX_STORED_PRACTICE_SESSIONS);
+  assert.equal((await readPracticeSessions(storage))[0].id, 'job-interview-0');
+  assert.deepEqual(normalizePracticeSessions([{ id: 'missing-fields' }]), []);
+  assert.deepEqual(
+    await readPracticeSessions({
+      getItem: async () => '{broken-json',
+      setItem: async () => undefined,
+    }),
+    [],
+  );
+});
+
 test('creates a lesson-complete summary from saved sessions', async () => {
   const { createLessonCompleteSummary } = await import('../src/utils/lessonComplete.ts');
   const sessions = [

@@ -1,5 +1,49 @@
 # Agent Learning Log
 
+## 2026-06-26: Persistent Practice Sessions
+
+Built one focused improvement: completed mock practice sessions are now saved locally with AsyncStorage. Progress, local XP and recent completion history can survive a browser reload or app restart.
+
+What went well:
+
+- Reused the small validated storage-helper pattern from onboarding and daily target persistence.
+- Stored only the lightweight `PracticeSession` summary, not full typed answers, secrets or account data.
+- `AppNavigator` now loads saved sessions during startup and writes the latest 10 sessions after each completed lesson.
+- Added test coverage for safe parsing, corrupt JSON fallback and the 10-session storage cap.
+- Mobile preview confirmed a Job Interview lesson can be completed, reloaded and still appear in Home and Progress.
+
+What went wrong:
+
+- This is still local-only progress, so it does not sync across devices or accounts.
+- AsyncStorage web data is not easy to inspect as a plain localStorage key, so UI reload behavior is the strongest preview signal.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 39 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep local persistence narrow and validated before putting data into app state.
+- Session persistence makes the habit loop feel much more real; the next improvements should make returning progress easier to understand.
+- Do not save full answers long-term until there is an explicit product/privacy decision.
+
+Next suggested task:
+
+- Add a cleaner first-time and returning-state polish to Progress, so saved sessions feel more guided and less like raw stats.
+
 ## 2026-06-26: Persistent Daily Target
 
 Built one focused improvement: the Profile daily practice target is now saved locally with AsyncStorage. If a user chooses 2 or 3 roleplays per day, that target survives reloads and app restarts.
