@@ -304,6 +304,31 @@ test('creates a lesson-complete summary from saved sessions', async () => {
   assert.equal(createLessonCompleteSummary([]), null);
 });
 
+test('creates a rewarding roleplay completion summary', async () => {
+  const { createPracticeCompletionSummary } = await import('../src/utils/practiceCompletion.ts');
+
+  const firstAnswerSummary = createPracticeCompletionSummary({
+    includedFollowUp: false,
+    roleplayTitle: 'Sales Call',
+    xpReward: 55,
+  });
+
+  assert.equal(firstAnswerSummary.title, 'Sales Call saved');
+  assert.equal(firstAnswerSummary.rewardLabel, 'Strong practice win');
+  assert.ok(firstAnswerSummary.body.includes('saved to Progress'));
+  assert.ok(firstAnswerSummary.nextAction.includes('follow-up'));
+
+  const fullSessionSummary = createPracticeCompletionSummary({
+    includedFollowUp: true,
+    roleplayTitle: 'Job Interview',
+    xpReward: 70,
+  });
+
+  assert.equal(fullSessionSummary.rewardLabel, 'Career-ready sprint');
+  assert.ok(fullSessionSummary.body.includes('follow-up'));
+  assert.ok(fullSessionSummary.nextAction.includes('fresh practice angle'));
+});
+
 test('creates a first-time progress action for new users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();

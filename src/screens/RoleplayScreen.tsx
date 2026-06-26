@@ -11,6 +11,7 @@ import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
+import { createPracticeCompletionSummary } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 
@@ -44,6 +45,13 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
+  const completionSummary = savedSessionId
+    ? createPracticeCompletionSummary({
+        includedFollowUp: Boolean(followUpReview?.isReadyForFeedback),
+        roleplayTitle: roleplay.title,
+        xpReward: totalXpReward,
+      })
+    : null;
 
   useEffect(() => {
     if (!isTimerRunning) {
@@ -311,10 +319,39 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
           variant="secondary"
         />
       </View>
-      {savedSessionId ? (
-        <Text style={styles.savedNote}>
-          Session saved to Progress. +{totalXpReward} XP.
-        </Text>
+      {completionSummary ? (
+        <Card muted>
+          <View style={styles.completionHeader}>
+            <View style={styles.completionTitleBlock}>
+              <Text style={styles.completionEyebrow}>Session complete</Text>
+              <Text style={styles.completionTitle}>{completionSummary.title}</Text>
+            </View>
+            <View style={styles.completionXpPill}>
+              <Text style={styles.completionXp}>+{totalXpReward}</Text>
+              <Text style={styles.completionXpLabel}>XP</Text>
+            </View>
+          </View>
+          <Text style={styles.completionBody}>{completionSummary.body}</Text>
+          <View style={styles.completionStats}>
+            <View style={styles.completionStat}>
+              <Text style={styles.completionStatLabel}>Reward</Text>
+              <Text style={styles.completionStatValue}>{completionSummary.rewardLabel}</Text>
+            </View>
+            <View style={styles.completionStat}>
+              <Text style={styles.completionStatLabel}>Saved in</Text>
+              <Text style={styles.completionStatValue}>Progress</Text>
+            </View>
+          </View>
+          <Text style={styles.completionNext}>{completionSummary.nextAction}</Text>
+          <View style={styles.completionAction}>
+            <AppButton
+              accessibilityHint="Clears this completed session and starts a fresh answer"
+              label="Practice another answer"
+              onPress={clearAnswer}
+              variant="quiet"
+            />
+          </View>
+        </Card>
       ) : null}
 
       {showFeedback && feedbackResult ? <FeedbackPanel feedback={feedbackResult.feedback} /> : null}
@@ -666,11 +703,82 @@ const styles = StyleSheet.create({
   finalSaveAction: {
     marginTop: spacing.md,
   },
-  savedNote: {
+  completionHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  completionTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  completionEyebrow: {
     color: colors.success,
     fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.xs,
+    textTransform: 'uppercase',
+  },
+  completionTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  completionXpPill: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.md,
+    minWidth: 76,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  completionXp: {
+    color: colors.accent,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  completionXpLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  completionBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  completionStats: {
+    flexDirection: 'row',
+    marginTop: spacing.md,
+  },
+  completionStat: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.sm,
+    borderWidth: 1,
+    flex: 1,
+    padding: spacing.md,
+  },
+  completionStatLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
     fontWeight: '800',
-    marginTop: spacing.sm,
-    textAlign: 'center',
+  },
+  completionStatValue: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  completionNext: {
+    color: colors.primaryDark,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  completionAction: {
+    marginTop: spacing.md,
   },
 });
