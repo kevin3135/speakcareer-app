@@ -768,6 +768,37 @@ test('creates a guided next step for progress states', async () => {
   assert.ok(completeGuide.body.includes('1/1 target'));
 });
 
+test('creates an actionable mistake practice drill', async () => {
+  const { createMistakePracticeDrill } = await import('../src/utils/mistakePracticeDrill.ts');
+  const interviewDrill = createMistakePracticeDrill(progressMock.mistakeBank);
+
+  assert.equal(interviewDrill.roleplayId, 'job-interview');
+  assert.equal(interviewDrill.ctaLabel, 'Practice Job Interview');
+  assert.equal(interviewDrill.eyebrow, 'High priority');
+  assert.ok(interviewDrill.title.includes('Interview Structure'));
+  assert.ok(interviewDrill.mistake.correction.includes('customer feedback analysis'));
+  assert.deepEqual(interviewDrill.steps, [
+    'Read the better sentence once.',
+    'Say it out loud without looking at the original.',
+    'Use the same pattern in your next answer.',
+  ]);
+
+  const salesDrill = createMistakePracticeDrill([
+    {
+      id: 'm-sales',
+      category: 'Sales Calls',
+      original: 'It is not expensive.',
+      correction: 'The price connects to the time your team saves each month.',
+      note: 'Connect pricing to value.',
+      priority: 'Medium',
+    },
+  ]);
+
+  assert.equal(salesDrill.roleplayId, 'sales-call');
+  assert.equal(salesDrill.ctaLabel, 'Practice Sales Call');
+  assert.equal(createMistakePracticeDrill([]), null);
+});
+
 test('adds saved sessions to local progress and daily mission', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');

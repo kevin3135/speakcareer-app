@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Actionable Mistake Practice Drill
+
+Built one focused improvement: Progress now turns the top mistake-bank item into a short practice drill. Users see what to avoid, what to say instead, three micro-steps and a CTA into the connected roleplay.
+
+What went well:
+
+- The mistake bank is now more actionable instead of being only a reference list.
+- The drill picks the highest-priority mistake and maps it to the relevant English career roleplay.
+- The UI stays professional and simple: one correction, one pattern and one next practice button.
+- Mobile preview confirmed the drill appears above the mistake list and "Practice Job Interview" opens the Job Interview flow.
+
+What went wrong:
+
+- The drill is still static mock data and does not yet adapt to the user's latest saved mistake.
+- The mistake bank below the drill is still a long list; later it may need grouping or filters.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 41 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Feedback gets more useful when each correction has a next action, not only a score or explanation.
+- Keep these drills tiny: one correction, one speaking pattern, one roleplay CTA.
+- Later, real AI feedback should feed the top drill from saved user sessions instead of static mock mistakes.
+
+Next suggested task:
+
+- Add one small "repeat this sentence" interaction to the drill, such as a local checked state after the user marks the correction as practiced.
+
 ## 2026-06-26: Guided Progress Next Step
 
 Built one focused improvement: Progress now starts with a simple guided next-step card for first-time and returning users. It tells the user what to do next, shows three small steps and opens the recommended next roleplay.

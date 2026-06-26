@@ -9,6 +9,7 @@ import { colors, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
+import { createMistakePracticeDrill } from '../utils/mistakePracticeDrill';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { formatSessionDate } from '../utils/sessionHistory';
 
@@ -22,6 +23,7 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
   const { summary, mistakeBank } = progressData;
   const completionSummary = createLessonCompleteSummary(sessions);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
+  const mistakeDrill = createMistakePracticeDrill(mistakeBank);
   const progressGuide = createProgressNextStepGuide({
     dailyTarget,
     roleplays: practiceContent.roleplays,
@@ -152,6 +154,39 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
       )}
 
       <Text style={styles.sectionTitle}>Mistake bank</Text>
+      {mistakeDrill ? (
+        <Card>
+          <Text style={styles.drillKicker}>{mistakeDrill.eyebrow}</Text>
+          <Text style={styles.drillTitle}>{mistakeDrill.title}</Text>
+          <Text style={styles.drillBody}>{mistakeDrill.body}</Text>
+          <View style={styles.drillCompare}>
+            <View style={styles.drillBoxMuted}>
+              <Text style={styles.drillLabel}>Instead of</Text>
+              <Text style={styles.drillOriginal}>{mistakeDrill.mistake.original}</Text>
+            </View>
+            <View style={styles.drillBoxStrong}>
+              <Text style={styles.drillLabelStrong}>Say this</Text>
+              <Text style={styles.drillCorrection}>{mistakeDrill.mistake.correction}</Text>
+            </View>
+          </View>
+          <View style={styles.drillSteps}>
+            {mistakeDrill.steps.map((step, index) => (
+              <View key={step} style={styles.drillStepRow}>
+                <Text style={styles.drillStepNumber}>{index + 1}</Text>
+                <Text style={styles.drillStepText}>{step}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={styles.drillAction}>
+            <AppButton
+              accessibilityHint="Opens the roleplay connected to this mistake correction"
+              label={mistakeDrill.ctaLabel}
+              onPress={() => onOpenRoleplay(mistakeDrill.roleplayId)}
+              variant="secondary"
+            />
+          </View>
+        </Card>
+      ) : null}
       {mistakeBank.map((mistake) => (
         <Card key={mistake.id}>
           <View style={styles.mistakeHeader}>
@@ -414,6 +449,91 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: 18,
     marginTop: spacing.md,
+  },
+  drillKicker: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  drillTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    lineHeight: 25,
+    marginTop: spacing.sm,
+  },
+  drillBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.sm,
+  },
+  drillCompare: {
+    marginTop: spacing.lg,
+  },
+  drillBoxMuted: {
+    backgroundColor: colors.background,
+    borderColor: colors.border,
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  drillBoxStrong: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#BDE7DC',
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  drillLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  drillLabelStrong: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  drillOriginal: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.xs,
+  },
+  drillCorrection: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 22,
+    marginTop: spacing.xs,
+  },
+  drillSteps: {
+    marginTop: spacing.lg,
+  },
+  drillStepRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: spacing.sm,
+  },
+  drillStepNumber: {
+    color: colors.accent,
+    fontSize: typography.body,
+    fontWeight: '900',
+    marginRight: spacing.md,
+  },
+  drillStepText: {
+    color: colors.text,
+    flex: 1,
+    fontSize: typography.body,
+    lineHeight: 22,
+  },
+  drillAction: {
+    marginTop: spacing.lg,
   },
   mistakeHeader: {
     alignItems: 'center',
