@@ -4,6 +4,9 @@ export type LocalProgressStats = {
   sessionsCompleted: number;
   minutesPracticed: number;
   currentStreakDays: number;
+  targetSessionsCompleted: number;
+  targetSessionsRemaining: number;
+  targetCompletionPercent: number;
   totalLocalXp: number;
   totalCareerXp: number;
   xpToday: number;
@@ -30,6 +33,9 @@ export function createLocalProgressStats(
     sessionsCompleted: summary.sessionsCompleted + sessions.length,
     minutesPracticed: summary.minutesPracticed + sessions.length * SPRINT_MINUTES,
     currentStreakDays: summary.currentStreakDays + (hasLocalPractice ? 1 : 0),
+    targetSessionsCompleted: Math.min(sessions.length, dailyTarget),
+    targetSessionsRemaining: Math.max(dailyTarget - sessions.length, 0),
+    targetCompletionPercent: Math.round((Math.min(sessions.length, dailyTarget) / dailyTarget) * 100),
     totalLocalXp,
     totalCareerXp: baseCareerXp + totalLocalXp,
     xpToday,

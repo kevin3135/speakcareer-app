@@ -472,3 +472,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Show daily target completion in Progress, such as 1/2 roleplays completed today.
+
+## 2026-06-26: Progress Daily Target Completion
+
+Built one focused improvement: Progress now shows the selected daily target as a clear completion card, including completed roleplays, remaining roleplays and target completion percentage. This makes the Profile daily target visible outside Home.
+
+What went well:
+
+- The daily target now has a second visible payoff in Progress.
+- `localProgress` now exposes target completion stats instead of forcing screens to calculate them.
+- Added tests for completed, remaining and percent values for a 2-roleplay target.
+- The UI stays compact and professional.
+
+What went wrong:
+
+- The target is still in-memory only and resets after app restart.
+- The completion count is based on saved sessions in the current app run, not calendar-day storage.
+- Progress now has several reward/progress cards, so future design work should keep hierarchy clean.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The app now has a complete local daily loop: set target, practice, save, see target progress.
+- A useful next step is to add roleplay category/level filters in Practice to make content browsing easier.
+- Keep the loop local and in-memory until persistence is explicitly approved.
+
+Next suggested task:
+
+- Add simple Practice filters for scenario category or level.

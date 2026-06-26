@@ -147,6 +147,9 @@ test('adds saved sessions to local progress and daily mission', async () => {
   assert.equal(twoRoleplayMission.title, 'Complete 2 career roleplays');
   assert.equal(twoRoleplayMission.xpGoal, 120);
   assert.equal(twoRoleplayProgress.xpGoal, 120);
+  assert.equal(twoRoleplayProgress.targetSessionsCompleted, 1);
+  assert.equal(twoRoleplayProgress.targetSessionsRemaining, 1);
+  assert.equal(twoRoleplayProgress.targetCompletionPercent, 50);
   assert.ok(twoRoleplayMission.progressPercent < 100);
 });
 

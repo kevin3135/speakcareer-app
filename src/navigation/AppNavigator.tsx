@@ -56,7 +56,9 @@ export function AppNavigator() {
             onSelectRoleplay={openRoleplay}
           />
         ) : null}
-        {activeScreen === 'Progress' ? <ProgressScreen sessions={practiceSessions} /> : null}
+        {activeScreen === 'Progress' ? (
+          <ProgressScreen dailyTarget={dailyTarget} sessions={practiceSessions} />
+        ) : null}
         {activeScreen === 'Profile' ? (
           <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={setDailyTarget} />
         ) : null}

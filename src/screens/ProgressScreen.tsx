@@ -5,19 +5,20 @@ import { ProgressBar } from '../components/ProgressBar';
 import { Screen } from '../components/Screen';
 import { progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
-import type { PracticeSession } from '../types';
+import type { DailyPracticeTarget, PracticeSession } from '../types';
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
+  dailyTarget: DailyPracticeTarget;
   sessions: PracticeSession[];
 };
 
-export function ProgressScreen({ sessions }: ProgressScreenProps) {
+export function ProgressScreen({ dailyTarget, sessions }: ProgressScreenProps) {
   const { summary, mistakeBank } = progressData;
   const completionSummary = createLessonCompleteSummary(sessions);
-  const localProgress = createLocalProgressStats(summary, sessions);
+  const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
 
   return (
     <Screen
@@ -53,6 +54,24 @@ export function ProgressScreen({ sessions }: ProgressScreenProps) {
           <Text style={styles.completeNext}>{completionSummary.nextAction}</Text>
         </View>
       ) : null}
+
+      <Card>
+        <View style={styles.targetHeader}>
+          <View>
+            <Text style={styles.sectionTitle}>Daily target</Text>
+            <Text style={styles.targetMeta}>
+              {localProgress.targetSessionsCompleted}/{dailyTarget} roleplay{dailyTarget === 1 ? '' : 's'} completed
+            </Text>
+          </View>
+          <View style={styles.targetPill}>
+            <Text style={styles.targetPillValue}>{localProgress.targetSessionsRemaining}</Text>
+            <Text style={styles.targetPillLabel}>left</Text>
+          </View>
+        </View>
+        <View style={styles.progressBlock}>
+          <ProgressBar label="Target completion" value={localProgress.targetCompletionPercent} />
+        </View>
+      </Card>
 
       <View style={styles.statGrid}>
         <Card>
@@ -193,6 +212,36 @@ const styles = StyleSheet.create({
   },
   statGrid: {
     flexDirection: 'row',
+  },
+  targetHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  targetMeta: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  targetPill: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: 8,
+    minWidth: 62,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  targetPillValue: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  targetPillLabel: {
+    color: colors.ink,
+    fontSize: 10,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   statNumber: {
     color: colors.accent,
