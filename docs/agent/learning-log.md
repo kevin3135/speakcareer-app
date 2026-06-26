@@ -901,3 +901,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-specific suggested phrases for Meeting Practice.
+
+## 2026-06-26: Meeting Variant-Specific Phrases
+
+Built one focused improvement: Meeting Practice practice angles now show their own useful phrases. Status update, Clarify deadline and Challenge decision each have three tailored sentence starters, reusing the existing variant-specific phrase support in Roleplay.
+
+What went well:
+
+- Meeting practice now gives more precise language support for three common workplace meeting moments.
+- The change reused the existing optional `suggestedPhrases` field on prompt variants.
+- No UI or navigation changes were needed because Roleplay already falls back cleanly.
+- Added focused tests for meeting-specific phrases.
+
+What went wrong:
+
+- Only Interview and Meeting have variant-specific phrases so far.
+- Presentation, Sales and Small Talk still use scenario-level phrases.
+- Feedback is still scenario-level and does not yet react to the selected variant.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Continue adding variant-specific phrase support scenario by scenario.
+- The next logical content step is Presentation Practice because presentation language depends heavily on opening, transition and challenge handling.
+- Keep each phrase list to three short, reusable starters.
+
+Next suggested task:
+
+- Add variant-specific suggested phrases for Presentation Practice.

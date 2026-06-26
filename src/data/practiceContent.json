@@ -153,21 +153,36 @@
           "title": "Status update",
           "openingLine": "Let's start with your update. What changed since our last meeting?",
           "userGoal": "Explain what is done, what is blocked and what support you need.",
-          "coachingNote": "Use three short parts: progress, blocker and next step."
+          "coachingNote": "Use three short parts: progress, blocker and next step.",
+          "suggestedPhrases": [
+            "Since our last meeting, I completed...",
+            "The main blocker right now is...",
+            "My next step is to..."
+          ]
         },
         {
           "id": "clarify-deadline",
           "title": "Clarify deadline",
           "openingLine": "The timeline looks tight. What deadline or dependency do you need clarified?",
           "userGoal": "Ask for one specific clarification without sounding defensive.",
-          "coachingNote": "Name the dependency, explain the risk briefly and ask for a clear owner or date."
+          "coachingNote": "Name the dependency, explain the risk briefly and ask for a clear owner or date.",
+          "suggestedPhrases": [
+            "Could we clarify the deadline for...",
+            "The dependency I am waiting on is...",
+            "To stay on track, I need..."
+          ]
         },
         {
           "id": "challenge-decision",
           "title": "Challenge decision",
           "openingLine": "I think we should move forward with the current plan. Do you see any risks?",
           "userGoal": "Politely challenge the plan with one risk and one constructive alternative.",
-          "coachingNote": "Start by acknowledging the plan, then add your concern and suggest a practical next step."
+          "coachingNote": "Start by acknowledging the plan, then add your concern and suggest a practical next step.",
+          "suggestedPhrases": [
+            "I understand the reason for that decision.",
+            "One risk I see is...",
+            "Could we also consider..."
+          ]
         }
       ],
       "suggestedPhrases": [
