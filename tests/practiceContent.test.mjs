@@ -782,10 +782,25 @@ test('creates a professional daily mission from progress data', async () => {
 });
 
 test('formats the five-minute focus timer', async () => {
-  const { FOCUS_SESSION_SECONDS, formatFocusTime } = await import('../src/utils/focusTimer.ts');
+  const {
+    createFocusTimerControls,
+    FOCUS_SESSION_SECONDS,
+    formatFocusTime,
+  } = await import('../src/utils/focusTimer.ts');
 
   assert.equal(FOCUS_SESSION_SECONDS, 300);
   assert.equal(formatFocusTime(300), '5:00');
   assert.equal(formatFocusTime(61), '1:01');
   assert.equal(formatFocusTime(-20), '0:00');
+
+  const idleControls = createFocusTimerControls({ isRunning: false, secondsRemaining: 300 });
+  assert.equal(idleControls.title, 'Optional timer');
+  assert.equal(idleControls.primaryLabel, 'Start');
+  assert.ok(idleControls.description.includes('5-minute'));
+
+  const runningControls = createFocusTimerControls({ isRunning: true, secondsRemaining: 240 });
+  assert.equal(runningControls.primaryLabel, 'Pause');
+
+  const finishedControls = createFocusTimerControls({ isRunning: false, secondsRemaining: 0 });
+  assert.equal(finishedControls.primaryLabel, 'Restart');
 });

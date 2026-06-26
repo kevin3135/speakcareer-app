@@ -11,7 +11,7 @@ import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { createAnswerCoachContent } from '../utils/answerCoach';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
-import { FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
+import { createFocusTimerControls, FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
 import {
   createNextPracticeRecommendation,
   createPracticeCompletionSummary,
@@ -55,6 +55,10 @@ export function RoleplayScreen({
   const activeOpeningLine = activePromptVariant?.openingLine ?? roleplay.openingLine;
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
   const answerCoach = createAnswerCoachContent({ persona: roleplay.aiPersona });
+  const timerControls = createFocusTimerControls({
+    isRunning: isTimerRunning,
+    secondsRemaining: timerSeconds,
+  });
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
   const completionSummary = savedSessionId
@@ -192,9 +196,6 @@ export function RoleplayScreen({
             <Text style={styles.detailLabel}>Guided practice</Text>
             <Text style={styles.guideTitle}>{roleplayGuide.activeLabel}</Text>
           </View>
-          <View style={styles.guidePill}>
-            <Text style={styles.guidePillText}>{formatFocusTime(timerSeconds)}</Text>
-          </View>
         </View>
         <Text style={styles.guideInstruction}>{roleplayGuide.activeInstruction}</Text>
         <View style={styles.guideSteps}>
@@ -227,6 +228,35 @@ export function RoleplayScreen({
               </Text>
             </View>
           ))}
+        </View>
+        <View style={styles.guideTimerPanel}>
+          <View style={styles.guideTimerHeader}>
+            <View style={styles.guideTimerCopyBlock}>
+              <Text style={styles.guideTimerTitle}>{timerControls.title}</Text>
+              <Text style={styles.guideTimerCopy}>{timerControls.description}</Text>
+            </View>
+            <Text style={styles.guideTimerValue}>{formatFocusTime(timerSeconds)}</Text>
+          </View>
+          <View style={styles.guideTimerActions}>
+            <Pressable
+              accessibilityHint="Starts, pauses or restarts the five-minute focus timer"
+              accessibilityLabel={timerControls.primaryAccessibilityLabel}
+              accessibilityRole="button"
+              onPress={toggleFocusTimer}
+              style={({ pressed }) => [styles.guideTimerButton, pressed && styles.guideTimerButtonPressed]}
+            >
+              <Text style={styles.guideTimerButtonText}>{timerControls.primaryLabel}</Text>
+            </Pressable>
+            <Pressable
+              accessibilityHint="Resets the focus timer back to five minutes"
+              accessibilityLabel={timerControls.resetAccessibilityLabel}
+              accessibilityRole="button"
+              onPress={resetFocusTimer}
+              style={({ pressed }) => [styles.guideTimerResetButton, pressed && styles.guideTimerButtonPressed]}
+            >
+              <Text style={styles.guideTimerResetText}>{timerControls.resetLabel}</Text>
+            </Pressable>
+          </View>
         </View>
       </Card>
 
@@ -300,45 +330,6 @@ export function RoleplayScreen({
       <Card muted>
         <Text style={styles.detailLabel}>{roleplay.aiPersona} opens with</Text>
         <Text style={styles.openingLine}>{activeOpeningLine}</Text>
-      </Card>
-
-      <Card>
-        <View style={styles.timerHeader}>
-          <View>
-            <Text style={styles.detailLabel}>Focus timer</Text>
-            <Text style={styles.timerTitle}>5-minute career sprint</Text>
-          </View>
-          <View style={styles.timerPill}>
-            <Text style={styles.timerValue}>{formatFocusTime(timerSeconds)}</Text>
-          </View>
-        </View>
-        <Text style={styles.timerCopy}>
-          Stay in one realistic conversation, write the answer, then review for XP.
-        </Text>
-        <View style={styles.timerActions}>
-          <Pressable
-            accessibilityHint="Starts, pauses or restarts the five-minute focus timer"
-            accessibilityLabel={
-              isTimerRunning ? 'Pause focus timer' : timerSeconds === 0 ? 'Restart focus timer' : 'Start focus timer'
-            }
-            accessibilityRole="button"
-            onPress={toggleFocusTimer}
-            style={({ pressed }) => [styles.timerButton, pressed && styles.timerButtonPressed]}
-          >
-            <Text style={styles.timerButtonText}>
-              {isTimerRunning ? 'Pause' : timerSeconds === 0 ? 'Restart' : 'Start'}
-            </Text>
-          </Pressable>
-          <Pressable
-            accessibilityHint="Resets the focus timer back to five minutes"
-            accessibilityLabel="Reset focus timer"
-            accessibilityRole="button"
-            onPress={resetFocusTimer}
-            style={({ pressed }) => [styles.timerButtonSecondary, pressed && styles.timerButtonPressed]}
-          >
-            <Text style={styles.timerButtonSecondaryText}>Reset</Text>
-          </Pressable>
-        </View>
       </Card>
 
       <Card>
@@ -557,19 +548,6 @@ const styles = StyleSheet.create({
     fontSize: typography.h2,
     fontWeight: '900',
   },
-  guidePill: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  guidePillText: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
   guideInstruction: {
     color: colors.text,
     fontSize: typography.body,
@@ -623,6 +601,74 @@ const styles = StyleSheet.create({
   },
   guideStepTextDone: {
     color: colors.primaryDark,
+  },
+  guideTimerPanel: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  guideTimerHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+  },
+  guideTimerCopyBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  guideTimerTitle: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  guideTimerCopy: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    lineHeight: 18,
+    marginTop: spacing.xs,
+  },
+  guideTimerValue: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  guideTimerActions: {
+    flexDirection: 'row',
+  },
+  guideTimerButton: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radii.md,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 40,
+  },
+  guideTimerResetButton: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    flex: 1,
+    justifyContent: 'center',
+    marginLeft: spacing.sm,
+    minHeight: 40,
+  },
+  guideTimerButtonPressed: {
+    opacity: 0.82,
+  },
+  guideTimerButtonText: {
+    color: colors.surface,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  guideTimerResetText: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   selector: {
     flexDirection: 'row',
@@ -716,73 +762,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 22,
     marginTop: spacing.sm,
-  },
-  timerHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  timerTitle: {
-    color: colors.ink,
-    fontSize: typography.h2,
-    fontWeight: '900',
-  },
-  timerPill: {
-    alignItems: 'center',
-    backgroundColor: colors.infoSoft,
-    borderRadius: radii.md,
-    minWidth: 86,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  timerValue: {
-    color: colors.info,
-    fontSize: typography.h2,
-    fontWeight: '900',
-  },
-  timerCopy: {
-    color: colors.textMuted,
-    fontSize: typography.body,
-    lineHeight: 22,
-    marginTop: spacing.md,
-  },
-  timerActions: {
-    flexDirection: 'row',
-    marginTop: spacing.lg,
-  },
-  timerButton: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderRadius: radii.md,
-    flex: 1,
-    justifyContent: 'center',
-    minHeight: 44,
-    paddingHorizontal: spacing.lg,
-  },
-  timerButtonSecondary: {
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    flex: 1,
-    justifyContent: 'center',
-    marginLeft: spacing.md,
-    minHeight: 44,
-    paddingHorizontal: spacing.lg,
-  },
-  timerButtonPressed: {
-    opacity: 0.82,
-  },
-  timerButtonText: {
-    color: colors.surface,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  timerButtonSecondaryText: {
-    color: colors.text,
-    fontSize: typography.body,
-    fontWeight: '900',
   },
   answerHeader: {
     alignItems: 'center',
