@@ -82,6 +82,40 @@ test('creates local practice sessions from reviewed answers', async () => {
   assert.equal(session.completedAt, '2026-06-26T10:00:00.000Z');
 });
 
+test('creates a lesson-complete summary from saved sessions', async () => {
+  const { createLessonCompleteSummary } = await import('../src/utils/lessonComplete.ts');
+  const sessions = [
+    {
+      id: 'meeting-practice-1',
+      roleplayId: 'meeting-practice',
+      roleplayTitle: 'Meeting Practice',
+      completedAt: '2026-06-26T10:00:00.000Z',
+      answerPreview: 'Since our last meeting, I completed the first draft.',
+      wordCount: 42,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Strong update with clear next steps.',
+      xpReward: 65,
+    },
+    {
+      id: 'job-interview-1',
+      roleplayId: 'job-interview',
+      roleplayTitle: 'Job Interview',
+      completedAt: '2026-06-25T10:00:00.000Z',
+      answerPreview: 'In my previous role, I improved the process.',
+      wordCount: 20,
+      readinessLabel: 'Good start',
+      feedbackSummary: 'Add one result.',
+      xpReward: 35,
+    },
+  ];
+  const summary = createLessonCompleteSummary(sessions);
+
+  assert.equal(summary.latestSession.roleplayTitle, 'Meeting Practice');
+  assert.equal(summary.totalLocalXp, 100);
+  assert.ok(summary.nextAction.includes('streak'));
+  assert.equal(createLessonCompleteSummary([]), null);
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');

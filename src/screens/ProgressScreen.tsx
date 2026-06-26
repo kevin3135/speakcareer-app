@@ -6,6 +6,7 @@ import { Screen } from '../components/Screen';
 import { progressData } from '../data/content';
 import { colors, spacing, typography } from '../styles/theme';
 import type { PracticeSession } from '../types';
+import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
@@ -14,12 +15,43 @@ type ProgressScreenProps = {
 
 export function ProgressScreen({ sessions }: ProgressScreenProps) {
   const { summary, mistakeBank } = progressData;
+  const completionSummary = createLessonCompleteSummary(sessions);
 
   return (
     <Screen
       title="Progress"
       subtitle="A simple mistake bank for recurring English career communication patterns."
     >
+      {completionSummary ? (
+        <View style={styles.completeCard}>
+          <View style={styles.completeHeader}>
+            <View style={styles.completeTitleBlock}>
+              <Text style={styles.completeKicker}>Lesson complete</Text>
+              <Text style={styles.completeTitle}>{completionSummary.latestSession.roleplayTitle}</Text>
+            </View>
+            <View style={styles.completeXpPill}>
+              <Text style={styles.completeXp}>+{completionSummary.latestSession.xpReward}</Text>
+              <Text style={styles.completeXpLabel}>XP</Text>
+            </View>
+          </View>
+          <View style={styles.completeStats}>
+            <View style={styles.completeStat}>
+              <Text style={styles.completeStatValue}>{completionSummary.latestSession.wordCount}</Text>
+              <Text style={styles.completeStatLabel}>words</Text>
+            </View>
+            <View style={styles.completeStat}>
+              <Text style={styles.completeStatValue}>{sessions.length}</Text>
+              <Text style={styles.completeStatLabel}>saved</Text>
+            </View>
+            <View style={styles.completeStat}>
+              <Text style={styles.completeStatValue}>{completionSummary.totalLocalXp}</Text>
+              <Text style={styles.completeStatLabel}>local XP</Text>
+            </View>
+          </View>
+          <Text style={styles.completeNext}>{completionSummary.nextAction}</Text>
+        </View>
+      ) : null}
+
       <View style={styles.statGrid}>
         <Card>
           <Text style={styles.statNumber}>{summary.minutesPracticed}</Text>
@@ -86,6 +118,77 @@ export function ProgressScreen({ sessions }: ProgressScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  completeCard: {
+    backgroundColor: colors.primaryDark,
+    borderRadius: 8,
+    padding: spacing.xl,
+  },
+  completeHeader: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  completeTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  completeKicker: {
+    color: '#BFE7E1',
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  completeTitle: {
+    color: colors.surface,
+    fontSize: typography.h1,
+    fontWeight: '900',
+    lineHeight: 31,
+    marginTop: spacing.xs,
+  },
+  completeXpPill: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: 8,
+    minWidth: 68,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  completeXp: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  completeXpLabel: {
+    color: colors.ink,
+    fontSize: 10,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  completeStats: {
+    flexDirection: 'row',
+    marginTop: spacing.lg,
+  },
+  completeStat: {
+    flex: 1,
+  },
+  completeStatValue: {
+    color: colors.surface,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  completeStatLabel: {
+    color: '#BFE7E1',
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  completeNext: {
+    color: '#E4F4F1',
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.lg,
+  },
   statGrid: {
     flexDirection: 'row',
   },

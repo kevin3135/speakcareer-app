@@ -343,3 +343,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add a polished lesson-complete state after saving a full roleplay session.
+
+## 2026-06-26: Lesson Complete Progress Reward
+
+Built one focused improvement: after saving a roleplay session, Progress now shows a polished lesson-complete reward card for the latest session. It highlights earned XP, word count, saved session count, total local XP and a recommended next action.
+
+What went well:
+
+- Saving a session now feels more rewarding and complete instead of just adding another history card.
+- The reward summary logic is isolated in `src/utils/lessonComplete.ts`.
+- The feature fits the Duolingo-like loop while keeping the tone professional and career-focused.
+- Added a test for lesson-complete summary calculations.
+
+What went wrong:
+
+- The completion card appears on Progress because saving currently navigates there immediately; Roleplay does not yet have its own completion overlay.
+- XP and completed sessions are still local in-memory only.
+- The next action is rule-based and not personalized beyond XP and word count.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep strengthening the complete-practice-reward-repeat loop.
+- The next useful improvement is a simple local streak/progress calculation from saved sessions, still without persistence packages.
+- Do not add backend, auth, payments or app store work yet.
+
+Next suggested task:
+
+- Make Home and Progress use saved local sessions to calculate current-session XP and streak-like progress.
