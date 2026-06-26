@@ -166,3 +166,45 @@ Agent memory for next time:
 Next suggested task:
 
 - Connect typed answers to more specific rule-based mock feedback and XP rewards.
+
+## 2026-06-26: Rule-Based Feedback Rewards
+
+Built one focused improvement: typed roleplay answers now generate local rule-based mock feedback and XP rewards. The Roleplay screen shows the reward after review, saved sessions store the dynamic feedback summary and Progress shows the XP earned for each session.
+
+What went well:
+
+- The feature makes the local practice loop more useful and more habit-forming without adding real AI or backend services.
+- The feedback logic is isolated in `src/utils/ruleBasedFeedback.ts`, so it can later be replaced or compared against backend AI feedback.
+- The UX stays professional: XP supports practice motivation, while feedback remains focused on career communication quality.
+- Added tests for weak and strong typed answers.
+
+What went wrong:
+
+- The feedback is still simple rule-based mock logic, so it can miss nuance in grammar, pronunciation or industry-specific language.
+- XP is still in-memory with saved sessions and does not persist after a restart.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep gamification tied to professional progress, not childish rewards.
+- The next high-value step is to make progress feel persistent or make the roleplay flow richer with follow-up prompts.
+- Do not add OpenAI, Supabase, payments, analytics or app store work yet.
+
+Next suggested task:
+
+- Add follow-up prompt variants for one roleplay so the experience feels more conversational.

@@ -55,9 +55,12 @@ export function ProgressScreen({ sessions }: ProgressScreenProps) {
               <Text style={styles.sessionTitle}>{session.roleplayTitle}</Text>
               <Text style={styles.sessionDate}>{formatSessionDate(session.completedAt)}</Text>
             </View>
-            <Text style={styles.sessionMeta}>
-              {session.readinessLabel} - {session.wordCount} words
-            </Text>
+            <View style={styles.sessionMetaRow}>
+              <Text style={styles.sessionMeta}>
+                {session.readinessLabel} - {session.wordCount} words
+              </Text>
+              <Text style={styles.sessionXp}>+{session.xpReward} XP</Text>
+            </View>
             <Text style={styles.sessionPreview}>{session.answerPreview}</Text>
             <Text style={styles.sessionFeedback}>{session.feedbackSummary}</Text>
           </Card>
@@ -138,11 +141,22 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
   },
+  sessionMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: spacing.sm,
+  },
   sessionMeta: {
     color: colors.primaryDark,
+    flex: 1,
     fontSize: typography.small,
     fontWeight: '900',
-    marginTop: spacing.sm,
+  },
+  sessionXp: {
+    color: colors.accent,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginLeft: spacing.md,
   },
   sessionPreview: {
     color: colors.text,

@@ -9,6 +9,7 @@ import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
+import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 
 type RoleplayScreenProps = {
@@ -21,6 +22,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   const [showFeedback, setShowFeedback] = useState(false);
   const [draftAnswer, setDraftAnswer] = useState('');
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
+  const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
   const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -29,7 +31,10 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
+    const nextFeedbackResult = createRuleBasedFeedback(roleplay, draftAnswer, review);
+
     setAnswerReview(review);
+    setFeedbackResult(nextFeedbackResult);
     setShowFeedback(review.isReadyForFeedback);
     setSavedSessionId(null);
   }
@@ -37,19 +42,22 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   function clearAnswer() {
     setDraftAnswer('');
     setAnswerReview(null);
+    setFeedbackResult(null);
     setShowFeedback(false);
     setSavedSessionId(null);
   }
 
   function saveSession() {
-    if (!answerReview?.isReadyForFeedback) {
+    if (!answerReview?.isReadyForFeedback || !feedbackResult) {
       return;
     }
 
     const session = createPracticeSession({
       answer: draftAnswer,
+      feedback: feedbackResult.feedback,
       review: answerReview,
       roleplay,
+      xpReward: feedbackResult.xpReward,
     });
 
     setSavedSessionId(session.id);
@@ -128,6 +136,12 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
               <Text style={styles.wordCount}>{answerReview.wordCount} words</Text>
             </View>
             <Text style={styles.reviewNote}>{answerReview.reviewNote}</Text>
+            {feedbackResult ? (
+              <View style={styles.rewardRow}>
+                <Text style={styles.rewardValue}>+{feedbackResult.xpReward} XP</Text>
+                <Text style={styles.rewardLabel}>{feedbackResult.rewardLabel}</Text>
+              </View>
+            ) : null}
           </View>
         ) : null}
       </Card>
@@ -144,9 +158,13 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
         ) : null}
         <AppButton label="Clear" onPress={clearAnswer} variant="secondary" />
       </View>
-      {savedSessionId ? <Text style={styles.savedNote}>Session saved to Progress.</Text> : null}
+      {savedSessionId ? (
+        <Text style={styles.savedNote}>
+          Session saved to Progress. +{feedbackResult?.xpReward ?? 0} XP.
+        </Text>
+      ) : null}
 
-      {showFeedback ? <FeedbackPanel feedback={roleplay.feedback} /> : null}
+      {showFeedback && feedbackResult ? <FeedbackPanel feedback={feedbackResult.feedback} /> : null}
     </Screen>
   );
 }
@@ -259,6 +277,30 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: typography.body,
     lineHeight: 22,
+  },
+  rewardRow: {
+    alignItems: 'center',
+    borderColor: colors.border,
+    borderRadius: radii.sm,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  rewardValue: {
+    color: colors.accent,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  rewardLabel: {
+    color: colors.textMuted,
+    flex: 1,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginLeft: spacing.md,
+    textAlign: 'right',
   },
   actions: {
     marginTop: spacing.md,

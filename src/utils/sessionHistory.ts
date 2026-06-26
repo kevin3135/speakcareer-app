@@ -1,10 +1,12 @@
 import type { AnswerReview } from './answerReview';
-import type { PracticeSession, RoleplayScenario } from '../types';
+import type { AIFeedback, PracticeSession, RoleplayScenario } from '../types';
 
 type CreatePracticeSessionInput = {
   roleplay: RoleplayScenario;
   answer: string;
   review: AnswerReview;
+  feedback: AIFeedback;
+  xpReward: number;
   completedAt?: Date;
 };
 
@@ -12,6 +14,8 @@ export function createPracticeSession({
   roleplay,
   answer,
   review,
+  feedback,
+  xpReward,
   completedAt = new Date(),
 }: CreatePracticeSessionInput): PracticeSession {
   const trimmedAnswer = answer.trim().replace(/\s+/g, ' ');
@@ -27,7 +31,8 @@ export function createPracticeSession({
     answerPreview: preview,
     wordCount: review.wordCount,
     readinessLabel: review.readinessLabel,
-    feedbackSummary: roleplay.feedback.summary,
+    feedbackSummary: feedback.summary,
+    xpReward,
   };
 }
 

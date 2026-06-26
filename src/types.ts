@@ -87,4 +87,5 @@ export type PracticeSession = {
   wordCount: number;
   readinessLabel: string;
   feedbackSummary: string;
+  xpReward: number;
 };
