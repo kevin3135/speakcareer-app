@@ -46,6 +46,7 @@ export type RoleplayPromptVariant = {
   openingLine: string;
   userGoal: string;
   coachingNote: string;
+  suggestedPhrases?: string[];
 };
 
 export type RoleplayScenario = {

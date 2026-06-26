@@ -90,6 +90,26 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
   }
 });
 
+test('adds interview-specific phrases for each interview practice angle', () => {
+  const interview = practiceContent.roleplays.find((roleplay) => roleplay.id === 'job-interview');
+
+  for (const variant of interview.promptVariants) {
+    assert.equal(variant.suggestedPhrases.length, 3);
+    assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+  }
+
+  assert.ok(
+    interview.promptVariants
+      .find((variant) => variant.id === 'role-motivation')
+      .suggestedPhrases.some((phrase) => phrase.includes('interests me')),
+  );
+  assert.ok(
+    interview.promptVariants
+      .find((variant) => variant.id === 'difficult-situation')
+      .suggestedPhrases.some((phrase) => phrase.includes('challenging')),
+  );
+});
+
 test('reviews typed roleplay answers with simple local rules', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
 

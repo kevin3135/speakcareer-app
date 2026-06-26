@@ -858,3 +858,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-specific suggested phrases for one high-value scenario, starting with Job Interview.
+
+## 2026-06-26: Interview Variant-Specific Phrases
+
+Built one focused improvement: Job Interview practice angles now show their own useful phrases. "Tell me about yourself", "Why this role?" and "Difficult situation" each have three tailored sentence starters, and Roleplay automatically falls back to the scenario-level phrases when a variant does not provide its own.
+
+What went well:
+
+- The feature makes the interview practice flow more specific without adding backend AI or a new lesson system.
+- The content model stayed simple by adding optional phrases to existing prompt variants.
+- The Roleplay UI now adapts useful phrases to the selected practice angle.
+- Added a focused test that protects interview-specific phrases.
+
+What went wrong:
+
+- Only Job Interview has variant-specific phrases so far.
+- The mock feedback still does not change per prompt variant.
+- Phrase quality is still curated local content, not personalized to the user's answer.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Variant-specific content is a good next layer now that all roleplays have practice angles.
+- Add tailored phrases scenario by scenario instead of building a larger lesson engine.
+- Keep phrase lists short so the Roleplay screen stays scannable on mobile.
+
+Next suggested task:
+
+- Add variant-specific suggested phrases for Meeting Practice.

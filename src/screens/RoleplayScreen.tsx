@@ -41,6 +41,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     roleplayPromptVariants[0];
   const activeUserGoal = activePromptVariant?.userGoal ?? roleplay.userGoal;
   const activeOpeningLine = activePromptVariant?.openingLine ?? roleplay.openingLine;
+  const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
 
@@ -261,7 +262,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
       <Card>
         <Text style={styles.detailLabel}>Useful phrases</Text>
         <View style={styles.phraseList}>
-          {roleplay.suggestedPhrases.map((phrase) => (
+          {activeSuggestedPhrases.map((phrase) => (
             <Text key={phrase} style={styles.phrase}>- {phrase}</Text>
           ))}
         </View>

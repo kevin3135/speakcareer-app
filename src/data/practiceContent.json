@@ -72,21 +72,36 @@
           "title": "Tell me about yourself",
           "openingLine": "Thanks for joining today. Could you start by telling me a little about yourself?",
           "userGoal": "Give a concise career story with your role, strongest proof point and reason for applying.",
-          "coachingNote": "Use present, past and future: who you are now, what experience proves it and why this role is next."
+          "coachingNote": "Use present, past and future: who you are now, what experience proves it and why this role is next.",
+          "suggestedPhrases": [
+            "Currently, I focus on...",
+            "Before that, I built experience in...",
+            "That is why this role feels like a strong next step."
+          ]
         },
         {
           "id": "role-motivation",
           "title": "Why this role?",
           "openingLine": "What interests you most about this role and our company?",
           "userGoal": "Connect your motivation to the role, the company and your next professional step.",
-          "coachingNote": "Avoid a generic answer. Mention one role requirement and one reason it fits your experience."
+          "coachingNote": "Avoid a generic answer. Mention one role requirement and one reason it fits your experience.",
+          "suggestedPhrases": [
+            "What interests me most is...",
+            "This connects well with my experience in...",
+            "I am looking for a role where I can..."
+          ]
         },
         {
           "id": "difficult-situation",
           "title": "Difficult situation",
           "openingLine": "Can you describe a difficult work situation and how you handled it?",
           "userGoal": "Use situation, action and result with one clear lesson learned.",
-          "coachingNote": "Keep the problem short, spend most of the answer on what you did and end with the result."
+          "coachingNote": "Keep the problem short, spend most of the answer on what you did and end with the result.",
+          "suggestedPhrases": [
+            "The situation was challenging because...",
+            "I took responsibility for...",
+            "The result was that we..."
+          ]
         }
       ],
       "suggestedPhrases": [
