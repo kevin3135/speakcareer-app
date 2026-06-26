@@ -336,6 +336,24 @@
             "improvementFocus": "Add one proof point before recommending the next step.",
             "suggestedRewrite": "That is a fair concern. The reason I still recommend this is that the customer feedback points to a clear opportunity, and a low-risk next step would be a two-week pilot before a larger investment."
           }
+        },
+        {
+          "id": "audience-question",
+          "title": "Audience question",
+          "openingLine": "One audience member asks: How do we know this recommendation is worth the extra work?",
+          "userGoal": "Answer briefly, give one reason and return to the next step.",
+          "coachingNote": "Acknowledge the question, answer with one business reason and close with what you recommend next.",
+          "suggestedPhrases": [
+            "That is a fair question.",
+            "The main reason is...",
+            "The next step I recommend is..."
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This presentation answer should handle the audience question directly and return to a clear recommendation.",
+            "strengthFocus": "You acknowledged the question before answering, which keeps the tone confident and respectful.",
+            "improvementFocus": "Close with the next step so the audience knows what decision or action you want.",
+            "suggestedRewrite": "That is a fair question. The main reason this is worth the extra work is that it reduces launch risk before we commit more resources. The next step I recommend is a short pilot so we can test the impact with a smaller group first."
+          }
         }
       ],
       "suggestedPhrases": [

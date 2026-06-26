@@ -146,7 +146,7 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
   );
   assert.deepEqual(
     presentation.promptVariants.map((variant) => variant.title),
-    ['Opening agenda', 'Smooth transition', 'Handle challenge'],
+    ['Opening agenda', 'Smooth transition', 'Handle challenge', 'Audience question'],
   );
   assert.deepEqual(
     sales.promptVariants.map((variant) => variant.title),
@@ -259,6 +259,16 @@ test('adds presentation-specific phrases for each presentation practice angle', 
     presentation.promptVariants
       .find((variant) => variant.id === 'handle-challenge')
       .suggestedPhrases.some((phrase) => phrase.includes('low-risk')),
+  );
+  assert.ok(
+    presentation.promptVariants
+      .find((variant) => variant.id === 'audience-question')
+      .suggestedPhrases.some((phrase) => phrase.includes('fair question')),
+  );
+  assert.ok(
+    presentation.promptVariants
+      .find((variant) => variant.id === 'audience-question')
+      .feedbackGuidance.suggestedRewrite.includes('short pilot'),
   );
 });
 
@@ -1115,6 +1125,7 @@ test('adapts presentation feedback to the selected practice angle', async () => 
   const roleplay = practiceContent.roleplays.find((item) => item.id === 'presentation-practice');
   const transitionVariant = roleplay.promptVariants.find((variant) => variant.id === 'smooth-transition');
   const challengeVariant = roleplay.promptVariants.find((variant) => variant.id === 'handle-challenge');
+  const audienceVariant = roleplay.promptVariants.find((variant) => variant.id === 'audience-question');
   const answer = [
     'This leads to the next point about customer impact.',
     'First, I would explain the decision we need and then connect it to the timeline.',
@@ -1123,6 +1134,7 @@ test('adapts presentation feedback to the selected practice angle', async () => 
   const review = summarizePracticeAnswer(answer);
   const transitionFeedback = createRuleBasedFeedback(roleplay, answer, review, transitionVariant);
   const challengeFeedback = createRuleBasedFeedback(roleplay, answer, review, challengeVariant);
+  const audienceFeedback = createRuleBasedFeedback(roleplay, answer, review, audienceVariant);
 
   assert.ok(transitionFeedback.feedback.summary.includes('"Smooth transition"'));
   assert.equal(
@@ -1139,6 +1151,14 @@ test('adapts presentation feedback to the selected practice angle', async () => 
   );
   assert.notEqual(
     transitionFeedback.feedback.suggestedRewrite,
+    challengeFeedback.feedback.suggestedRewrite,
+  );
+  assert.ok(audienceFeedback.feedback.summary.includes('"Audience question"'));
+  assert.ok(
+    audienceFeedback.feedback.strengths.includes(audienceVariant.feedbackGuidance.strengthFocus),
+  );
+  assert.notEqual(
+    audienceFeedback.feedback.suggestedRewrite,
     challengeFeedback.feedback.suggestedRewrite,
   );
 });

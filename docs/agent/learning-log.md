@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Presentation Audience Question Variant
+
+Built one focused improvement: Presentation Practice now includes an "Audience question" practice angle. It trains users to handle a realistic Q&A moment by acknowledging the question, giving one business reason and returning to a clear next step.
+
+What went well:
+
+- Added one practical presentation follow-up prompt without expanding into a full course.
+- Reused the existing `promptVariants`, answer placeholder and rule-based feedback structure.
+- The first test run caught that the new goal text was one character too long for the mobile read-first card.
+- Mobile preview confirmed the new angle appears in the picker and updates the prompt and placeholder.
+
+What went wrong:
+
+- Presentation Practice now has four angles while some roleplays still have three; this is intentional because Q&A was next in the development plan.
+- The Q&A moment is still a mock one-turn exercise, not a real back-and-forth AI conversation.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 41 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep new roleplay goals under the mobile read-first card length limits.
+- Presentation Q&A should stay practical: acknowledge, answer, recommend the next step.
+- Kevin wants the app to feel simpler and more guided, so prefer one clear next action over extra choices.
+
+Next suggested task:
+
+- Simplify the first-run introduction further with a guided "first 5-minute practice" path before adding more scenario content.
+
 ## 2026-06-26: Angle-Specific Answer Placeholders
 
 Built one focused improvement: the Roleplay answer box now uses the selected practice angle's suggested phrases as its placeholder. Meeting Practice no longer shows the generic interview-style "Currently, I focus..." starter.
