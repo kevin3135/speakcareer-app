@@ -643,3 +643,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add presentation Q&A prompt variants so Presentation Practice also feels repeatable.
+
+## 2026-06-26: Presentation Prompt Variants
+
+Built one focused improvement: Presentation Practice now has three repeatable practice angles: Opening agenda, Smooth transition and Handle challenge. Each variant changes the opening line, user goal and coaching note through the existing Roleplay UI.
+
+What went well:
+
+- The improvement reused the prompt-variant system without adding new architecture.
+- Presentation Practice now supports Q&A-style challenge handling, which makes it more realistic for workplace presentations.
+- The content stays English-first and professional.
+- Updated tests so Interview, Meeting and Presentation all have protected prompt variants.
+
+What went wrong:
+
+- Presentation variants still share the same suggested phrases and mock feedback.
+- Sales and Small Talk do not have prompt variants yet.
+- Switching variants still clears the current answer to avoid mixing prompts and drafts.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Prompt variants can now be rolled out scenario by scenario with very low risk.
+- The next useful content expansion is Sales objection variants, then Small Talk follow-up variants.
+- Keep content variants short enough to scan on mobile.
+
+Next suggested task:
+
+- Add sales objection prompt variants for Sales Call.

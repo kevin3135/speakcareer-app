@@ -44,12 +44,14 @@ test('provides mock feedback and mistake-bank data', () => {
   assert.ok(progressMock.summary.nextFocus.length > 10);
 });
 
-test('adds repeatable prompt variants for interview and meeting practice', () => {
+test('adds repeatable prompt variants for core roleplay categories', () => {
   const interview = practiceContent.roleplays.find((roleplay) => roleplay.id === 'job-interview');
   const meeting = practiceContent.roleplays.find((roleplay) => roleplay.id === 'meeting-practice');
+  const presentation = practiceContent.roleplays.find((roleplay) => roleplay.id === 'presentation-practice');
 
   assert.ok(interview.promptVariants.length >= 3);
   assert.ok(meeting.promptVariants.length >= 3);
+  assert.ok(presentation.promptVariants.length >= 3);
   assert.deepEqual(
     interview.promptVariants.map((variant) => variant.title),
     ['Tell me about yourself', 'Why this role?', 'Difficult situation'],
@@ -58,8 +60,16 @@ test('adds repeatable prompt variants for interview and meeting practice', () =>
     meeting.promptVariants.map((variant) => variant.title),
     ['Status update', 'Clarify deadline', 'Challenge decision'],
   );
+  assert.deepEqual(
+    presentation.promptVariants.map((variant) => variant.title),
+    ['Opening agenda', 'Smooth transition', 'Handle challenge'],
+  );
 
-  for (const variant of [...interview.promptVariants, ...meeting.promptVariants]) {
+  for (const variant of [
+    ...interview.promptVariants,
+    ...meeting.promptVariants,
+    ...presentation.promptVariants,
+  ]) {
     assert.ok(variant.openingLine.length > 20);
     assert.ok(variant.userGoal.length > 20);
     assert.ok(variant.coachingNote.length > 20);
