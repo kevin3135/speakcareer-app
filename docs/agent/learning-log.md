@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Simple Home Daily Mission
+
+Built one focused improvement: the Home `Today` card is now a single daily mission card instead of a broad XP progress summary. First-time users see one clear target: save one Job Interview answer, with a 5-minute sprint, target, reward and a short reason to practice now.
+
+What went well:
+
+- The first-run Home screen now reinforces one action instead of showing progress math from mock data.
+- The new mission state lives in `src/utils/homeDailyMission.ts`, so first-run, partial and complete mission states are covered without component-test setup.
+- Mobile preview confirmed the card shows "Save one Job Interview answer", "0/1 saved", "+40 XP" and a clear "Why now" reason.
+- The change keeps the app professional and habit-forming without adding backend, auth, payments or secrets.
+
+What went wrong:
+
+- The browser first opened Roleplay after the start CTA, so Home had to be selected again to verify the mission card.
+- The Home hero still has hard-coded detail pills; it could reuse guided-start detail labels next.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 43 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run Home should use completion-based progress, not mock XP progress, so the user understands exactly what to do.
+- "Why now" copy is useful when Kevin wants the app to feel habit-forming but still professional.
+- Keep Home focused on one next action before adding more library or dashboard elements.
+
+Next suggested task:
+
+- Reuse `guidedStart.detailLabels` in the Home hero so the first sprint details stay consistent between Onboarding and Home.
+
 ## 2026-06-26: Guided Home Unlock Preview
 
 Built one focused improvement: first-time Home now previews the real next English roleplays in one compact `What unlocks next` card instead of using abstract preview pills or a full roleplay wall.

@@ -615,6 +615,62 @@ test('keeps the Home library quiet until the first saved practice', async () => 
   assert.equal(activeLibrary.previewRoleplays[0].id, 'job-interview');
 });
 
+test('creates one clear Home daily mission card', async () => {
+  const { createDailyMission } = await import('../src/utils/gamification.ts');
+  const { createHomeDailyMissionCard } = await import('../src/utils/homeDailyMission.ts');
+  const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');
+  const savedSession = {
+    id: 'job-interview-1',
+    roleplayId: 'job-interview',
+    roleplayTitle: 'Job Interview',
+    completedAt: '2026-06-26T10:00:00.000Z',
+    answerPreview: 'I improved the weekly customer feedback process.',
+    wordCount: 24,
+    readinessLabel: 'Ready for feedback',
+    feedbackSummary: 'Good structure and result.',
+    xpReward: 55,
+  };
+
+  const firstRunMission = createHomeDailyMissionCard({
+    dailyMission: createDailyMission(progressMock.summary, [], 1),
+    dailyTarget: 1,
+    localProgress: createLocalProgressStats(progressMock.summary, [], 1),
+    sessions: [],
+  });
+
+  assert.equal(firstRunMission.title, 'Save one Job Interview answer');
+  assert.equal(firstRunMission.meta, '5-minute sprint');
+  assert.equal(firstRunMission.targetLabel, '0/1 saved');
+  assert.equal(firstRunMission.progressPercent, 0);
+  assert.ok(firstRunMission.body.includes('2-4 spoken sentences'));
+  assert.ok(firstRunMission.reason.includes('interview English'));
+
+  const partialMission = createHomeDailyMissionCard({
+    dailyMission: createDailyMission(progressMock.summary, [savedSession], 3),
+    dailyTarget: 3,
+    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 3),
+    sessions: [savedSession],
+  });
+
+  assert.equal(partialMission.title, "Finish today's mission");
+  assert.equal(partialMission.meta, '2 left');
+  assert.equal(partialMission.targetLabel, '1/3 saved');
+  assert.equal(partialMission.progressPercent, 33);
+  assert.ok(partialMission.body.includes('Finish 2 more'));
+
+  const completeMission = createHomeDailyMissionCard({
+    dailyMission: createDailyMission(progressMock.summary, [savedSession], 1),
+    dailyTarget: 1,
+    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 1),
+    sessions: [savedSession],
+  });
+
+  assert.equal(completeMission.title, "Today's mission complete");
+  assert.equal(completeMission.meta, 'Done today');
+  assert.equal(completeMission.targetLabel, '1/1 saved');
+  assert.equal(completeMission.progressPercent, 100);
+});
+
 test('guides roleplay practice through one simple step at a time', async () => {
   const { createRoleplayGuideState } = await import('../src/utils/roleplayGuide.ts');
   const firstStep = createRoleplayGuideState({

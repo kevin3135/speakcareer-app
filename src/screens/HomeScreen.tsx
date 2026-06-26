@@ -10,6 +10,7 @@ import { guidedIntroSteps, guidedStart } from '../data/guidedIntro';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLibraryState } from '../utils/homeLibrary';
 import { createHomePracticeRecommendation } from '../utils/homeRecommendation';
 import { createLocalProgressStats } from '../utils/localProgress';
@@ -32,7 +33,12 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
     practiceContent.roleplays[0];
   const dailyMission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(progressData.summary, sessions, dailyTarget);
-  const hasSavedSession = sessions.length > 0;
+  const homeDailyMission = createHomeDailyMissionCard({
+    dailyMission,
+    dailyTarget,
+    localProgress,
+    sessions,
+  });
   const homeLibrary = createHomeLibraryState(sessions, practiceContent.roleplays, guidedStart.roleplayId);
   const homeLibraryRoleplayIds = new Set(homeLibrary.previewRoleplays.map((roleplay) => roleplay.id));
   const visibleRoleplayCards = practiceContent.roleplays.filter((roleplay) =>
@@ -90,17 +96,30 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
 
       <Card>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Today</Text>
-          <Text style={styles.sectionMeta}>{dailyMission.xpToday}/{dailyMission.xpGoal} XP</Text>
+          <Text style={styles.sectionTitle}>{homeDailyMission.title}</Text>
+          <Text style={styles.sectionMeta}>{homeDailyMission.meta}</Text>
         </View>
         <View style={styles.progressBlock}>
-          <ProgressBar label="Practice progress" value={dailyMission.progressPercent} />
+          <ProgressBar
+            label={homeDailyMission.progressLabel}
+            value={homeDailyMission.progressPercent}
+          />
         </View>
-        <Text style={styles.copy}>
-          {hasSavedSession
-            ? `${sessions.length}/${dailyTarget} short practice${dailyTarget === 1 ? '' : 's'} done. ${localProgress.totalLocalXp} XP added this run.`
-            : 'Your first step is one short Job Interview practice. Nothing else is required today.'}
-        </Text>
+        <Text style={styles.copy}>{homeDailyMission.body}</Text>
+        <View style={styles.missionStatRow}>
+          <View style={styles.missionStat}>
+            <Text style={styles.missionStatLabel}>Target</Text>
+            <Text style={styles.missionStatValue}>{homeDailyMission.targetLabel}</Text>
+          </View>
+          <View style={styles.missionStat}>
+            <Text style={styles.missionStatLabel}>Reward</Text>
+            <Text style={styles.missionStatValue}>{homeDailyMission.rewardLabel}</Text>
+          </View>
+        </View>
+        <View style={styles.missionReason}>
+          <Text style={styles.missionStatLabel}>Why now</Text>
+          <Text style={styles.missionReasonText}>{homeDailyMission.reason}</Text>
+        </View>
       </Card>
 
       {homeLibrary.showRoleplayCards ? (
@@ -252,6 +271,42 @@ const styles = StyleSheet.create({
   },
   progressBlock: {
     marginTop: spacing.lg,
+  },
+  missionReason: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  missionReasonText: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 19,
+    marginTop: spacing.xs,
+  },
+  missionStat: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.md,
+    flex: 1,
+    padding: spacing.md,
+  },
+  missionStatLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  missionStatRow: {
+    columnGap: spacing.sm,
+    flexDirection: 'row',
+    marginTop: spacing.md,
+  },
+  missionStatValue: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+    marginTop: spacing.xs,
   },
   libraryPreviewCard: {
     backgroundColor: colors.surface,
