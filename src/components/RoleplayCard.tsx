@@ -13,6 +13,8 @@ export function RoleplayCard({ roleplay, onPress }: RoleplayCardProps) {
 
   return (
     <Pressable
+      accessibilityHint="Opens this roleplay practice sprint"
+      accessibilityLabel={`Start ${roleplay.title} roleplay, ${roleplay.targetLevel}, ${roleplay.durationMinutes} minutes`}
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => [styles.card, pressed && styles.pressed]}

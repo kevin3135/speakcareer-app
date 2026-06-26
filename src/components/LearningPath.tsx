@@ -56,6 +56,8 @@ export function LearningPath({ steps }: LearningPathProps) {
         if (isInteractive) {
           return (
             <Pressable
+              accessibilityHint="Opens the next recommended practice"
+              accessibilityLabel={`${step.title}. ${stateLabels[step.state]} step`}
               accessibilityRole="button"
               key={step.id}
               onPress={step.onPress}

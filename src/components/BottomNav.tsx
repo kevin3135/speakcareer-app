@@ -18,6 +18,8 @@ export function BottomNav({ activeScreen, onChange }: BottomNavProps) {
 
         return (
           <Pressable
+            accessibilityHint={`Open the ${tab} screen`}
+            accessibilityLabel={`${tab} tab`}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
             key={tab}

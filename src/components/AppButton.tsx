@@ -3,14 +3,24 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 import { colors, radii, spacing, typography } from '../styles/theme';
 
 type AppButtonProps = {
+  accessibilityHint?: string;
+  accessibilityLabel?: string;
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'quiet';
 };
 
-export function AppButton({ label, onPress, variant = 'primary' }: AppButtonProps) {
+export function AppButton({
+  accessibilityHint,
+  accessibilityLabel,
+  label,
+  onPress,
+  variant = 'primary',
+}: AppButtonProps) {
   return (
     <Pressable
+      accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityLabel ?? label}
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => [

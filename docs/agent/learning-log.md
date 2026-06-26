@@ -815,3 +815,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add accessibility labels to the main interactive controls and roleplay filter chips.
+
+## 2026-06-26: Basic Accessibility Labels
+
+Built one focused improvement: the main interactive controls now have clearer accessibility labels and hints. This covers bottom navigation tabs, roleplay cards, learning path actions, Practice category and level filters, Profile daily target controls, Roleplay scenario and practice-angle chips, timer controls, answer inputs and primary CTA buttons.
+
+What went well:
+
+- The app is more usable for screen reader users without changing the visual design.
+- Existing UI components stayed simple; `AppButton` now supports optional labels and hints while keeping sensible defaults.
+- The most context-heavy controls now explain what they do, such as filters, timer controls and roleplay practice angles.
+- The improvement supports a more professional MVP without adding dependencies or integrations.
+
+What went wrong:
+
+- There are still no React Native component tests for accessibility props.
+- Some labels are static English strings and may need localization later.
+- Accessibility work is not complete yet; future passes should review focus order and dynamic announcements.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep adding accessibility context when new custom Pressables or chips are introduced.
+- The next high-value product step is improving feedback depth with variant-specific phrases or feedback.
+- Do not add a component testing stack until it is worth the setup cost.
+
+Next suggested task:
+
+- Add variant-specific suggested phrases for one high-value scenario, starting with Job Interview.

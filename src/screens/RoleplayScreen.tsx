@@ -153,7 +153,10 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
 
           return (
             <Pressable
+              accessibilityHint="Switches the active roleplay scenario"
+              accessibilityLabel={`Open ${item.title} roleplay`}
               accessibilityRole="button"
+              accessibilityState={{ selected: isActive }}
               key={item.id}
               onPress={() => onSelectRoleplay(item.id)}
               style={[styles.selectorItem, isActive && styles.selectorItemActive]}
@@ -190,8 +193,10 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
 
               return (
                 <Pressable
-                  accessibilityLabel={`Practice ${variant.title}`}
+                  accessibilityHint="Changes the opening prompt and clears the current draft answer"
+                  accessibilityLabel={`Use ${variant.title} practice angle`}
                   accessibilityRole="button"
+                  accessibilityState={{ selected: isActive }}
                   key={variant.id}
                   onPress={() => selectPromptVariant(variant.id)}
                   style={[styles.variantChip, isActive && styles.variantChipActive]}
@@ -229,6 +234,10 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
         </Text>
         <View style={styles.timerActions}>
           <Pressable
+            accessibilityHint="Starts, pauses or restarts the five-minute focus timer"
+            accessibilityLabel={
+              isTimerRunning ? 'Pause focus timer' : timerSeconds === 0 ? 'Restart focus timer' : 'Start focus timer'
+            }
             accessibilityRole="button"
             onPress={toggleFocusTimer}
             style={({ pressed }) => [styles.timerButton, pressed && styles.timerButtonPressed]}
@@ -238,6 +247,8 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
             </Text>
           </Pressable>
           <Pressable
+            accessibilityHint="Resets the focus timer back to five minutes"
+            accessibilityLabel="Reset focus timer"
             accessibilityRole="button"
             onPress={resetFocusTimer}
             style={({ pressed }) => [styles.timerButtonSecondary, pressed && styles.timerButtonPressed]}
@@ -260,6 +271,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
         <Text style={styles.detailLabel}>Your answer</Text>
         <TextInput
           accessibilityLabel="Practice answer"
+          accessibilityHint="Write your first spoken-style response to the roleplay prompt"
           multiline
           onChangeText={setDraftAnswer}
           placeholder="Write your first response here..."
@@ -287,10 +299,16 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
 
       <View style={styles.actions}>
         <AppButton
+          accessibilityHint="Reviews your first answer with local mock feedback"
           label="Review answer"
           onPress={reviewAnswer}
         />
-        <AppButton label="Clear" onPress={clearAnswer} variant="secondary" />
+        <AppButton
+          accessibilityHint="Clears the current answer, feedback and timer"
+          label="Clear"
+          onPress={clearAnswer}
+          variant="secondary"
+        />
       </View>
       {savedSessionId ? (
         <Text style={styles.savedNote}>
@@ -311,6 +329,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
           <Text style={styles.followUpCoach}>{adaptiveFollowUp.coachingNote}</Text>
           <TextInput
             accessibilityLabel="Follow-up answer"
+            accessibilityHint="Write your response to the follow-up roleplay question"
             multiline
             onChangeText={updateFollowUpAnswer}
             placeholder="Write your follow-up response..."
@@ -335,14 +354,23 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
             </View>
           ) : null}
           <View style={styles.followUpAction}>
-            <AppButton label="Review follow-up" onPress={reviewFollowUpAnswer} variant="quiet" />
+            <AppButton
+              accessibilityHint="Reviews your follow-up answer for readiness"
+              label="Review follow-up"
+              onPress={reviewFollowUpAnswer}
+              variant="quiet"
+            />
           </View>
         </Card>
       ) : null}
 
       {answerReview?.isReadyForFeedback && !savedSessionId ? (
         <View style={styles.finalSaveAction}>
-          <AppButton label={`Save full session (+${totalXpReward} XP)`} onPress={saveSession} />
+          <AppButton
+            accessibilityHint="Saves this practice session to Progress"
+            label={`Save full session (+${totalXpReward} XP)`}
+            onPress={saveSession}
+          />
         </View>
       ) : null}
     </Screen>

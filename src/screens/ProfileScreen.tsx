@@ -34,6 +34,8 @@ export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScree
 
             return (
               <Pressable
+                accessibilityHint="Updates the daily practice target for this app run"
+                accessibilityLabel={`Set daily target to ${target} ${target === 1 ? 'roleplay' : 'roleplays'}`}
                 accessibilityRole="button"
                 accessibilityState={{ selected: isActive }}
                 key={target}

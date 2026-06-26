@@ -47,7 +47,11 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
       </Card>
 
       <View style={styles.footer}>
-        <AppButton label="Start practicing" onPress={onContinue} />
+        <AppButton
+          accessibilityHint="Moves from onboarding to the Home screen"
+          label="Start practicing"
+          onPress={onContinue}
+        />
         <Text style={styles.note}>Spanish, French and Mandarin Chinese are planned after the English MVP is solid.</Text>
       </View>
     </ScrollView>

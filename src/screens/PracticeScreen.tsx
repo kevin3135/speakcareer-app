@@ -73,6 +73,8 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
 
           return (
             <Pressable
+              accessibilityHint="Filters the roleplay list by career conversation category"
+              accessibilityLabel={`Set category filter to ${category}`}
               accessibilityRole="button"
               accessibilityState={{ selected: isActive }}
               key={category}
@@ -97,6 +99,8 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
 
           return (
             <Pressable
+              accessibilityHint="Filters the roleplay list by English level"
+              accessibilityLabel={`Set level filter to ${level}`}
               accessibilityRole="button"
               accessibilityState={{ selected: isActive }}
               key={level}

@@ -47,6 +47,7 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
           </View>
           <View style={styles.emptyAction}>
             <AppButton
+              accessibilityHint="Opens the recommended first roleplay from the empty progress state"
               label={progressEmptyState.ctaLabel}
               onPress={() => onOpenRoleplay(progressEmptyState.roleplayId)}
             />

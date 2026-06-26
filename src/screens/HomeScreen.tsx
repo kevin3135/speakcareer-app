@@ -97,7 +97,11 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
           </View>
         </View>
         <View style={styles.buttonRow}>
-          <AppButton label="Start mission" onPress={() => onOpenRoleplay(featured.id)} />
+          <AppButton
+            accessibilityHint={`Opens the recommended ${featured.title} roleplay`}
+            label="Start mission"
+            onPress={() => onOpenRoleplay(featured.id)}
+          />
         </View>
       </View>
 
