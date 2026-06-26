@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Simpler First Practice Guidance
+
+Built one focused UX improvement: the first practice path now feels more guided and less busy. Onboarding points users to one 5-minute Job Interview sprint with 2-4 sentences and a clear rewrite, and the Roleplay answer card now shows one "Quick starter" before hiding extra help behind a single More button.
+
+What went well:
+
+- The first-run copy is more concrete: one Job Interview answer first, not a broad set of choices.
+- Onboarding now shows simple detail pills for "5 minutes", "2-4 sentences" and "Clear rewrite".
+- The answer card is calmer because the old separate Plan and Phrases buttons are collapsed into one More control.
+- Mobile preview confirmed the Roleplay card shows "Quick starter", "1 starter + 3-step plan" and the More button without the old Phrases button.
+
+What went wrong:
+
+- A half-finished writing-support change was present on the active branch, which caused the first rerun of typecheck/tests to fail.
+- The current browser already had saved sessions, so the first-run Home hero could not be visually verified there; tests cover the first-run recommendation state.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 41 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants fewer choices at the start, so make the next action obvious before showing the full app.
+- Prefer one visible helper plus optional expansion over multiple helper buttons.
+- If a branch changes unexpectedly, inspect and finish the current safe direction instead of reverting user or automation work.
+
+Next suggested task:
+
+- Add a first-run Home mode that keeps the full roleplay library less prominent until the user saves their first practice.
+
 ## 2026-06-26: Presentation Audience Question Variant
 
 Built one focused improvement: Presentation Practice now includes an "Audience question" practice angle. It trains users to handle a realistic Q&A moment by acknowledging the question, giving one business reason and returning to a clear next step.

@@ -61,8 +61,8 @@ export function RoleplayScreen({
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
   const [isScenarioPickerOpen, setIsScenarioPickerOpen] = useState(false);
   const [isAnglePickerOpen, setIsAnglePickerOpen] = useState(false);
+  const [isWritingSupportOpen, setIsWritingSupportOpen] = useState(false);
   const [isAnswerPlanOpen, setIsAnswerPlanOpen] = useState(false);
-  const [isPhraseHelperOpen, setIsPhraseHelperOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
   const [activePromptVariantId, setActivePromptVariantId] = useState(
     roleplay.promptVariants?.[0]?.id ?? null,
@@ -73,6 +73,8 @@ export function RoleplayScreen({
     roleplayPromptVariants.find((variant) => variant.id === activePromptVariantId) ??
     roleplayPromptVariants[0];
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
+  const quickStartPhrase = activeSuggestedPhrases[0];
+  const extraSuggestedPhrases = activeSuggestedPhrases.slice(1);
   const answerCoach = createAnswerCoachContent({
     persona: roleplay.aiPersona,
     promptVariant: activePromptVariant,
@@ -96,14 +98,15 @@ export function RoleplayScreen({
     variants: roleplayPromptVariants,
   });
   const phraseHelper = createRoleplayPhraseHelperState({
-    isOpen: isPhraseHelperOpen,
+    isOpen: isWritingSupportOpen,
     phraseCount: activeSuggestedPhrases.length,
   });
   const writingSupport = createWritingSupportState({
+    isExpanded: isWritingSupportOpen,
     isAnswerPlanOpen,
-    isPhraseHelperOpen,
     phraseLabel: phraseHelper.summaryLabel,
     planLabel: answerPlan.stepCountLabel,
+    quickStartPhrase,
   });
   const readCard = createRoleplayReadCard({
     activePromptVariant,
@@ -212,7 +215,6 @@ export function RoleplayScreen({
 
   function selectPromptVariant(variantId: string) {
     setIsAnglePickerOpen(false);
-    setIsPhraseHelperOpen(false);
     setActivePromptVariantId(variantId);
     clearAnswer();
   }
@@ -223,12 +225,20 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setShowFeedback(false);
     setSavedSession(null);
+    setIsWritingSupportOpen(false);
     setIsAnswerPlanOpen(false);
-    setIsPhraseHelperOpen(false);
     setFollowUpAnswer('');
     setFollowUpReview(null);
     setAdaptiveFollowUp(null);
     resetFocusTimer();
+  }
+
+  function toggleWritingSupport() {
+    if (isWritingSupportOpen) {
+      setIsAnswerPlanOpen(false);
+    }
+
+    setIsWritingSupportOpen((isOpen) => !isOpen);
   }
 
   function saveSession() {
@@ -472,73 +482,88 @@ export function RoleplayScreen({
               <Text style={styles.writingSupportTitle}>{writingSupport.title}</Text>
               <Text style={styles.writingSupportSummary}>{writingSupport.summaryLabel}</Text>
             </View>
-            <View style={styles.writingSupportActions}>
-              <Pressable
-                accessibilityHint="Shows or hides the answer structure checklist"
-                accessibilityLabel={answerPlan.toggleAccessibilityLabel}
-                accessibilityRole="button"
-                accessibilityState={{ expanded: isAnswerPlanOpen }}
-                onPress={() => setIsAnswerPlanOpen((isOpen) => !isOpen)}
-                style={({ pressed }) => [
-                  styles.writingSupportToggle,
-                  isAnswerPlanOpen && styles.writingSupportToggleActive,
-                  pressed && styles.writingSupportTogglePressed,
+            <Pressable
+              accessibilityHint="Shows or hides extra writing support for this answer"
+              accessibilityLabel={writingSupport.toggleAccessibilityLabel}
+              accessibilityRole="button"
+              accessibilityState={{ expanded: isWritingSupportOpen }}
+              onPress={toggleWritingSupport}
+              style={({ pressed }) => [
+                styles.writingSupportToggle,
+                isWritingSupportOpen && styles.writingSupportToggleActive,
+                pressed && styles.writingSupportTogglePressed,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.writingSupportToggleText,
+                  isWritingSupportOpen && styles.writingSupportToggleTextActive,
                 ]}
               >
-                <Text
-                  style={[
-                    styles.writingSupportToggleText,
-                    isAnswerPlanOpen && styles.writingSupportToggleTextActive,
-                  ]}
-                >
-                  Plan
-                </Text>
-              </Pressable>
-              <Pressable
-                accessibilityHint="Shows or hides optional phrase starters for your answer"
-                accessibilityLabel={phraseHelper.toggleAccessibilityLabel}
-                accessibilityRole="button"
-                accessibilityState={{ expanded: isPhraseHelperOpen }}
-                onPress={() => setIsPhraseHelperOpen((isOpen) => !isOpen)}
-                style={({ pressed }) => [
-                  styles.writingSupportToggle,
-                  styles.writingSupportToggleSecondary,
-                  isPhraseHelperOpen && styles.writingSupportToggleActive,
-                  pressed && styles.writingSupportTogglePressed,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.writingSupportToggleText,
-                    isPhraseHelperOpen && styles.writingSupportToggleTextActive,
-                  ]}
-                >
-                  Phrases
-                </Text>
-              </Pressable>
-            </View>
+                {writingSupport.toggleLabel}
+              </Text>
+            </Pressable>
           </View>
           <Text style={styles.writingSupportHelper}>{writingSupport.helperText}</Text>
-          {isAnswerPlanOpen ? (
-            <View style={styles.answerChecklist}>
-              {answerPlan.steps.map((item, index) => (
-                <View key={item} style={styles.answerChecklistItem}>
-                  <View style={styles.answerChecklistNumber}>
-                    <Text style={styles.answerChecklistNumberText}>{index + 1}</Text>
+          <View style={styles.quickStartBlock}>
+            <Text style={styles.quickStartLabel}>{writingSupport.quickStartLabel}</Text>
+            <Text style={styles.quickStartText}>{writingSupport.quickStartText}</Text>
+          </View>
+          {isWritingSupportOpen ? (
+            <>
+              {extraSuggestedPhrases.length > 0 ? (
+                <View style={styles.inlinePhraseList}>
+                  {extraSuggestedPhrases.map((phrase) => (
+                    <View key={phrase} style={styles.inlinePhraseChip}>
+                      <Text style={styles.inlinePhraseText}>{phrase}</Text>
+                    </View>
+                  ))}
+                </View>
+              ) : null}
+              <View style={styles.nestedPlanBlock}>
+                <View style={styles.nestedPlanHeader}>
+                  <View style={styles.nestedPlanCopy}>
+                    <Text style={styles.nestedPlanTitle}>{answerPlan.title}</Text>
+                    <Text style={styles.nestedPlanSummary}>{answerPlan.stepCountLabel}</Text>
                   </View>
-                  <Text style={styles.answerChecklistText}>{item}</Text>
+                  <Pressable
+                    accessibilityHint="Shows or hides the answer structure checklist"
+                    accessibilityLabel={answerPlan.toggleAccessibilityLabel}
+                    accessibilityRole="button"
+                    accessibilityState={{ expanded: isAnswerPlanOpen }}
+                    onPress={() => setIsAnswerPlanOpen((isOpen) => !isOpen)}
+                    style={({ pressed }) => [
+                      styles.writingSupportToggle,
+                      styles.nestedPlanToggle,
+                      isAnswerPlanOpen && styles.writingSupportToggleActive,
+                      pressed && styles.writingSupportTogglePressed,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.writingSupportToggleText,
+                        isAnswerPlanOpen && styles.writingSupportToggleTextActive,
+                      ]}
+                    >
+                      {answerPlan.toggleLabel}
+                    </Text>
+                  </Pressable>
                 </View>
-              ))}
-            </View>
-          ) : null}
-          {isPhraseHelperOpen ? (
-            <View style={styles.inlinePhraseList}>
-              {activeSuggestedPhrases.map((phrase) => (
-                <View key={phrase} style={styles.inlinePhraseChip}>
-                  <Text style={styles.inlinePhraseText}>{phrase}</Text>
-                </View>
-              ))}
-            </View>
+                <Text style={styles.nestedPlanHelper}>{answerPlan.helperText}</Text>
+                {isAnswerPlanOpen ? (
+                  <View style={styles.answerChecklist}>
+                    {answerPlan.steps.map((item, index) => (
+                      <View key={item} style={styles.answerChecklistItem}>
+                        <View style={styles.answerChecklistNumber}>
+                          <Text style={styles.answerChecklistNumberText}>{index + 1}</Text>
+                        </View>
+                        <Text style={styles.answerChecklistText}>{item}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ) : null}
+              </View>
+            </>
           ) : null}
         </View>
         <View style={styles.answerInputHeader}>
@@ -1179,10 +1204,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginTop: spacing.xs,
   },
-  writingSupportActions: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
   writingSupportToggle: {
     alignItems: 'center',
     backgroundColor: colors.surface,
@@ -1192,9 +1213,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 36,
     paddingHorizontal: spacing.md,
-  },
-  writingSupportToggleSecondary: {
-    marginLeft: spacing.xs,
   },
   writingSupportToggleActive: {
     backgroundColor: colors.primary,
@@ -1212,6 +1230,65 @@ const styles = StyleSheet.create({
     color: colors.surface,
   },
   writingSupportHelper: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
+  },
+  quickStartBlock: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  quickStartLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  quickStartText: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: 19,
+    marginTop: spacing.xs,
+  },
+  nestedPlanBlock: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  nestedPlanHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  nestedPlanCopy: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  nestedPlanTitle: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  nestedPlanSummary: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  nestedPlanToggle: {
+    minWidth: 64,
+  },
+  nestedPlanHelper: {
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '700',

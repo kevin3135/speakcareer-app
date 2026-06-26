@@ -9,29 +9,31 @@ export type GuidedIntroStep = {
 export const guidedIntroSteps: GuidedIntroStep[] = [
   {
     id: 'choose',
-    title: 'Choose one work situation',
-    body: 'Start with a real career moment, such as an interview or meeting.',
+    title: 'Read one interview prompt',
+    body: 'Start with one clear question. No need to browse the whole app first.',
   },
   {
     id: 'answer',
-    title: 'Write one short answer',
-    body: 'Practice spoken English in a small 5-minute sprint.',
+    title: 'Write 2-4 sentences',
+    body: 'Keep it short, spoken and professional.',
   },
   {
     id: 'review',
-    title: 'Review simple feedback',
-    body: 'See what worked, what to improve and what to say next.',
+    title: 'Get one better version',
+    body: 'Review what worked, what to improve and what to say instead.',
   },
 ];
 
 export const guidedStart: {
+  detailLabels: string[];
   title: string;
   subtitle: string;
   ctaLabel: string;
   roleplayId: RoleplayId;
 } = {
-  title: 'Start with Job Interview',
-  subtitle: 'A calm first English sprint for the most common career moment.',
-  ctaLabel: 'Start guided practice',
+  detailLabels: ['5 minutes', '2-4 sentences', 'Clear rewrite'],
+  title: 'First sprint: Job Interview',
+  subtitle: 'Do one simple English interview answer first. The app guides the rest.',
+  ctaLabel: 'Start first sprint',
   roleplayId: 'job-interview',
 };

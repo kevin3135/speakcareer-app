@@ -16,9 +16,9 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
       <View style={styles.brandBlock}>
         <Text style={styles.kicker}>English career practice</Text>
         <Text style={styles.brand}>SpeakCareer</Text>
-        <Text style={styles.positioning}>Practice work English in 3 simple steps.</Text>
+        <Text style={styles.positioning}>Your first 5-minute English practice is ready.</Text>
         <Text style={styles.intro}>
-          Choose a real workplace situation, write one answer and get clear feedback.
+          Start with one Job Interview answer. Read the prompt, write 2-4 sentences and review a clearer version.
         </Text>
       </View>
 
@@ -27,6 +27,13 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
           <Text style={styles.cardKicker}>First guided practice</Text>
           <Text style={styles.cardTitle}>{guidedStart.title}</Text>
           <Text style={styles.body}>{guidedStart.subtitle}</Text>
+          <View style={styles.detailRow}>
+            {guidedStart.detailLabels.map((label) => (
+              <View key={label} style={styles.detailPill}>
+                <Text style={styles.detailPillText}>{label}</Text>
+              </View>
+            ))}
+          </View>
         </Card>
       </View>
 
@@ -115,6 +122,26 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: 23,
     marginTop: spacing.sm,
+  },
+  detailPill: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  detailPillText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  detailRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: spacing.lg,
   },
   firstPracticeCard: {
     marginTop: spacing.xl,

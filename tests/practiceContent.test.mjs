@@ -40,9 +40,12 @@ test('keeps the guided first experience simple and action oriented', async () =>
   );
   assert.equal(guidedIntroSteps.length, 3);
   assert.equal(guidedStart.roleplayId, 'job-interview');
-  assert.equal(guidedStart.ctaLabel, 'Start guided practice');
-  assert.ok(guidedStart.subtitle.includes('first English sprint'));
+  assert.equal(guidedStart.ctaLabel, 'Start first sprint');
+  assert.deepEqual(guidedStart.detailLabels, ['5 minutes', '2-4 sentences', 'Clear rewrite']);
+  assert.ok(guidedStart.title.includes('Job Interview'));
+  assert.ok(guidedStart.subtitle.includes('one simple English interview answer'));
   assert.ok(guidedIntroSteps.every((step) => step.title.length <= 32));
+  assert.ok(guidedIntroSteps.every((step) => step.body.length <= 72));
 });
 
 test('stores onboarding completion in local storage', async () => {
@@ -544,7 +547,7 @@ test('recommends the real next roleplay on Home after a saved session', async ()
   });
 
   assert.equal(firstVisitRecommendation.roleplayId, 'job-interview');
-  assert.equal(firstVisitRecommendation.ctaLabel, 'Start guided practice');
+  assert.equal(firstVisitRecommendation.ctaLabel, 'Start first sprint');
   assert.ok(firstVisitRecommendation.title.includes('Job Interview'));
 
   const continueRecommendation = createHomePracticeRecommendation(
@@ -716,23 +719,32 @@ test('creates a combined writing support helper state', async () => {
   const { createWritingSupportState } = await import('../src/utils/writingSupportHelper.ts');
 
   const closedSupport = createWritingSupportState({
+    isExpanded: false,
     isAnswerPlanOpen: false,
-    isPhraseHelperOpen: false,
     phraseLabel: '3 phrases',
     planLabel: '3-step plan',
+    quickStartPhrase: 'I can give a short update on that.',
   });
 
   assert.equal(closedSupport.title, 'Writing support');
-  assert.equal(closedSupport.summaryLabel, '3-step plan + 3 phrases');
+  assert.equal(closedSupport.summaryLabel, '1 starter + 3-step plan');
+  assert.equal(closedSupport.quickStartLabel, 'Quick starter');
+  assert.equal(closedSupport.quickStartText, 'I can give a short update on that.');
+  assert.equal(closedSupport.toggleLabel, 'More');
+  assert.equal(closedSupport.toggleAccessibilityLabel, 'Show writing support');
   assert.ok(closedSupport.helperText.includes('get stuck'));
 
   const openSupport = createWritingSupportState({
+    isExpanded: true,
     isAnswerPlanOpen: true,
-    isPhraseHelperOpen: false,
     phraseLabel: '3 phrases',
     planLabel: '3-step plan',
+    quickStartPhrase: 'I can give a short update on that.',
   });
 
+  assert.equal(openSupport.summaryLabel, '3 phrases + 3-step plan');
+  assert.equal(openSupport.toggleLabel, 'Hide');
+  assert.equal(openSupport.toggleAccessibilityLabel, 'Hide writing support');
   assert.ok(openSupport.helperText.includes('Use only what helps'));
 });
 
