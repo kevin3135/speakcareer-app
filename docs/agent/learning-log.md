@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Meeting Polite Interruption Angle
+
+Built one focused practice improvement: Meeting Practice now includes a "Polite interruption" angle. The user practices interrupting respectfully, adding one relevant point and handing the conversation back.
+
+What went well:
+
+- Added a common workplace meeting moment without changing navigation or architecture.
+- Reused the existing prompt variant and rule-based feedback structure.
+- Tests verify the title order, phrase guidance, rewrite and angle-specific feedback.
+- The content stays short enough for the existing read-first mobile card.
+
+What went wrong:
+
+- Meeting Practice now has five angles, so the picker may need grouping later if content keeps growing.
+- This is still a one-turn written practice, not a live meeting simulation.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 44 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Meeting content is getting useful; keep each angle focused on one real workplace move.
+- If a scenario grows past five angles, improve selection simplicity before adding many more.
+- A strong next improvement is Presentation Q&A follow-up because it adds practice depth without backend work.
+
+Next suggested task:
+
+- Add one concise Presentation Q&A follow-up prompt variant.
+
 ## 2026-06-27: Workplace Project Follow-Up Small Talk
 
 Built one focused practice improvement: Workplace Small Talk now includes a "Project follow-up" angle. The user practices responding to a colleague's work update, adding one useful detail and asking a friendly professional question back.

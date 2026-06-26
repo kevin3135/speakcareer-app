@@ -203,6 +203,24 @@
           }
         },
         {
+          "id": "polite-interruption",
+          "title": "Polite interruption",
+          "openingLine": "Let me walk through the plan quickly, and then we can decide today.",
+          "userGoal": "Interrupt politely, add one point and return the floor.",
+          "coachingNote": "Use a soft interruption, make one useful point and hand the conversation back to the speaker.",
+          "suggestedPhrases": [
+            "Sorry to interrupt for one quick point.",
+            "Could I add one detail before we decide?",
+            "Please continue, I just wanted to flag..."
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This meeting answer should interrupt politely, add one relevant point and return the floor.",
+            "strengthFocus": "You interrupted with a clear purpose and kept the meeting respectful.",
+            "improvementFocus": "Use a soft opening and hand the conversation back after your point.",
+            "suggestedRewrite": "Sorry to interrupt for one quick point. Could I add one detail before we decide? The customer review is still open, so we may need that input first. Please continue, I just wanted to flag that risk."
+          }
+        },
+        {
           "id": "challenge-decision",
           "title": "Challenge decision",
           "openingLine": "I think we should move forward with the current plan. Do you see any risks?",
