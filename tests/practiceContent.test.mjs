@@ -11,6 +11,7 @@ const progressMock = JSON.parse(
 
 test('includes the required English roleplay scenarios', () => {
   const titles = practiceContent.roleplays.map((roleplay) => roleplay.title);
+  const categories = practiceContent.roleplays.map((roleplay) => roleplay.category);
 
   assert.deepEqual(titles, [
     'Job Interview',
@@ -19,6 +20,7 @@ test('includes the required English roleplay scenarios', () => {
     'Sales Call',
     'Workplace Small Talk',
   ]);
+  assert.deepEqual(categories, ['Interview', 'Meeting', 'Presentation', 'Sales', 'Small Talk']);
 });
 
 test('keeps the first MVP focused on English', () => {
@@ -153,22 +155,38 @@ test('adds saved sessions to local progress and daily mission', async () => {
   assert.ok(twoRoleplayMission.progressPercent < 100);
 });
 
-test('filters roleplays by target level', async () => {
+test('filters roleplays by category and target level', async () => {
   const {
+    ALL_CATEGORIES_FILTER,
     ALL_LEVELS_FILTER,
+    filterRoleplaysByCategory,
     filterRoleplaysByLevel,
+    getRoleplayCategoryFilters,
     getRoleplayLevelFilters,
   } = await import('../src/utils/roleplayFilters.ts');
 
+  assert.deepEqual(getRoleplayCategoryFilters(practiceContent.roleplays), [
+    ALL_CATEGORIES_FILTER,
+    'Interview',
+    'Meeting',
+    'Presentation',
+    'Sales',
+    'Small Talk',
+  ]);
   assert.deepEqual(getRoleplayLevelFilters(practiceContent.roleplays), [
     ALL_LEVELS_FILTER,
     'B1-B2',
     'B2',
     'A2-B1',
   ]);
+  assert.equal(filterRoleplaysByCategory(practiceContent.roleplays, ALL_CATEGORIES_FILTER).length, 5);
+  assert.equal(filterRoleplaysByCategory(practiceContent.roleplays, 'Meeting')[0].title, 'Meeting Practice');
   assert.equal(filterRoleplaysByLevel(practiceContent.roleplays, ALL_LEVELS_FILTER).length, 5);
   assert.equal(filterRoleplaysByLevel(practiceContent.roleplays, 'B2').length, 2);
   assert.equal(filterRoleplaysByLevel(practiceContent.roleplays, 'A2-B1')[0].title, 'Workplace Small Talk');
+
+  const meetingRoleplays = filterRoleplaysByCategory(practiceContent.roleplays, 'Meeting');
+  assert.equal(filterRoleplaysByLevel(meetingRoleplays, 'B1-B2')[0].title, 'Meeting Practice');
 });
 
 test('creates rule-based feedback and XP from typed answers', async () => {

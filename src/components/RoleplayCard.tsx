@@ -27,6 +27,11 @@ export function RoleplayCard({ roleplay, onPress }: RoleplayCardProps) {
           <Text style={styles.minutes}>{roleplay.durationMinutes} min</Text>
         </View>
       </View>
+      <View style={styles.tagRow}>
+        <View style={styles.categoryTag}>
+          <Text style={styles.categoryTagText}>{roleplay.category}</Text>
+        </View>
+      </View>
       <Text style={styles.focus}>{roleplay.focus}</Text>
       <Text style={styles.description}>{roleplay.description}</Text>
       <View style={styles.footer}>
@@ -93,6 +98,22 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '700',
     marginTop: spacing.sm,
+  },
+  tagRow: {
+    flexDirection: 'row',
+    marginTop: spacing.md,
+  },
+  categoryTag: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  categoryTagText: {
+    color: colors.ink,
+    fontSize: 11,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   description: {
     color: colors.textMuted,

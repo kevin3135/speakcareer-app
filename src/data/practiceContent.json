@@ -56,6 +56,7 @@
     {
       "id": "job-interview",
       "title": "Job Interview",
+      "category": "Interview",
       "focus": "Structured answers and confident tone",
       "targetLanguage": "English",
       "targetLevel": "B1-B2",
@@ -98,6 +99,7 @@
     {
       "id": "meeting-practice",
       "title": "Meeting Practice",
+      "category": "Meeting",
       "focus": "Concise updates and clarification",
       "targetLanguage": "English",
       "targetLevel": "B1-B2",
@@ -140,6 +142,7 @@
     {
       "id": "presentation-practice",
       "title": "Presentation Practice",
+      "category": "Presentation",
       "focus": "Opening, transitions and closing",
       "targetLanguage": "English",
       "targetLevel": "B2",
@@ -182,6 +185,7 @@
     {
       "id": "sales-call",
       "title": "Sales Call",
+      "category": "Sales",
       "focus": "Discovery questions and objection handling",
       "targetLanguage": "English",
       "targetLevel": "B2",
@@ -224,6 +228,7 @@
     {
       "id": "workplace-small-talk",
       "title": "Workplace Small Talk",
+      "category": "Small Talk",
       "focus": "Natural openings and polite follow-up",
       "targetLanguage": "English",
       "targetLevel": "A2-B1",

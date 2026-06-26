@@ -33,9 +33,17 @@ export type PracticeModule = {
   drills: string[];
 };
 
+export type RoleplayCategory =
+  | 'Interview'
+  | 'Meeting'
+  | 'Presentation'
+  | 'Sales'
+  | 'Small Talk';
+
 export type RoleplayScenario = {
   id: RoleplayId;
   title: string;
+  category: RoleplayCategory;
   focus: string;
   targetLanguage: 'English';
   targetLevel: string;

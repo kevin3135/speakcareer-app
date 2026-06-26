@@ -8,9 +8,13 @@ import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { RoleplayId } from '../types';
 import {
+  ALL_CATEGORIES_FILTER,
   ALL_LEVELS_FILTER,
+  filterRoleplaysByCategory,
   filterRoleplaysByLevel,
+  getRoleplayCategoryFilters,
   getRoleplayLevelFilters,
+  type RoleplayCategoryFilter,
   type RoleplayLevelFilter,
 } from '../utils/roleplayFilters';
 
@@ -19,9 +23,16 @@ type PracticeScreenProps = {
 };
 
 export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
+  const [selectedCategory, setSelectedCategory] =
+    useState<RoleplayCategoryFilter>(ALL_CATEGORIES_FILTER);
   const [selectedLevel, setSelectedLevel] = useState<RoleplayLevelFilter>(ALL_LEVELS_FILTER);
+  const categoryFilters = getRoleplayCategoryFilters(practiceContent.roleplays);
   const levelFilters = getRoleplayLevelFilters(practiceContent.roleplays);
-  const filteredRoleplays = filterRoleplaysByLevel(practiceContent.roleplays, selectedLevel);
+  const categoryFilteredRoleplays = filterRoleplaysByCategory(
+    practiceContent.roleplays,
+    selectedCategory,
+  );
+  const filteredRoleplays = filterRoleplaysByLevel(categoryFilteredRoleplays, selectedLevel);
 
   return (
     <Screen
@@ -55,6 +66,31 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
         <Text style={styles.sectionTitle}>Roleplays</Text>
         <Text style={styles.sectionMeta}>{filteredRoleplays.length} scenarios</Text>
       </View>
+      <Text style={styles.filterLabel}>Category</Text>
+      <View style={styles.filterRow}>
+        {categoryFilters.map((category) => {
+          const isActive = category === selectedCategory;
+
+          return (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityState={{ selected: isActive }}
+              key={category}
+              onPress={() => setSelectedCategory(category)}
+              style={({ pressed }) => [
+                styles.filterChip,
+                isActive && styles.filterChipActive,
+                pressed && styles.filterChipPressed,
+              ]}
+            >
+              <Text style={[styles.filterText, isActive && styles.filterTextActive]}>
+                {category}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      <Text style={styles.filterLabel}>Level</Text>
       <View style={styles.filterRow}>
         {levelFilters.map((level) => {
           const isActive = level === selectedLevel;
@@ -166,6 +202,14 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '700',
+  },
+  filterLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginBottom: spacing.sm,
+    marginTop: spacing.md,
+    textTransform: 'uppercase',
   },
   filterRow: {
     flexDirection: 'row',

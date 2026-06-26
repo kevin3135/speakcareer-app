@@ -558,3 +558,45 @@ Agent memory for next time:
 Next suggested task:
 
 - Add category tags and category filters to the Practice roleplay library.
+
+## 2026-06-26: Practice Category Filters
+
+Built one focused improvement: the Practice screen now has roleplay category tags and category filters for Interview, Meeting, Presentation, Sales and Small Talk. Users can combine the new category filter with the existing level filter to browse the English roleplay library faster.
+
+What went well:
+
+- The feature improves practice flow without adding any backend, storage or new screens.
+- Category data lives in the local roleplay content, so the filter stays simple to extend as the library grows.
+- The Practice UI now gives clearer browsing cues because each card shows its category tag.
+- Added focused tests for category data and combined category-plus-level filtering.
+
+What went wrong:
+
+- Filter state is still local to the Practice screen and resets when the screen remounts.
+- The roleplay library is still small, so the feature is more about clarity and future scale than solving a large-content problem today.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Practice now supports both level and category browsing with no new architecture.
+- The next useful practice-flow improvement is better scenario density inside categories, such as adding more interview and meeting variants.
+- Keep Expo Go compatibility on SDK 54 unless the learning log explicitly says Kevin's device support changed.
+
+Next suggested task:
+
+- Add a few more local roleplay variants inside the Interview and Meeting categories.
