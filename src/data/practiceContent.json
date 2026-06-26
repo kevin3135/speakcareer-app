@@ -234,21 +234,36 @@
           "title": "Opening agenda",
           "openingLine": "Before you begin, what should we pay attention to during your presentation?",
           "userGoal": "Open with the topic, the three-part structure and the decision you want from the audience.",
-          "coachingNote": "Start with the purpose, preview the structure and tell the audience what decision or takeaway matters."
+          "coachingNote": "Start with the purpose, preview the structure and tell the audience what decision or takeaway matters.",
+          "suggestedPhrases": [
+            "Today I will cover three points...",
+            "The main decision we need is...",
+            "By the end, I want you to understand..."
+          ]
         },
         {
           "id": "smooth-transition",
           "title": "Smooth transition",
           "openingLine": "You finished your first point. How would you move naturally into the second point?",
           "userGoal": "Use a clear transition that connects the previous point to the next business reason.",
-          "coachingNote": "Avoid saying only 'next'. Link the ideas with a phrase like 'This matters because...' or 'That leads to...'."
+          "coachingNote": "Avoid saying only 'next'. Link the ideas with a phrase like 'This matters because...' or 'That leads to...'.",
+          "suggestedPhrases": [
+            "This leads to the next point...",
+            "The reason this matters is...",
+            "Let me connect this to..."
+          ]
         },
         {
           "id": "handle-challenge",
           "title": "Handle challenge",
           "openingLine": "I understand the recommendation, but why should we prioritize this now?",
           "userGoal": "Answer a skeptical question with calm reasoning, evidence and one practical next step.",
-          "coachingNote": "Acknowledge the concern first, then give one reason, one proof point and a small next step."
+          "coachingNote": "Acknowledge the concern first, then give one reason, one proof point and a small next step.",
+          "suggestedPhrases": [
+            "That is a fair concern.",
+            "The reason I still recommend this is...",
+            "A low-risk next step would be..."
+          ]
         }
       ],
       "suggestedPhrases": [

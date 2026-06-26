@@ -135,6 +135,31 @@ test('adds meeting-specific phrases for each meeting practice angle', () => {
   );
 });
 
+test('adds presentation-specific phrases for each presentation practice angle', () => {
+  const presentation = practiceContent.roleplays.find((roleplay) => roleplay.id === 'presentation-practice');
+
+  for (const variant of presentation.promptVariants) {
+    assert.equal(variant.suggestedPhrases.length, 3);
+    assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+  }
+
+  assert.ok(
+    presentation.promptVariants
+      .find((variant) => variant.id === 'opening-agenda')
+      .suggestedPhrases.some((phrase) => phrase.includes('decision')),
+  );
+  assert.ok(
+    presentation.promptVariants
+      .find((variant) => variant.id === 'smooth-transition')
+      .suggestedPhrases.some((phrase) => phrase.includes('next point')),
+  );
+  assert.ok(
+    presentation.promptVariants
+      .find((variant) => variant.id === 'handle-challenge')
+      .suggestedPhrases.some((phrase) => phrase.includes('low-risk')),
+  );
+});
+
 test('reviews typed roleplay answers with simple local rules', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
 
