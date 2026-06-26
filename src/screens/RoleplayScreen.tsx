@@ -9,6 +9,7 @@ import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
+import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
@@ -29,8 +30,8 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [followUpAnswer, setFollowUpAnswer] = useState('');
   const [followUpReview, setFollowUpReview] = useState<AnswerReview | null>(null);
+  const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
 
-  const followUpPrompt = roleplay.followUpPrompts[0];
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
 
@@ -56,9 +57,11 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
     const nextFeedbackResult = createRuleBasedFeedback(roleplay, draftAnswer, review);
+    const nextFollowUp = createAdaptiveFollowUpPrompt(roleplay, draftAnswer, review);
 
     setAnswerReview(review);
     setFeedbackResult(nextFeedbackResult);
+    setAdaptiveFollowUp(nextFollowUp);
     setShowFeedback(review.isReadyForFeedback);
     setFollowUpAnswer('');
     setFollowUpReview(null);
@@ -99,6 +102,7 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     setSavedSessionId(null);
     setFollowUpAnswer('');
     setFollowUpReview(null);
+    setAdaptiveFollowUp(null);
     resetFocusTimer();
   }
 
@@ -254,11 +258,15 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
 
       {showFeedback && feedbackResult ? <FeedbackPanel feedback={feedbackResult.feedback} /> : null}
 
-      {showFeedback && followUpPrompt ? (
+      {showFeedback && adaptiveFollowUp ? (
         <Card>
           <Text style={styles.detailLabel}>Follow-up round</Text>
+          <View style={styles.followUpFocusPill}>
+            <Text style={styles.followUpFocusText}>{adaptiveFollowUp.focusLabel}</Text>
+          </View>
           <Text style={styles.followUpPersona}>{roleplay.aiPersona} asks</Text>
-          <Text style={styles.followUpPrompt}>{followUpPrompt}</Text>
+          <Text style={styles.followUpPrompt}>{adaptiveFollowUp.prompt}</Text>
+          <Text style={styles.followUpCoach}>{adaptiveFollowUp.coachingNote}</Text>
           <TextInput
             accessibilityLabel="Follow-up answer"
             multiline
@@ -454,12 +462,32 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: spacing.sm,
   },
+  followUpFocusPill: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.sm,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  followUpFocusText: {
+    color: colors.ink,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
   followUpPrompt: {
     color: colors.ink,
     fontSize: typography.h3,
     fontWeight: '900',
     lineHeight: 23,
     marginTop: spacing.xs,
+  },
+  followUpCoach: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
   },
   followUpInput: {
     backgroundColor: colors.background,

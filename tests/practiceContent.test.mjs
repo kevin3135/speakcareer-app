@@ -106,6 +106,28 @@ test('creates rule-based feedback and XP from typed answers', async () => {
   assert.ok(strongFeedback.feedback.scores.find((score) => score.label === 'Structure').value >= 80);
 });
 
+test('adapts follow-up prompts to the first answer weakness', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createAdaptiveFollowUpPrompt } = await import('../src/utils/followUpPrompt.ts');
+  const roleplay = practiceContent.roleplays[0];
+
+  const vagueAnswer = 'I worked with the team and helped on different tasks during the project.';
+  const vaguePrompt = createAdaptiveFollowUpPrompt(roleplay, vagueAnswer, summarizePracticeAnswer(vagueAnswer));
+
+  assert.equal(vaguePrompt.focus, 'result');
+  assert.ok(vaguePrompt.prompt.includes('result') || vaguePrompt.prompt.includes('impact'));
+
+  const strongAnswer = [
+    'In my previous role, I led a customer feedback project with my team.',
+    'First, I grouped issues by priority.',
+    'As a result, we reduced repeat complaints by 20%.',
+  ].join(' ');
+  const strongPrompt = createAdaptiveFollowUpPrompt(roleplay, strongAnswer, summarizePracticeAnswer(strongAnswer));
+
+  assert.equal(strongPrompt.focus, 'next-step');
+  assert.equal(strongPrompt.prompt, roleplay.followUpPrompts[0]);
+});
+
 test('creates a professional daily mission from progress data', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const mission = createDailyMission(progressMock.summary);

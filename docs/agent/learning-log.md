@@ -300,3 +300,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make follow-up prompts adapt to the first answer weakness: result, structure, confidence or next step.
+
+## 2026-06-26: Adaptive Follow-Up Prompts
+
+Built one focused improvement: follow-up prompts now adapt to the first answer's weakest area using local rules. The Roleplay screen can ask for more detail, impact, structure, confidence or a realistic next-step follow-up, and it shows a short coaching note explaining why that prompt appears.
+
+What went well:
+
+- The roleplay flow feels more intelligent without connecting real OpenAI or adding backend complexity.
+- The adaptive logic is isolated in `src/utils/followUpPrompt.ts`, making it easy to improve later.
+- Added tests for result-focused follow-ups and strong-answer next-step follow-ups.
+- The UI stays professional with a small focus label and coaching note.
+
+What went wrong:
+
+- The adaptive logic is still simple keyword matching and can miss nuanced answers.
+- Follow-up scoring still uses the general answer-review rules instead of a dedicated second-turn evaluator.
+- Progress and XP are still in-memory only.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep making the conversation loop feel smarter before adding real AI.
+- The next useful improvement is a better lesson-complete state after saving a full session.
+- Do not add persistence, auth, backend or payments yet unless explicitly approved.
+
+Next suggested task:
+
+- Add a polished lesson-complete state after saving a full roleplay session.
