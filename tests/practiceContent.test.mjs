@@ -207,6 +207,10 @@ test('adds small-talk-specific phrases for each workplace small talk angle', () 
   for (const variant of smallTalk.promptVariants) {
     assert.equal(variant.suggestedPhrases.length, 3);
     assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+    assert.ok(variant.feedbackGuidance.summaryHint.length > 20);
+    assert.ok(variant.feedbackGuidance.strengthFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.improvementFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.suggestedRewrite.length > 40);
   }
 
   assert.ok(
@@ -542,6 +546,40 @@ test('adapts sales feedback to the selected objection angle', async () => {
   assert.notEqual(
     priceFeedback.feedback.suggestedRewrite,
     timingFeedback.feedback.suggestedRewrite,
+  );
+});
+
+test('adapts small talk feedback to the selected practice angle', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
+  const roleplay = practiceContent.roleplays.find((item) => item.id === 'workplace-small-talk');
+  const introVariant = roleplay.promptVariants.find((variant) => variant.id === 'quick-introduction');
+  const meetingVariant = roleplay.promptVariants.find((variant) => variant.id === 'move-to-meeting');
+  const answer = [
+    'Nice to meet you, I work with the customer team.',
+    'First, I would ask what project you are working on today.',
+    'Then I would move to the meeting agenda when everyone joins.',
+  ].join(' ');
+  const review = summarizePracticeAnswer(answer);
+  const introFeedback = createRuleBasedFeedback(roleplay, answer, review, introVariant);
+  const meetingFeedback = createRuleBasedFeedback(roleplay, answer, review, meetingVariant);
+
+  assert.ok(introFeedback.feedback.summary.includes('"Quick introduction"'));
+  assert.equal(
+    introFeedback.feedback.suggestedRewrite,
+    introVariant.feedbackGuidance.suggestedRewrite,
+  );
+  assert.ok(
+    introFeedback.feedback.improvements.includes(
+      introVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.ok(
+    meetingFeedback.feedback.strengths.includes(meetingVariant.feedbackGuidance.strengthFocus),
+  );
+  assert.notEqual(
+    introFeedback.feedback.suggestedRewrite,
+    meetingFeedback.feedback.suggestedRewrite,
   );
 });
 

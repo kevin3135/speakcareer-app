@@ -473,7 +473,13 @@
             "Nice to meet you. I work on the product team.",
             "I'm Kevin, and my role is focused on customer growth.",
             "What team or project are you working with?"
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This small talk answer should introduce you warmly, mention your role and ask one light professional question.",
+            "strengthFocus": "You kept the introduction warm, brief and work-appropriate.",
+            "improvementFocus": "Mention your role and ask one easy professional question to keep the conversation moving.",
+            "suggestedRewrite": "Nice to meet you. I'm Kevin, and my role is focused on customer growth. What team or project are you working with?"
+          }
         },
         {
           "id": "friendly-follow-up",
@@ -485,7 +491,13 @@
             "That sounds like a busy week.",
             "What part of the project has been most interesting?",
             "I hope the work is going smoothly."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This small talk answer should respond naturally and ask a friendly work-focused follow-up question.",
+            "strengthFocus": "You showed interest in the other person's work without becoming too personal.",
+            "improvementFocus": "Ask one follow-up question about the project or team to keep the conversation natural.",
+            "suggestedRewrite": "That sounds like a busy week. What part of the project has been most interesting so far? I hope the work is going smoothly."
+          }
         },
         {
           "id": "move-to-meeting",
@@ -497,7 +509,13 @@
             "It was nice chatting before the meeting.",
             "Shall we get started with the agenda?",
             "Maybe we can begin with the first topic."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This small talk answer should close the chat politely and move into the meeting topic.",
+            "strengthFocus": "You transitioned from friendly small talk into the meeting without sounding abrupt.",
+            "improvementFocus": "Use a bridge phrase like 'Shall we get started?' before naming the agenda.",
+            "suggestedRewrite": "It was nice chatting before the meeting. Shall we get started with the agenda? Maybe we can begin with the first topic."
+          }
         }
       ],
       "suggestedPhrases": [

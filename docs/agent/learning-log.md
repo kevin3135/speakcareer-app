@@ -1287,3 +1287,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-aware feedback guidance for Workplace Small Talk.
+
+## 2026-06-26: Workplace Small Talk Variant-Aware Feedback
+
+Built one focused improvement: Workplace Small Talk feedback now adapts to the selected practice angle. Quick introduction, Friendly follow-up and Move to meeting each provide their own feedback emphasis and suggested rewrite.
+
+What went well:
+
+- All five core MVP roleplays now have variant-aware feedback guidance.
+- Small Talk feedback now coaches natural professional warmth without becoming too personal.
+- The change reused the existing `RoleplayPromptVariant.feedbackGuidance` field.
+- Added focused tests for small-talk-specific feedback guidance and variant-aware feedback output.
+
+What went wrong:
+
+- Score logic remains general-purpose and does not yet change per selected practice angle.
+- Feedback guidance is still curated local content, not personalized AI.
+- There is some repetition in tests now that every scenario checks the same feedback guidance shape.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Every core roleplay now has tailored phrases and variant-aware feedback guidance.
+- The next high-value step should improve the practice loop or UI polish, not add more static text.
+- Consider reducing repeated test assertions with a small helper if tests become harder to scan.
+
+Next suggested task:
+
+- Improve the roleplay completion UI so saving a session feels more rewarding and clear.
