@@ -553,6 +553,36 @@ test('filters roleplays by category and target level', async () => {
   assert.equal(filterRoleplaysByLevel(meetingRoleplays, 'B1-B2')[0].title, 'Meeting Practice');
 });
 
+test('creates a calm roleplay scenario picker state', async () => {
+  const {
+    createRoleplayScenarioPickerState,
+    formatRoleplayScenarioMeta,
+  } = await import('../src/utils/roleplayScenarioPicker.ts');
+
+  const closedPicker = createRoleplayScenarioPickerState({
+    activeRoleplayId: 'job-interview',
+    isOpen: false,
+    roleplays: practiceContent.roleplays,
+  });
+
+  assert.equal(closedPicker.currentScenario.title, 'Job Interview');
+  assert.equal(closedPicker.toggleLabel, 'Change');
+  assert.equal(closedPicker.options.length, 4);
+  assert.equal(closedPicker.options.some((option) => option.id === 'job-interview'), false);
+  assert.ok(closedPicker.helperText.includes('one scenario'));
+  assert.equal(formatRoleplayScenarioMeta(closedPicker.currentScenario), 'B1-B2 / 12 min / Interview');
+
+  const openPicker = createRoleplayScenarioPickerState({
+    activeRoleplayId: 'sales-call',
+    isOpen: true,
+    roleplays: practiceContent.roleplays,
+  });
+
+  assert.equal(openPicker.currentScenario.title, 'Sales Call');
+  assert.equal(openPicker.toggleLabel, 'Hide');
+  assert.equal(openPicker.toggleAccessibilityLabel, 'Hide roleplay scenario choices');
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');

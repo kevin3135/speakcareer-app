@@ -18,6 +18,10 @@ import {
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createRoleplayGuideState } from '../utils/roleplayGuide';
+import {
+  createRoleplayScenarioPickerState,
+  formatRoleplayScenarioMeta,
+} from '../utils/roleplayScenarioPicker';
 import { createPracticeSession } from '../utils/sessionHistory';
 
 type RoleplayScreenProps = {
@@ -43,6 +47,7 @@ export function RoleplayScreen({
   const [followUpAnswer, setFollowUpAnswer] = useState('');
   const [followUpReview, setFollowUpReview] = useState<AnswerReview | null>(null);
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
+  const [isScenarioPickerOpen, setIsScenarioPickerOpen] = useState(false);
   const [activePromptVariantId, setActivePromptVariantId] = useState(
     roleplay.promptVariants?.[0]?.id ?? null,
   );
@@ -58,6 +63,11 @@ export function RoleplayScreen({
   const timerControls = createFocusTimerControls({
     isRunning: isTimerRunning,
     secondsRemaining: timerSeconds,
+  });
+  const scenarioPicker = createRoleplayScenarioPickerState({
+    activeRoleplayId: roleplay.id,
+    isOpen: isScenarioPickerOpen,
+    roleplays: practiceContent.roleplays,
   });
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
@@ -135,6 +145,11 @@ export function RoleplayScreen({
   function resetFocusTimer() {
     setIsTimerRunning(false);
     setTimerSeconds(FOCUS_SESSION_SECONDS);
+  }
+
+  function selectRoleplay(roleplayId: RoleplayId) {
+    setIsScenarioPickerOpen(false);
+    onSelectRoleplay(roleplayId);
   }
 
   function selectPromptVariant(variantId: string) {
@@ -260,26 +275,45 @@ export function RoleplayScreen({
         </View>
       </Card>
 
-      <View style={styles.selector}>
-        {practiceContent.roleplays.map((item) => {
-          const isActive = item.id === roleplay.id;
-
-          return (
-            <Pressable
-              accessibilityHint="Switches the active roleplay scenario"
-              accessibilityLabel={`Open ${item.title} roleplay`}
-              accessibilityRole="button"
-              accessibilityState={{ selected: isActive }}
-              key={item.id}
-              onPress={() => onSelectRoleplay(item.id)}
-              style={[styles.selectorItem, isActive && styles.selectorItemActive]}
-            >
-              <Text style={[styles.selectorText, isActive && styles.selectorTextActive]}>
-                {item.title}
-              </Text>
-            </Pressable>
-          );
-        })}
+      <View style={styles.scenarioPanel}>
+        <View style={styles.scenarioSummary}>
+          <View style={styles.scenarioCopyBlock}>
+            <Text style={styles.detailLabel}>{scenarioPicker.eyebrow}</Text>
+            <Text style={styles.scenarioTitle}>{scenarioPicker.currentScenario.title}</Text>
+            <Text style={styles.scenarioMeta}>
+              {formatRoleplayScenarioMeta(scenarioPicker.currentScenario)}
+            </Text>
+          </View>
+          <Pressable
+            accessibilityHint="Shows or hides the other roleplay scenario choices"
+            accessibilityLabel={scenarioPicker.toggleAccessibilityLabel}
+            accessibilityRole="button"
+            accessibilityState={{ expanded: isScenarioPickerOpen }}
+            onPress={() => setIsScenarioPickerOpen((isOpen) => !isOpen)}
+            style={({ pressed }) => [styles.scenarioToggle, pressed && styles.scenarioTogglePressed]}
+          >
+            <Text style={styles.scenarioToggleText}>{scenarioPicker.toggleLabel}</Text>
+          </Pressable>
+        </View>
+        {isScenarioPickerOpen ? (
+          <View style={styles.scenarioChoices}>
+            {scenarioPicker.options.map((item) => (
+              <Pressable
+                accessibilityHint="Switches the active roleplay scenario"
+                accessibilityLabel={`Open ${item.title} roleplay`}
+                accessibilityRole="button"
+                key={item.id}
+                onPress={() => selectRoleplay(item.id)}
+                style={({ pressed }) => [styles.scenarioChoice, pressed && styles.scenarioChoicePressed]}
+              >
+                <Text style={styles.scenarioChoiceTitle}>{item.title}</Text>
+                <Text style={styles.scenarioChoiceMeta}>{formatRoleplayScenarioMeta(item)}</Text>
+              </Pressable>
+            ))}
+          </View>
+        ) : (
+          <Text style={styles.scenarioHelper}>{scenarioPicker.helperText}</Text>
+        )}
       </View>
 
       <Card>
@@ -670,31 +704,79 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
-  selector: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  selectorItem: {
+  scenarioPanel: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: radii.sm,
+    borderRadius: radii.md,
     borderWidth: 1,
-    marginBottom: spacing.sm,
-    marginRight: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    padding: spacing.md,
   },
-  selectorItemActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+  scenarioSummary: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
-  selectorText: {
+  scenarioCopyBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  scenarioTitle: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  scenarioMeta: {
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '800',
+    marginTop: spacing.xs,
   },
-  selectorTextActive: {
-    color: colors.surface,
+  scenarioToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.primarySoft,
+    borderRadius: radii.md,
+    justifyContent: 'center',
+    minHeight: 40,
+    paddingHorizontal: spacing.md,
+  },
+  scenarioTogglePressed: {
+    opacity: 0.82,
+  },
+  scenarioToggleText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  scenarioHelper: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
+  },
+  scenarioChoices: {
+    marginTop: spacing.md,
+  },
+  scenarioChoice: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  scenarioChoicePressed: {
+    opacity: 0.82,
+  },
+  scenarioChoiceTitle: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  scenarioChoiceMeta: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
   },
   focus: {
     color: colors.primaryDark,
