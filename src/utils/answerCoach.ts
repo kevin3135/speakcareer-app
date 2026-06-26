@@ -5,6 +5,8 @@ export type AnswerCoachContent = {
   phraseLabel: string;
   reviewCtaLabel: string;
   title: string;
+  transitionBody: string;
+  transitionTitle: string;
   wordTargetLabel: string;
 };
 
@@ -24,6 +26,8 @@ export function createAnswerCoachContent({ persona }: AnswerCoachInput): AnswerC
     phraseLabel: 'Helpful phrases',
     reviewCtaLabel: 'Review answer',
     title: 'Write your answer',
+    transitionBody: 'Use the prompt above. Keep it short, spoken and specific.',
+    transitionTitle: 'Now write your answer',
     wordTargetLabel: '2-4 sentences',
   };
 }

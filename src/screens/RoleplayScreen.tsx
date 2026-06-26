@@ -421,6 +421,10 @@ export function RoleplayScreen({
             ))}
           </View>
         </View>
+        <View style={styles.answerTransition}>
+          <Text style={styles.answerTransitionTitle}>{answerCoach.transitionTitle}</Text>
+          <Text style={styles.answerTransitionBody}>{answerCoach.transitionBody}</Text>
+        </View>
         <TextInput
           accessibilityLabel="Practice answer"
           accessibilityHint="Write your first spoken-style response to the roleplay prompt"
@@ -1011,6 +1015,24 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: typography.small,
     fontWeight: '800',
+  },
+  answerTransition: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radii.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  answerTransitionTitle: {
+    color: colors.primaryDark,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  answerTransitionBody: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.xs,
   },
   answerInput: {
     backgroundColor: colors.background,
