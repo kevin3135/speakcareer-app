@@ -649,8 +649,9 @@ test('creates one read-first card from roleplay prompt details', async () => {
   const defaultCard = createRoleplayReadCard({ roleplay });
   assert.equal(defaultCard.eyebrow, 'Read this first');
   assert.equal(defaultCard.focus, 'Structured answers and confident tone');
-  assert.equal(defaultCard.openingLabel, 'Hiring Manager says');
+  assert.equal(defaultCard.openingLabel, 'AI prompt');
   assert.equal(defaultCard.openingLine, roleplay.openingLine);
+  assert.equal(defaultCard.openingSpeaker, 'Hiring Manager');
   assert.deepEqual(
     defaultCard.details.map((detail) => detail.label),
     ['Situation', 'Goal'],

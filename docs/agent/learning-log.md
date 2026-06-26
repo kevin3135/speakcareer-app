@@ -2229,3 +2229,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the AI opening line in the read-first card more compact so Step 2 moves closer on mobile.
+
+## 2026-06-26: Compact AI Prompt Line
+
+Built one focused improvement: the Roleplay read-first card now shows the AI opening line as a compact `AI prompt` row with the speaker inline.
+
+What went well:
+
+- The prompt is still visible and clearly tied to the persona, but it no longer uses a large quote-style block.
+- The helper now returns `openingSpeaker`, which keeps the UI compact without losing who is speaking.
+- Mobile preview at 390x844 confirmed Step 2 sits closer to the read-first card.
+- The change stayed in the local mock Roleplay flow and did not touch integrations or secrets.
+
+What went wrong:
+
+- The prompt still wraps across multiple lines for longer opening questions.
+- The answer card still starts with several support elements before the text input.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 34 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the AI prompt visible, but visually lighter than the user's next action.
+- Persona context can live inline instead of as a large label.
+- The next small task should make Step 2 start faster by collapsing the answer checklist or showing only the active writing instruction first.
+
+Next suggested task:
+
+- Make the answer checklist collapsible or more compact so the text input appears sooner.

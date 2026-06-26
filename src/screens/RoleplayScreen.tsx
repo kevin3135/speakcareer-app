@@ -406,7 +406,10 @@ export function RoleplayScreen({
         </View>
         <View style={styles.readOpeningBlock}>
           <Text style={styles.readOpeningLabel}>{readCard.openingLabel}</Text>
-          <Text style={styles.readOpeningLine}>{readCard.openingLine}</Text>
+          <Text style={styles.readOpeningLine}>
+            <Text style={styles.readOpeningSpeaker}>{readCard.openingSpeaker}: </Text>
+            {readCard.openingLine}
+          </Text>
         </View>
       </Card>
 
@@ -916,22 +919,29 @@ const styles = StyleSheet.create({
   },
   readOpeningBlock: {
     backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: radii.md,
-    marginTop: spacing.md,
-    padding: spacing.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   readOpeningLabel: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
-    marginBottom: spacing.xs,
     textTransform: 'uppercase',
   },
   readOpeningLine: {
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 21,
+    marginTop: spacing.xs,
+  },
+  readOpeningSpeaker: {
     color: colors.ink,
-    fontSize: typography.h3,
     fontWeight: '900',
-    lineHeight: 23,
   },
   angleHeader: {
     alignItems: 'center',

@@ -28,7 +28,8 @@ export function createRoleplayReadCard({
     eyebrow: 'Read this first',
     focus: roleplay.focus,
     goal,
-    openingLabel: `${roleplay.aiPersona} says`,
+    openingLabel: 'AI prompt',
     openingLine: activePromptVariant?.openingLine ?? roleplay.openingLine,
+    openingSpeaker: roleplay.aiPersona,
   };
 }
