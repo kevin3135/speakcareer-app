@@ -399,6 +399,58 @@ test('recommends the real next roleplay on Home after a saved session', async ()
   assert.ok(continueRecommendation.subtitle.includes('meeting'));
 });
 
+test('guides roleplay practice through one simple step at a time', async () => {
+  const { createRoleplayGuideState } = await import('../src/utils/roleplayGuide.ts');
+  const firstStep = createRoleplayGuideState({
+    hasDraftAnswer: false,
+    hasReviewedAnswer: false,
+    isReadyForFeedback: false,
+    isSaved: false,
+  });
+
+  assert.equal(firstStep.activeLabel, 'Step 1 of 4');
+  assert.deepEqual(
+    firstStep.steps.map((step) => step.status),
+    ['active', 'locked', 'locked', 'locked'],
+  );
+
+  const reviewStep = createRoleplayGuideState({
+    hasDraftAnswer: true,
+    hasReviewedAnswer: false,
+    isReadyForFeedback: false,
+    isSaved: false,
+  });
+
+  assert.equal(reviewStep.activeLabel, 'Step 3 of 4');
+  assert.deepEqual(
+    reviewStep.steps.map((step) => step.status),
+    ['done', 'done', 'active', 'locked'],
+  );
+
+  const saveStep = createRoleplayGuideState({
+    hasDraftAnswer: true,
+    hasReviewedAnswer: true,
+    isReadyForFeedback: true,
+    isSaved: false,
+  });
+
+  assert.equal(saveStep.activeLabel, 'Step 4 of 4');
+  assert.deepEqual(
+    saveStep.steps.map((step) => step.status),
+    ['done', 'done', 'done', 'active'],
+  );
+
+  const savedStep = createRoleplayGuideState({
+    hasDraftAnswer: true,
+    hasReviewedAnswer: true,
+    isReadyForFeedback: true,
+    isSaved: true,
+  });
+
+  assert.equal(savedStep.activeLabel, 'Session saved');
+  assert.ok(savedStep.steps.every((step) => step.status === 'done'));
+});
+
 test('creates a first-time progress action for new users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();

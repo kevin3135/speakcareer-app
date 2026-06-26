@@ -16,6 +16,7 @@ import {
   createPracticeCompletionSummary,
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
+import { createRoleplayGuideState } from '../utils/roleplayGuide';
 import { createPracticeSession } from '../utils/sessionHistory';
 
 type RoleplayScreenProps = {
@@ -64,6 +65,12 @@ export function RoleplayScreen({
   const nextPracticeRecommendation = completionSummary
     ? createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays)
     : null;
+  const roleplayGuide = createRoleplayGuideState({
+    hasDraftAnswer: draftAnswer.trim().length > 0,
+    hasReviewedAnswer: Boolean(answerReview),
+    isReadyForFeedback: Boolean(answerReview?.isReadyForFeedback && feedbackResult),
+    isSaved: Boolean(savedSessionId),
+  });
 
   useEffect(() => {
     if (!isTimerRunning) {
@@ -174,9 +181,53 @@ export function RoleplayScreen({
 
   return (
     <Screen
-      title="Roleplay"
-      subtitle="Practice a realistic workplace conversation. AI is mocked until backend integration is ready."
+      title={roleplay.title}
+      subtitle="Follow the steps: read, answer, review and save."
     >
+      <Card muted>
+        <View style={styles.guideHeader}>
+          <View style={styles.guideTitleBlock}>
+            <Text style={styles.detailLabel}>Guided practice</Text>
+            <Text style={styles.guideTitle}>{roleplayGuide.activeLabel}</Text>
+          </View>
+          <View style={styles.guidePill}>
+            <Text style={styles.guidePillText}>{formatFocusTime(timerSeconds)}</Text>
+          </View>
+        </View>
+        <Text style={styles.guideInstruction}>{roleplayGuide.activeInstruction}</Text>
+        <View style={styles.guideSteps}>
+          {roleplayGuide.steps.map((step, index) => (
+            <View
+              key={step.id}
+              style={[
+                styles.guideStep,
+                step.status === 'active' && styles.guideStepActive,
+                step.status === 'done' && styles.guideStepDone,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.guideStepNumber,
+                  step.status === 'active' && styles.guideStepNumberActive,
+                  step.status === 'done' && styles.guideStepNumberDone,
+                ]}
+              >
+                {index + 1}
+              </Text>
+              <Text
+                style={[
+                  styles.guideStepText,
+                  step.status === 'active' && styles.guideStepTextActive,
+                  step.status === 'done' && styles.guideStepTextDone,
+                ]}
+              >
+                {step.title}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </Card>
+
       <View style={styles.selector}>
         {practiceContent.roleplays.map((item) => {
           const isActive = item.id === roleplay.id;
@@ -200,7 +251,7 @@ export function RoleplayScreen({
       </View>
 
       <Card>
-        <Text style={styles.title}>{roleplay.title}</Text>
+        <Text style={styles.detailLabel}>Current prompt</Text>
         <Text style={styles.focus}>{roleplay.focus}</Text>
         <Text style={styles.description}>{roleplay.description}</Text>
 
@@ -468,6 +519,87 @@ export function RoleplayScreen({
 }
 
 const styles = StyleSheet.create({
+  guideHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  guideTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  guideTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  guidePill: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  guidePillText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  guideInstruction: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  guideSteps: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: spacing.lg,
+  },
+  guideStep: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    flexDirection: 'row',
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  guideStepActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  guideStepDone: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#BDE7DC',
+  },
+  guideStepNumber: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.xs,
+  },
+  guideStepNumberActive: {
+    color: colors.surface,
+  },
+  guideStepNumberDone: {
+    color: colors.primaryDark,
+  },
+  guideStepText: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  guideStepTextActive: {
+    color: colors.surface,
+  },
+  guideStepTextDone: {
+    color: colors.primaryDark,
+  },
   selector: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -477,6 +609,8 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radii.sm,
     borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
@@ -491,11 +625,6 @@ const styles = StyleSheet.create({
   },
   selectorTextActive: {
     color: colors.surface,
-  },
-  title: {
-    color: colors.ink,
-    fontSize: typography.h1,
-    fontWeight: '900',
   },
   focus: {
     color: colors.primaryDark,
