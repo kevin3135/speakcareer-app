@@ -34,6 +34,8 @@ test('provides mock feedback and mistake-bank data', () => {
     assert.ok(roleplay.feedback.summary.length > 20);
     assert.ok(roleplay.feedback.scores.length >= 4);
     assert.ok(roleplay.feedback.suggestedRewrite.length > 20);
+    assert.ok(roleplay.followUpPrompts.length >= 2);
+    assert.ok(roleplay.followUpPrompts[0].length > 20);
   }
 
   assert.ok(progressMock.mistakeBank.length >= 4);

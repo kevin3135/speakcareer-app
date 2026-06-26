@@ -27,6 +27,12 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
   const [timerSeconds, setTimerSeconds] = useState(FOCUS_SESSION_SECONDS);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [followUpAnswer, setFollowUpAnswer] = useState('');
+  const [followUpReview, setFollowUpReview] = useState<AnswerReview | null>(null);
+
+  const followUpPrompt = roleplay.followUpPrompts[0];
+  const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
+  const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
 
   useEffect(() => {
     if (!isTimerRunning) {
@@ -54,6 +60,21 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     setAnswerReview(review);
     setFeedbackResult(nextFeedbackResult);
     setShowFeedback(review.isReadyForFeedback);
+    setFollowUpAnswer('');
+    setFollowUpReview(null);
+    setSavedSessionId(null);
+  }
+
+  function updateFollowUpAnswer(answer: string) {
+    setFollowUpAnswer(answer);
+    setFollowUpReview(null);
+    setSavedSessionId(null);
+  }
+
+  function reviewFollowUpAnswer() {
+    const review = summarizePracticeAnswer(followUpAnswer);
+
+    setFollowUpReview(review);
     setSavedSessionId(null);
   }
 
@@ -76,6 +97,8 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
     setFeedbackResult(null);
     setShowFeedback(false);
     setSavedSessionId(null);
+    setFollowUpAnswer('');
+    setFollowUpReview(null);
     resetFocusTimer();
   }
 
@@ -84,12 +107,16 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
       return;
     }
 
+    const savedAnswer = followUpReview?.isReadyForFeedback
+      ? `${draftAnswer.trim()} Follow-up: ${followUpAnswer.trim()}`
+      : draftAnswer;
+
     const session = createPracticeSession({
-      answer: draftAnswer,
+      answer: savedAnswer,
       feedback: feedbackResult.feedback,
       review: answerReview,
       roleplay,
-      xpReward: feedbackResult.xpReward,
+      xpReward: totalXpReward,
     });
 
     setSavedSessionId(session.id);
@@ -217,20 +244,57 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
           label="Review answer"
           onPress={reviewAnswer}
         />
-        {answerReview?.isReadyForFeedback && !savedSessionId ? (
-          <View style={styles.secondaryAction}>
-            <AppButton label="Save session" onPress={saveSession} variant="quiet" />
-          </View>
-        ) : null}
         <AppButton label="Clear" onPress={clearAnswer} variant="secondary" />
       </View>
       {savedSessionId ? (
         <Text style={styles.savedNote}>
-          Session saved to Progress. +{feedbackResult?.xpReward ?? 0} XP.
+          Session saved to Progress. +{totalXpReward} XP.
         </Text>
       ) : null}
 
       {showFeedback && feedbackResult ? <FeedbackPanel feedback={feedbackResult.feedback} /> : null}
+
+      {showFeedback && followUpPrompt ? (
+        <Card>
+          <Text style={styles.detailLabel}>Follow-up round</Text>
+          <Text style={styles.followUpPersona}>{roleplay.aiPersona} asks</Text>
+          <Text style={styles.followUpPrompt}>{followUpPrompt}</Text>
+          <TextInput
+            accessibilityLabel="Follow-up answer"
+            multiline
+            onChangeText={updateFollowUpAnswer}
+            placeholder="Write your follow-up response..."
+            placeholderTextColor={colors.textMuted}
+            style={styles.followUpInput}
+            textAlignVertical="top"
+            value={followUpAnswer}
+          />
+          {followUpReview ? (
+            <View style={styles.answerReview}>
+              <View style={styles.reviewHeader}>
+                <Text style={styles.reviewLabel}>{followUpReview.readinessLabel}</Text>
+                <Text style={styles.wordCount}>{followUpReview.wordCount} words</Text>
+              </View>
+              <Text style={styles.reviewNote}>{followUpReview.reviewNote}</Text>
+              {followUpReview.isReadyForFeedback ? (
+                <View style={styles.rewardRow}>
+                  <Text style={styles.rewardValue}>+15 XP</Text>
+                  <Text style={styles.rewardLabel}>Follow-up bonus</Text>
+                </View>
+              ) : null}
+            </View>
+          ) : null}
+          <View style={styles.followUpAction}>
+            <AppButton label="Review follow-up" onPress={reviewFollowUpAnswer} variant="quiet" />
+          </View>
+        </Card>
+      ) : null}
+
+      {answerReview?.isReadyForFeedback && !savedSessionId ? (
+        <View style={styles.finalSaveAction}>
+          <AppButton label={`Save full session (+${totalXpReward} XP)`} onPress={saveSession} />
+        </View>
+      ) : null}
     </Screen>
   );
 }
@@ -384,6 +448,34 @@ const styles = StyleSheet.create({
     minHeight: 132,
     padding: spacing.md,
   },
+  followUpPersona: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.sm,
+  },
+  followUpPrompt: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: 23,
+    marginTop: spacing.xs,
+  },
+  followUpInput: {
+    backgroundColor: colors.background,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+    minHeight: 104,
+    padding: spacing.md,
+  },
+  followUpAction: {
+    marginTop: spacing.md,
+  },
   answerReview: {
     backgroundColor: colors.surfaceMuted,
     borderRadius: radii.md,
@@ -438,7 +530,7 @@ const styles = StyleSheet.create({
   actions: {
     marginTop: spacing.md,
   },
-  secondaryAction: {
+  finalSaveAction: {
     marginTop: spacing.md,
   },
   savedNote: {

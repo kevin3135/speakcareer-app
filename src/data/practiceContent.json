@@ -70,6 +70,10 @@
         "The main challenge was...",
         "As a result, we improved..."
       ],
+      "followUpPrompts": [
+        "That sounds useful. Can you give me one specific example of a result you created?",
+        "What would your previous manager say is your strongest communication skill?"
+      ],
       "feedback": {
         "summary": "Your answer is professional and easy to follow. The next improvement is to add one specific result.",
         "strengths": [
@@ -107,6 +111,10 @@
         "Since our last meeting, I completed...",
         "The main blocker is...",
         "The next step is..."
+      ],
+      "followUpPrompts": [
+        "Thanks. What support do you need from the team before the next meeting?",
+        "If the blocker continues, what backup plan would you suggest?"
       ],
       "feedback": {
         "summary": "The update is clear, but it needs a sharper ask at the end.",
@@ -146,6 +154,10 @@
         "This leads to the second point...",
         "The key takeaway is..."
       ],
+      "followUpPrompts": [
+        "What is the one decision you want the audience to make after your presentation?",
+        "How would you answer if someone challenges your recommendation?"
+      ],
       "feedback": {
         "summary": "The presentation has a strong opening. Add clearer signposting before each main point.",
         "strengths": [
@@ -184,6 +196,10 @@
         "What would the impact be if...",
         "It sounds like the main concern is..."
       ],
+      "followUpPrompts": [
+        "Before we talk about price, what question would you ask to understand the customer's real concern?",
+        "How would you connect the product value back to the customer's own words?"
+      ],
       "feedback": {
         "summary": "You acknowledged the concern well. Ask one more discovery question before defending the product.",
         "strengths": [
@@ -221,6 +237,10 @@
         "Nice to meet you.",
         "How long have you been working on this project?",
         "That sounds interesting."
+      ],
+      "followUpPrompts": [
+        "What friendly follow-up question would you ask to keep the conversation natural?",
+        "How would you politely move from small talk into the meeting topic?"
       ],
       "feedback": {
         "summary": "The conversation sounds friendly and appropriate. Add one follow-up question to keep it moving.",

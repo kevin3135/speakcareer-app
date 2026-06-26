@@ -44,6 +44,7 @@ export type RoleplayScenario = {
   aiPersona: string;
   openingLine: string;
   suggestedPhrases: string[];
+  followUpPrompts: string[];
   feedback: AIFeedback;
 };
 

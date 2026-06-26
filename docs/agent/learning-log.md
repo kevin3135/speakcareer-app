@@ -257,3 +257,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add one follow-up question after feedback so each roleplay becomes a two-turn conversation.
+
+## 2026-06-26: Two-Turn Roleplay Loop
+
+Built one focused improvement: roleplays now continue into a second local conversation turn after the first feedback. Each scenario has follow-up prompts, the Roleplay screen shows a follow-up answer box, users can review that second answer and a ready follow-up earns a small XP bonus before saving the full session.
+
+What went well:
+
+- The practice loop feels more like a real professional conversation without adding real AI.
+- Follow-up prompts are stored in local content, keeping the MVP simple and easy to expand.
+- Saving happens after the follow-up area with the full XP reward, which makes the flow feel more like a finished lesson.
+- Added content tests to ensure every roleplay has follow-up prompts.
+
+What went wrong:
+
+- The follow-up prompt is still static per roleplay; it does not adapt to the user's first answer yet.
+- Follow-up feedback reuses the simple local answer review rather than a separate detailed feedback panel.
+- Progress remains in-memory and still resets after app restart.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The next valuable improvement is to make follow-up prompts adaptive to the first answer's missing skill, still using local rules only.
+- Keep the save point at the end of the practice loop so it feels like completing a lesson.
+- Do not add backend AI until the local conversation flow feels strong.
+
+Next suggested task:
+
+- Make follow-up prompts adapt to the first answer weakness: result, structure, confidence or next step.
