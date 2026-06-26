@@ -600,3 +600,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add a few more local roleplay variants inside the Interview and Meeting categories.
+
+## 2026-06-26: Interview and Meeting Prompt Variants
+
+Built one focused improvement: the Roleplay screen now supports repeatable practice angles for Job Interview and Meeting Practice. Interview has variants for "Tell me about yourself", "Why this role?" and "Difficult situation"; Meeting has variants for status updates, deadline clarification and politely challenging a decision. Selecting a variant changes the user's goal, coaching note and opening line.
+
+What went well:
+
+- The app now feels more reusable and less static without adding any backend, real AI or complex lesson system.
+- The new prompt variants are local content, so they are easy to expand per category.
+- The Roleplay UI keeps the interaction simple with professional chips and a coaching note.
+- Added a focused test to protect the new interview and meeting variants.
+
+What went wrong:
+
+- Only Interview and Meeting have prompt variants for now.
+- Switching a variant clears the current draft answer, which is safe but could feel abrupt if a user taps accidentally.
+- The variants do not yet change suggested phrases or mock feedback wording per variant.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Prompt variants are a lightweight way to make each roleplay feel more like a mini-course.
+- The next useful content step is adding variants for Presentation Q&A, Sales objections or Small Talk follow-ups.
+- Keep the variant system local and simple until the app needs real lesson sequencing.
+
+Next suggested task:
+
+- Add presentation Q&A prompt variants so Presentation Practice also feels repeatable.

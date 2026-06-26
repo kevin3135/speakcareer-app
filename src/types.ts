@@ -40,6 +40,14 @@ export type RoleplayCategory =
   | 'Sales'
   | 'Small Talk';
 
+export type RoleplayPromptVariant = {
+  id: string;
+  title: string;
+  openingLine: string;
+  userGoal: string;
+  coachingNote: string;
+};
+
 export type RoleplayScenario = {
   id: RoleplayId;
   title: string;
@@ -53,6 +61,7 @@ export type RoleplayScenario = {
   userGoal: string;
   aiPersona: string;
   openingLine: string;
+  promptVariants?: RoleplayPromptVariant[];
   suggestedPhrases: string[];
   followUpPrompts: string[];
   feedback: AIFeedback;

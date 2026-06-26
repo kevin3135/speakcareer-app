@@ -44,6 +44,28 @@ test('provides mock feedback and mistake-bank data', () => {
   assert.ok(progressMock.summary.nextFocus.length > 10);
 });
 
+test('adds repeatable prompt variants for interview and meeting practice', () => {
+  const interview = practiceContent.roleplays.find((roleplay) => roleplay.id === 'job-interview');
+  const meeting = practiceContent.roleplays.find((roleplay) => roleplay.id === 'meeting-practice');
+
+  assert.ok(interview.promptVariants.length >= 3);
+  assert.ok(meeting.promptVariants.length >= 3);
+  assert.deepEqual(
+    interview.promptVariants.map((variant) => variant.title),
+    ['Tell me about yourself', 'Why this role?', 'Difficult situation'],
+  );
+  assert.deepEqual(
+    meeting.promptVariants.map((variant) => variant.title),
+    ['Status update', 'Clarify deadline', 'Challenge decision'],
+  );
+
+  for (const variant of [...interview.promptVariants, ...meeting.promptVariants]) {
+    assert.ok(variant.openingLine.length > 20);
+    assert.ok(variant.userGoal.length > 20);
+    assert.ok(variant.coachingNote.length > 20);
+  }
+});
+
 test('reviews typed roleplay answers with simple local rules', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
 

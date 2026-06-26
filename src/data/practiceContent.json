@@ -66,6 +66,29 @@
       "userGoal": "Give focused answers using situation, action and result.",
       "aiPersona": "Hiring Manager",
       "openingLine": "Thanks for joining today. Could you start by telling me a little about yourself?",
+      "promptVariants": [
+        {
+          "id": "tell-me-about-yourself",
+          "title": "Tell me about yourself",
+          "openingLine": "Thanks for joining today. Could you start by telling me a little about yourself?",
+          "userGoal": "Give a concise career story with your role, strongest proof point and reason for applying.",
+          "coachingNote": "Use present, past and future: who you are now, what experience proves it and why this role is next."
+        },
+        {
+          "id": "role-motivation",
+          "title": "Why this role?",
+          "openingLine": "What interests you most about this role and our company?",
+          "userGoal": "Connect your motivation to the role, the company and your next professional step.",
+          "coachingNote": "Avoid a generic answer. Mention one role requirement and one reason it fits your experience."
+        },
+        {
+          "id": "difficult-situation",
+          "title": "Difficult situation",
+          "openingLine": "Can you describe a difficult work situation and how you handled it?",
+          "userGoal": "Use situation, action and result with one clear lesson learned.",
+          "coachingNote": "Keep the problem short, spend most of the answer on what you did and end with the result."
+        }
+      ],
       "suggestedPhrases": [
         "In my previous role, I was responsible for...",
         "The main challenge was...",
@@ -109,6 +132,29 @@
       "userGoal": "Explain what is done, what is blocked and what support you need.",
       "aiPersona": "Project Lead",
       "openingLine": "Let's start with your update. What changed since our last meeting?",
+      "promptVariants": [
+        {
+          "id": "status-update",
+          "title": "Status update",
+          "openingLine": "Let's start with your update. What changed since our last meeting?",
+          "userGoal": "Explain what is done, what is blocked and what support you need.",
+          "coachingNote": "Use three short parts: progress, blocker and next step."
+        },
+        {
+          "id": "clarify-deadline",
+          "title": "Clarify deadline",
+          "openingLine": "The timeline looks tight. What deadline or dependency do you need clarified?",
+          "userGoal": "Ask for one specific clarification without sounding defensive.",
+          "coachingNote": "Name the dependency, explain the risk briefly and ask for a clear owner or date."
+        },
+        {
+          "id": "challenge-decision",
+          "title": "Challenge decision",
+          "openingLine": "I think we should move forward with the current plan. Do you see any risks?",
+          "userGoal": "Politely challenge the plan with one risk and one constructive alternative.",
+          "coachingNote": "Start by acknowledging the plan, then add your concern and suggest a practical next step."
+        }
+      ],
       "suggestedPhrases": [
         "Since our last meeting, I completed...",
         "The main blocker is...",

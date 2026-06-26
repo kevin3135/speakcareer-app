@@ -31,7 +31,16 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   const [followUpAnswer, setFollowUpAnswer] = useState('');
   const [followUpReview, setFollowUpReview] = useState<AnswerReview | null>(null);
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
+  const [activePromptVariantId, setActivePromptVariantId] = useState(
+    roleplay.promptVariants?.[0]?.id ?? null,
+  );
 
+  const roleplayPromptVariants = roleplay.promptVariants ?? [];
+  const activePromptVariant =
+    roleplayPromptVariants.find((variant) => variant.id === activePromptVariantId) ??
+    roleplayPromptVariants[0];
+  const activeUserGoal = activePromptVariant?.userGoal ?? roleplay.userGoal;
+  const activeOpeningLine = activePromptVariant?.openingLine ?? roleplay.openingLine;
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
 
@@ -92,6 +101,11 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
   function resetFocusTimer() {
     setIsTimerRunning(false);
     setTimerSeconds(FOCUS_SESSION_SECONDS);
+  }
+
+  function selectPromptVariant(variantId: string) {
+    setActivePromptVariantId(variantId);
+    clearAnswer();
   }
 
   function clearAnswer() {
@@ -163,13 +177,41 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
         </View>
         <View style={styles.detailBlock}>
           <Text style={styles.detailLabel}>Your goal</Text>
-          <Text style={styles.detailText}>{roleplay.userGoal}</Text>
+          <Text style={styles.detailText}>{activeUserGoal}</Text>
         </View>
       </Card>
 
+      {roleplayPromptVariants.length > 0 ? (
+        <Card>
+          <Text style={styles.detailLabel}>Practice angle</Text>
+          <View style={styles.variantList}>
+            {roleplayPromptVariants.map((variant) => {
+              const isActive = variant.id === activePromptVariant?.id;
+
+              return (
+                <Pressable
+                  accessibilityLabel={`Practice ${variant.title}`}
+                  accessibilityRole="button"
+                  key={variant.id}
+                  onPress={() => selectPromptVariant(variant.id)}
+                  style={[styles.variantChip, isActive && styles.variantChipActive]}
+                >
+                  <Text style={[styles.variantChipText, isActive && styles.variantChipTextActive]}>
+                    {variant.title}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+          {activePromptVariant ? (
+            <Text style={styles.variantNote}>{activePromptVariant.coachingNote}</Text>
+          ) : null}
+        </Card>
+      ) : null}
+
       <Card muted>
         <Text style={styles.detailLabel}>{roleplay.aiPersona} opens with</Text>
-        <Text style={styles.openingLine}>{roleplay.openingLine}</Text>
+        <Text style={styles.openingLine}>{activeOpeningLine}</Text>
       </Card>
 
       <Card>
@@ -369,6 +411,40 @@ const styles = StyleSheet.create({
     fontSize: typography.h2,
     fontWeight: '700',
     lineHeight: 28,
+  },
+  variantList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: spacing.xs,
+  },
+  variantChip: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radii.sm,
+    borderWidth: 1,
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  variantChipActive: {
+    backgroundColor: colors.primaryDark,
+    borderColor: colors.primaryDark,
+  },
+  variantChipText: {
+    color: colors.text,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  variantChipTextActive: {
+    color: colors.surface,
+  },
+  variantNote: {
+    color: colors.textMuted,
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.sm,
   },
   timerHeader: {
     alignItems: 'center',
