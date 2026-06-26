@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Meeting Polite Disagreement Variant
+
+Built one focused improvement: Meeting Practice now includes a new "Polite disagreement" practice angle. It trains users to disagree respectfully, name one risk and ask for a focused clarification before suggesting a safer next step.
+
+What went well:
+
+- Added one practical workplace conversation pattern without expanding into a full course.
+- The new variant includes opening line, goal, coaching note, three suggested phrases and tailored feedback guidance.
+- Tests now verify the new angle appears in Meeting Practice and that rule-based feedback uses its guidance.
+- Mobile preview confirmed the angle appears in the picker and updates the prompt after selection.
+
+What went wrong:
+
+- The answer placeholder is still generic and does not adapt to the selected meeting angle.
+- Meeting Practice now has four angles while other roleplays mostly have three; that is fine for roadmap priority but should stay intentional.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 41 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- More content should be added as small, realistic workplace moments with specific coaching and feedback.
+- Prompt variants should stay easy to scan in the angle picker: title plus one coaching sentence.
+- A useful next UX step is making the answer placeholder adapt to the selected practice angle.
+
+Next suggested task:
+
+- Make the Roleplay answer placeholder adapt to the selected practice angle, starting with Meeting Practice.
+
 ## 2026-06-26: Mark Mistake Drill Practiced
 
 Built one focused improvement: the Progress mistake drill now has a local "Mark practiced" mini-win. After the user says the correction out loud, they can mark it practiced and the card changes to a short "Practice win" state.

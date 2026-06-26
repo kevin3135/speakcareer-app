@@ -142,7 +142,7 @@ test('adds repeatable prompt variants for core roleplay categories', () => {
   );
   assert.deepEqual(
     meeting.promptVariants.map((variant) => variant.title),
-    ['Status update', 'Clarify deadline', 'Challenge decision'],
+    ['Status update', 'Clarify deadline', 'Challenge decision', 'Polite disagreement'],
   );
   assert.deepEqual(
     presentation.promptVariants.map((variant) => variant.title),
@@ -220,6 +220,16 @@ test('adds meeting-specific phrases for each meeting practice angle', () => {
     meeting.promptVariants
       .find((variant) => variant.id === 'challenge-decision')
       .suggestedPhrases.some((phrase) => phrase.includes('risk')),
+  );
+  assert.ok(
+    meeting.promptVariants
+      .find((variant) => variant.id === 'polite-disagreement')
+      .suggestedPhrases.some((phrase) => phrase.includes('concerned')),
+  );
+  assert.ok(
+    meeting.promptVariants
+      .find((variant) => variant.id === 'polite-disagreement')
+      .feedbackGuidance.suggestedRewrite.includes('Could we clarify'),
   );
 });
 
@@ -1049,6 +1059,7 @@ test('adapts meeting feedback to the selected practice angle', async () => {
   const roleplay = practiceContent.roleplays.find((item) => item.id === 'meeting-practice');
   const statusVariant = roleplay.promptVariants.find((variant) => variant.id === 'status-update');
   const challengeVariant = roleplay.promptVariants.find((variant) => variant.id === 'challenge-decision');
+  const disagreementVariant = roleplay.promptVariants.find((variant) => variant.id === 'polite-disagreement');
   const answer = [
     'Since our last meeting, I completed the draft with the team.',
     'First, I clarified the blocker and deadline with the project owner.',
@@ -1057,6 +1068,7 @@ test('adapts meeting feedback to the selected practice angle', async () => {
   const review = summarizePracticeAnswer(answer);
   const statusFeedback = createRuleBasedFeedback(roleplay, answer, review, statusVariant);
   const challengeFeedback = createRuleBasedFeedback(roleplay, answer, review, challengeVariant);
+  const disagreementFeedback = createRuleBasedFeedback(roleplay, answer, review, disagreementVariant);
 
   assert.ok(statusFeedback.feedback.summary.includes('"Status update"'));
   assert.equal(
@@ -1073,6 +1085,16 @@ test('adapts meeting feedback to the selected practice angle', async () => {
   );
   assert.notEqual(
     statusFeedback.feedback.suggestedRewrite,
+    challengeFeedback.feedback.suggestedRewrite,
+  );
+  assert.ok(disagreementFeedback.feedback.summary.includes('"Polite disagreement"'));
+  assert.ok(
+    disagreementFeedback.feedback.improvements.includes(
+      disagreementVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.notEqual(
+    disagreementFeedback.feedback.suggestedRewrite,
     challengeFeedback.feedback.suggestedRewrite,
   );
 });

@@ -219,6 +219,24 @@
             "improvementFocus": "Pair the risk with one practical alternative or next step.",
             "suggestedRewrite": "I understand the reason for that decision. One risk I see is that we may not have enough time for customer validation. Could we also consider a shorter pilot before committing to the full plan?"
           }
+        },
+        {
+          "id": "polite-disagreement",
+          "title": "Polite disagreement",
+          "openingLine": "I think we should skip the customer review and launch this week. Does anyone disagree?",
+          "userGoal": "Disagree politely, explain one risk and ask for a short clarification.",
+          "coachingNote": "Acknowledge the goal, use one softener and ask a focused question before suggesting a safer next step.",
+          "suggestedPhrases": [
+            "I see the goal, but I am concerned about...",
+            "Could we clarify whether...",
+            "A safer next step might be..."
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This meeting answer should disagree respectfully while asking for one useful clarification.",
+            "strengthFocus": "You disagreed without sounding confrontational, which keeps the meeting productive.",
+            "improvementFocus": "Make the clarification question specific so the team knows what decision is needed.",
+            "suggestedRewrite": "I see the goal of launching quickly, but I am concerned that skipping the customer review could create avoidable issues. Could we clarify whether the review can be shortened instead of removed? A safer next step might be a same-day review with only the highest-risk points."
+          }
         }
       ],
       "suggestedPhrases": [
