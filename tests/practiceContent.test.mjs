@@ -73,3 +73,15 @@ test('creates local practice sessions from reviewed answers', async () => {
   assert.ok(session.answerPreview.includes('customer feedback'));
   assert.equal(session.completedAt, '2026-06-26T10:00:00.000Z');
 });
+
+test('creates a professional daily mission from progress data', async () => {
+  const { createDailyMission } = await import('../src/utils/gamification.ts');
+  const mission = createDailyMission(progressMock.summary);
+
+  assert.equal(mission.title, 'Complete one career roleplay');
+  assert.equal(mission.xpGoal, 60);
+  assert.ok(mission.level >= 1);
+  assert.ok(mission.xpTotal > 0);
+  assert.ok(mission.progressPercent >= 0);
+  assert.ok(mission.progressPercent <= 100);
+});

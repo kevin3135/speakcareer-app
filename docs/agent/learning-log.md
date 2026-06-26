@@ -124,3 +124,45 @@ Agent memory for next time:
 Next suggested task:
 
 - Connect the typed answer to more specific rule-based mock feedback.
+
+## 2026-06-26: Gamified Daily Mission Home
+
+Built one focused improvement: the Home screen now feels more like a businesslike practice game. It shows a daily mission, level, streak, total career XP, reward, daily XP progress and a three-step career path. This moves SpeakCareer toward a more engaging Duolingo-style habit loop without becoming childish.
+
+What went well:
+
+- The app now has a clearer first action: Start mission.
+- The gamification is professional: level, XP, streak and mission progress support career practice instead of feeling like a toy.
+- The gamification logic is isolated in `src/utils/gamification.ts`.
+- Added a focused test for creating the daily mission from mock progress data.
+
+What went wrong:
+
+- The design still uses simple local mock numbers; there is no real streak or persistent XP yet.
+- Session history is still in-memory only, so progress resets when the app restarts.
+- Tests still print a harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm run typecheck` passed.
+- `npm run test` passed.
+- `npm run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Continue making the app more habit-forming, but keep the tone adult and career-focused.
+- Keep Expo SDK 54 compatibility until Kevin's Expo Go support changes.
+- Avoid adding persistence packages until the local practice loop is clearly useful.
+
+Next suggested task:
+
+- Connect typed answers to more specific rule-based mock feedback and XP rewards.
