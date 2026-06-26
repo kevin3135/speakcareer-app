@@ -903,12 +903,18 @@ test('formats the five-minute focus timer', async () => {
 
   const idleControls = createFocusTimerControls({ isRunning: false, secondsRemaining: 300 });
   assert.equal(idleControls.title, 'Optional timer');
+  assert.equal(idleControls.caption, '5-minute sprint');
   assert.equal(idleControls.primaryLabel, 'Start');
   assert.ok(idleControls.description.includes('5-minute'));
+  assert.equal(idleControls.showReset, false);
 
   const runningControls = createFocusTimerControls({ isRunning: true, secondsRemaining: 240 });
+  assert.equal(runningControls.caption, 'Sprint running');
   assert.equal(runningControls.primaryLabel, 'Pause');
+  assert.equal(runningControls.showReset, true);
 
   const finishedControls = createFocusTimerControls({ isRunning: false, secondsRemaining: 0 });
+  assert.equal(finishedControls.caption, 'Sprint complete');
   assert.equal(finishedControls.primaryLabel, 'Restart');
+  assert.equal(finishedControls.showReset, true);
 });

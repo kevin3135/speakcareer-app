@@ -265,23 +265,25 @@ export function RoleplayScreen({
           ))}
         </View>
         <View style={styles.guideTimerPanel}>
-          <View style={styles.guideTimerHeader}>
+          <View style={styles.guideTimerRow}>
             <View style={styles.guideTimerCopyBlock}>
               <Text style={styles.guideTimerTitle}>{timerControls.title}</Text>
-              <Text style={styles.guideTimerCopy}>{timerControls.description}</Text>
+              <Text style={styles.guideTimerCopy}>{timerControls.caption}</Text>
             </View>
-            <Text style={styles.guideTimerValue}>{formatFocusTime(timerSeconds)}</Text>
+            <View style={styles.guideTimerActions}>
+              <Text style={styles.guideTimerValue}>{formatFocusTime(timerSeconds)}</Text>
+              <Pressable
+                accessibilityHint="Starts, pauses or restarts the five-minute focus timer"
+                accessibilityLabel={timerControls.primaryAccessibilityLabel}
+                accessibilityRole="button"
+                onPress={toggleFocusTimer}
+                style={({ pressed }) => [styles.guideTimerButton, pressed && styles.guideTimerButtonPressed]}
+              >
+                <Text style={styles.guideTimerButtonText}>{timerControls.primaryLabel}</Text>
+              </Pressable>
+            </View>
           </View>
-          <View style={styles.guideTimerActions}>
-            <Pressable
-              accessibilityHint="Starts, pauses or restarts the five-minute focus timer"
-              accessibilityLabel={timerControls.primaryAccessibilityLabel}
-              accessibilityRole="button"
-              onPress={toggleFocusTimer}
-              style={({ pressed }) => [styles.guideTimerButton, pressed && styles.guideTimerButtonPressed]}
-            >
-              <Text style={styles.guideTimerButtonText}>{timerControls.primaryLabel}</Text>
-            </Pressable>
+          {timerControls.showReset ? (
             <Pressable
               accessibilityHint="Resets the focus timer back to five minutes"
               accessibilityLabel={timerControls.resetAccessibilityLabel}
@@ -291,7 +293,7 @@ export function RoleplayScreen({
             >
               <Text style={styles.guideTimerResetText}>{timerControls.resetLabel}</Text>
             </Pressable>
-          </View>
+          ) : null}
         </View>
       </Card>
 
@@ -708,12 +710,13 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     marginTop: spacing.md,
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
-  guideTimerHeader: {
+  guideTimerRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    marginBottom: spacing.md,
+    justifyContent: 'space-between',
   },
   guideTimerCopyBlock: {
     flex: 1,
@@ -727,35 +730,39 @@ const styles = StyleSheet.create({
   guideTimerCopy: {
     color: colors.textMuted,
     fontSize: typography.small,
+    fontWeight: '800',
     lineHeight: 18,
-    marginTop: spacing.xs,
   },
   guideTimerValue: {
-    color: colors.textMuted,
-    fontSize: typography.small,
+    color: colors.ink,
+    fontSize: typography.body,
     fontWeight: '900',
+    minWidth: 42,
+    textAlign: 'right',
   },
   guideTimerActions: {
+    alignItems: 'center',
     flexDirection: 'row',
   },
   guideTimerButton: {
     alignItems: 'center',
     backgroundColor: colors.primary,
     borderRadius: radii.md,
-    flex: 1,
     justifyContent: 'center',
-    minHeight: 40,
+    marginLeft: spacing.sm,
+    minHeight: 36,
+    minWidth: 76,
+    paddingHorizontal: spacing.md,
   },
   guideTimerResetButton: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    flex: 1,
+    alignSelf: 'flex-end',
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radii.sm,
     justifyContent: 'center',
-    marginLeft: spacing.sm,
-    minHeight: 40,
+    marginTop: spacing.sm,
+    minHeight: 28,
+    paddingHorizontal: spacing.sm,
   },
   guideTimerButtonPressed: {
     opacity: 0.82,
@@ -766,7 +773,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   guideTimerResetText: {
-    color: colors.text,
+    color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '900',
   },

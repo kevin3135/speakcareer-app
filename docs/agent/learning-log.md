@@ -2100,3 +2100,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Collapse the optional timer into a compact row or move it below the answer action so Step 1 starts faster.
+
+## 2026-06-26: Compact Focus Timer
+
+Built one focused improvement: the Roleplay optional timer is now a compact row instead of a large panel, with Reset hidden until the timer has started.
+
+What went well:
+
+- The timer still supports Start, Pause, Restart and Reset, but the idle state takes much less vertical space.
+- The timer helper now exposes `caption` and `showReset`, so the UI rule is easy to test.
+- Mobile preview at 390x844 confirmed the compact timer fits cleanly and the running state shows Pause plus Reset.
+- The first roleplay setup now reaches scenario, angle and the read-first card faster on mobile.
+
+What went wrong:
+
+- The running timer still adds a small Reset row, so there is a tiny layout height change after starting it.
+- The guide card is better, but the overall Roleplay page is still long for a first-time user.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 33 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional tools should be visibly available without pushing the core practice task down.
+- Hide secondary controls until the user has started using that feature.
+- The next small task should shorten the read-first card or make context/goal easier to scan.
+
+Next suggested task:
+
+- Make the read-first card more scannable by turning context and goal into shorter labeled bullets.

@@ -1,11 +1,13 @@
 export const FOCUS_SESSION_SECONDS = 5 * 60;
 
 export type FocusTimerControls = {
+  caption: string;
   description: string;
   primaryAccessibilityLabel: string;
   primaryLabel: string;
   resetAccessibilityLabel: string;
   resetLabel: string;
+  showReset: boolean;
   title: string;
 };
 
@@ -27,8 +29,10 @@ export function createFocusTimerControls({
   secondsRemaining,
 }: FocusTimerControlsInput): FocusTimerControls {
   const isFinished = secondsRemaining <= 0;
+  const hasStarted = isRunning || secondsRemaining < FOCUS_SESSION_SECONDS;
 
   return {
+    caption: isRunning ? 'Sprint running' : isFinished ? 'Sprint complete' : '5-minute sprint',
     description: 'Use this only when you want a focused 5-minute sprint.',
     primaryAccessibilityLabel: isRunning
       ? 'Pause focus timer'
@@ -38,6 +42,7 @@ export function createFocusTimerControls({
     primaryLabel: isRunning ? 'Pause' : isFinished ? 'Restart' : 'Start',
     resetAccessibilityLabel: 'Reset focus timer',
     resetLabel: 'Reset',
+    showReset: hasStarted,
     title: 'Optional timer',
   };
 }
