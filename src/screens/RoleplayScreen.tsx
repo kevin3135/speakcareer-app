@@ -27,6 +27,7 @@ import {
   formatRoleplayScenarioMeta,
 } from '../utils/roleplayScenarioPicker';
 import { createPracticeSession } from '../utils/sessionHistory';
+import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
   roleplay: RoleplayScenario;
@@ -87,6 +88,12 @@ export function RoleplayScreen({
   const phraseHelper = createRoleplayPhraseHelperState({
     isOpen: isPhraseHelperOpen,
     phraseCount: activeSuggestedPhrases.length,
+  });
+  const writingSupport = createWritingSupportState({
+    isAnswerPlanOpen,
+    isPhraseHelperOpen,
+    phraseLabel: phraseHelper.summaryLabel,
+    planLabel: answerPlan.stepCountLabel,
   });
   const readCard = createRoleplayReadCard({
     activePromptVariant,
@@ -431,24 +438,59 @@ export function RoleplayScreen({
           </View>
         </View>
         <Text style={styles.answerInstruction}>{answerCoach.instruction}</Text>
-        <View style={styles.answerPlanBlock}>
-          <View style={styles.answerPlanHeader}>
-            <View style={styles.answerPlanCopy}>
-              <Text style={styles.answerPlanTitle}>{answerPlan.title}</Text>
-              <Text style={styles.answerPlanSummary}>{answerPlan.stepCountLabel}</Text>
+        <View style={styles.writingSupportBlock}>
+          <View style={styles.writingSupportHeader}>
+            <View style={styles.writingSupportCopy}>
+              <Text style={styles.writingSupportTitle}>{writingSupport.title}</Text>
+              <Text style={styles.writingSupportSummary}>{writingSupport.summaryLabel}</Text>
             </View>
-            <Pressable
-              accessibilityHint="Shows or hides the answer structure checklist"
-              accessibilityLabel={answerPlan.toggleAccessibilityLabel}
-              accessibilityRole="button"
-              accessibilityState={{ expanded: isAnswerPlanOpen }}
-              onPress={() => setIsAnswerPlanOpen((isOpen) => !isOpen)}
-              style={({ pressed }) => [styles.answerPlanToggle, pressed && styles.answerPlanTogglePressed]}
-            >
-              <Text style={styles.answerPlanToggleText}>{answerPlan.toggleLabel}</Text>
-            </Pressable>
+            <View style={styles.writingSupportActions}>
+              <Pressable
+                accessibilityHint="Shows or hides the answer structure checklist"
+                accessibilityLabel={answerPlan.toggleAccessibilityLabel}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: isAnswerPlanOpen }}
+                onPress={() => setIsAnswerPlanOpen((isOpen) => !isOpen)}
+                style={({ pressed }) => [
+                  styles.writingSupportToggle,
+                  isAnswerPlanOpen && styles.writingSupportToggleActive,
+                  pressed && styles.writingSupportTogglePressed,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.writingSupportToggleText,
+                    isAnswerPlanOpen && styles.writingSupportToggleTextActive,
+                  ]}
+                >
+                  Plan
+                </Text>
+              </Pressable>
+              <Pressable
+                accessibilityHint="Shows or hides optional phrase starters for your answer"
+                accessibilityLabel={phraseHelper.toggleAccessibilityLabel}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: isPhraseHelperOpen }}
+                onPress={() => setIsPhraseHelperOpen((isOpen) => !isOpen)}
+                style={({ pressed }) => [
+                  styles.writingSupportToggle,
+                  styles.writingSupportToggleSecondary,
+                  isPhraseHelperOpen && styles.writingSupportToggleActive,
+                  pressed && styles.writingSupportTogglePressed,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.writingSupportToggleText,
+                    isPhraseHelperOpen && styles.writingSupportToggleTextActive,
+                  ]}
+                >
+                  Phrases
+                </Text>
+              </Pressable>
+            </View>
           </View>
-          <Text style={styles.answerPlanHelper}>{answerPlan.helperText}</Text>
+          <Text style={styles.writingSupportHelper}>{writingSupport.helperText}</Text>
           {isAnswerPlanOpen ? (
             <View style={styles.answerChecklist}>
               {answerPlan.steps.map((item, index) => (
@@ -461,25 +503,6 @@ export function RoleplayScreen({
               ))}
             </View>
           ) : null}
-        </View>
-        <View style={styles.inlinePhraseBlock}>
-          <View style={styles.inlinePhraseHeader}>
-            <View style={styles.inlinePhraseCopy}>
-              <Text style={styles.inlinePhraseLabel}>{answerCoach.phraseLabel}</Text>
-              <Text style={styles.inlinePhraseSummary}>{phraseHelper.summaryLabel}</Text>
-            </View>
-            <Pressable
-              accessibilityHint="Shows or hides optional phrase starters for your answer"
-              accessibilityLabel={phraseHelper.toggleAccessibilityLabel}
-              accessibilityRole="button"
-              accessibilityState={{ expanded: isPhraseHelperOpen }}
-              onPress={() => setIsPhraseHelperOpen((isOpen) => !isOpen)}
-              style={({ pressed }) => [styles.inlinePhraseToggle, pressed && styles.inlinePhraseTogglePressed]}
-            >
-              <Text style={styles.inlinePhraseToggleText}>{phraseHelper.toggleLabel}</Text>
-            </Pressable>
-          </View>
-          <Text style={styles.inlinePhraseHelper}>{phraseHelper.helperText}</Text>
           {isPhraseHelperOpen ? (
             <View style={styles.inlinePhraseList}>
               {activeSuggestedPhrases.map((phrase) => (
@@ -1071,33 +1094,37 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.md,
   },
-  answerPlanBlock: {
+  writingSupportBlock: {
     backgroundColor: colors.surfaceMuted,
     borderRadius: radii.md,
     marginTop: spacing.md,
     padding: spacing.md,
   },
-  answerPlanHeader: {
+  writingSupportHeader: {
     alignItems: 'center',
     flexDirection: 'row',
   },
-  answerPlanCopy: {
+  writingSupportCopy: {
     flex: 1,
     paddingRight: spacing.md,
   },
-  answerPlanTitle: {
+  writingSupportTitle: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
-  answerPlanSummary: {
+  writingSupportSummary: {
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '800',
     marginTop: spacing.xs,
   },
-  answerPlanToggle: {
+  writingSupportActions: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  writingSupportToggle: {
     alignItems: 'center',
     backgroundColor: colors.surface,
     borderColor: colors.border,
@@ -1107,15 +1134,25 @@ const styles = StyleSheet.create({
     minHeight: 36,
     paddingHorizontal: spacing.md,
   },
-  answerPlanTogglePressed: {
+  writingSupportToggleSecondary: {
+    marginLeft: spacing.xs,
+  },
+  writingSupportToggleActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  writingSupportTogglePressed: {
     opacity: 0.82,
   },
-  answerPlanToggleText: {
+  writingSupportToggleText: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  answerPlanHelper: {
+  writingSupportToggleTextActive: {
+    color: colors.surface,
+  },
+  writingSupportHelper: {
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '700',
@@ -1150,57 +1187,6 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: 19,
-  },
-  inlinePhraseBlock: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radii.md,
-    marginTop: spacing.md,
-    padding: spacing.md,
-  },
-  inlinePhraseHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  inlinePhraseCopy: {
-    flex: 1,
-    paddingRight: spacing.md,
-  },
-  inlinePhraseLabel: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  inlinePhraseSummary: {
-    color: colors.textMuted,
-    fontSize: typography.small,
-    fontWeight: '800',
-    marginTop: spacing.xs,
-  },
-  inlinePhraseToggle: {
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    justifyContent: 'center',
-    minHeight: 36,
-    paddingHorizontal: spacing.md,
-  },
-  inlinePhraseTogglePressed: {
-    opacity: 0.82,
-  },
-  inlinePhraseToggleText: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  inlinePhraseHelper: {
-    color: colors.textMuted,
-    fontSize: typography.small,
-    fontWeight: '700',
-    lineHeight: 18,
-    marginTop: spacing.sm,
   },
   inlinePhraseList: {
     flexDirection: 'row',

@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-26: Combined Writing Support
+
+Built one focused improvement: the Roleplay answer card now combines the old Answer plan and Helpful phrases sections into one compact Writing support area. Plan and phrases remain optional, but they no longer feel like two separate stacked tasks before the user can write.
+
+What went well:
+
+- Step 2 now has one support surface instead of two, which makes the writing flow calmer.
+- The Plan and Phrases controls still open independently, so beginners can choose only the support they need.
+- The summary and helper copy live in `src/utils/writingSupportHelper.ts`, with focused unit coverage.
+- Mobile preview at 390x844 confirmed the support toggles open and the answer input remains directly below the support area.
+
+What went wrong:
+
+- When both support options are open, the helper area is still tall; the default state is intentionally compact.
+- The answer transition panel still adds another small block before the text input, so a later pass can merge it into the input header.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 36 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep combining nearby helper controls when they support the same action.
+- Default Roleplay should show one clear next action first, with optional coaching available only when asked for.
+- The next small task should make the answer input even more central by merging the "Now write your answer" cue into the input area.
+
+Next suggested task:
+
+- Merge the "Now write your answer" transition into the answer input header so there is one fewer block before typing.
+
 ## 2026-06-26: Collapsible Helpful Phrases
 
 Built one focused improvement: the Roleplay answer card now keeps helpful phrases collapsed by default behind a small Show/Hide control. This keeps the answer input closer to the top of the writing step while still preserving optional phrase support for users who want it.

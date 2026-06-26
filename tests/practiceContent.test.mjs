@@ -524,6 +524,30 @@ test('creates a collapsible answer plan helper state', async () => {
   assert.deepEqual(openHelper.steps, steps);
 });
 
+test('creates a combined writing support helper state', async () => {
+  const { createWritingSupportState } = await import('../src/utils/writingSupportHelper.ts');
+
+  const closedSupport = createWritingSupportState({
+    isAnswerPlanOpen: false,
+    isPhraseHelperOpen: false,
+    phraseLabel: '3 phrases',
+    planLabel: '3-step plan',
+  });
+
+  assert.equal(closedSupport.title, 'Writing support');
+  assert.equal(closedSupport.summaryLabel, '3-step plan + 3 phrases');
+  assert.ok(closedSupport.helperText.includes('get stuck'));
+
+  const openSupport = createWritingSupportState({
+    isAnswerPlanOpen: true,
+    isPhraseHelperOpen: false,
+    phraseLabel: '3 phrases',
+    planLabel: '3-step plan',
+  });
+
+  assert.ok(openSupport.helperText.includes('Use only what helps'));
+});
+
 test('creates a first-time progress action for new users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();
