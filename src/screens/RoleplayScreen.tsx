@@ -8,6 +8,7 @@ import { Screen } from '../components/Screen';
 import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
+import { createAnswerCoachContent } from '../utils/answerCoach';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
@@ -53,6 +54,7 @@ export function RoleplayScreen({
   const activeUserGoal = activePromptVariant?.userGoal ?? roleplay.userGoal;
   const activeOpeningLine = activePromptVariant?.openingLine ?? roleplay.openingLine;
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
+  const answerCoach = createAnswerCoachContent({ persona: roleplay.aiPersona });
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
   const completionSummary = savedSessionId
@@ -349,13 +351,32 @@ export function RoleplayScreen({
       </Card>
 
       <Card>
-        <Text style={styles.detailLabel}>Your answer</Text>
+        <View style={styles.answerHeader}>
+          <View style={styles.answerTitleBlock}>
+            <Text style={styles.detailLabel}>Step 2</Text>
+            <Text style={styles.answerTitle}>{answerCoach.title}</Text>
+          </View>
+          <View style={styles.answerTargetPill}>
+            <Text style={styles.answerTargetText}>{answerCoach.wordTargetLabel}</Text>
+          </View>
+        </View>
+        <Text style={styles.answerInstruction}>{answerCoach.instruction}</Text>
+        <View style={styles.answerChecklist}>
+          {answerCoach.checklist.map((item, index) => (
+            <View key={item} style={styles.answerChecklistItem}>
+              <View style={styles.answerChecklistNumber}>
+                <Text style={styles.answerChecklistNumberText}>{index + 1}</Text>
+              </View>
+              <Text style={styles.answerChecklistText}>{item}</Text>
+            </View>
+          ))}
+        </View>
         <TextInput
           accessibilityLabel="Practice answer"
           accessibilityHint="Write your first spoken-style response to the roleplay prompt"
           multiline
           onChangeText={setDraftAnswer}
-          placeholder="Write your first response here..."
+          placeholder={answerCoach.placeholder}
           placeholderTextColor={colors.textMuted}
           style={styles.answerInput}
           textAlignVertical="top"
@@ -376,21 +397,23 @@ export function RoleplayScreen({
             ) : null}
           </View>
         ) : null}
+        <View style={styles.answerActions}>
+          <AppButton
+            accessibilityHint="Reviews your first answer with local mock feedback"
+            label={answerCoach.reviewCtaLabel}
+            onPress={reviewAnswer}
+          />
+          <View style={styles.answerClearAction}>
+            <AppButton
+              accessibilityHint="Clears the current answer, feedback and timer"
+              label="Clear"
+              onPress={clearAnswer}
+              variant="secondary"
+            />
+          </View>
+        </View>
       </Card>
 
-      <View style={styles.actions}>
-        <AppButton
-          accessibilityHint="Reviews your first answer with local mock feedback"
-          label="Review answer"
-          onPress={reviewAnswer}
-        />
-        <AppButton
-          accessibilityHint="Clears the current answer, feedback and timer"
-          label="Clear"
-          onPress={clearAnswer}
-          variant="secondary"
-        />
-      </View>
       {completionSummary ? (
         <Card muted>
           <View style={styles.completionHeader}>
@@ -768,6 +791,66 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: 22,
   },
+  answerHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  answerTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  answerTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  answerTargetPill: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: 999,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  answerTargetText: {
+    color: colors.ink,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  answerInstruction: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  answerChecklist: {
+    marginTop: spacing.md,
+  },
+  answerChecklistItem: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: spacing.sm,
+  },
+  answerChecklistNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.primarySoft,
+    borderRadius: 999,
+    height: 26,
+    justifyContent: 'center',
+    marginRight: spacing.sm,
+    width: 26,
+  },
+  answerChecklistNumberText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  answerChecklistText: {
+    color: colors.text,
+    flex: 1,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: 19,
+  },
   answerInput: {
     backgroundColor: colors.background,
     borderColor: colors.border,
@@ -776,6 +859,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: typography.body,
     lineHeight: 22,
+    marginTop: spacing.md,
     minHeight: 132,
     padding: spacing.md,
   },
@@ -878,8 +962,11 @@ const styles = StyleSheet.create({
     marginLeft: spacing.md,
     textAlign: 'right',
   },
-  actions: {
+  answerActions: {
     marginTop: spacing.md,
+  },
+  answerClearAction: {
+    marginTop: spacing.sm,
   },
   finalSaveAction: {
     marginTop: spacing.md,

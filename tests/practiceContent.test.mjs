@@ -451,6 +451,22 @@ test('guides roleplay practice through one simple step at a time', async () => {
   assert.ok(savedStep.steps.every((step) => step.status === 'done'));
 });
 
+test('creates a simple answer coach for the roleplay answer card', async () => {
+  const { createAnswerCoachContent } = await import('../src/utils/answerCoach.ts');
+  const coach = createAnswerCoachContent({ persona: 'Hiring Manager' });
+
+  assert.equal(coach.title, 'Write your answer');
+  assert.equal(coach.wordTargetLabel, '2-4 sentences');
+  assert.equal(coach.reviewCtaLabel, 'Review answer');
+  assert.ok(coach.instruction.includes('Hiring Manager'));
+  assert.deepEqual(coach.checklist, [
+    'Answer the question directly.',
+    'Add one concrete detail or result.',
+    'Finish with a clear next step.',
+  ]);
+  assert.ok(coach.placeholder.includes('Currently'));
+});
+
 test('creates a first-time progress action for new users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();
