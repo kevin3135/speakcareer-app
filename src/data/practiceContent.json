@@ -374,7 +374,13 @@
             "That makes sense. Can I ask what this problem currently costs you?",
             "Before we discuss price, what outcome would make this worthwhile?",
             "If we could reduce that cost, would the investment feel different?"
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This sales answer should acknowledge the price concern before connecting cost to business impact.",
+            "strengthFocus": "You treated the price concern as a discovery moment instead of defending immediately.",
+            "improvementFocus": "Ask what the current problem costs before explaining the value of the solution.",
+            "suggestedRewrite": "That makes sense. Before we discuss price, can I ask what this problem currently costs your team in time or missed opportunities? If we could reduce that cost, the investment may feel easier to evaluate."
+          }
         },
         {
           "id": "timing-concern",
@@ -386,7 +392,13 @@
             "What would need to change for this to become a priority?",
             "Would a smaller pilot be easier to evaluate now?",
             "Can we agree on a low-pressure next step?"
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This sales answer should explore timing without pressuring the prospect to decide now.",
+            "strengthFocus": "You kept the timing objection low-pressure and focused on the buyer's priorities.",
+            "improvementFocus": "Ask what would need to change before suggesting a smaller next step.",
+            "suggestedRewrite": "What would need to change for this to become a priority? If now is not the right time, would a smaller pilot be easier to evaluate, or should we agree on a low-pressure next step for later?"
+          }
         },
         {
           "id": "existing-tool",
@@ -398,7 +410,13 @@
             "It's good that you already have a process in place.",
             "What works well with your current tool?",
             "Where does the current workflow still create friction?"
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This sales answer should respect the current tool while uncovering one workflow gap.",
+            "strengthFocus": "You respected the current setup before asking about gaps or friction.",
+            "improvementFocus": "Ask what works well first, then uncover one specific workflow gap.",
+            "suggestedRewrite": "It's good that you already have a process in place. What works well with your current tool, and where does the current workflow still create friction for your team?"
+          }
         }
       ],
       "suggestedPhrases": [

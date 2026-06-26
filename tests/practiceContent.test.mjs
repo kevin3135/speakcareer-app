@@ -178,6 +178,10 @@ test('adds sales-specific phrases for each sales objection angle', () => {
   for (const variant of sales.promptVariants) {
     assert.equal(variant.suggestedPhrases.length, 3);
     assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+    assert.ok(variant.feedbackGuidance.summaryHint.length > 20);
+    assert.ok(variant.feedbackGuidance.strengthFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.improvementFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.suggestedRewrite.length > 40);
   }
 
   assert.ok(
@@ -504,6 +508,40 @@ test('adapts presentation feedback to the selected practice angle', async () => 
   assert.notEqual(
     transitionFeedback.feedback.suggestedRewrite,
     challengeFeedback.feedback.suggestedRewrite,
+  );
+});
+
+test('adapts sales feedback to the selected objection angle', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
+  const roleplay = practiceContent.roleplays.find((item) => item.id === 'sales-call');
+  const priceVariant = roleplay.promptVariants.find((variant) => variant.id === 'price-concern');
+  const timingVariant = roleplay.promptVariants.find((variant) => variant.id === 'timing-concern');
+  const answer = [
+    'That makes sense, and I would first clarify the business priority.',
+    'Then I would ask what the current problem costs the team today.',
+    'As a result, we can connect the value to a low-pressure next step.',
+  ].join(' ');
+  const review = summarizePracticeAnswer(answer);
+  const priceFeedback = createRuleBasedFeedback(roleplay, answer, review, priceVariant);
+  const timingFeedback = createRuleBasedFeedback(roleplay, answer, review, timingVariant);
+
+  assert.ok(priceFeedback.feedback.summary.includes('"Price concern"'));
+  assert.equal(
+    priceFeedback.feedback.suggestedRewrite,
+    priceVariant.feedbackGuidance.suggestedRewrite,
+  );
+  assert.ok(
+    priceFeedback.feedback.improvements.includes(
+      priceVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.ok(
+    timingFeedback.feedback.strengths.includes(timingVariant.feedbackGuidance.strengthFocus),
+  );
+  assert.notEqual(
+    priceFeedback.feedback.suggestedRewrite,
+    timingFeedback.feedback.suggestedRewrite,
   );
 });
 

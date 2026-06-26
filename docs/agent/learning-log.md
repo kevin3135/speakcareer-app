@@ -1244,3 +1244,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-aware feedback guidance for Sales Call.
+
+## 2026-06-26: Sales Variant-Aware Feedback
+
+Built one focused improvement: Sales Call feedback now adapts to the selected objection angle. Price concern, Timing concern and Existing tool each provide their own feedback emphasis and suggested rewrite.
+
+What went well:
+
+- Sales feedback now coaches the exact objection the user chose instead of using only generic sales feedback.
+- The guidance keeps sales language consultative: acknowledge, ask, then connect value or a next step.
+- The change reused the existing `RoleplayPromptVariant.feedbackGuidance` field.
+- Added focused tests for sales-specific feedback guidance and variant-aware feedback output.
+
+What went wrong:
+
+- Variant-aware feedback guidance now exists for Interview, Meeting, Presentation and Sales only.
+- Workplace Small Talk still uses generic rule-based feedback even though its phrases are variant-specific.
+- Score logic remains general-purpose and does not yet change per sales objection.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Sales feedback should stay consultative and never sound pushy.
+- `feedbackGuidance` is now proven across four core roleplay categories.
+- Preserve the default non-variant feedback path while finishing the last scenario.
+
+Next suggested task:
+
+- Add variant-aware feedback guidance for Workplace Small Talk.
