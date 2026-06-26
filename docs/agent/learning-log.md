@@ -1843,3 +1843,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Make the Practice angle section default to one recommended angle with a compact "change angle" control.
+
+## 2026-06-26: Calm Practice Angle Picker
+
+Built one focused improvement: the Roleplay Practice angle section now shows one active recommended angle by default, with a compact "Change" button that reveals the other angles only when needed.
+
+What went well:
+
+- The user now sees one recommended prompt angle first instead of multiple chips at once.
+- The active angle title and coaching note stay visible, so the user still understands how to answer.
+- The optional angle list is handled through `src/utils/roleplayAnglePicker.ts` and covered by a focused test.
+- Mobile preview at 390px confirmed closed and open angle states work without horizontal overflow.
+
+What went wrong:
+
+- Opening the angle picker still adds two detailed options, which is useful but visually taller.
+- The Roleplay screen is now clearer, but the prompt/context card and opening-line card may still be merged later.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 31 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep roleplay choices progressive: one recommended option first, optional alternatives behind a simple control.
+- Preserve coaching notes when hiding choice lists, because they tell the user how to answer.
+- The next small task should reduce the number of separate cards before the answer box.
+
+Next suggested task:
+
+- Merge the current prompt, context, goal and opening line into one simpler "Read this first" card before the answer step.

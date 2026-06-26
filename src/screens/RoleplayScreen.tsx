@@ -17,6 +17,7 @@ import {
   createPracticeCompletionSummary,
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
+import { createRoleplayAnglePickerState } from '../utils/roleplayAnglePicker';
 import { createRoleplayGuideState } from '../utils/roleplayGuide';
 import {
   createRoleplayScenarioPickerState,
@@ -48,6 +49,7 @@ export function RoleplayScreen({
   const [followUpReview, setFollowUpReview] = useState<AnswerReview | null>(null);
   const [adaptiveFollowUp, setAdaptiveFollowUp] = useState<AdaptiveFollowUpPrompt | null>(null);
   const [isScenarioPickerOpen, setIsScenarioPickerOpen] = useState(false);
+  const [isAnglePickerOpen, setIsAnglePickerOpen] = useState(false);
   const [activePromptVariantId, setActivePromptVariantId] = useState(
     roleplay.promptVariants?.[0]?.id ?? null,
   );
@@ -68,6 +70,11 @@ export function RoleplayScreen({
     activeRoleplayId: roleplay.id,
     isOpen: isScenarioPickerOpen,
     roleplays: practiceContent.roleplays,
+  });
+  const anglePicker = createRoleplayAnglePickerState({
+    activeVariantId: activePromptVariant?.id ?? null,
+    isOpen: isAnglePickerOpen,
+    variants: roleplayPromptVariants,
   });
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
@@ -153,6 +160,7 @@ export function RoleplayScreen({
   }
 
   function selectPromptVariant(variantId: string) {
+    setIsAnglePickerOpen(false);
     setActivePromptVariantId(variantId);
     clearAnswer();
   }
@@ -331,33 +339,46 @@ export function RoleplayScreen({
         </View>
       </Card>
 
-      {roleplayPromptVariants.length > 0 ? (
+      {roleplayPromptVariants.length > 0 && anglePicker.currentAngle ? (
         <Card>
-          <Text style={styles.detailLabel}>Practice angle</Text>
-          <View style={styles.variantList}>
-            {roleplayPromptVariants.map((variant) => {
-              const isActive = variant.id === activePromptVariant?.id;
-
-              return (
+          <View style={styles.angleHeader}>
+            <View style={styles.angleCopyBlock}>
+              <Text style={styles.detailLabel}>{anglePicker.eyebrow}</Text>
+              <Text style={styles.angleTitle}>{anglePicker.currentAngle.title}</Text>
+            </View>
+            {anglePicker.options.length > 0 ? (
+              <Pressable
+                accessibilityHint="Shows or hides the other practice angles for this roleplay"
+                accessibilityLabel={anglePicker.toggleAccessibilityLabel}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: isAnglePickerOpen }}
+                onPress={() => setIsAnglePickerOpen((isOpen) => !isOpen)}
+                style={({ pressed }) => [styles.angleToggle, pressed && styles.angleTogglePressed]}
+              >
+                <Text style={styles.angleToggleText}>{anglePicker.toggleLabel}</Text>
+              </Pressable>
+            ) : null}
+          </View>
+          <Text style={styles.angleNote}>{anglePicker.currentAngle.coachingNote}</Text>
+          {isAnglePickerOpen ? (
+            <View style={styles.angleOptions}>
+              {anglePicker.options.map((variant) => (
                 <Pressable
                   accessibilityHint="Changes the opening prompt and clears the current draft answer"
                   accessibilityLabel={`Use ${variant.title} practice angle`}
                   accessibilityRole="button"
-                  accessibilityState={{ selected: isActive }}
                   key={variant.id}
                   onPress={() => selectPromptVariant(variant.id)}
-                  style={[styles.variantChip, isActive && styles.variantChipActive]}
+                  style={({ pressed }) => [styles.angleOption, pressed && styles.angleOptionPressed]}
                 >
-                  <Text style={[styles.variantChipText, isActive && styles.variantChipTextActive]}>
-                    {variant.title}
-                  </Text>
+                  <Text style={styles.angleOptionTitle}>{variant.title}</Text>
+                  <Text style={styles.angleOptionNote}>{variant.coachingNote}</Text>
                 </Pressable>
-              );
-            })}
-          </View>
-          {activePromptVariant ? (
-            <Text style={styles.variantNote}>{activePromptVariant.coachingNote}</Text>
-          ) : null}
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.angleHelper}>{anglePicker.helperText}</Text>
+          )}
         </Card>
       ) : null}
 
@@ -811,39 +832,74 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 28,
   },
-  variantList: {
+  angleHeader: {
+    alignItems: 'center',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: spacing.xs,
   },
-  variantChip: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderRadius: radii.sm,
-    borderWidth: 1,
-    marginBottom: spacing.sm,
-    marginRight: spacing.sm,
+  angleCopyBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  angleTitle: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  angleToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.primarySoft,
+    borderRadius: radii.md,
+    justifyContent: 'center',
+    minHeight: 40,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
   },
-  variantChipActive: {
-    backgroundColor: colors.primaryDark,
-    borderColor: colors.primaryDark,
+  angleTogglePressed: {
+    opacity: 0.82,
   },
-  variantChipText: {
-    color: colors.text,
+  angleToggleText: {
+    color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  variantChipTextActive: {
-    color: colors.surface,
-  },
-  variantNote: {
+  angleNote: {
     color: colors.textMuted,
     fontSize: typography.body,
     fontWeight: '700',
     lineHeight: 22,
     marginTop: spacing.sm,
+  },
+  angleHelper: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.sm,
+  },
+  angleOptions: {
+    marginTop: spacing.md,
+  },
+  angleOption: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  angleOptionPressed: {
+    opacity: 0.82,
+  },
+  angleOptionTitle: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  angleOptionNote: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginTop: spacing.xs,
   },
   answerHeader: {
     alignItems: 'center',

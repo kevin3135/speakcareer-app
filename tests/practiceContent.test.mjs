@@ -583,6 +583,33 @@ test('creates a calm roleplay scenario picker state', async () => {
   assert.equal(openPicker.toggleAccessibilityLabel, 'Hide roleplay scenario choices');
 });
 
+test('creates a calm roleplay angle picker state', async () => {
+  const { createRoleplayAnglePickerState } = await import('../src/utils/roleplayAnglePicker.ts');
+  const interviewVariants = practiceContent.roleplays[0].promptVariants;
+
+  const closedPicker = createRoleplayAnglePickerState({
+    activeVariantId: 'career-story',
+    isOpen: false,
+    variants: interviewVariants,
+  });
+
+  assert.equal(closedPicker.currentAngle.title, 'Tell me about yourself');
+  assert.equal(closedPicker.toggleLabel, 'Change');
+  assert.equal(closedPicker.options.length, interviewVariants.length - 1);
+  assert.equal(closedPicker.options.some((option) => option.id === 'career-story'), false);
+  assert.ok(closedPicker.helperText.includes('this angle first'));
+
+  const openPicker = createRoleplayAnglePickerState({
+    activeVariantId: 'role-motivation',
+    isOpen: true,
+    variants: interviewVariants,
+  });
+
+  assert.equal(openPicker.currentAngle.title, 'Why this role?');
+  assert.equal(openPicker.toggleLabel, 'Hide');
+  assert.equal(openPicker.toggleAccessibilityLabel, 'Hide practice angle choices');
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
