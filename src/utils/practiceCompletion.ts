@@ -5,6 +5,7 @@ export type PracticeCompletionSummary = {
   rewardLabel: string;
   body: string;
   nextAction: string;
+  progressCtaLabel: string;
 };
 
 export type NextPracticeRecommendation = {
@@ -34,6 +35,7 @@ export function createPracticeCompletionSummary({
     nextAction: includedFollowUp
       ? 'Start a fresh practice angle while the conversation is still warm.'
       : 'Try the follow-up round next time to earn bonus XP and deepen the answer.',
+    progressCtaLabel: 'Review Progress',
   };
 }
 

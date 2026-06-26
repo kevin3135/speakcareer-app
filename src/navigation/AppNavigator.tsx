@@ -30,7 +30,6 @@ export function AppNavigator() {
 
   function savePracticeSession(session: PracticeSession) {
     setPracticeSessions((sessions) => [session, ...sessions].slice(0, 10));
-    setActiveScreen('Progress');
   }
 
   if (!hasSeenOnboarding) {
@@ -51,6 +50,7 @@ export function AppNavigator() {
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
             key={selectedRoleplay.id}
+            onOpenProgress={() => setActiveScreen('Progress')}
             onSaveSession={savePracticeSession}
             roleplay={selectedRoleplay}
             onSelectRoleplay={openRoleplay}

@@ -318,6 +318,7 @@ test('creates a rewarding roleplay completion summary', async () => {
 
   assert.equal(firstAnswerSummary.title, 'Sales Call saved');
   assert.equal(firstAnswerSummary.rewardLabel, 'Strong practice win');
+  assert.equal(firstAnswerSummary.progressCtaLabel, 'Review Progress');
   assert.ok(firstAnswerSummary.body.includes('saved to Progress'));
   assert.ok(firstAnswerSummary.nextAction.includes('follow-up'));
 

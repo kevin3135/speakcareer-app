@@ -20,11 +20,17 @@ import { createPracticeSession } from '../utils/sessionHistory';
 
 type RoleplayScreenProps = {
   roleplay: RoleplayScenario;
+  onOpenProgress: () => void;
   onSelectRoleplay: (roleplayId: RoleplayId) => void;
   onSaveSession: (session: PracticeSession) => void;
 };
 
-export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: RoleplayScreenProps) {
+export function RoleplayScreen({
+  onOpenProgress,
+  onSaveSession,
+  roleplay,
+  onSelectRoleplay,
+}: RoleplayScreenProps) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [draftAnswer, setDraftAnswer] = useState('');
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
@@ -375,6 +381,14 @@ export function RoleplayScreen({ onSaveSession, roleplay, onSelectRoleplay }: Ro
               />
             ) : null}
             <View style={nextPracticeRecommendation ? styles.completionSecondaryAction : undefined}>
+              <AppButton
+                accessibilityHint="Opens Progress to review saved sessions and mistake bank"
+                label={completionSummary.progressCtaLabel}
+                onPress={onOpenProgress}
+                variant="secondary"
+              />
+            </View>
+            <View style={styles.completionSecondaryAction}>
               <AppButton
                 accessibilityHint="Clears this completed session and starts a fresh answer"
                 label="Practice another answer"

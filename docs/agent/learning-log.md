@@ -1416,3 +1416,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add a completion-card action to review Progress after saving a session.
+
+## 2026-06-26: Completion Progress Action
+
+Built one focused improvement: the roleplay completion card now has a direct "Review Progress" action. Saving a session stays on the completion card so the user can see the XP reward, then choose whether to start the next roleplay, review Progress or practice another answer.
+
+What went well:
+
+- The completion reward is now actually visible after saving because saving no longer immediately navigates away.
+- Progress is still one tap away from the completion card.
+- The change reused the existing `activeScreen` state instead of adding navigation complexity.
+- Added test coverage for the Progress CTA label in the completion summary.
+
+What went wrong:
+
+- This is still local session state and does not persist across app restarts.
+- The completion card still has not been visually checked in Expo during this heartbeat.
+- There is no component-level test for tapping the Progress button yet.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the completion card visible after save; do not auto-navigate away from the reward state.
+- Completion actions now cover next roleplay, Progress review and same-roleplay retry.
+- The next high-value step should improve persistence or visually verify the flow in Expo.
+
+Next suggested task:
+
+- Visually test the Roleplay completion flow in Expo and adjust spacing if needed.
