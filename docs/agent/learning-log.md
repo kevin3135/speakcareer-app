@@ -1158,3 +1158,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Add variant-aware feedback guidance for Meeting Practice.
+
+## 2026-06-26: Meeting Variant-Aware Feedback
+
+Built one focused improvement: Meeting Practice feedback now adapts to the selected practice angle. Status update, Clarify deadline and Challenge decision each provide their own feedback emphasis and suggested rewrite.
+
+What went well:
+
+- Meeting feedback now feels more relevant to the actual workplace moment the user picked.
+- The change reused the existing `RoleplayPromptVariant.feedbackGuidance` extension point.
+- The Roleplay UI needed no new changes because active variants already flow into rule-based feedback.
+- Added focused tests for meeting-specific feedback guidance and variant-aware feedback output.
+
+What went wrong:
+
+- Variant-aware feedback guidance now exists for Interview and Meeting only.
+- Presentation, Sales and Small Talk still use generic rule-based feedback even though their phrases are variant-specific.
+- Score logic remains general-purpose and does not yet change per meeting angle.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Meeting feedback guidance should stay short and action-oriented: progress, blocker, deadline, risk and next step.
+- Keep adding `feedbackGuidance` scenario by scenario so the content stays easy to review.
+- Preserve the default non-variant feedback path when extending variant-specific coaching.
+
+Next suggested task:
+
+- Add variant-aware feedback guidance for Presentation Practice.

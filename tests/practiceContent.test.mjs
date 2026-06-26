@@ -120,6 +120,10 @@ test('adds meeting-specific phrases for each meeting practice angle', () => {
   for (const variant of meeting.promptVariants) {
     assert.equal(variant.suggestedPhrases.length, 3);
     assert.ok(variant.suggestedPhrases.every((phrase) => phrase.length > 15));
+    assert.ok(variant.feedbackGuidance.summaryHint.length > 20);
+    assert.ok(variant.feedbackGuidance.strengthFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.improvementFocus.length > 20);
+    assert.ok(variant.feedbackGuidance.suggestedRewrite.length > 40);
   }
 
   assert.ok(
@@ -428,6 +432,40 @@ test('adapts interview feedback to the selected practice angle', async () => {
   assert.notEqual(
     motivationFeedback.feedback.suggestedRewrite,
     difficultFeedback.feedback.suggestedRewrite,
+  );
+});
+
+test('adapts meeting feedback to the selected practice angle', async () => {
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+  const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
+  const roleplay = practiceContent.roleplays.find((item) => item.id === 'meeting-practice');
+  const statusVariant = roleplay.promptVariants.find((variant) => variant.id === 'status-update');
+  const challengeVariant = roleplay.promptVariants.find((variant) => variant.id === 'challenge-decision');
+  const answer = [
+    'Since our last meeting, I completed the draft with the team.',
+    'First, I clarified the blocker and deadline with the project owner.',
+    'As a result, we agreed on a next step and reduced the delivery risk.',
+  ].join(' ');
+  const review = summarizePracticeAnswer(answer);
+  const statusFeedback = createRuleBasedFeedback(roleplay, answer, review, statusVariant);
+  const challengeFeedback = createRuleBasedFeedback(roleplay, answer, review, challengeVariant);
+
+  assert.ok(statusFeedback.feedback.summary.includes('"Status update"'));
+  assert.equal(
+    statusFeedback.feedback.suggestedRewrite,
+    statusVariant.feedbackGuidance.suggestedRewrite,
+  );
+  assert.ok(
+    statusFeedback.feedback.improvements.includes(
+      statusVariant.feedbackGuidance.improvementFocus,
+    ),
+  );
+  assert.ok(
+    challengeFeedback.feedback.strengths.includes(challengeVariant.feedbackGuidance.strengthFocus),
+  );
+  assert.notEqual(
+    statusFeedback.feedback.suggestedRewrite,
+    challengeFeedback.feedback.suggestedRewrite,
   );
 });
 

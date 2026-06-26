@@ -176,7 +176,13 @@
             "Since our last meeting, I completed...",
             "The main blocker right now is...",
             "My next step is to..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This meeting answer should organize progress, blocker and next step in a short update.",
+            "strengthFocus": "You gave the meeting a clear progress update instead of speaking generally.",
+            "improvementFocus": "Name the blocker and the next step so the team knows what support you need.",
+            "suggestedRewrite": "Since our last meeting, I completed the first draft and shared it with the team. The main blocker right now is the missing customer data, so my next step is to confirm the owner and follow up by Friday."
+          }
         },
         {
           "id": "clarify-deadline",
@@ -188,7 +194,13 @@
             "Could we clarify the deadline for...",
             "The dependency I am waiting on is...",
             "To stay on track, I need..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This meeting answer should clarify the deadline or dependency without sounding defensive.",
+            "strengthFocus": "You asked for clarification in a calm, professional way.",
+            "improvementFocus": "Name the specific dependency and ask for one clear owner or date.",
+            "suggestedRewrite": "Could we clarify the deadline for the customer data review? The dependency I am waiting on is the final approval from finance. To stay on track, I need a confirmed owner and date by tomorrow."
+          }
         },
         {
           "id": "challenge-decision",
@@ -200,7 +212,13 @@
             "I understand the reason for that decision.",
             "One risk I see is...",
             "Could we also consider..."
-          ]
+          ],
+          "feedbackGuidance": {
+            "summaryHint": "This meeting answer should challenge the decision politely while offering a constructive alternative.",
+            "strengthFocus": "You raised the risk respectfully instead of rejecting the plan.",
+            "improvementFocus": "Pair the risk with one practical alternative or next step.",
+            "suggestedRewrite": "I understand the reason for that decision. One risk I see is that we may not have enough time for customer validation. Could we also consider a shorter pilot before committing to the full plan?"
+          }
         }
       ],
       "suggestedPhrases": [
