@@ -610,6 +610,26 @@ test('creates a calm roleplay angle picker state', async () => {
   assert.equal(openPicker.toggleAccessibilityLabel, 'Hide practice angle choices');
 });
 
+test('creates one read-first card from roleplay prompt details', async () => {
+  const { createRoleplayReadCard } = await import('../src/utils/roleplayReadCard.ts');
+  const roleplay = practiceContent.roleplays[0];
+  const roleMotivationVariant = roleplay.promptVariants.find((variant) => variant.id === 'role-motivation');
+
+  const defaultCard = createRoleplayReadCard({ roleplay });
+  assert.equal(defaultCard.eyebrow, 'Read this first');
+  assert.equal(defaultCard.focus, 'Structured answers and confident tone');
+  assert.equal(defaultCard.openingLabel, 'Hiring Manager says');
+  assert.equal(defaultCard.openingLine, roleplay.openingLine);
+
+  const variantCard = createRoleplayReadCard({
+    activePromptVariant: roleMotivationVariant,
+    roleplay,
+  });
+  assert.equal(variantCard.goal, roleMotivationVariant.userGoal);
+  assert.equal(variantCard.openingLine, roleMotivationVariant.openingLine);
+  assert.ok(variantCard.context.includes('hiring manager'));
+});
+
 test('creates rule-based feedback and XP from typed answers', async () => {
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');

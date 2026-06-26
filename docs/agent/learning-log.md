@@ -1886,3 +1886,46 @@ Agent memory for next time:
 Next suggested task:
 
 - Merge the current prompt, context, goal and opening line into one simpler "Read this first" card before the answer step.
+
+## 2026-06-26: Single Read-First Roleplay Card
+
+Built one focused improvement: the Roleplay screen now combines the old Current prompt, Context, Your goal and opening-line cards into one "Read this first" card before the answer step.
+
+What went well:
+
+- The user now reads one consolidated prompt card instead of jumping between separate prompt and persona-opening cards.
+- The card updates from the selected practice angle because `src/utils/roleplayReadCard.ts` uses the active prompt variant for the goal and opening line.
+- The old "Current prompt" and "opens with" labels are gone from the Roleplay screen.
+- Mobile preview at 390px confirmed the new card appears correctly without horizontal overflow.
+
+What went wrong:
+
+- The read-first card is information-dense, so future polish should make the active action even more obvious.
+- The guided intro card is still tall, especially with the optional timer visible.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 32 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://localhost:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep roleplay reading context in one card before the answer step.
+- If a card is information-dense, avoid adding another card near it; improve hierarchy inside the same card first.
+- The next small task should make the answer action feel more like the primary next step after reading.
+
+Next suggested task:
+
+- Add a compact "Now write your answer" transition above the answer box so the next action is unmistakable.

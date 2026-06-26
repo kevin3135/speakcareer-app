@@ -19,6 +19,7 @@ import {
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createRoleplayAnglePickerState } from '../utils/roleplayAnglePicker';
 import { createRoleplayGuideState } from '../utils/roleplayGuide';
+import { createRoleplayReadCard } from '../utils/roleplayReadCard';
 import {
   createRoleplayScenarioPickerState,
   formatRoleplayScenarioMeta,
@@ -58,8 +59,6 @@ export function RoleplayScreen({
   const activePromptVariant =
     roleplayPromptVariants.find((variant) => variant.id === activePromptVariantId) ??
     roleplayPromptVariants[0];
-  const activeUserGoal = activePromptVariant?.userGoal ?? roleplay.userGoal;
-  const activeOpeningLine = activePromptVariant?.openingLine ?? roleplay.openingLine;
   const activeSuggestedPhrases = activePromptVariant?.suggestedPhrases ?? roleplay.suggestedPhrases;
   const answerCoach = createAnswerCoachContent({ persona: roleplay.aiPersona });
   const timerControls = createFocusTimerControls({
@@ -75,6 +74,10 @@ export function RoleplayScreen({
     activeVariantId: activePromptVariant?.id ?? null,
     isOpen: isAnglePickerOpen,
     variants: roleplayPromptVariants,
+  });
+  const readCard = createRoleplayReadCard({
+    activePromptVariant,
+    roleplay,
   });
   const followUpBonusXp = followUpReview?.isReadyForFeedback ? 15 : 0;
   const totalXpReward = (feedbackResult?.xpReward ?? 0) + followUpBonusXp;
@@ -324,21 +327,6 @@ export function RoleplayScreen({
         )}
       </View>
 
-      <Card>
-        <Text style={styles.detailLabel}>Current prompt</Text>
-        <Text style={styles.focus}>{roleplay.focus}</Text>
-        <Text style={styles.description}>{roleplay.description}</Text>
-
-        <View style={styles.detailBlock}>
-          <Text style={styles.detailLabel}>Context</Text>
-          <Text style={styles.detailText}>{roleplay.workplaceContext}</Text>
-        </View>
-        <View style={styles.detailBlock}>
-          <Text style={styles.detailLabel}>Your goal</Text>
-          <Text style={styles.detailText}>{activeUserGoal}</Text>
-        </View>
-      </Card>
-
       {roleplayPromptVariants.length > 0 && anglePicker.currentAngle ? (
         <Card>
           <View style={styles.angleHeader}>
@@ -383,8 +371,23 @@ export function RoleplayScreen({
       ) : null}
 
       <Card muted>
-        <Text style={styles.detailLabel}>{roleplay.aiPersona} opens with</Text>
-        <Text style={styles.openingLine}>{activeOpeningLine}</Text>
+        <Text style={styles.detailLabel}>{readCard.eyebrow}</Text>
+        <Text style={styles.readTitle}>{readCard.focus}</Text>
+        <Text style={styles.readDescription}>{readCard.description}</Text>
+        <View style={styles.readDetailGrid}>
+          <View style={styles.readDetailBlock}>
+            <Text style={styles.detailLabel}>{readCard.contextLabel}</Text>
+            <Text style={styles.detailText}>{readCard.context}</Text>
+          </View>
+          <View style={styles.readDetailBlock}>
+            <Text style={styles.detailLabel}>{readCard.goalLabel}</Text>
+            <Text style={styles.detailText}>{readCard.goal}</Text>
+          </View>
+        </View>
+        <View style={styles.readOpeningBlock}>
+          <Text style={styles.readOpeningLabel}>{readCard.openingLabel}</Text>
+          <Text style={styles.readOpeningLine}>{readCard.openingLine}</Text>
+        </View>
       </Card>
 
       <Card>
@@ -799,20 +802,23 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginTop: spacing.xs,
   },
-  focus: {
+  readTitle: {
     color: colors.primaryDark,
-    fontSize: typography.body,
-    fontWeight: '800',
+    fontSize: typography.h3,
+    fontWeight: '900',
     marginTop: spacing.sm,
   },
-  description: {
+  readDescription: {
     color: colors.textMuted,
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.sm,
   },
-  detailBlock: {
-    marginTop: spacing.lg,
+  readDetailGrid: {
+    marginTop: spacing.sm,
+  },
+  readDetailBlock: {
+    marginTop: spacing.md,
   },
   detailLabel: {
     color: colors.ink,
@@ -826,11 +832,24 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: 22,
   },
-  openingLine: {
-    color: colors.text,
-    fontSize: typography.h2,
-    fontWeight: '700',
-    lineHeight: 28,
+  readOpeningBlock: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  readOpeningLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.xs,
+    textTransform: 'uppercase',
+  },
+  readOpeningLine: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: 23,
   },
   angleHeader: {
     alignItems: 'center',
