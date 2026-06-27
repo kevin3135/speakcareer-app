@@ -142,6 +142,37 @@ test('creates one simple first-quest feedback card', async () => {
   assert.equal(ready.xpLabel, '+40 XP');
 });
 
+test('creates a simple first-quest completion handoff', async () => {
+  const { createFirstQuestCompletionState } = await import('../src/utils/firstQuestCompletion.ts');
+
+  const completion = createFirstQuestCompletionState({
+    nextPracticeRecommendation: {
+      reason: 'Train a different meeting skill: concise updates and follow-up questions.',
+      title: 'Meeting Practice',
+    },
+    xpReward: 40,
+  });
+
+  assert.equal(completion.eyebrow, 'Step 3 of 3');
+  assert.equal(completion.title, 'Saved');
+  assert.equal(completion.unlockLabel, 'Next lesson unlocked');
+  assert.equal(completion.nextTitle, 'Meeting Practice');
+  assert.equal(completion.ctaLabel, 'Continue');
+  assert.equal(completion.ctaTarget, 'roleplay');
+  assert.equal(completion.xpLabel, '+40 XP');
+  assert.ok(completion.body.includes('next lesson'));
+
+  const fallback = createFirstQuestCompletionState({
+    nextPracticeRecommendation: null,
+    xpReward: 25,
+  });
+
+  assert.equal(fallback.ctaLabel, 'Continue');
+  assert.equal(fallback.ctaTarget, 'progress');
+  assert.equal(fallback.nextTitle, 'Wins');
+  assert.equal(fallback.xpLabel, '+25 XP');
+});
+
 test('stores onboarding completion in local storage', async () => {
   const {
     ONBOARDING_COMPLETED_KEY,

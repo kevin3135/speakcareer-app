@@ -13,6 +13,7 @@ import { createAnswerCoachContent } from '../utils/answerCoach';
 import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
+import { createFirstQuestCompletionState } from '../utils/firstQuestCompletion';
 import { createFirstQuestFeedbackState } from '../utils/firstQuestFeedback';
 import { createFocusTimerControls, FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
 import { createLocalProgressStats } from '../utils/localProgress';
@@ -52,6 +53,7 @@ export function RoleplayScreen({
   onSelectRoleplay,
   sessions,
 }: RoleplayScreenProps) {
+  const [enteredAsFirstQuest] = useState(roleplay.id === guidedStart.roleplayId && sessions.length === 0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [draftAnswer, setDraftAnswer] = useState('');
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
@@ -138,6 +140,13 @@ export function RoleplayScreen({
   const nextPracticeRecommendation = completionSummary
     ? createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays)
     : null;
+  const firstQuestCompletion =
+    enteredAsFirstQuest && savedSession
+      ? createFirstQuestCompletionState({
+          nextPracticeRecommendation,
+          xpReward: totalXpReward,
+        })
+      : null;
   const savePrompt =
     answerReview?.isReadyForFeedback && !savedSession
       ? createPracticeSavePrompt({
@@ -283,6 +292,44 @@ export function RoleplayScreen({
 
     clearAnswer();
     onSelectRoleplay(nextPracticeRecommendation.roleplayId);
+  }
+
+  function finishFirstQuest() {
+    if (firstQuestCompletion?.ctaTarget === 'progress') {
+      onOpenProgress();
+      return;
+    }
+
+    startRecommendedPractice();
+  }
+
+  if (firstQuestCompletion) {
+    return (
+      <Screen
+        title={firstQuestCompletion.title}
+        subtitle="One clear next step."
+      >
+        <View style={styles.simpleQuestPanel}>
+          <Text style={styles.simpleQuestKicker}>{firstQuestCompletion.eyebrow}</Text>
+          <Text style={styles.simpleQuestTitle}>{firstQuestCompletion.title}</Text>
+          <Text style={styles.simpleCompletionReward}>{firstQuestCompletion.xpLabel}</Text>
+          <Text style={styles.simpleCompletionBody}>{firstQuestCompletion.body}</Text>
+
+          <View style={styles.simpleCompletionUnlockBox}>
+            <Text style={styles.simpleRewriteLabel}>{firstQuestCompletion.unlockLabel}</Text>
+            <Text style={styles.simpleCompletionNextTitle}>{firstQuestCompletion.nextTitle}</Text>
+          </View>
+
+          <View style={styles.simpleQuestAction}>
+            <AppButton
+              accessibilityHint="Opens the next unlocked step after your first saved answer"
+              label={firstQuestCompletion.ctaLabel}
+              onPress={finishFirstQuest}
+            />
+          </View>
+        </View>
+      </Screen>
+    );
   }
 
   if (isFirstQuestMode && firstQuest) {
@@ -977,6 +1024,42 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  simpleCompletionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.lg,
+  },
+  simpleCompletionReward: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.accentSoft,
+    borderRadius: 999,
+    color: colors.accent,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    marginTop: spacing.lg,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+  },
+  simpleCompletionUnlockBox: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#A9DCCF',
+    borderRadius: radii.md,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.lg,
+  },
+  simpleCompletionNextTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    marginTop: spacing.xs,
   },
   simpleReviewTitle: {
     color: colors.ink,

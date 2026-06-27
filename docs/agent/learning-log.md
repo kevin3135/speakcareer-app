@@ -1,5 +1,43 @@
 # Agent Learning Log
 
+## 2026-06-27: First-Quest Success Handoff
+
+Built one focused practice-loop improvement: after the very first saved Job Interview answer, the app now stays in a dedicated success handoff instead of dropping straight into the full Roleplay screen. The user sees the XP reward, what unlocked, one next recommended quest and one primary button.
+
+What went well:
+
+- The first save now feels intentional and motivating instead of abruptly switching into the richer post-save UI.
+- Added a small `createFirstQuestCompletionState` helper so the success copy stays simple and testable.
+- Kept the first-quest completion state to one next action, which matches the guided onboarding flow.
+- All required checks passed after the change.
+
+What went wrong:
+
+- This run did not add a component-level UI test, only helper coverage and full project checks.
+- The dedicated success state is only for the first saved answer; later completion states are still denser.
+- No browser preview was run in this pass, so the behavior was validated through code inspection and checks only.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 53 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- After a first practice win, keep the user in one clear success state with one next action.
+- First-run completion should celebrate progress and unlocks without exposing the full advanced flow immediately.
+- The next useful onboarding improvement is storing the chosen starting level and using it to adjust the first examples.
+
 ## 2026-06-27: Three-Tab Simple Navigation
 
 Built one focused simplification: the bottom navigation no longer shows `Home`, `Practice`, `Roleplay`, `Progress`, `Profile`. After the first save it now shows only three simple choices: `Learn`, `Wins` and `Me`. Practice and Roleplay stay app-led instead of user-selected tabs. The first-run screens also received a rounder, friendlier system font treatment.
