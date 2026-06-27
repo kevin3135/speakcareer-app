@@ -15,6 +15,7 @@ import { RoleplayScreen } from '../screens/RoleplayScreen';
 import { colors } from '../styles/theme';
 import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId, StartingLevelId } from '../types';
 import { readDailyTarget, saveDailyTarget } from '../utils/dailyTargetStorage';
+import { readPracticedMistakeIds, savePracticedMistakeIds } from '../utils/mistakePracticeStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 import { readPracticeSessions, savePracticeSessions } from '../utils/practiceSessionStorage';
 import { readStartingLevel, saveStartingLevel } from '../utils/startingLevelStorage';
@@ -25,6 +26,7 @@ export function AppNavigator() {
   const [activeScreen, setActiveScreen] = useState<MainScreen>('Home');
   const [selectedRoleplayId, setSelectedRoleplayId] = useState<RoleplayId>('job-interview');
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
+  const [practicedMistakeIds, setPracticedMistakeIds] = useState<string[]>([]);
   const [dailyTarget, setDailyTarget] = useState<DailyPracticeTarget>(1);
   const [startingLevelId, setStartingLevelId] = useState<StartingLevelId>('basic');
 
@@ -43,13 +45,21 @@ export function AppNavigator() {
       readOnboardingCompletion(AsyncStorage),
       readDailyTarget(AsyncStorage),
       readPracticeSessions(AsyncStorage),
+      readPracticedMistakeIds(AsyncStorage),
       readStartingLevel(AsyncStorage),
     ])
-      .then(([isComplete, storedDailyTarget, storedPracticeSessions, storedStartingLevel]) => {
+      .then(([
+        isComplete,
+        storedDailyTarget,
+        storedPracticeSessions,
+        storedPracticedMistakeIds,
+        storedStartingLevel,
+      ]) => {
         if (isMounted) {
           setHasSeenOnboarding(isComplete);
           setDailyTarget(storedDailyTarget);
           setPracticeSessions(storedPracticeSessions);
+          setPracticedMistakeIds(storedPracticedMistakeIds);
           setStartingLevelId(storedStartingLevel);
         }
       })
@@ -82,6 +92,20 @@ export function AppNavigator() {
   function changeDailyTarget(target: DailyPracticeTarget) {
     setDailyTarget(target);
     void saveDailyTarget(AsyncStorage, target).catch(() => undefined);
+  }
+
+  function markMistakePracticed(mistakeId: string) {
+    setPracticedMistakeIds((currentIds) => {
+      if (currentIds.includes(mistakeId)) {
+        return currentIds;
+      }
+
+      const nextIds = [...currentIds, mistakeId];
+
+      void savePracticedMistakeIds(AsyncStorage, nextIds).catch(() => undefined);
+
+      return nextIds;
+    });
   }
 
   function completeOnboarding(selectedLevel: StartingLevelId) {
@@ -142,7 +166,9 @@ export function AppNavigator() {
         {activeScreen === 'Progress' ? (
           <ProgressScreen
             dailyTarget={dailyTarget}
+            onMarkMistakePracticed={markMistakePracticed}
             onOpenRoleplay={openRoleplay}
+            practicedMistakeIds={practicedMistakeIds}
             sessions={practiceSessions}
           />
         ) : null}

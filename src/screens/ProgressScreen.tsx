@@ -18,7 +18,7 @@ import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
 import { createLocalProgressStats } from '../utils/localProgress';
-import { createMistakePracticeDrill } from '../utils/mistakePracticeDrill';
+import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
@@ -26,13 +26,21 @@ import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
   dailyTarget: DailyPracticeTarget;
+  onMarkMistakePracticed: (mistakeId: string) => void;
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
+  practicedMistakeIds: string[];
   sessions: PracticeSession[];
 };
 
 const weekActivity = [28, 44, 18, 65, 40, 72, 55];
 
-export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: ProgressScreenProps) {
+export function ProgressScreen({
+  dailyTarget,
+  onMarkMistakePracticed,
+  onOpenRoleplay,
+  practicedMistakeIds,
+  sessions,
+}: ProgressScreenProps) {
   const { summary, mistakeBank } = progressData;
   const mission = createDailyMission(summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
@@ -48,6 +56,12 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
   const emptyState = isFirstSaveLocked ? createProgressEmptyState() : null;
   const mistakePreview = isFirstSaveLocked ? createProgressMistakeBankPreview(mistakeBank) : null;
   const mistakeDrill = isFirstSaveLocked ? null : createMistakePracticeDrill(mistakeBank);
+  const isTopMistakePracticed = mistakeDrill
+    ? practicedMistakeIds.includes(mistakeDrill.mistake.id)
+    : false;
+  const mistakePracticeStatus = mistakeDrill
+    ? createMistakePracticeStatus(isTopMistakePracticed)
+    : null;
 
   return (
     <ScreenContainer
@@ -221,6 +235,26 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
                   </View>
                 ))}
               </View>
+              {mistakePracticeStatus ? (
+                <View style={styles.practiceStatusBox}>
+                  <View style={styles.rowBetween}>
+                    <Text style={styles.mistakeLabelStrong}>{mistakePracticeStatus.label}</Text>
+                    <Badge
+                      label={isTopMistakePracticed ? 'Saved locally' : '1 quick repeat'}
+                      tone={isTopMistakePracticed ? 'success' : 'info'}
+                    />
+                  </View>
+                  <Text style={styles.practiceStatusBody}>{mistakePracticeStatus.body}</Text>
+                  <View style={styles.practiceStatusAction}>
+                    <AppButton
+                      disabled={isTopMistakePracticed}
+                      label={mistakePracticeStatus.ctaLabel}
+                      onPress={() => onMarkMistakePracticed(mistakeDrill.mistake.id)}
+                      variant={isTopMistakePracticed ? 'quiet' : 'secondary'}
+                    />
+                  </View>
+                </View>
+              ) : null}
               <View style={styles.cardAction}>
                 <AppButton
                   label={mistakeDrill.ctaLabel}
@@ -432,6 +466,24 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
+  },
+  practiceStatusBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  practiceStatusBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  practiceStatusAction: {
+    marginTop: spacing.md,
   },
   skillGrid: {
     flexDirection: 'row',

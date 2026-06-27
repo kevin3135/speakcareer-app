@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-27: Persisted Mistake Drill Practice
+
+Persisted the top Wins correction drill locally so the learner can mark one correction as practiced and return to a real `Practiced once` state later. The Progress drill now shows a short repeat-status panel, stores practiced mistake IDs in AsyncStorage, and keeps the linked roleplay CTA available for immediate reuse.
+
+What went well:
+
+- This strengthened the habit loop without adding screens, integrations or new content models.
+- The existing `createMistakePracticeStatus` helper was reused instead of inventing a second status format.
+- The change stayed focused on one local storage helper, navigator state wiring and one Progress card update.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include Expo/browser visual QA, so the new status panel still needs a quick mobile layout check.
+- The practiced state is still driven by the static mock mistake bank, not by parsing mistakes out of real saved answers yet.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Persisting one small correction action is enough to make Progress feel more earned.
+- Keep the correction drill connected to an immediate roleplay CTA so the user can reuse the phrase while it is fresh.
+- Prefer adding lightweight local state around the existing mock mistake bank before attempting automatic mistake extraction.
+
+Next suggested task:
+
+- When a learner opens a roleplay from the top correction drill, show that exact correction as a short warm-up cue above the answer box.
+
 ## 2026-06-27: Actionable Progress Coaching
 
 Turned the Progress screen into a clearer coach surface after a saved roleplay. The old generic daily-goal card now uses the existing next-step guidance helper, showing one recommended action, three short steps and a direct CTA into the right next roleplay. Progress also now highlights one top-priority correction as a focused practice drill before the full mistake bank.

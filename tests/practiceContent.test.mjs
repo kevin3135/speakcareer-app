@@ -644,6 +644,39 @@ test('stores local practice sessions safely', async () => {
   );
 });
 
+test('stores practiced mistake ids in local storage', async () => {
+  const {
+    PRACTICED_MISTAKE_IDS_KEY,
+    normalizePracticedMistakeIds,
+    readPracticedMistakeIds,
+    savePracticedMistakeIds,
+  } = await import('../src/utils/mistakePracticeStorage.ts');
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  assert.deepEqual(normalizePracticedMistakeIds(['m-001', '', 12, 'm-002']), ['m-001', 'm-002']);
+  assert.deepEqual(await readPracticedMistakeIds(storage), []);
+
+  await savePracticedMistakeIds(storage, ['m-001', 'm-002', 'm-001']);
+
+  assert.equal(values.get(PRACTICED_MISTAKE_IDS_KEY), JSON.stringify(['m-001', 'm-002']));
+  assert.deepEqual(await readPracticedMistakeIds(storage), ['m-001', 'm-002']);
+  assert.deepEqual(
+    await readPracticedMistakeIds({
+      getItem: async () => {
+        throw new Error('Storage unavailable');
+      },
+      setItem: async () => undefined,
+    }),
+    [],
+  );
+});
+
 test('creates a lesson-complete summary from saved sessions', async () => {
   const { createLessonCompleteSummary } = await import('../src/utils/lessonComplete.ts');
   const sessions = [
