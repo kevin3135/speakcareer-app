@@ -102,7 +102,9 @@ export function AppNavigator() {
             sessions={practiceSessions}
           />
         ) : null}
-        {activeScreen === 'Practice' ? <PracticeScreen onOpenRoleplay={openRoleplay} /> : null}
+        {activeScreen === 'Practice' ? (
+          <PracticeScreen onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
+        ) : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
             key={selectedRoleplay.id}

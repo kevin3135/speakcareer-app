@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { AppButton } from '../components/AppButton';
 import { Card } from '../components/Card';
+import { LearningPath } from '../components/LearningPath';
+import { ProgressBar } from '../components/ProgressBar';
 import { RoleplayCard } from '../components/RoleplayCard';
 import { Screen } from '../components/Screen';
 import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
-import type { RoleplayId } from '../types';
+import type { PracticeSession, RoleplayId } from '../types';
+import { createPracticeCareerPath } from '../utils/practiceCareerPath';
 import {
   ALL_CATEGORIES_FILTER,
   ALL_LEVELS_FILTER,
@@ -20,12 +24,17 @@ import {
 
 type PracticeScreenProps = {
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
+  sessions: PracticeSession[];
 };
 
-export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
+export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps) {
   const [selectedCategory, setSelectedCategory] =
     useState<RoleplayCategoryFilter>(ALL_CATEGORIES_FILTER);
   const [selectedLevel, setSelectedLevel] = useState<RoleplayLevelFilter>(ALL_LEVELS_FILTER);
+  const practiceCareerPath = createPracticeCareerPath({
+    roleplays: practiceContent.roleplays,
+    sessions,
+  });
   const categoryFilters = getRoleplayCategoryFilters(practiceContent.roleplays);
   const levelFilters = getRoleplayLevelFilters(practiceContent.roleplays);
   const categoryFilteredRoleplays = filterRoleplaysByCategory(
@@ -37,33 +46,46 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
   return (
     <Screen
       title="Practice"
-      subtitle="Short English drills for professional conversations."
+      subtitle="Follow one guided English career path, then browse the full library."
     >
-      {practiceContent.practiceModules.map((module) => (
-        <Card key={module.id}>
-          <View style={styles.moduleHeader}>
-            <View style={styles.moduleTitleBlock}>
-              <Text style={styles.moduleTitle}>{module.title}</Text>
-              <Text style={styles.level}>{module.level}</Text>
-            </View>
-            <View style={styles.rewardPill}>
-              <Text style={styles.rewardValue}>+{module.minutes * 3} XP</Text>
-              <Text style={styles.minutes}>{module.minutes} min</Text>
-            </View>
+      <View style={styles.hero}>
+        <View style={styles.heroHeader}>
+          <Text style={styles.heroKicker}>Recommended next</Text>
+          <View style={styles.metaPill}>
+            <Text style={styles.metaPillText}>{practiceCareerPath.meta}</Text>
           </View>
-          <Text style={styles.outcome}>{module.outcome}</Text>
-          <View style={styles.drills}>
-            {module.drills.map((drill) => (
-              <View key={drill} style={styles.drillChip}>
-                <Text style={styles.drill}>{drill}</Text>
-              </View>
-            ))}
-          </View>
-        </Card>
-      ))}
+        </View>
+        <Text style={styles.heroTitle}>{practiceCareerPath.title}</Text>
+        <Text style={styles.heroBody}>{practiceCareerPath.body}</Text>
+        <View style={styles.heroProgress}>
+          <ProgressBar label={practiceCareerPath.progressLabel} value={practiceCareerPath.progressPercent} />
+        </View>
+        <View style={styles.buttonRow}>
+          <AppButton
+            accessibilityHint="Starts the next recommended sprint from the Practice path"
+            label={practiceCareerPath.ctaLabel}
+            onPress={() => onOpenRoleplay(practiceCareerPath.roleplayId)}
+          />
+        </View>
+      </View>
+
+      <Card>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Career path</Text>
+          <Text style={styles.sectionMeta}>{practiceCareerPath.progressLabel}</Text>
+        </View>
+        <View style={styles.pathBody}>
+          <LearningPath
+            steps={practiceCareerPath.steps.map((step) => ({
+              ...step,
+              onPress: () => onOpenRoleplay(step.roleplayId),
+            }))}
+          />
+        </View>
+      </Card>
 
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Roleplays</Text>
+        <Text style={styles.sectionTitle}>Scenario library</Text>
         <Text style={styles.sectionMeta}>{filteredRoleplays.length} scenarios</Text>
       </View>
       <Text style={styles.filterLabel}>Category</Text>
@@ -128,74 +150,62 @@ export function PracticeScreen({ onOpenRoleplay }: PracticeScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  moduleHeader: {
+  hero: {
+    backgroundColor: '#F0F8F4',
+    borderColor: '#B7DED3',
+    borderRadius: radii.md,
+    borderWidth: 1,
+    padding: spacing.xl,
+  },
+  heroHeader: {
     alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  moduleTitleBlock: {
-    flex: 1,
-    paddingRight: spacing.md,
-  },
-  moduleTitle: {
-    color: colors.ink,
-    fontSize: typography.h2,
-    fontWeight: '900',
-  },
-  rewardPill: {
-    alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderRadius: 8,
-    minWidth: 76,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-  },
-  rewardValue: {
-    color: colors.ink,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  minutes: {
-    color: colors.accent,
-    fontSize: 11,
-    fontWeight: '900',
-    marginTop: spacing.xs,
-  },
-  outcome: {
-    color: colors.textMuted,
-    fontSize: typography.body,
-    lineHeight: 22,
-    marginTop: spacing.sm,
-  },
-  level: {
+  heroKicker: {
     color: colors.primaryDark,
     fontSize: typography.small,
-    fontWeight: '800',
-    marginTop: spacing.xs,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
-  drills: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  metaPill: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: 999,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  metaPillText: {
+    color: colors.ink,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  heroTitle: {
+    color: colors.ink,
+    fontSize: typography.h1,
+    fontWeight: '900',
+    lineHeight: 31,
+    marginTop: spacing.sm,
+  },
+  heroBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
     marginTop: spacing.md,
   },
-  drillChip: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: 8,
-    marginBottom: spacing.sm,
-    marginRight: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+  heroProgress: {
+    marginTop: spacing.lg,
   },
-  drill: {
-    color: colors.text,
-    fontSize: typography.small,
-    fontWeight: '800',
+  buttonRow: {
+    marginTop: spacing.lg,
   },
   sectionHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: spacing.sm,
+  },
+  pathBody: {
+    marginTop: spacing.lg,
   },
   sectionTitle: {
     color: colors.ink,

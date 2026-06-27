@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Guided Practice Career Path
+
+Built one focused practice-flow improvement: the Practice screen now opens with a guided career path instead of starting with a flat module list. Users see one recommended next sprint, path progress, locked and unlocked roleplays, and the full scenario library remains available below.
+
+What went well:
+
+- The Practice tab now matches the clearer, more game-like guidance already added to Home without becoming childish.
+- Reused the existing `LearningPath` component so the new flow stays simple and easy to extend.
+- Added `createPracticeCareerPath` so unlock order, replay behavior and copy are tested outside the screen.
+- Mobile browser preview confirmed Practice shows `Recommended next`, `0 of 5 complete`, one active Job Interview step and the library below it.
+
+What went wrong:
+
+- The new path is still based on saved local sessions, so unlocking remains mock/local until backend work is approved later.
+- Replacing the old top module cards makes Practice more focused, but the scenario library below is still a long scroll on mobile.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 48 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Practice should open with one recommended sprint and visible progress, not a broad wall of options.
+- Sequential unlocks create a stronger habit loop when they are tied to saved local sessions.
+- Keep the full library available, but always subordinate it to the next guided action.
+
+Next suggested task:
+
+- Turn the first-time Progress session history empty state into a guided first-save card tied to the new Practice path.
+
 ## 2026-06-27: Gamified Home Quest
 
 Built one focused UX improvement after Kevin said the app felt too cluttered and not game-like enough. Home now opens with a clear daily quest, streak, level, target, reward and a three-step career path instead of separate "How it works", mission and library sections.

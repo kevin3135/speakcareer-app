@@ -1546,6 +1546,64 @@ test('creates a professional daily mission from progress data', async () => {
   assert.ok(mission.progressPercent <= 100);
 });
 
+test('creates a guided practice career path for first-time users', async () => {
+  const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
+  const path = createPracticeCareerPath({
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+  });
+
+  assert.equal(path.title, 'Next: Job Interview');
+  assert.equal(path.meta, 'Start simple');
+  assert.equal(path.progressLabel, '0 of 5 complete');
+  assert.equal(path.progressPercent, 0);
+  assert.equal(path.roleplayId, 'job-interview');
+  assert.equal(path.ctaLabel, 'Start Job Interview');
+  assert.deepEqual(
+    path.steps.map((step) => step.state),
+    ['active', 'locked', 'locked', 'locked', 'locked'],
+  );
+  assert.equal(path.steps[0].caption, 'Interview | B1-B2 | 12 min');
+});
+
+test('unlocks the next practice sprint in sequence after saved sessions', async () => {
+  const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
+  const path = createPracticeCareerPath({
+    roleplays: practiceContent.roleplays,
+    sessions: [
+      { roleplayId: 'meeting-practice' },
+      { roleplayId: 'job-interview' },
+    ],
+  });
+
+  assert.equal(path.title, 'Next: Presentation Practice');
+  assert.equal(path.meta, '2 of 5 complete');
+  assert.equal(path.progressLabel, '2 of 5 complete');
+  assert.equal(path.progressPercent, 40);
+  assert.equal(path.roleplayId, 'presentation-practice');
+  assert.deepEqual(
+    path.steps.map((step) => step.state),
+    ['done', 'done', 'active', 'locked', 'locked'],
+  );
+});
+
+test('loops the practice career path after all core roleplays are complete', async () => {
+  const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
+  const path = createPracticeCareerPath({
+    roleplays: practiceContent.roleplays,
+    sessions: practiceContent.roleplays.map((roleplay) => ({ roleplayId: roleplay.id })),
+  });
+
+  assert.equal(path.title, 'Career path complete');
+  assert.equal(path.meta, 'Full path complete');
+  assert.equal(path.progressLabel, '5 of 5 complete');
+  assert.equal(path.progressPercent, 100);
+  assert.equal(path.roleplayId, 'meeting-practice');
+  assert.equal(path.ctaLabel, 'Replay Meeting Practice');
+  assert.equal(path.steps.find((step) => step.roleplayId === 'meeting-practice').state, 'active');
+  assert.equal(path.steps.filter((step) => step.state === 'done').length, 4);
+});
+
 test('formats the five-minute focus timer', async () => {
   const {
     createFocusTimerControls,
