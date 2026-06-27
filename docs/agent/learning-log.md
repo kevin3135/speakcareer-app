@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-27: Prioritized Roleplay Save Action
+
+Made the post-feedback Roleplay flow clearer by moving the primary save button above the optional follow-up prompt. After `Better English`, the learner now sees the save action before the bonus turn, so the main path is easier to understand and the follow-up feels like optional extra practice instead of a competing requirement.
+
+What went well:
+
+- This directly addressed the feedback-card hierarchy without adding a new feature.
+- The change stayed in one screen and only reordered existing UI blocks.
+- The safer default path is now: read correction, save answer, optionally do bonus follow-up.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser visual QA after the reorder, so the post-feedback fold should still be checked on mobile.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In Roleplay feedback, saving the corrected answer is the main route; follow-up is bonus depth.
+- Keep optional practice below the main action unless the user explicitly opens it.
+- Reordering existing UI can remove confusion without increasing code complexity.
+
+Next suggested task:
+
+- Mobile-preview the post-feedback state and, if needed, make the optional bonus turn visually lighter than the save section.
+
 ## 2026-06-27: Quiet Roleplay Back Button
 
 Verified the Roleplay first viewport at a mobile `390x844` size in the in-app browser. The answer field and disabled `Check answer` button are visible above the fold, with the button ending around y=464, so the main practice action is reachable without scrolling. Then made the Roleplay back button smaller and pill-shaped so it remains available without competing with the coach prompt.

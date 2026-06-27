@@ -333,6 +333,11 @@ export function RoleplayScreen({
           </View>
           <Text style={styles.cardTitle}>{savePrompt.title}</Text>
           <Text style={styles.followUpBody}>{savePrompt.body}</Text>
+          <View style={styles.feedbackActions}>
+            <View style={styles.feedbackActionItem}>
+              <AppButton label={savePrompt.ctaLabel} onPress={saveSession} />
+            </View>
+          </View>
           {followUpPrompt ? (
             <View style={styles.followUpPromptBox}>
               <View style={styles.oneThingHeader}>
@@ -388,11 +393,6 @@ export function RoleplayScreen({
               )}
             </View>
           ) : null}
-          <View style={styles.feedbackActions}>
-            <View style={styles.feedbackActionItem}>
-              <AppButton label={savePrompt.ctaLabel} onPress={saveSession} />
-            </View>
-          </View>
         </Card>
       ) : null}
     </ScreenContainer>
