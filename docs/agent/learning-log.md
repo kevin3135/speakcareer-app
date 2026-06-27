@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Quiet Foundation Handoff Chrome
+
+Polished the completed Foundation lesson handoff area after confirming the handoff content is already compact on this branch. The visible code change makes the Foundation back button smaller and pill-shaped, matching the quieter Roleplay chrome so `Continue to interview` remains the main action.
+
+What went well:
+
+- This kept the foundation-to-roleplay bridge focused on one next action.
+- The change stayed in one screen and reused existing theme spacing and radius tokens.
+- The handoff card already had two-line starter/coach limits, so no extra text changes were needed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile browser QA, so the finished Foundation state should still be screenshot-checked.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Foundation handoff should show enough confidence to start the interview, not another long lesson.
+- Keep Back visible, but treat it as secondary chrome.
+- Keep the starter answer visible but visually secondary to `Continue to interview`.
+
+Next suggested task:
+
+- Mobile-preview the completed Foundation state and, if needed, make the `Continue to interview` button sticky or closer to the handoff.
+
 ## 2026-06-28: Foundation-to-Interview Starter Handoff
 
 Made one focused practice-flow improvement: after the learner finishes the Foundation sentence, the screen now shows a compact handoff card for `Quest 1: Job Interview` with a level-matched starter answer and the matching coach note. This makes the first interview response easier to begin before the learner enters Roleplay.

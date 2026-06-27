@@ -132,14 +132,14 @@ export function FoundationScreen({ onBack, onStartCareerPractice, startingLevelI
 const styles = StyleSheet.create({
   backButton: {
     alignItems: 'center',
+    alignSelf: 'flex-start',
     backgroundColor: colors.surface,
     borderColor: colors.borderStrong,
-    borderRadius: radius.lg,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    alignSelf: 'flex-start',
-    minHeight: 42,
     justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
+    minHeight: 36,
+    paddingHorizontal: spacing.md,
   },
   structureBlockPressed: {
     opacity: 0.84,
