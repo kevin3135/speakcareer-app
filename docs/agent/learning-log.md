@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-27: Quiet Roleplay Back Button
+
+Verified the Roleplay first viewport at a mobile `390x844` size in the in-app browser. The answer field and disabled `Check answer` button are visible above the fold, with the button ending around y=464, so the main practice action is reachable without scrolling. Then made the Roleplay back button smaller and pill-shaped so it remains available without competing with the coach prompt.
+
+What went well:
+
+- Browser QA confirmed the previous answer-card compaction worked before adding more changes.
+- The code change stayed tiny: one existing back-button style became quieter.
+- The user still has a clear way back, but the first viewport gives more attention to the answer flow.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first browser click attempt timed out, so the browser connection had to be recovered before measuring the Roleplay view.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Do not shrink the Roleplay answer card further unless a screenshot shows the CTA falling below the fold.
+- Keep Back visible, but treat it as secondary chrome.
+- Browser viewport QA is useful before making more Roleplay layout guesses.
+
+Next suggested task:
+
+- Simplify the post-feedback card so `Better English`, `Save answer` and optional follow-up are visually prioritized without feeling like three equal actions.
+
 ## 2026-06-27: Optional Roleplay Follow-Up Turn
 
 Added one focused roleplay-loop improvement: after a strong first answer, the learner can now open one optional adaptive follow-up turn before saving. The Roleplay screen now shows a follow-up prompt based on the first answer weakness, tracks a small bonus XP reward when the follow-up is strong enough, saves that extra turn into the local session summary, and shows a `Follow-up saved` cue in Progress for the latest win.
