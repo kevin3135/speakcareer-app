@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: One-Card First Feedback
+
+Built one focused simplification: after `Check answer` in the first Job Interview flow, the user now sees one simple feedback card with a short confirmation, one `Better English` rewrite and the XP label. The same button then becomes `Save answer`.
+
+What went well:
+
+- The post-check state now stays as simple as the first prompt screen.
+- Added a small `createFirstQuestFeedbackState` helper so the first feedback card stays predictable.
+- The app still uses the existing rule-based mock feedback, but hides the full feedback panel for first-run users.
+- Mobile preview confirmed the screen shows one feedback card and one save path.
+
+What went wrong:
+
+- The suggested rewrite is still the scenario-level mock rewrite, not a true rewrite of the user's typed answer.
+- The first feedback card sits inside `RoleplayScreen`; extraction can wait until the flow settles.
+- The screenshot showed the card can extend below the fold with a longer rewrite, so later copy may need shorter first-run rewrites.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 52 tests.
+- `npm.cmd run lint` passed.
+- Mobile browser preview passed for first-run check-answer feedback.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run feedback should be one correction, one rewrite and one save button.
+- Avoid bringing back the full feedback panel until after the first saved session.
+- Next useful improvement is shortening the first-run rewrite so the save button stays visible.
+
+Next suggested task:
+
+- Create a shorter first-run rewrite for the first Job Interview answer so the entire feedback and save path fit on one phone screen.
+
 ## 2026-06-27: One-Button First Interview
 
 Built one focused first-run simplification: the first Job Interview roleplay now has a special simple mode before any session is saved. New users see only one interview question, the `I + action + result` structure, one answer box and one primary button that changes from `Check answer` to `Save answer`.

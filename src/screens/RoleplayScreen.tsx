@@ -13,6 +13,7 @@ import { createAnswerCoachContent } from '../utils/answerCoach';
 import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createAdaptiveFollowUpPrompt, type AdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
+import { createFirstQuestFeedbackState } from '../utils/firstQuestFeedback';
 import { createFocusTimerControls, FOCUS_SESSION_SECONDS, formatFocusTime } from '../utils/focusTimer';
 import { createLocalProgressStats } from '../utils/localProgress';
 import {
@@ -156,6 +157,10 @@ export function RoleplayScreen({
     sessions: completionSessions,
   });
   const isFirstQuestMode = Boolean(firstQuest);
+  const firstQuestFeedback = createFirstQuestFeedbackState({
+    answerReview,
+    feedbackResult,
+  });
 
   useEffect(() => {
     if (!isTimerRunning) {
@@ -318,12 +323,20 @@ export function RoleplayScreen({
             value={draftAnswer}
           />
 
-          {answerReview ? (
+          {firstQuestFeedback ? (
             <View style={styles.simpleReviewBox}>
-              <Text style={styles.simpleReviewTitle}>{answerReview.readinessLabel}</Text>
-              <Text style={styles.simpleReviewBody}>{answerReview.reviewNote}</Text>
-              {isSimpleAnswerReady && feedbackResult ? (
-                <Text style={styles.simpleRewardText}>Ready to save: +{feedbackResult.xpReward} XP</Text>
+              <View style={styles.simpleReviewHeader}>
+                <Text style={styles.simpleReviewTitle}>{firstQuestFeedback.title}</Text>
+                {firstQuestFeedback.xpLabel ? (
+                  <Text style={styles.simpleRewardPill}>{firstQuestFeedback.xpLabel}</Text>
+                ) : null}
+              </View>
+              <Text style={styles.simpleReviewBody}>{firstQuestFeedback.body}</Text>
+              {firstQuestFeedback.rewrite ? (
+                <View style={styles.simpleRewriteBox}>
+                  <Text style={styles.simpleRewriteLabel}>{firstQuestFeedback.rewriteLabel}</Text>
+                  <Text style={styles.simpleRewriteText}>{firstQuestFeedback.rewrite}</Text>
+                </View>
               ) : null}
             </View>
           ) : null}
@@ -955,10 +968,18 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
     padding: spacing.lg,
   },
+  simpleReviewHeader: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   simpleReviewTitle: {
     color: colors.ink,
+    flex: 1,
     fontSize: typography.h3,
     fontWeight: '900',
+    lineHeight: 22,
+    paddingRight: spacing.md,
   },
   simpleReviewBody: {
     color: colors.text,
@@ -966,12 +987,35 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.xs,
   },
-  simpleRewardText: {
+  simpleRewardPill: {
+    backgroundColor: colors.surface,
+    borderRadius: 999,
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
-    marginTop: spacing.sm,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
     textTransform: 'uppercase',
+  },
+  simpleRewriteBox: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  simpleRewriteLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  simpleRewriteText: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 22,
+    marginTop: spacing.xs,
   },
   simpleQuestAction: {
     marginTop: spacing.lg,

@@ -94,6 +94,50 @@ test('shows a first-quest banner only for the initial Job Interview run', async 
   );
 });
 
+test('creates one simple first-quest feedback card', async () => {
+  const { createFirstQuestFeedbackState } = await import('../src/utils/firstQuestFeedback.ts');
+
+  assert.equal(
+    createFirstQuestFeedbackState({
+      answerReview: null,
+      feedbackResult: null,
+    }),
+    null,
+  );
+
+  const needsWork = createFirstQuestFeedbackState({
+    answerReview: {
+      isReadyForFeedback: false,
+      readinessLabel: 'Add one more sentence',
+      reviewNote: 'Write at least two short sentences before saving.',
+    },
+    feedbackResult: null,
+  });
+
+  assert.equal(needsWork.title, 'Add one more sentence');
+  assert.equal(needsWork.body, 'Write at least two short sentences before saving.');
+  assert.equal(needsWork.rewrite, undefined);
+
+  const ready = createFirstQuestFeedbackState({
+    answerReview: {
+      isReadyForFeedback: true,
+      readinessLabel: 'Ready',
+      reviewNote: 'Good enough to review.',
+    },
+    feedbackResult: {
+      feedback: {
+        suggestedRewrite: 'I helped the team finish the project on time.',
+      },
+      xpReward: 40,
+    },
+  });
+
+  assert.equal(ready.title, 'Good. Say it like this.');
+  assert.equal(ready.rewriteLabel, 'Better English');
+  assert.equal(ready.rewrite, 'I helped the team finish the project on time.');
+  assert.equal(ready.xpLabel, '+40 XP');
+});
+
 test('stores onboarding completion in local storage', async () => {
   const {
     ONBOARDING_COMPLETED_KEY,
