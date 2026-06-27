@@ -17,6 +17,7 @@ import { foundationStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createHomeLearnState } from '../utils/homeLearnState';
 import { createHomeLibraryState } from '../utils/homeLibrary';
 
 type HomeScreenProps = {
@@ -34,54 +35,37 @@ export function HomeScreen({
 }: HomeScreenProps) {
   const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const hasSavedPractice = sessions.length > 0;
-  const recommendedRoleplay =
-    practiceContent.roleplays.find((roleplay) => roleplay.id === (hasSavedPractice ? 'meeting-practice' : 'job-interview')) ??
-    practiceContent.roleplays[0];
-  const homeLibrary = createHomeLibraryState(sessions, practiceContent.roleplays, recommendedRoleplay.id);
-  const startToday = hasSavedPractice
-    ? () => onOpenRoleplay(recommendedRoleplay.id)
-    : onStartFoundation;
-  const todayStep = hasSavedPractice
-    ? {
-        eyebrow: 'Next quest',
-        title: recommendedRoleplay.title,
-        body: 'Answer one workplace prompt and save one better version.',
-        cta: 'Start next roleplay',
-      }
-    : {
-        eyebrow: 'Step 1',
-        title: foundationStart.title,
-        body: 'Tap three blocks: I, action, result. Then the interview unlocks.',
-        cta: 'Start step 1',
-      };
+  const learnState = createHomeLearnState({
+    foundationCtaLabel: foundationStart.ctaLabel,
+    foundationTitle: foundationStart.title,
+    roleplays: practiceContent.roleplays,
+    sessions,
+  });
+  const guidedRoleplayId: RoleplayId =
+    learnState.hero.target === 'foundation' ? 'job-interview' : learnState.hero.target;
+  const homeLibrary = createHomeLibraryState(
+    sessions,
+    practiceContent.roleplays,
+    guidedRoleplayId,
+  );
+  function startToday() {
+    if (learnState.hero.target === 'foundation') {
+      onStartFoundation();
+      return;
+    }
 
-  const lessonPath = [
-    {
-      body: 'Learn the sentence shape that makes work English clear.',
-      meta: '2 min foundation',
-      state: hasSavedPractice ? 'completed' as const : 'current' as const,
-      title: 'Clear sentence',
-      xpLabel: '+20 XP',
-      onPress: hasSavedPractice ? undefined : onStartFoundation,
-    },
-    {
-      body: 'Use the same shape in a real interview answer.',
-      meta: '5 min roleplay',
-      state: hasSavedPractice ? 'current' as const : 'locked' as const,
-      title: 'Interview answer',
-      xpLabel: '+40 XP',
-      onPress: hasSavedPractice ? () => onOpenRoleplay('job-interview') : undefined,
-    },
-    {
-      body: 'Give a short update without rambling.',
-      meta: 'Unlocks after interview',
-      state: sessions.some((session) => session.roleplayId === 'meeting-practice')
-        ? 'completed' as const
-        : 'locked' as const,
-      title: 'Meeting update',
-      xpLabel: '+45 XP',
-    },
-  ];
+    onOpenRoleplay(learnState.hero.target);
+  }
+  const activeLessonIndex = Math.max(
+    0,
+    learnState.steps.findIndex((lesson) => lesson.state === 'current'),
+  );
+  const activeLesson = learnState.steps[activeLessonIndex] ?? learnState.steps[0];
+  const activeRoleplayId = activeLesson.roleplayId;
+  const startActiveLesson = activeRoleplayId
+    ? () => onOpenRoleplay(activeRoleplayId)
+    : onStartFoundation;
+  const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
 
   return (
     <ScreenContainer
@@ -95,13 +79,13 @@ export function HomeScreen({
       title="Ready for today?"
     >
       <GradientHero
-        overline={todayStep.eyebrow}
-        subtitle={todayStep.body}
-        title={todayStep.title}
+        overline={learnState.hero.eyebrow}
+        subtitle={learnState.hero.body}
+        title={learnState.hero.title}
         tone="primary"
       >
         <View>
-          <GradientButton label={todayStep.cta} onPress={startToday} />
+          <GradientButton label={learnState.hero.ctaLabel} onPress={startToday} />
         </View>
       </GradientHero>
 
@@ -130,21 +114,44 @@ export function HomeScreen({
       ) : null}
 
       <SectionHeader
-        subtitle="Follow the active card. Locked lessons show what comes next."
+        subtitle="Follow the one card marked Now. The rest stay visible, but quieter."
         title="Your path"
       />
-      {lessonPath.map((lesson, index) => (
-        <LessonCard
-          body={lesson.body}
-          index={index + 1}
-          key={lesson.title}
-          meta={lesson.meta}
-          onPress={lesson.onPress}
-          state={lesson.state}
-          title={lesson.title}
-          xpLabel={lesson.xpLabel}
-        />
-      ))}
+      <LessonCard
+        body={activeLesson.body}
+        ctaLabel={activeLesson.ctaLabel}
+        index={activeLessonIndex + 1}
+        meta={activeLesson.meta}
+        onPress={startActiveLesson}
+        state={activeLesson.state}
+        title={activeLesson.title}
+        xpLabel={activeLesson.xpLabel}
+      />
+      <Card tone="muted">
+        <Text style={styles.previewLessonsLabel}>Later on this path</Text>
+        <View style={styles.previewLessonsList}>
+          {previewLessons.map((lesson, index) => (
+            <View key={lesson.title} style={styles.previewLessonRow}>
+              <View style={styles.previewLessonNumber}>
+                <Text style={styles.previewLessonNumberText}>
+                  {String(index >= activeLessonIndex ? index + 2 : index + 1).padStart(2, '0')}
+                </Text>
+              </View>
+              <View style={styles.previewLessonCopy}>
+                <View style={styles.previewLessonTitleRow}>
+                  <Text style={styles.previewLessonTitle}>{lesson.title}</Text>
+                  <Badge
+                    label={lesson.state === 'completed' ? 'Done' : 'Locked'}
+                    tone={lesson.state === 'completed' ? 'secondary' : 'purple'}
+                  />
+                </View>
+                <Text style={styles.previewLessonMeta}>{lesson.meta}</Text>
+                <Text style={styles.previewLessonBody}>{lesson.body}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      </Card>
 
       <SectionHeader
         action={<Badge label={homeLibrary.meta} tone="info" />}
@@ -233,6 +240,65 @@ const styles = StyleSheet.create({
   },
   questProgress: {
     marginTop: spacing.lg,
+  },
+  previewLessonsLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  previewLessonsList: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  previewLessonRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  previewLessonNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: radius.pill,
+    height: 42,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    width: 42,
+  },
+  previewLessonNumberText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  previewLessonCopy: {
+    flex: 1,
+    gap: spacing.xs,
+  },
+  previewLessonTitleRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  previewLessonTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  previewLessonMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  previewLessonBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: typography.lineSmall,
   },
   unlockBody: {
     color: colors.textMuted,

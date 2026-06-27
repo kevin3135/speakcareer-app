@@ -917,6 +917,45 @@ test('creates a simple game-like Home quest path', async () => {
   assert.ok(returningPath.nodes[2].body.includes('5-minute sprint'));
 });
 
+test('keeps the Learn path focused on one current step', async () => {
+  const { foundationStart } = await import('../src/data/guidedIntro.ts');
+  const { createHomeLearnState } = await import('../src/utils/homeLearnState.ts');
+
+  const firstRunLearnState = createHomeLearnState({
+    foundationCtaLabel: foundationStart.ctaLabel,
+    foundationTitle: foundationStart.title,
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+  });
+
+  assert.equal(firstRunLearnState.hero.target, 'foundation');
+  assert.equal(firstRunLearnState.hero.ctaLabel, 'Start step 1');
+  assert.equal(firstRunLearnState.steps.filter((step) => step.state === 'current').length, 1);
+  assert.equal(firstRunLearnState.steps[0].title, 'Clear sentence');
+  assert.equal(firstRunLearnState.steps[0].state, 'current');
+  assert.equal(firstRunLearnState.steps[1].title, 'Job Interview');
+  assert.equal(firstRunLearnState.steps[1].state, 'locked');
+  assert.ok(firstRunLearnState.steps[1].body.includes('foundation lesson'));
+
+  const returningLearnState = createHomeLearnState({
+    foundationCtaLabel: foundationStart.ctaLabel,
+    foundationTitle: foundationStart.title,
+    roleplays: practiceContent.roleplays,
+    sessions: [{ roleplayId: 'job-interview' }],
+  });
+
+  assert.equal(returningLearnState.hero.target, 'meeting-practice');
+  assert.equal(returningLearnState.hero.title, 'Next: Meeting Practice');
+  assert.equal(returningLearnState.steps.filter((step) => step.state === 'current').length, 1);
+  assert.deepEqual(
+    returningLearnState.steps.slice(0, 4).map((step) => step.state),
+    ['completed', 'completed', 'current', 'locked'],
+  );
+  assert.ok(returningLearnState.steps[1].body.includes('practice history'));
+  assert.ok(returningLearnState.steps[2].body.includes('Meeting Practice'));
+  assert.ok(returningLearnState.steps[3].body.includes('Unlocks after'));
+});
+
 test('creates one clear Home daily mission card', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createHomeDailyMissionCard } = await import('../src/utils/homeDailyMission.ts');

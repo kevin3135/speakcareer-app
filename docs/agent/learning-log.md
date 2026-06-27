@@ -1,14 +1,14 @@
 # Agent Learning Log
 
-## 2026-06-27: Quieter Learn Unlock Preview
+## 2026-06-27: Single Active Learn Path
 
-Built one focused onboarding and practice-flow improvement: the Learn screen no longer adds a separate clickable Home roleplay card. Instead, it now shows one clear primary action in the hero and a quiet `What unlocks next` preview underneath the lesson path. The extra daily mission card is also hidden before the first saved answer, so first-run users see less duplication.
+Built one focused onboarding and practice-flow improvement: the Learn screen now shows one highlighted current lesson card and moves the rest of the path into softer preview rows. The quiet `What unlocks next` preview stays below that path, so the user sees one clear next action without losing a sense of progress.
 
 What went well:
 
-- The first Learn screen now points to one next action instead of a second roleplay choice.
-- Upcoming scenarios still feel motivating because the unlock preview shows what is coming next without turning it into another decision.
-- The change reused the existing local `homeLibrary` helper instead of adding new architecture.
+- The current lesson is now visually dominant, which better matches the app-led flow.
+- Completed and locked lessons still give progress context without competing with the active card.
+- Added a small `homeLearnState` helper so the hero and Learn path stay aligned on the same next step.
 - `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
 
 What went wrong:
@@ -20,7 +20,7 @@ What went wrong:
 Checks run:
 
 - `npm.cmd run typecheck` passed.
-- `npm.cmd run test` passed with 55 tests.
+- `npm.cmd run test` passed with 56 tests.
 - `npm.cmd run lint` passed.
 
 Rubric self-evaluation:
@@ -34,13 +34,13 @@ Rubric self-evaluation:
 
 Agent memory for next time:
 
-- On Learn, future lessons can be motivating without becoming extra choices.
-- Before the first saved answer, avoid duplicate progress cards and duplicate CTAs.
+- On Learn, the active lesson should stay visually louder than completed and locked lessons.
 - Quiet previews work well for upcoming roleplays because they preserve momentum without letting the user wander.
+- If progress context is needed, prefer softer preview rows over multiple full-size action cards.
 
 Next suggested task:
 
-- Simplify the returning Learn screen further by turning the active lesson path into one highlighted current card and softer completed/locked previews.
+- Reduce duplicate motivation panels on Learn by folding the daily mission progress into the hero or active lesson card.
 
 ## 2026-06-27: Starting Level Now Matters
 
