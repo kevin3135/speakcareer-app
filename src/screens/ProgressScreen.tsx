@@ -136,42 +136,21 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
 
       <Text style={styles.sectionTitle}>Session history</Text>
       {sessions.length === 0 ? (
-        <View style={styles.emptyQuestCard}>
-          <View style={styles.emptyQuestHeader}>
-            <View style={styles.emptyQuestTitleBlock}>
-              <Text style={styles.emptyQuestKicker}>{progressEmptyState.eyebrow}</Text>
-              <Text style={styles.emptyQuestTitle}>{progressEmptyState.title}</Text>
+        <Card muted>
+          <View style={styles.lockedHistoryHeader}>
+            <View style={styles.lockedHistoryTitleBlock}>
+              <Text style={styles.lockedHistoryKicker}>{progressEmptyState.eyebrow}</Text>
+              <Text style={styles.lockedHistoryTitle}>{progressEmptyState.title}</Text>
             </View>
-            <View style={styles.emptyQuestReward}>
-              <Text style={styles.emptyQuestRewardValue}>{progressEmptyState.rewardLabel}</Text>
-              <Text style={styles.emptyQuestRewardLabel}>Reward</Text>
-            </View>
-          </View>
-          <Text style={styles.emptyQuestBody}>{progressEmptyState.body}</Text>
-          <View style={styles.emptyQuestProgress}>
-            <Text style={styles.emptyQuestProgressLabel}>{progressEmptyState.progressLabel}</Text>
-            <View style={styles.emptyQuestProgressTrack}>
-              <View style={styles.emptyQuestProgressFill} />
+            <View style={styles.lockedHistoryStatusPill}>
+              <Text style={styles.lockedHistoryStatusValue}>{progressEmptyState.progressLabel}</Text>
             </View>
           </View>
-          <View style={styles.emptyQuestSteps}>
-            {progressEmptyState.steps.map((step, index) => (
-              <View key={step} style={styles.emptyQuestStepRow}>
-                <View style={styles.emptyQuestStepNumber}>
-                  <Text style={styles.emptyQuestStepNumberText}>{index + 1}</Text>
-                </View>
-                <Text style={styles.emptyQuestStepText}>{step}</Text>
-              </View>
-            ))}
+          <Text style={styles.lockedHistoryBody}>{progressEmptyState.body}</Text>
+          <View style={styles.lockedHistoryUnlock}>
+            <Text style={styles.lockedHistoryUnlockText}>{progressEmptyState.unlockLabel}</Text>
           </View>
-          <View style={styles.emptyQuestAction}>
-            <AppButton
-              accessibilityHint="Starts the first roleplay needed to unlock Progress history"
-              label={progressEmptyState.ctaLabel}
-              onPress={() => onOpenRoleplay(progressEmptyState.roleplayId)}
-            />
-          </View>
-        </View>
+        </Card>
       ) : (
         sessions.map((session) => (
           <Card key={session.id}>
@@ -464,114 +443,61 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.lg,
   },
-  emptyQuestAction: {
-    marginTop: spacing.lg,
-  },
-  emptyQuestBody: {
-    color: colors.text,
-    fontSize: typography.body,
-    fontWeight: '700',
-    lineHeight: 22,
-    marginTop: spacing.md,
-  },
-  emptyQuestCard: {
-    backgroundColor: colors.surface,
-    borderColor: '#BDE7DC',
-    borderRadius: 8,
-    borderWidth: 1,
-    padding: spacing.xl,
-  },
-  emptyQuestHeader: {
+  lockedHistoryHeader: {
     alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  emptyQuestKicker: {
+  lockedHistoryKicker: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
-  emptyQuestProgress: {
-    marginTop: spacing.lg,
-  },
-  emptyQuestProgressFill: {
-    backgroundColor: colors.primary,
-    borderRadius: 999,
-    height: 8,
-    width: '0%',
-  },
-  emptyQuestProgressLabel: {
-    color: colors.ink,
-    fontSize: typography.small,
-    fontWeight: '900',
-    marginBottom: spacing.sm,
-  },
-  emptyQuestProgressTrack: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: 999,
-    height: 8,
-    overflow: 'hidden',
-  },
-  emptyQuestReward: {
+  lockedHistoryStatusPill: {
     alignItems: 'center',
     backgroundColor: colors.accentSoft,
     borderRadius: 8,
     marginLeft: spacing.md,
-    minWidth: 72,
+    minWidth: 88,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
   },
-  emptyQuestRewardLabel: {
+  lockedHistoryStatusValue: {
     color: colors.ink,
-    fontSize: 10,
-    fontWeight: '900',
-    marginTop: 1,
-    textTransform: 'uppercase',
-  },
-  emptyQuestRewardValue: {
-    color: colors.ink,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  emptyQuestStepNumber: {
-    alignItems: 'center',
-    backgroundColor: colors.ink,
-    borderRadius: 999,
-    height: 28,
-    justifyContent: 'center',
-    marginRight: spacing.md,
-    width: 28,
-  },
-  emptyQuestStepNumberText: {
-    color: colors.surface,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  emptyQuestStepRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: spacing.sm,
-  },
-  emptyQuestStepText: {
-    color: colors.ink,
-    flex: 1,
-    fontSize: typography.body,
-    fontWeight: '800',
-    lineHeight: 21,
-  },
-  emptyQuestSteps: {
-    marginTop: spacing.lg,
-  },
-  emptyQuestTitle: {
+  lockedHistoryTitle: {
     color: colors.ink,
     fontSize: typography.h2,
     fontWeight: '900',
     lineHeight: 25,
     marginTop: spacing.xs,
   },
-  emptyQuestTitleBlock: {
+  lockedHistoryTitleBlock: {
     flex: 1,
+  },
+  lockedHistoryBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  lockedHistoryUnlock: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  lockedHistoryUnlockText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: 18,
   },
   previewBody: {
     color: colors.text,

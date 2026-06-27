@@ -1,25 +1,17 @@
-import type { RoleplayId } from '../types';
-
 export type ProgressEmptyState = {
   body: string;
-  ctaLabel: string;
   eyebrow: string;
   progressLabel: string;
-  rewardLabel: string;
-  roleplayId: RoleplayId;
-  steps: string[];
   title: string;
+  unlockLabel: string;
 };
 
 export function createProgressEmptyState(): ProgressEmptyState {
   return {
-    body: 'Progress unlocks after one saved answer. Do a short Job Interview quest, review the feedback and save it here.',
-    ctaLabel: 'Start first save quest',
-    eyebrow: 'First save quest',
+    body: 'Your first saved answer will appear here with the scenario, feedback summary and XP reward.',
+    eyebrow: 'Locked until first save',
     progressLabel: '0/1 saved',
-    rewardLabel: '+40 XP',
-    roleplayId: 'job-interview',
-    steps: ['Start Job Interview', 'Review your rewrite', 'Save to unlock history'],
-    title: 'Unlock Progress',
+    title: 'Session history starts after one save',
+    unlockLabel: 'First unlock: history, XP and daily target progress',
   };
 }

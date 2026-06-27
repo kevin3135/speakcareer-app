@@ -958,22 +958,15 @@ test('creates a combined writing support helper state', async () => {
   assert.ok(openSupport.helperText.includes('Use only what helps'));
 });
 
-test('creates a first-time progress action for new users', async () => {
+test('creates a locked session history preview for first-time progress users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
   const emptyState = createProgressEmptyState();
 
-  assert.equal(emptyState.roleplayId, 'job-interview');
-  assert.equal(emptyState.ctaLabel, 'Start first save quest');
-  assert.equal(emptyState.eyebrow, 'First save quest');
+  assert.equal(emptyState.eyebrow, 'Locked until first save');
   assert.equal(emptyState.progressLabel, '0/1 saved');
-  assert.equal(emptyState.rewardLabel, '+40 XP');
-  assert.equal(emptyState.title, 'Unlock Progress');
-  assert.ok(emptyState.body.includes('Progress unlocks'));
-  assert.deepEqual(emptyState.steps, [
-    'Start Job Interview',
-    'Review your rewrite',
-    'Save to unlock history',
-  ]);
+  assert.equal(emptyState.title, 'Session history starts after one save');
+  assert.ok(emptyState.body.includes('feedback summary'));
+  assert.equal(emptyState.unlockLabel, 'First unlock: history, XP and daily target progress');
 });
 
 test('creates a guided next step for progress states', async () => {

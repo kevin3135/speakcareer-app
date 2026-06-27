@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Single First-Save Progress CTA
+
+Built one focused Progress simplification: first-time users now get only one primary "save your first answer" action at the top of Progress. The Session history section no longer repeats the same quest with another button and step list; it now shows a quieter locked preview of what appears after the first save.
+
+What went well:
+
+- Reduced first-time Progress duplication without changing the unlocked flow for returning users.
+- Kept the implementation small by updating one helper, one screen section and one existing unit test.
+- The new Session history state still explains the unlock value by previewing saved feedback, XP and target progress.
+- Checks stayed fast and clean, with all existing tests passing.
+
+What went wrong:
+
+- The first-time Progress screen still has two "0/1 saved" references because the locked mistake-bank preview below also uses the same unlock progress language.
+- This run did not change the top guide copy, so first-time Progress still depends on that hero card to explain the first action clearly.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 49 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-time Progress should have one primary CTA, with lower sections explaining unlocks instead of repeating the same action.
+- Locked previews work better when they show the value of saving without introducing a second path.
+- If first-time Progress still feels busy later, reduce repeated `0/1 saved` language before adding new progress mechanics.
+
+Next suggested task:
+
+- Improve onboarding handoff by giving first-time users one even more direct path from onboarding into the first Job Interview sprint.
+
 ## 2026-06-27: Locked First-Time Mistake Bank Preview
 
 Built one focused Progress simplification: first-time users no longer see the full mistake drill and mistake list before saving a session. Progress now shows one locked preview card with `0/1 saved`, the first correction waiting, and how many patterns unlock after the first save.
