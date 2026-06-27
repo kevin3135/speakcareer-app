@@ -7,7 +7,7 @@ import { foundationStart, levelAssessment, type LevelAssessmentChoice } from '..
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 
 type OnboardingScreenProps = {
-  onContinue: () => void;
+  onContinue: (selectedLevelId: LevelAssessmentChoice['id']) => void;
 };
 
 export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
@@ -73,7 +73,11 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
             accessibilityHint="Continues to the first guided English foundation lesson"
             disabled={!selectedLevelId}
             label="Continue"
-            onPress={onContinue}
+            onPress={() => {
+              if (selectedLevelId) {
+                onContinue(selectedLevelId);
+              }
+            }}
           />
         </View>
       </View>

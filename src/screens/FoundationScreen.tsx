@@ -11,17 +11,20 @@ import {
 } from '../components/ui';
 import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
+import type { StartingLevelId } from '../types';
+import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type FoundationScreenProps = {
   onStartCareerPractice: () => void;
+  startingLevelId: StartingLevelId;
 };
 
-const sentencePieces = ['I', 'helped the team finish', 'the project on time.'];
-
-export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProps) {
+export function FoundationScreen({ onStartCareerPractice, startingLevelId }: FoundationScreenProps) {
   const [completedSteps, setCompletedSteps] = useState(0);
   const totalSteps = foundationStart.structure.length;
   const isComplete = completedSteps >= totalSteps;
+  const levelProfile = getStartingLevelProfile(startingLevelId);
+  const sentencePieces = levelProfile.foundationExampleParts;
   const builtSentence =
     completedSteps > 0
       ? sentencePieces.slice(0, completedSteps).join(' ')
@@ -46,7 +49,7 @@ export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProp
         tone="secondary"
       />
 
-      <CoachBubble message="Tap the blocks in order. Build the sentence, then continue to interview practice." />
+      <CoachBubble message={levelProfile.coachMessage} />
 
       <View style={styles.structureRow}>
         {foundationStart.structure.map((part, index) => {
@@ -89,12 +92,12 @@ export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProp
 
       <SectionHeader title="Build this example" />
       <View style={styles.exampleCard}>
-        <Text style={styles.exampleText}>{builtSentence}</Text>
+        <Text style={styles.exampleText}>{isComplete ? levelProfile.foundationExample : builtSentence}</Text>
       </View>
 
       <View style={styles.ruleBox}>
         <Text style={styles.ruleTitle}>Your rule</Text>
-        <Text style={styles.ruleText}>Say who did it, what happened, and why it mattered.</Text>
+        <Text style={styles.ruleText}>{levelProfile.foundationRule}</Text>
       </View>
 
       <AppButton

@@ -1,5 +1,88 @@
 # Agent Learning Log
 
+## 2026-06-27: Quieter Learn Unlock Preview
+
+Built one focused onboarding and practice-flow improvement: the Learn screen no longer adds a separate clickable Home roleplay card. Instead, it now shows one clear primary action in the hero and a quiet `What unlocks next` preview underneath the lesson path. The extra daily mission card is also hidden before the first saved answer, so first-run users see less duplication.
+
+What went well:
+
+- The first Learn screen now points to one next action instead of a second roleplay choice.
+- Upcoming scenarios still feel motivating because the unlock preview shows what is coming next without turning it into another decision.
+- The change reused the existing local `homeLibrary` helper instead of adding new architecture.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not add a component-level UI test; coverage still comes from helper tests and full project checks.
+- No browser preview was run in this pass, so the visual result was validated through code inspection and automated checks only.
+- Returning users still see both the hero CTA and the daily mission progress card, so a later pass can reduce duplication there too.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 55 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- On Learn, future lessons can be motivating without becoming extra choices.
+- Before the first saved answer, avoid duplicate progress cards and duplicate CTAs.
+- Quiet previews work well for upcoming roleplays because they preserve momentum without letting the user wander.
+
+Next suggested task:
+
+- Simplify the returning Learn screen further by turning the active lesson path into one highlighted current card and softer completed/locked previews.
+
+## 2026-06-27: Starting Level Now Matters
+
+Built one focused onboarding improvement: the selected starting English level is now saved locally and reused in the first guided lesson and first roleplay starter copy. `starter`, `basic` and `confident` learners now see different foundation examples, rules and answer starters instead of losing that choice after onboarding.
+
+What went well:
+
+- The change stayed inside the first-run loop without adding new screens or integrations.
+- Existing users who already completed onboarding safely fall back to `basic`.
+- Added focused tests for starting-level storage and content profiles, and all project checks passed.
+
+What went wrong:
+
+- This run did not add a visible way to change the saved starting level after onboarding.
+- The level choice currently personalizes the foundation lesson and answer starter, but it does not yet change the interview prompt difficulty or feedback wording.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Checks run:
+
+- `npm.cmd run typecheck`
+- `npm.cmd run test`
+- `npm.cmd run lint`
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the onboarding level choice meaningful; do not ask for it unless later screens use it.
+- Default returning users to `basic` when earlier app versions have no saved starting level.
+- The next useful step is to adapt the first interview prompt/coaching tone to the saved starting level, not just the starter copy.
+
+Next suggested task:
+
+- Adjust the first Job Interview prompt and coaching note by saved starting level so beginners and stronger users get a better-matched first practice.
+
 ## 2026-06-27: Simpler Home First Step
 
 Changed the Learn/Home screen so the first-run experience has fewer competing actions. The hero now names the exact next step, the daily quest is a quiet progress card instead of a second CTA, lesson cards no longer show extra CTA labels, and the recommended roleplay card stays hidden until the learner has saved at least one practice.

@@ -1,8 +1,8 @@
-import type { RoleplayId } from '../types';
+import type { RoleplayId, StartingLevelId } from '../types';
 
 export type LevelAssessmentChoice = {
   body: string;
-  id: 'starter' | 'basic' | 'confident';
+  id: StartingLevelId;
   label: string;
   title: string;
 };

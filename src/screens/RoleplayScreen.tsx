@@ -15,11 +15,12 @@ import {
 } from '../components/ui';
 import { practiceContent } from '../data/content';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
-import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario, StartingLevelId } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createNextPracticeRecommendation } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
+import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type RoleplayScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -28,15 +29,15 @@ type RoleplayScreenProps = {
   onSelectRoleplay: (roleplayId: RoleplayId) => void;
   onSaveSession: (session: PracticeSession) => void;
   sessions: PracticeSession[];
+  startingLevelId: StartingLevelId;
 };
-
-const starterAnswer = 'Currently, I help my team solve customer problems faster. One result I am proud of is improving the handoff process.';
 
 export function RoleplayScreen({
   onOpenProgress,
   onSaveSession,
   roleplay,
   onSelectRoleplay,
+  startingLevelId,
 }: RoleplayScreenProps) {
   const answerInputRef = useRef<TextInput>(null);
   const [draftAnswer, setDraftAnswer] = useState('');
@@ -51,6 +52,7 @@ export function RoleplayScreen({
   const xpReward = feedbackResult?.xpReward ?? roleplay.durationMinutes * 4;
   const nextRecommendation = createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays);
   const isReady = Boolean(answerReview?.isReadyForFeedback && feedbackResult);
+  const levelProfile = getStartingLevelProfile(startingLevelId);
 
   function openTyping() {
     setIsTypingOpen(true);
@@ -60,7 +62,7 @@ export function RoleplayScreen({
   function startMockMic() {
     setIsTypingOpen(true);
     if (!draftAnswer.trim()) {
-      setDraftAnswer(starterAnswer);
+      setDraftAnswer(levelProfile.starterAnswer);
     }
   }
 
@@ -224,7 +226,7 @@ export function RoleplayScreen({
               setFeedbackResult(null);
             }}
             onFocus={() => setIsAnswerFocused(true)}
-            placeholder="Start with: Currently, I..."
+            placeholder={levelProfile.answerPlaceholder}
             placeholderTextColor={colors.textMuted}
             ref={answerInputRef}
             style={[styles.answerInput, isAnswerFocused && styles.answerInputActive]}

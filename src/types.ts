@@ -2,6 +2,8 @@ export type MainScreen = 'Home' | 'Foundation' | 'Practice' | 'Roleplay' | 'Prog
 
 export type DailyPracticeTarget = 1 | 2 | 3;
 
+export type StartingLevelId = 'starter' | 'basic' | 'confident';
+
 export type RoleplayId =
   | 'job-interview'
   | 'meeting-practice'

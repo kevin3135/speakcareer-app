@@ -49,6 +49,10 @@ test('keeps the guided first experience simple and action oriented', async () =>
     levelAssessment.choices.map((choice) => choice.label),
     ['A1-A2', 'B1', 'B2'],
   );
+  assert.deepEqual(
+    levelAssessment.choices.map((choice) => choice.id),
+    ['starter', 'basic', 'confident'],
+  );
   assert.equal(foundationStart.ctaLabel, 'Start lesson');
   assert.deepEqual(foundationStart.structure, ['I', 'action', 'result']);
   assert.ok(foundationStart.subtitle.includes('one sentence shape'));
@@ -204,6 +208,41 @@ test('stores onboarding completion in local storage', async () => {
   );
 });
 
+test('stores the selected starting level in local storage', async () => {
+  const {
+    STARTING_LEVEL_KEY,
+    parseStartingLevelValue,
+    readStartingLevel,
+    saveStartingLevel,
+  } = await import('../src/utils/startingLevelStorage.ts');
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  assert.equal(parseStartingLevelValue('starter'), 'starter');
+  assert.equal(parseStartingLevelValue('confident'), 'confident');
+  assert.equal(parseStartingLevelValue('something-else'), 'basic');
+  assert.equal(await readStartingLevel(storage), 'basic');
+
+  await saveStartingLevel(storage, 'confident');
+
+  assert.equal(values.get(STARTING_LEVEL_KEY), 'confident');
+  assert.equal(await readStartingLevel(storage), 'confident');
+  assert.equal(
+    await readStartingLevel({
+      getItem: async () => {
+        throw new Error('Storage unavailable');
+      },
+      setItem: async () => undefined,
+    }),
+    'basic',
+  );
+});
+
 test('stores the daily practice target in local storage', async () => {
   const {
     DAILY_TARGET_KEY,
@@ -237,6 +276,25 @@ test('stores the daily practice target in local storage', async () => {
     }),
     1,
   );
+});
+
+test('personalizes the first lesson and answer starter by starting level', async () => {
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const basicProfile = getStartingLevelProfile('basic');
+  const confidentProfile = getStartingLevelProfile('confident');
+
+  assert.deepEqual(starterProfile.foundationExampleParts, ['I', 'organized the weekly report', 'and sent it on time.']);
+  assert.ok(starterProfile.answerPlaceholder.includes('I worked on'));
+  assert.ok(starterProfile.starterAnswer.includes('The result was'));
+
+  assert.deepEqual(basicProfile.foundationExampleParts, ['I', 'helped the team finish', 'the project on time.']);
+  assert.ok(basicProfile.answerPlaceholder.includes('Currently, I'));
+
+  assert.deepEqual(confidentProfile.foundationExampleParts, ['I', 'led the project update', 'and reduced delays for the team.']);
+  assert.ok(confidentProfile.answerPlaceholder.includes('In my current role'));
+  assert.equal(getStartingLevelProfile(null).foundationExample, basicProfile.foundationExample);
 });
 
 test('provides mock feedback and mistake-bank data', () => {

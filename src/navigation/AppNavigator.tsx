@@ -13,10 +13,11 @@ import { ProfileScreen } from '../screens/ProfileScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { RoleplayScreen } from '../screens/RoleplayScreen';
 import { colors } from '../styles/theme';
-import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId } from '../types';
+import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId, StartingLevelId } from '../types';
 import { readDailyTarget, saveDailyTarget } from '../utils/dailyTargetStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 import { readPracticeSessions, savePracticeSessions } from '../utils/practiceSessionStorage';
+import { readStartingLevel, saveStartingLevel } from '../utils/startingLevelStorage';
 
 export function AppNavigator() {
   const [isOnboardingLoading, setIsOnboardingLoading] = useState(true);
@@ -25,6 +26,7 @@ export function AppNavigator() {
   const [selectedRoleplayId, setSelectedRoleplayId] = useState<RoleplayId>('job-interview');
   const [practiceSessions, setPracticeSessions] = useState<PracticeSession[]>([]);
   const [dailyTarget, setDailyTarget] = useState<DailyPracticeTarget>(1);
+  const [startingLevelId, setStartingLevelId] = useState<StartingLevelId>('basic');
 
   const selectedRoleplay = useMemo(
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
@@ -41,12 +43,14 @@ export function AppNavigator() {
       readOnboardingCompletion(AsyncStorage),
       readDailyTarget(AsyncStorage),
       readPracticeSessions(AsyncStorage),
+      readStartingLevel(AsyncStorage),
     ])
-      .then(([isComplete, storedDailyTarget, storedPracticeSessions]) => {
+      .then(([isComplete, storedDailyTarget, storedPracticeSessions, storedStartingLevel]) => {
         if (isMounted) {
           setHasSeenOnboarding(isComplete);
           setDailyTarget(storedDailyTarget);
           setPracticeSessions(storedPracticeSessions);
+          setStartingLevelId(storedStartingLevel);
         }
       })
       .finally(() => {
@@ -80,11 +84,13 @@ export function AppNavigator() {
     void saveDailyTarget(AsyncStorage, target).catch(() => undefined);
   }
 
-  function completeOnboarding() {
+  function completeOnboarding(selectedLevel: StartingLevelId) {
     setSelectedRoleplayId(guidedStart.roleplayId);
     setActiveScreen('Foundation');
     setHasSeenOnboarding(true);
+    setStartingLevelId(selectedLevel);
     void saveOnboardingCompletion(AsyncStorage).catch(() => undefined);
+    void saveStartingLevel(AsyncStorage, selectedLevel).catch(() => undefined);
   }
 
   if (isOnboardingLoading) {
@@ -111,7 +117,10 @@ export function AppNavigator() {
           />
         ) : null}
         {activeScreen === 'Foundation' ? (
-          <FoundationScreen onStartCareerPractice={() => openRoleplay(guidedStart.roleplayId)} />
+          <FoundationScreen
+            onStartCareerPractice={() => openRoleplay(guidedStart.roleplayId)}
+            startingLevelId={startingLevelId}
+          />
         ) : null}
         {activeScreen === 'Practice' ? (
           <PracticeScreen onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
@@ -125,6 +134,7 @@ export function AppNavigator() {
             sessions={practiceSessions}
             roleplay={selectedRoleplay}
             onSelectRoleplay={openRoleplay}
+            startingLevelId={startingLevelId}
           />
         ) : null}
         {activeScreen === 'Progress' ? (
