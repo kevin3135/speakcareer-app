@@ -581,11 +581,14 @@ test('creates local practice sessions from reviewed answers', async () => {
   const { createRuleBasedFeedback } = await import('../src/utils/ruleBasedFeedback.ts');
   const { createPracticeSession } = await import('../src/utils/sessionHistory.ts');
   const roleplay = practiceContent.roleplays[0];
-  const answer = 'In my previous role, I coordinated customer feedback reviews and helped the team prioritize product improvements.';
+  const answer = 'I led customer feedback reviews and turned repeated issues into clear product priorities for the team.';
+  const followUpAnswer = 'As a result, we reduced repeat issues and made the weekly review faster for the team.';
   const review = summarizePracticeAnswer(answer);
   const feedbackResult = createRuleBasedFeedback(roleplay, answer, review);
   const session = createPracticeSession({
     answer,
+    followUpAnswer,
+    includedFollowUp: true,
     feedback: feedbackResult.feedback,
     review,
     roleplay,
@@ -596,10 +599,11 @@ test('creates local practice sessions from reviewed answers', async () => {
   assert.equal(session.roleplayTitle, 'Job Interview');
   assert.equal(session.roleplayId, 'job-interview');
   assert.equal(session.wordCount, review.wordCount);
-  assert.ok(session.answerPreview.includes('customer feedback'));
+  assert.ok(session.answerPreview.includes('Follow-up:'));
   assert.equal(session.xpReward, feedbackResult.xpReward);
-  assert.equal(session.feedbackSummary, feedbackResult.feedback.summary);
+  assert.ok(session.feedbackSummary.includes('Follow-up included.'));
   assert.equal(session.completedAt, '2026-06-26T10:00:00.000Z');
+  assert.equal(session.includedFollowUp, true);
 });
 
 test('stores local practice sessions safely', async () => {
@@ -619,6 +623,7 @@ test('stores local practice sessions safely', async () => {
     wordCount: 20 + index,
     readinessLabel: 'Ready for feedback',
     feedbackSummary: 'Clear answer with useful detail.',
+    includedFollowUp: index === 0,
     xpReward: 40 + index,
   }));
   const values = new Map();
@@ -634,6 +639,7 @@ test('stores local practice sessions safely', async () => {
   assert.equal(JSON.parse(values.get(PRACTICE_SESSIONS_KEY)).length, MAX_STORED_PRACTICE_SESSIONS);
   assert.equal((await readPracticeSessions(storage)).length, MAX_STORED_PRACTICE_SESSIONS);
   assert.equal((await readPracticeSessions(storage))[0].id, 'job-interview-0');
+  assert.equal((await readPracticeSessions(storage))[0].includedFollowUp, true);
   assert.deepEqual(normalizePracticeSessions([{ id: 'missing-fields' }]), []);
   assert.deepEqual(
     await readPracticeSessions({

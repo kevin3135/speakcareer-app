@@ -4,6 +4,8 @@ import type { AIFeedback, PracticeSession, RoleplayScenario } from '../types';
 type CreatePracticeSessionInput = {
   roleplay: RoleplayScenario;
   answer: string;
+  followUpAnswer?: string;
+  includedFollowUp?: boolean;
   review: AnswerReview;
   feedback: AIFeedback;
   xpReward: number;
@@ -13,15 +15,21 @@ type CreatePracticeSessionInput = {
 export function createPracticeSession({
   roleplay,
   answer,
+  followUpAnswer,
+  includedFollowUp = false,
   review,
   feedback,
   xpReward,
   completedAt = new Date(),
 }: CreatePracticeSessionInput): PracticeSession {
   const trimmedAnswer = answer.trim().replace(/\s+/g, ' ');
-  const preview = trimmedAnswer.length > 120
-    ? `${trimmedAnswer.slice(0, 117)}...`
+  const trimmedFollowUpAnswer = followUpAnswer?.trim().replace(/\s+/g, ' ') ?? '';
+  const sessionAnswer = includedFollowUp && trimmedFollowUpAnswer
+    ? `${trimmedAnswer} Follow-up: ${trimmedFollowUpAnswer}`
     : trimmedAnswer;
+  const preview = sessionAnswer.length > 120
+    ? `${sessionAnswer.slice(0, 117)}...`
+    : sessionAnswer;
 
   return {
     id: `${roleplay.id}-${completedAt.getTime()}`,
@@ -31,7 +39,8 @@ export function createPracticeSession({
     answerPreview: preview,
     wordCount: review.wordCount,
     readinessLabel: review.readinessLabel,
-    feedbackSummary: feedback.summary,
+    feedbackSummary: includedFollowUp ? `${feedback.summary} Follow-up included.` : feedback.summary,
+    includedFollowUp,
     xpReward,
   };
 }

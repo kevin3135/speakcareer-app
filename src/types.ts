@@ -126,5 +126,6 @@ export type PracticeSession = {
   wordCount: number;
   readinessLabel: string;
   feedbackSummary: string;
+  includedFollowUp: boolean;
   xpReward: number;
 };

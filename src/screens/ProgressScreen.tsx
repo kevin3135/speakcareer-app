@@ -176,7 +176,10 @@ export function ProgressScreen({
 
           {latestSession ? (
             <Card>
-              <Text style={styles.cardKicker}>Latest win</Text>
+              <View style={styles.rowBetween}>
+                <Text style={styles.cardKicker}>Latest win</Text>
+                {latestSession.includedFollowUp ? <Badge label="Follow-up saved" tone="success" /> : null}
+              </View>
               <Text style={styles.cardTitle}>{latestSession.roleplayTitle}</Text>
               <Text style={styles.metaLine}>
                 {formatSessionDate(latestSession.completedAt)} - {latestSession.wordCount} words - +{latestSession.xpReward} XP

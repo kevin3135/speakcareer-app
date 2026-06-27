@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-27: Optional Roleplay Follow-Up Turn
+
+Added one focused roleplay-loop improvement: after a strong first answer, the learner can now open one optional adaptive follow-up turn before saving. The Roleplay screen now shows a follow-up prompt based on the first answer weakness, tracks a small bonus XP reward when the follow-up is strong enough, saves that extra turn into the local session summary, and shows a `Follow-up saved` cue in Progress for the latest win.
+
+What went well:
+
+- This used helpers that already existed in the repo, especially adaptive follow-up prompt logic and follow-up-aware completion copy, instead of inventing another practice flow.
+- The improvement stayed inside the current English MVP loop: one answer, one rewrite, one optional deeper turn, then save.
+- Local storage and session history now preserve whether a saved session included a follow-up, which makes the new loop feel real instead of cosmetic.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the new follow-up card stack still needs a quick mobile spacing check.
+- The follow-up turn currently reuses the first-answer feedback summary rather than generating a second dedicated rewrite for the follow-up itself.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The roleplay loop is stronger when a saved answer can turn into one optional deeper turn instead of ending immediately.
+- If a new practice turn affects motivation, store it in local session data so Progress can acknowledge it later.
+- Keep follow-up depth optional and lightweight; do not turn the MVP into a full chat transcript yet.
+
+Next suggested task:
+
+- Add a compact daily-target milestone card to the saved Roleplay state so the learner sees streak and today progress immediately after saving.
+
 ## 2026-06-27: Compact Roleplay Answer Card
 
 Made the first Roleplay answer card shorter and calmer so the learner reaches the answer box and `Check answer` action faster. The coach question now uses a smaller heading size, the answer field is slightly shorter, and warm-up cue spacing is tighter while keeping the same single-step practice flow.

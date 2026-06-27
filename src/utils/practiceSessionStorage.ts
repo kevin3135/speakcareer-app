@@ -51,6 +51,7 @@ function normalizePracticeSession(item: unknown): PracticeSession | null {
     completedAt: asString(record.completedAt),
     feedbackSummary: asString(record.feedbackSummary),
     id: asString(record.id),
+    includedFollowUp: asBoolean(record.includedFollowUp),
     readinessLabel: asString(record.readinessLabel),
     roleplayId: asString(record.roleplayId) as RoleplayId,
     roleplayTitle: asString(record.roleplayTitle),
@@ -79,4 +80,8 @@ function asString(value: unknown): string {
 
 function asNumber(value: unknown): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
+}
+
+function asBoolean(value: unknown): boolean {
+  return value === true;
 }
