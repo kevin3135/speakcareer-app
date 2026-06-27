@@ -1,5 +1,25 @@
 # Agent Learning Log
 
+## 2026-06-27: Short Roleplay Step Header
+
+Simplified the active Roleplay header so the game step shows `Step 1 of 3` with `Your turn`, then changes to `Step 2 of 3` with `Better English` after checking an answer. The saved state no longer repeats a separate screen header above the success card, and the first prompt card now says `Question` with a simple `1 answer` badge.
+
+What went well:
+
+- The Roleplay screen has less top text before the user writes an answer.
+- The active state now tells the user where they are in the mini-game without adding another button.
+- The saved success state is cleaner because it avoids duplicate `Saved`/lesson-complete messaging.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+- This run did not include browser screenshot QA, so the visual result was verified through code inspection and checks.
+
+Next best design task:
+
+- Add a tiny animated focus cue to the Roleplay answer input so the next tap target feels even more obvious without adding more copy.
+
 ## 2026-06-27: Single Saved Roleplay Handoff
 
 Simplified the saved Roleplay completion state. After `Save answer`, the user now sees one focused success handoff with `Saved`, XP, `Streak updated`, the next recommended lesson title and one primary next-step button. The extra level momentum card, duplicate continue button and separate recommended lesson card were removed.

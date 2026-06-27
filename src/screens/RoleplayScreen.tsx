@@ -53,6 +53,7 @@ export function RoleplayScreen({
     xpReward,
   });
   const levelProfile = getStartingLevelProfile(startingLevelId);
+  const isReviewStep = Boolean(feedbackResult);
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
@@ -98,11 +99,7 @@ export function RoleplayScreen({
 
   if (savedSession) {
     return (
-      <ScreenContainer
-        overline="Lesson complete"
-        subtitle={nextRecommendation ? 'One next lesson is ready.' : 'Your progress is ready to review.'}
-        title={savedHandoff.title}
-      >
+      <ScreenContainer>
         <Pressable
           accessibilityHint="Go back to Learn"
           accessibilityLabel="Back to Learn"
@@ -136,10 +133,9 @@ export function RoleplayScreen({
 
   return (
     <ScreenContainer
-      overline="AI roleplay"
+      overline={isReviewStep ? 'Step 2 of 3' : 'Step 1 of 3'}
       right={<XPBadge label={`+${roleplay.durationMinutes * 4} XP`} />}
-      subtitle="Speak or type one answer. The coach gives a better professional version."
-      title={roleplay.title}
+      title={isReviewStep ? 'Better English' : 'Your turn'}
     >
       <Pressable
         accessibilityHint="Go back to Learn"
@@ -154,8 +150,8 @@ export function RoleplayScreen({
       {!feedbackResult ? (
         <Card tone="strong">
           <View style={styles.oneThingHeader}>
-            <Text style={styles.cardKicker}>Your turn</Text>
-            <Badge label={`${roleplay.durationMinutes} min`} tone="info" />
+            <Text style={styles.cardKicker}>Question</Text>
+            <Badge label="1 answer" tone="info" />
           </View>
           <Text style={styles.promptText}>{openingLine}</Text>
           <TextInput
