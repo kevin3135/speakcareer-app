@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Onboarding Plan Preview
+
+Finished the onboarding level handoff by showing a simple first-path preview after the learner picks a starting level. The preview explains the first two steps, shows the selected level, includes the coach note and gives the first answer starter before the learner continues.
+
+What went well:
+
+- This makes onboarding more app-led: after choosing a level, the user sees exactly what will happen next.
+- The preview stays focused on English foundation first, then the first Job Interview quest.
+- The helper is covered by a focused test for starter and confident level paths.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first check run caught an unfinished helper API mismatch between the screen and test; the current files are aligned and now pass.
+- This run did not include fresh mobile browser QA, so the plan card height should be checked on small phones.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding should reassure the learner with the next two steps, not open a full dashboard.
+- Keep the first path concrete: level, one foundation lesson, one interview quest.
+- If level-based preview logic grows, keep it in a tiny helper instead of burying it in the screen.
+
+Next suggested task:
+
+- Mobile-preview onboarding after selecting each level and tighten the plan card if the Continue button falls too low.
+
 ## 2026-06-27: Prioritized Roleplay Save Action
 
 Made the post-feedback Roleplay flow clearer by moving the primary save button above the optional follow-up prompt. After `Better English`, the learner now sees the save action before the bonus turn, so the main path is easier to understand and the follow-up feels like optional extra practice instead of a competing requirement.
@@ -4586,3 +4622,37 @@ Next suggested task:
 
 - Combine the Answer plan and Helpful phrases helper blocks into one compact writing support area.
 
+## 2026-06-28: Personalized Onboarding First-Path Preview
+
+Made one focused onboarding improvement: after the learner picks a starting level, the screen now shows a personalized first-path preview before Continue. The new panel explains the selected level, the first foundation lesson, the first job interview quest, and a level-matched answer starter so the next step feels concrete instead of generic.
+
+What went well:
+
+- This stayed inside the existing onboarding flow and did not add another step or any new storage.
+- The preview reuses existing guided-intro and starting-level data, so the content remains aligned with the rest of the MVP loop.
+- A focused helper test now protects the personalized onboarding path copy for starter and confident users.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new preview card spacing still needs a quick check on a phone-sized viewport.
+- The test run still shows the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding gets stronger when the user sees an exact first path, not only a level choice.
+- Reuse the starting-level profile data for concrete starter copy instead of inventing extra onboarding content.
+- Keep onboarding improvements inside the current one-screen flow unless the user explicitly needs another step.
+
+Next suggested task:
+
+- Make the Foundation-to-Roleplay handoff show one level-matched starter answer so the first interview response feels easier to begin.

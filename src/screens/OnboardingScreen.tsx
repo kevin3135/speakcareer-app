@@ -2,9 +2,16 @@ import { useState } from 'react';
 import type { DimensionValue } from 'react-native';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { AppButton, CoachBubble, ProgressBar } from '../components/ui';
-import { foundationStart, levelAssessment, type LevelAssessmentChoice } from '../data/guidedIntro';
+import { AppButton, Badge, CoachBubble, ProgressBar } from '../components/ui';
+import {
+  foundationStart,
+  guidedStart,
+  levelAssessment,
+  type LevelAssessmentChoice,
+} from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
+import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
+import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type OnboardingScreenProps = {
   onContinue: (selectedLevelId: LevelAssessmentChoice['id']) => void;
@@ -13,6 +20,21 @@ type OnboardingScreenProps = {
 export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
   const [selectedLevelId, setSelectedLevelId] = useState<LevelAssessmentChoice['id'] | null>(null);
   const progressWidth = `${levelAssessment.progressPercent}%` as DimensionValue;
+  const selectedChoice =
+    levelAssessment.choices.find((choice) => choice.id === selectedLevelId) ?? null;
+  const selectedProfile = selectedLevelId ? getStartingLevelProfile(selectedLevelId) : null;
+  const planPreview =
+    selectedChoice && selectedProfile
+      ? createOnboardingPlanPreview({
+          coachNote: selectedProfile.coachMessage,
+          firstLessonDetail: selectedProfile.foundationRule,
+          firstLessonTitle: foundationStart.title,
+          firstQuestSubtitle: guidedStart.subtitle,
+          firstQuestTitle: guidedStart.title,
+          levelLabel: selectedChoice.label,
+          starterPrompt: selectedProfile.answerPlaceholder,
+        })
+      : null;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -64,6 +86,35 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
           );
         })}
       </View>
+
+      {planPreview ? (
+        <View style={styles.planCard}>
+          <View style={styles.planHeader}>
+            <View style={styles.planCopy}>
+              <Text style={styles.planKicker}>{planPreview.title}</Text>
+              <Text style={styles.planTitle}>Start at {planPreview.levelLabel}</Text>
+            </View>
+            <Badge label="2-step start" tone="success" />
+          </View>
+
+          <Text style={styles.planCoachNote}>{planPreview.coachNote}</Text>
+
+          <View style={styles.planSteps}>
+            {planPreview.steps.map((step) => (
+              <View key={step.label} style={styles.planStep}>
+                <Text style={styles.planStepLabel}>{step.label}</Text>
+                <Text style={styles.planStepTitle}>{step.title}</Text>
+                <Text style={styles.planStepDetail}>{step.detail}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.planStarter}>
+            <Text style={styles.planStarterLabel}>First answer starter</Text>
+            <Text style={styles.planStarterText}>{planPreview.starterPrompt}</Text>
+          </View>
+        </View>
+      ) : null}
 
       <View style={styles.footer}>
         <Text style={styles.foundationHint}>Next: {foundationStart.title}</Text>
@@ -138,6 +189,99 @@ const styles = StyleSheet.create({
   optionList: {
     gap: spacing.md,
     marginTop: spacing.xl,
+  },
+  planCard: {
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    marginTop: spacing.xl,
+    padding: spacing.lg,
+    ...shadows.soft,
+  },
+  planHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  planCopy: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  planKicker: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  planTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    lineHeight: typography.lineH2,
+    marginTop: spacing.xs,
+  },
+  planCoachNote: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.md,
+  },
+  planSteps: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  planStep: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  planStepLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  planStepTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  planStepDetail: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  planStarter: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  planStarterLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  planStarterText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   optionCard: {
     alignItems: 'center',

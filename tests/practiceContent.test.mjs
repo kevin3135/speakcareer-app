@@ -243,6 +243,50 @@ test('stores the selected starting level in local storage', async () => {
   );
 });
 
+test('creates a personalized onboarding first-path preview from the selected level', async () => {
+  const { createOnboardingPlanPreview } = await import('../src/utils/onboardingPlan.ts');
+  const { foundationStart, guidedStart, levelAssessment } = await import('../src/data/guidedIntro.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterChoice = levelAssessment.choices.find((choice) => choice.id === 'starter');
+  const starterProfile = getStartingLevelProfile('starter');
+  const starterPreview = createOnboardingPlanPreview({
+    coachNote: starterProfile.coachMessage,
+    firstLessonDetail: starterProfile.foundationRule,
+    firstLessonTitle: foundationStart.title,
+    firstQuestSubtitle: guidedStart.subtitle,
+    firstQuestTitle: guidedStart.title,
+    levelLabel: starterChoice.label,
+    starterPrompt: starterProfile.answerPlaceholder,
+  });
+  const confidentChoice = levelAssessment.choices.find((choice) => choice.id === 'confident');
+  const confidentProfile = getStartingLevelProfile('confident');
+  const confidentPreview = createOnboardingPlanPreview({
+    coachNote: confidentProfile.coachMessage,
+    firstLessonDetail: confidentProfile.foundationRule,
+    firstLessonTitle: foundationStart.title,
+    firstQuestSubtitle: guidedStart.subtitle,
+    firstQuestTitle: guidedStart.title,
+    levelLabel: confidentChoice.label,
+    starterPrompt: confidentProfile.answerPlaceholder,
+  });
+
+  assert.equal(starterPreview.title, 'Your first English path');
+  assert.equal(starterPreview.levelLabel, 'A1-A2');
+  assert.equal(starterPreview.steps[0].label, 'Lesson 1');
+  assert.equal(starterPreview.steps[0].title, 'Learn one clear sentence');
+  assert.ok(starterPreview.steps[0].detail.includes('one clear result'));
+  assert.equal(starterPreview.steps[1].label, 'Quest 1');
+  assert.equal(starterPreview.steps[1].title, 'Quest 1: Job Interview');
+  assert.ok(starterPreview.coachNote.includes('Keep it simple'));
+  assert.ok(starterPreview.starterPrompt.includes('I worked on'));
+
+  assert.equal(confidentPreview.levelLabel, 'B2');
+  assert.ok(confidentPreview.steps[0].detail.includes('business result'));
+  assert.ok(confidentPreview.coachNote.includes('business result'));
+  assert.ok(confidentPreview.starterPrompt.includes('In my current role'));
+});
+
 test('stores the daily practice target in local storage', async () => {
   const {
     DAILY_TARGET_KEY,
