@@ -5,6 +5,7 @@ import { colors, radii, spacing, typography } from '../styles/theme';
 type AppButtonProps = {
   accessibilityHint?: string;
   accessibilityLabel?: string;
+  disabled?: boolean;
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'quiet';
@@ -13,6 +14,7 @@ type AppButtonProps = {
 export function AppButton({
   accessibilityHint,
   accessibilityLabel,
+  disabled = false,
   label,
   onPress,
   variant = 'primary',
@@ -22,10 +24,13 @@ export function AppButton({
       accessibilityHint={accessibilityHint}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
         styles.base,
         styles[variant],
+        disabled && styles.disabled,
         pressed && styles.pressed,
       ]}
     >
@@ -63,6 +68,9 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.82,
+  },
+  disabled: {
+    opacity: 0.45,
   },
   label: {
     fontSize: typography.body,

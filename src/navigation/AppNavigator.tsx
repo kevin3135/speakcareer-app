@@ -5,6 +5,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { BottomNav } from '../components/BottomNav';
 import { practiceContent } from '../data/content';
 import { guidedStart } from '../data/guidedIntro';
+import { FoundationScreen } from '../screens/FoundationScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { OnboardingScreen } from '../screens/OnboardingScreen';
 import { PracticeScreen } from '../screens/PracticeScreen';
@@ -78,7 +79,7 @@ export function AppNavigator() {
 
   function completeOnboarding() {
     setSelectedRoleplayId(guidedStart.roleplayId);
-    setActiveScreen('Roleplay');
+    setActiveScreen('Foundation');
     setHasSeenOnboarding(true);
     void saveOnboardingCompletion(AsyncStorage).catch(() => undefined);
   }
@@ -100,10 +101,12 @@ export function AppNavigator() {
       <View style={styles.body}>
         {activeScreen === 'Home' ? (
           <HomeScreen
-            dailyTarget={dailyTarget}
-            onOpenRoleplay={openRoleplay}
+            onStartFoundation={() => setActiveScreen('Foundation')}
             sessions={practiceSessions}
           />
+        ) : null}
+        {activeScreen === 'Foundation' ? (
+          <FoundationScreen onStartCareerPractice={() => openRoleplay(guidedStart.roleplayId)} />
         ) : null}
         {activeScreen === 'Practice' ? (
           <PracticeScreen onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
@@ -130,7 +133,10 @@ export function AppNavigator() {
           <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={changeDailyTarget} />
         ) : null}
       </View>
-      <BottomNav activeScreen={activeScreen} onChange={setActiveScreen} />
+      <BottomNav
+        activeScreen={activeScreen === 'Foundation' ? 'Home' : activeScreen}
+        onChange={setActiveScreen}
+      />
     </View>
   );
 }

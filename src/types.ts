@@ -1,4 +1,4 @@
-export type MainScreen = 'Home' | 'Practice' | 'Roleplay' | 'Progress' | 'Profile';
+export type MainScreen = 'Home' | 'Foundation' | 'Practice' | 'Roleplay' | 'Progress' | 'Profile';
 
 export type DailyPracticeTarget = 1 | 2 | 3;
 

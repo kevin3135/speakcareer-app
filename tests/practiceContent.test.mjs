@@ -32,18 +32,29 @@ test('keeps the first MVP focused on English', () => {
 });
 
 test('keeps the guided first experience simple and action oriented', async () => {
-  const { guidedIntroSteps, guidedStart } = await import('../src/data/guidedIntro.ts');
+  const {
+    foundationStart,
+    guidedIntroSteps,
+    guidedStart,
+    levelAssessment,
+  } = await import('../src/data/guidedIntro.ts');
 
   assert.deepEqual(
     guidedIntroSteps.map((step) => step.id),
-    ['choose', 'answer', 'review'],
+    ['structure', 'example', 'practice'],
   );
   assert.equal(guidedIntroSteps.length, 3);
+  assert.equal(levelAssessment.choices.length, 3);
+  assert.deepEqual(
+    levelAssessment.choices.map((choice) => choice.label),
+    ['A1-A2', 'B1', 'B2'],
+  );
+  assert.equal(foundationStart.ctaLabel, 'Start lesson 1');
+  assert.deepEqual(foundationStart.structure, ['I', 'action', 'result']);
+  assert.ok(foundationStart.subtitle.includes('basic English answer shape'));
   assert.equal(guidedStart.roleplayId, 'job-interview');
-  assert.equal(guidedStart.ctaLabel, 'Start first quest');
   assert.deepEqual(guidedStart.detailLabels, ['5 minutes', '2-4 sentences', 'Clear rewrite']);
   assert.equal(guidedStart.title, 'Quest 1: Job Interview');
-  assert.ok(guidedStart.subtitle.includes('save it for XP'));
   assert.ok(guidedIntroSteps.every((step) => step.title.length <= 32));
   assert.ok(guidedIntroSteps.every((step) => step.body.length <= 72));
 });

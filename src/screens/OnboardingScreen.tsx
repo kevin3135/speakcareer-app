@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import type { DimensionValue } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
-import { Card } from '../components/Card';
-import { guidedIntroSteps, guidedStart } from '../data/guidedIntro';
-import { practiceContent } from '../data/content';
+import { foundationStart, levelAssessment, type LevelAssessmentChoice } from '../data/guidedIntro';
 import { colors, radii, spacing, typography } from '../styles/theme';
 
 type OnboardingScreenProps = {
@@ -11,189 +11,187 @@ type OnboardingScreenProps = {
 };
 
 export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
+  const [selectedLevelId, setSelectedLevelId] = useState<LevelAssessmentChoice['id'] | null>(null);
+  const progressWidth = `${levelAssessment.progressPercent}%` as DimensionValue;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.brandBlock}>
-        <Text style={styles.kicker}>English career practice</Text>
-        <Text style={styles.brand}>SpeakCareer</Text>
-        <Text style={styles.positioning}>Your first career English quest is ready.</Text>
-        <Text style={styles.intro}>
-          Start with one Job Interview answer. The app opens the prompt first, then guides you through answer, review and save.
-        </Text>
+      <View style={styles.progressTrack}>
+        <View style={[styles.progressFill, { width: progressWidth }]} />
       </View>
 
-      <View style={styles.firstPracticeCard}>
-        <Card muted>
-          <Text style={styles.cardKicker}>Quest 1</Text>
-          <Text style={styles.cardTitle}>{guidedStart.title}</Text>
-          <Text style={styles.body}>{guidedStart.subtitle}</Text>
-          <View style={styles.detailRow}>
-            {guidedStart.detailLabels.map((label) => (
-              <View key={label} style={styles.detailPill}>
-                <Text style={styles.detailPillText}>{label}</Text>
+      <View style={styles.coachRow}>
+        <View style={styles.coachBadge}>
+          <Text style={styles.coachInitials}>SC</Text>
+        </View>
+        <View style={styles.speechBubble}>
+          <Text style={styles.question}>{levelAssessment.question}</Text>
+        </View>
+      </View>
+
+      <View style={styles.optionList}>
+        {levelAssessment.choices.map((choice) => {
+          const isSelected = choice.id === selectedLevelId;
+
+          return (
+            <Pressable
+              accessibilityHint="Selects your starting English level"
+              accessibilityLabel={`${choice.title}. ${choice.label}`}
+              accessibilityRole="button"
+              accessibilityState={{ selected: isSelected }}
+              key={choice.id}
+              onPress={() => setSelectedLevelId(choice.id)}
+              style={({ pressed }) => [
+                styles.optionCard,
+                isSelected && styles.optionCardSelected,
+                pressed && styles.optionCardPressed,
+              ]}
+            >
+              <View style={[styles.levelBadge, isSelected && styles.levelBadgeSelected]}>
+                <Text style={[styles.levelBadgeText, isSelected && styles.levelBadgeTextSelected]}>
+                  {choice.label}
+                </Text>
               </View>
-            ))}
-          </View>
-        </Card>
-      </View>
-
-      <View style={styles.stepsBlock}>
-        {guidedIntroSteps.map((step, index) => (
-          <View key={step.id} style={styles.stepRow}>
-            <View style={[styles.stepNumber, stepAccentStyles[index]]}>
-              <Text style={styles.stepNumberText}>{index + 1}</Text>
-            </View>
-            <View style={styles.stepTextBlock}>
-              <Text style={styles.stepTitle}>{step.title}</Text>
-              <Text style={styles.stepBody}>{step.body}</Text>
-            </View>
-          </View>
-        ))}
+              <View style={styles.optionCopy}>
+                <Text style={styles.optionTitle}>{choice.title}</Text>
+                <Text style={styles.optionBody}>{choice.body}</Text>
+              </View>
+            </Pressable>
+          );
+        })}
       </View>
 
       <View style={styles.footer}>
+        <Text style={styles.foundationHint}>{foundationStart.title}</Text>
         <AppButton
-          accessibilityHint="Opens the first guided Job Interview roleplay"
-          label={guidedStart.ctaLabel}
+          accessibilityHint="Continues to the first guided English foundation lesson"
+          disabled={!selectedLevelId}
+          label="Continue"
           onPress={onContinue}
         />
-        <Text style={styles.note}>
-          {practiceContent.firstTargetLanguage} first. Spanish, French and Mandarin Chinese come later.
-        </Text>
       </View>
     </ScrollView>
   );
 }
 
-const stepAccentStyles = [
-  { backgroundColor: colors.primarySoft },
-  { backgroundColor: colors.accentSoft },
-  { backgroundColor: colors.infoSoft },
-];
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background,
+    backgroundColor: '#101C22',
     flexGrow: 1,
     padding: spacing.xl,
   },
-  brandBlock: {
-    paddingTop: spacing.xl,
-  },
-  kicker: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '900',
-    marginBottom: spacing.sm,
-    textTransform: 'uppercase',
-  },
-  brand: {
-    color: colors.ink,
-    fontSize: typography.title,
-    fontWeight: '900',
-  },
-  positioning: {
-    color: colors.text,
-    fontSize: typography.h2,
-    fontWeight: '700',
-    lineHeight: 28,
-    marginTop: spacing.md,
-  },
-  intro: {
-    color: colors.textMuted,
-    fontSize: typography.body,
-    lineHeight: 23,
-    marginTop: spacing.md,
-  },
-  cardKicker: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '900',
-    marginBottom: spacing.sm,
-    textTransform: 'uppercase',
-  },
-  cardTitle: {
-    color: colors.ink,
-    fontSize: typography.h2,
-    fontWeight: '900',
-  },
-  body: {
-    color: colors.textMuted,
-    fontSize: typography.body,
-    lineHeight: 23,
-    marginTop: spacing.sm,
-  },
-  detailPill: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
+  progressTrack: {
+    backgroundColor: '#35444D',
     borderRadius: 999,
-    borderWidth: 1,
-    marginBottom: spacing.sm,
-    marginRight: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  detailPillText: {
-    color: colors.primaryDark,
-    fontSize: typography.small,
-    fontWeight: '800',
-  },
-  detailRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    height: 16,
     marginTop: spacing.lg,
+    overflow: 'hidden',
   },
-  firstPracticeCard: {
-    marginTop: spacing.xl,
+  progressFill: {
+    backgroundColor: '#92E044',
+    borderRadius: 999,
+    height: 16,
   },
-  stepsBlock: {
-    marginTop: spacing.lg,
-  },
-  stepRow: {
+  coachRow: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
     flexDirection: 'row',
-    marginBottom: spacing.md,
+    marginTop: spacing.xxl,
+  },
+  coachBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderBottomColor: colors.primaryDark,
+    borderBottomWidth: 5,
+    borderRadius: radii.md,
+    height: 88,
+    justifyContent: 'center',
+    width: 88,
+  },
+  coachInitials: {
+    color: colors.surface,
+    fontSize: typography.h1,
+    fontWeight: '900',
+  },
+  speechBubble: {
+    borderColor: '#34454F',
+    borderRadius: radii.md,
+    borderWidth: 2,
+    flex: 1,
+    marginLeft: spacing.lg,
     padding: spacing.lg,
   },
-  stepNumber: {
+  question: {
+    color: colors.surface,
+    fontSize: typography.h2,
+    fontWeight: '800',
+    lineHeight: 28,
+  },
+  optionList: {
+    marginTop: spacing.xxl,
+  },
+  optionCard: {
     alignItems: 'center',
-    borderRadius: 999,
-    height: 38,
+    backgroundColor: '#12232B',
+    borderColor: '#34454F',
+    borderRadius: radii.md,
+    borderWidth: 2,
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+    minHeight: 118,
+    padding: spacing.lg,
+  },
+  optionCardSelected: {
+    borderColor: '#92E044',
+    backgroundColor: '#172D26',
+  },
+  optionCardPressed: {
+    opacity: 0.86,
+  },
+  levelBadge: {
+    alignItems: 'center',
+    backgroundColor: '#22323A',
+    borderRadius: radii.md,
+    height: 58,
     justifyContent: 'center',
-    marginRight: spacing.md,
-    width: 38,
+    width: 68,
   },
-  stepNumberText: {
-    color: colors.ink,
-    fontSize: typography.h3,
+  levelBadgeSelected: {
+    backgroundColor: '#92E044',
+  },
+  levelBadgeText: {
+    color: colors.surface,
+    fontSize: typography.body,
     fontWeight: '900',
   },
-  stepTextBlock: {
+  levelBadgeTextSelected: {
+    color: '#102019',
+  },
+  optionCopy: {
     flex: 1,
+    marginLeft: spacing.lg,
   },
-  stepTitle: {
-    color: colors.ink,
+  optionTitle: {
+    color: colors.surface,
     fontSize: typography.h3,
     fontWeight: '900',
+    lineHeight: 22,
   },
-  stepBody: {
-    color: colors.text,
+  optionBody: {
+    color: '#B7C4CB',
     fontSize: typography.small,
+    fontWeight: '700',
     lineHeight: 19,
     marginTop: spacing.xs,
   },
   footer: {
-    marginTop: spacing.md,
+    marginTop: 'auto',
+    paddingTop: spacing.xxl,
   },
-  note: {
-    color: colors.textMuted,
+  foundationHint: {
+    color: '#B7C4CB',
     fontSize: typography.small,
-    lineHeight: 18,
-    marginTop: spacing.md,
+    fontWeight: '800',
+    marginBottom: spacing.md,
     textAlign: 'center',
   },
 });

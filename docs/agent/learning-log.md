@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Language Foundation First Start
+
+Built one focused usability improvement: the app now starts with a dark, Duolingo-inspired level assessment before opening the product. Home was simplified into one app-led foundation lesson, and Lesson 1 teaches the basic `I + action + result` English structure before sending the user into the Job Interview roleplay.
+
+What went well:
+
+- The start now has far fewer choices and less text.
+- The onboarding design now uses progress, a coach prompt, selectable level cards and a disabled Continue button until the user chooses a level.
+- Home now takes charge with one next action instead of showing a dashboard.
+- The first learning step now teaches basic English structure before career practice.
+
+What went wrong:
+
+- The selected level is not stored yet; it only guides the immediate onboarding experience.
+- The bottom navigation still exists during the foundation lesson, so the user can technically leave the guided path.
+- Browser preview could verify Home and Lesson 1, but not the first-run onboarding screen without clearing local onboarding storage.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 51 tests.
+- `npm.cmd run lint` passed.
+- Mobile browser preview passed for Home and Lesson 1 on `http://127.0.0.1:8091/`.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The app should lead the user through the system instead of asking them to browse.
+- Start with language fundamentals, then apply them to career scenarios.
+- Kevin likes the dark onboarding choice-card design, adapted in a more businesslike way.
+
+Next suggested task:
+
+- Store the selected starting level locally and use it to adjust the first few lesson examples.
+
 ## 2026-06-27: Executive Career Map Theme
 
 Built one focused design improvement: the Practice screen now uses an Executive Emerald career-map theme with a compact streak/XP/path status row, a clear Unit 1 banner and large active/done/locked map nodes. The first Job Interview roleplay also now shows a first-quest banner so the onboarding handoff feels intentional.
