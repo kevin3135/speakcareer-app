@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-27: Design Research And UX Audit
+
+Created a documentation-only design research and audit pass for SpeakCareer. Reviewed public patterns from Duolingo, Speak, ELSA Speak, Praktika, Babbel, Apple Human Interface Guidelines and Material Design, then inspected the current mobile app preview and source screens.
+
+What went well:
+
+- Defined a clearer original design direction: `Career Arcade`.
+- Confirmed the biggest UX problem is not missing features, but showing too many concepts too early.
+- Documented exact redesign priorities for Learn/Home, Roleplay, Wins/Progress, Feedback and Profile.
+- Created a screen-by-screen scoreboard so future design work can be measured.
+
+What went wrong:
+
+- This run did not implement UI changes because it was intentionally research and audit only.
+- Public competitor research is pattern-level; it should not be treated as permission to copy visuals.
+- The current app state in local storage showed a returning-user flow, so first-run onboarding was also reviewed through code.
+
+Checks run:
+
+- Documentation reviewed manually.
+- No app lint/typecheck/test run, because this was docs-only and no code changes were intended.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants the app to be extremely obvious: one action, one path, no early browsing.
+- Make the app more game-like through lesson nodes, XP, unlocks and coach warmth, not by copying Duolingo.
+- First implementation task should be the Learn/Home career lesson path.
+
+Next suggested task:
+
+- Redesign Learn/Home into a vertical career lesson path with one active node, two locked nodes, compact XP/streak status and one Start button.
+
 ## 2026-06-27: First-Quest Success Handoff
 
 Built one focused practice-loop improvement: after the very first saved Job Interview answer, the app now stays in a dedicated success handoff instead of dropping straight into the full Roleplay screen. The user sees the XP reward, what unlocked, one next recommended quest and one primary button.
