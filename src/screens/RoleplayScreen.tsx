@@ -5,7 +5,6 @@ import {
   AppButton,
   Badge,
   Card,
-  CoachBubble,
   FeedbackCard,
   GradientHero,
   LessonCard,
@@ -14,7 +13,7 @@ import {
   XPBadge,
 } from '../components/ui';
 import { practiceContent } from '../data/content';
-import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
+import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario, StartingLevelId } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createNextPracticeRecommendation } from '../utils/practiceCompletion';
@@ -25,6 +24,7 @@ import { getStartingLevelProfile } from '../utils/startingLevel';
 type RoleplayScreenProps = {
   dailyTarget: DailyPracticeTarget;
   roleplay: RoleplayScenario;
+  onBack: () => void;
   onOpenProgress: () => void;
   onSelectRoleplay: (roleplayId: RoleplayId) => void;
   onSaveSession: (session: PracticeSession) => void;
@@ -33,6 +33,7 @@ type RoleplayScreenProps = {
 };
 
 export function RoleplayScreen({
+  onBack,
   onOpenProgress,
   onSaveSession,
   roleplay,
@@ -44,7 +45,6 @@ export function RoleplayScreen({
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
   const [savedSession, setSavedSession] = useState<PracticeSession | null>(null);
-  const [isTypingOpen, setIsTypingOpen] = useState(true);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
 
   const activeVariant = roleplay.promptVariants?.[0];
@@ -53,18 +53,6 @@ export function RoleplayScreen({
   const nextRecommendation = createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays);
   const isReady = Boolean(answerReview?.isReadyForFeedback && feedbackResult);
   const levelProfile = getStartingLevelProfile(startingLevelId);
-
-  function openTyping() {
-    setIsTypingOpen(true);
-    answerInputRef.current?.focus();
-  }
-
-  function startMockMic() {
-    setIsTypingOpen(true);
-    if (!draftAnswer.trim()) {
-      setDraftAnswer(levelProfile.starterAnswer);
-    }
-  }
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
@@ -115,6 +103,16 @@ export function RoleplayScreen({
         subtitle="Your answer is saved. Keep the rhythm going."
         title="Nice work"
       >
+        <Pressable
+          accessibilityHint="Go back to Learn"
+          accessibilityLabel="Back to Learn"
+          accessibilityRole="button"
+          onPress={onBack}
+          style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
+        >
+          <Text style={styles.backText}>Back</Text>
+        </Pressable>
+
         <GradientHero
           overline="Career win"
           subtitle="Your correction is saved to Wins and your next roleplay is ready."
@@ -160,88 +158,48 @@ export function RoleplayScreen({
       subtitle="Speak or type one answer. The coach gives a better professional version."
       title={roleplay.title}
     >
-      <CoachBubble
-        message="I will play the interviewer or colleague. Answer naturally, then I will sharpen your English."
-      />
-
-      <GradientHero
-        overline={roleplay.category}
-        subtitle={roleplay.workplaceContext}
-        title={roleplay.focus}
-        tone="primary"
+      <Pressable
+        accessibilityHint="Go back to Learn"
+        accessibilityLabel="Back to Learn"
+        accessibilityRole="button"
+        onPress={onBack}
+        style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
       >
-        <View style={styles.heroBadges}>
-          <Badge label={roleplay.targetLevel} tone="purple" />
-          <Badge label={`${roleplay.durationMinutes} min`} tone="info" />
-        </View>
-      </GradientHero>
+        <Text style={styles.backText}>Back</Text>
+      </Pressable>
 
       <Card tone="strong">
-        <View style={styles.scenarioHeader}>
-          <View style={styles.flexOne}>
-            <Text style={styles.cardKicker}>Scenario</Text>
-            <Text style={styles.cardTitle}>{roleplay.aiPersona}</Text>
-          </View>
-          <Badge label="Live mock" tone="secondary" />
+        <View style={styles.oneThingHeader}>
+          <Text style={styles.cardKicker}>Your turn</Text>
+          <Badge label={`${roleplay.durationMinutes} min`} tone="info" />
         </View>
-        <View style={styles.chatArea}>
-          <View style={styles.coachMessage}>
-            <Text style={styles.chatLabel}>Coach</Text>
-            <Text style={styles.chatText}>{openingLine}</Text>
-          </View>
-          <View style={styles.userMessage}>
-            <Text style={styles.userLabel}>You</Text>
-            <Text style={styles.userHint}>Answer in 2-4 clear work sentences.</Text>
-          </View>
-        </View>
-
-        <Pressable
-          accessibilityHint="Starts a mock microphone state and fills a starter answer"
-          accessibilityLabel="Mock microphone practice"
-          accessibilityRole="button"
-          onPress={startMockMic}
-          style={({ pressed }) => [styles.micButton, pressed && styles.pressed]}
-        >
-          <Text style={styles.micText}>MIC</Text>
-          <Text style={styles.micSubtext}>Mock speaking button</Text>
-        </Pressable>
-
-        <View style={styles.secondaryActions}>
-          <AppButton label="Type instead" onPress={openTyping} size="small" variant="secondary" />
-          <AppButton label="End practice" onPress={onOpenProgress} size="small" variant="quiet" />
+        <Text style={styles.promptText}>{openingLine}</Text>
+        <TextInput
+          accessibilityHint="Type your roleplay answer"
+          accessibilityLabel="Roleplay answer"
+          multiline
+          onBlur={() => setIsAnswerFocused(false)}
+          onChangeText={(answer) => {
+            setDraftAnswer(answer);
+            setAnswerReview(null);
+            setFeedbackResult(null);
+          }}
+          onFocus={() => setIsAnswerFocused(true)}
+          placeholder={levelProfile.answerPlaceholder}
+          placeholderTextColor={colors.textMuted}
+          ref={answerInputRef}
+          style={[styles.answerInput, isAnswerFocused && styles.answerInputActive]}
+          textAlignVertical="top"
+          value={draftAnswer}
+        />
+        <View style={styles.answerAction}>
+          <AppButton
+            disabled={draftAnswer.trim().length === 0}
+            label={isReady ? 'Check again' : 'Check answer'}
+            onPress={reviewAnswer}
+          />
         </View>
       </Card>
-
-      {isTypingOpen ? (
-        <Card>
-          <Text style={styles.cardKicker}>Your answer</Text>
-          <TextInput
-            accessibilityHint="Type your roleplay answer"
-            accessibilityLabel="Roleplay answer"
-            multiline
-            onBlur={() => setIsAnswerFocused(false)}
-            onChangeText={(answer) => {
-              setDraftAnswer(answer);
-              setAnswerReview(null);
-              setFeedbackResult(null);
-            }}
-            onFocus={() => setIsAnswerFocused(true)}
-            placeholder={levelProfile.answerPlaceholder}
-            placeholderTextColor={colors.textMuted}
-            ref={answerInputRef}
-            style={[styles.answerInput, isAnswerFocused && styles.answerInputActive]}
-            textAlignVertical="top"
-            value={draftAnswer}
-          />
-          <View style={styles.answerAction}>
-            <AppButton
-              disabled={draftAnswer.trim().length === 0}
-              label={isReady ? 'Check again' : 'Get feedback'}
-              onPress={reviewAnswer}
-            />
-          </View>
-        </Card>
-      ) : null}
 
       {feedbackResult ? (
         <FeedbackCard
@@ -266,17 +224,22 @@ export function RoleplayScreen({
 }
 
 const styles = StyleSheet.create({
-  heroBadges: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  scenarioHeader: {
+  backButton: {
     alignItems: 'center',
-    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 42,
+    paddingHorizontal: spacing.lg,
   },
-  flexOne: {
-    flex: 1,
-    paddingRight: spacing.md,
+  backText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   cardKicker: {
     color: colors.primary,
@@ -292,88 +255,22 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineH2,
     marginTop: spacing.xs,
   },
-  chatArea: {
-    gap: spacing.md,
-    marginTop: spacing.lg,
-  },
-  coachMessage: {
-    backgroundColor: colors.coachSoft,
-    borderColor: colors.primaryGlow,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    padding: spacing.lg,
-  },
-  userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: colors.secondarySoft,
-    borderColor: colors.secondary,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    maxWidth: '88%',
-    padding: spacing.lg,
-  },
-  chatLabel: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  userLabel: {
-    color: colors.secondaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  chatText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '800',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
-  },
-  userHint: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
-  },
-  micButton: {
+  oneThingHeader: {
     alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: colors.primary,
-    borderColor: colors.white,
-    borderRadius: radius.pill,
-    borderWidth: 5,
-    height: 132,
-    justifyContent: 'center',
-    marginTop: spacing.xl,
-    width: 132,
-    ...shadows.button,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  micText: {
-    color: colors.white,
+  promptText: {
+    color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.h1,
+    fontSize: typography.h2,
     fontWeight: '900',
-  },
-  micSubtext: {
-    color: colors.primarySoft,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-    marginTop: spacing.xs,
+    lineHeight: typography.lineH2,
+    marginTop: spacing.lg,
   },
   pressed: {
     opacity: 0.84,
     transform: [{ scale: 0.98 }],
-  },
-  secondaryActions: {
-    flexDirection: 'row',
-    gap: spacing.md,
-    marginTop: spacing.lg,
   },
   answerInput: {
     backgroundColor: colors.surfaceMuted,

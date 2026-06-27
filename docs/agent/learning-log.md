@@ -1,5 +1,25 @@
 # Agent Learning Log
 
+## 2026-06-27: Back Buttons And One-Step Practice
+
+Added a clear `Back` button to the Foundation lesson and Roleplay screen. Simplified the Foundation game so it shows one active tap target at a time instead of three blocks plus multiple explanation cards. Simplified the Roleplay start so the user immediately sees one prompt, one answer box and one `Check answer` action.
+
+What went well:
+
+- The first lesson now feels much more like a guided game step.
+- Roleplay has fewer intro panels before the answer field.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- No raw hex colors were added to screens/components.
+
+What went wrong:
+
+- Browser preview reload timed out once after the code change, so this pass is verified by automated checks rather than visual browser QA.
+- The Roleplay feedback card is still detailed after checking an answer; a later pass should simplify that next state too.
+
+Next suggested task:
+
+- Simplify the post-check feedback state into one short `Better English` card with one save action.
+
 ## 2026-06-27: Simpler Animated Home Instruction
 
 Simplified the Learn/Home screen again and added a real pulsing `Animated` instruction card. The page now keeps the hero CTA, a compact XP/level row, one animated `TAP` instruction, one active lesson card, and one tiny `Unlocks next` hint. The larger daily mission panel, path preview card and roleplay unlock preview were removed from Home to reduce noise.

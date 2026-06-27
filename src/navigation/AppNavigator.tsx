@@ -118,6 +118,7 @@ export function AppNavigator() {
         ) : null}
         {activeScreen === 'Foundation' ? (
           <FoundationScreen
+            onBack={() => setActiveScreen('Home')}
             onStartCareerPractice={() => openRoleplay(guidedStart.roleplayId)}
             startingLevelId={startingLevelId}
           />
@@ -129,6 +130,7 @@ export function AppNavigator() {
           <RoleplayScreen
             key={selectedRoleplay.id}
             dailyTarget={dailyTarget}
+            onBack={() => setActiveScreen('Home')}
             onOpenProgress={() => setActiveScreen('Progress')}
             onSaveSession={savePracticeSession}
             sessions={practiceSessions}
