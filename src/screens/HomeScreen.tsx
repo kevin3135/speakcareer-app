@@ -67,7 +67,6 @@ export function HomeScreen({
 
       <AnimatedStartCard
         ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
-        meta={activeLesson.meta}
         onPress={startActiveLesson}
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
@@ -123,13 +122,11 @@ export function HomeScreen({
 
 function AnimatedStartCard({
   ctaLabel,
-  meta,
   onPress,
   title,
   xpLabel,
 }: {
   ctaLabel: string;
-  meta: string;
   onPress: () => void;
   title: string;
   xpLabel: string;
@@ -178,11 +175,6 @@ function AnimatedStartCard({
       onPress={onPress}
       style={({ pressed }) => [styles.startCard, pressed && styles.pressed]}
     >
-      <View style={styles.startTopRow}>
-        <Text style={styles.startKicker}>Today</Text>
-        <Badge label={xpLabel} tone="accent" />
-      </View>
-
       <View style={styles.startMainRow}>
         <View style={styles.startTarget}>
           <Animated.View
@@ -194,17 +186,19 @@ function AnimatedStartCard({
               },
             ]}
           />
-          <Text style={styles.startTargetText}>TAP</Text>
+          <Text style={styles.startTargetText}>START</Text>
         </View>
 
         <View style={styles.startCopy}>
+          <Text style={styles.startKicker}>Do this now</Text>
           <Text style={styles.startTitle}>{title}</Text>
-          <Text style={styles.startMeta}>{meta}</Text>
+          <View style={styles.startRewardRow}>
+            <Text numberOfLines={1} style={styles.startHint}>
+              {ctaLabel}
+            </Text>
+            <Badge label={xpLabel} tone="accent" />
+          </View>
         </View>
-      </View>
-
-      <View style={styles.startFooter}>
-        <Text style={styles.startCta}>{ctaLabel}</Text>
       </View>
     </Pressable>
   );
@@ -226,13 +220,8 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     ...shadows.medium,
   },
-  startTopRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   startKicker: {
-    color: colors.white,
+    color: colors.secondarySoft,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
@@ -246,21 +235,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.white,
     borderRadius: radius.pill,
-    height: 60,
+    height: 76,
     justifyContent: 'center',
-    width: 60,
+    width: 76,
   },
   startRing: {
     backgroundColor: colors.secondarySoft,
     borderRadius: radius.pill,
-    height: 60,
+    height: 76,
     position: 'absolute',
-    width: 60,
+    width: 76,
   },
   startTargetText: {
     color: colors.successDark,
     fontFamily: fonts.rounded,
-    fontSize: typography.micro,
+    fontSize: typography.body,
     fontWeight: '900',
   },
   startCopy: {
@@ -272,26 +261,20 @@ const styles = StyleSheet.create({
     fontSize: typography.h2,
     fontWeight: '900',
     lineHeight: typography.lineH2,
-  },
-  startMeta: {
-    color: colors.secondarySoft,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
     marginTop: spacing.xs,
   },
-  startFooter: {
-    alignSelf: 'flex-start',
-    backgroundColor: colors.white,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  startCta: {
-    color: colors.successDark,
+  startHint: {
+    color: colors.white,
+    flex: 1,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '900',
+  },
+  startRewardRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.md,
   },
   nextUnlock: {
     alignItems: 'center',

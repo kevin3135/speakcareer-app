@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Simpler Home Start Card
+
+Made one focused Home design improvement: the animated start card now behaves more like a single obvious game action. It no longer shows a separate `Today` row, lesson meta line or CTA pill. Instead, the card centers the user on one animated `START` target, one lesson title, one short action hint and a small XP reward chip.
+
+What went well:
+
+- This directly supports Kevin's request for a simpler Home screen with less text and clearer app-led instruction.
+- The change stayed in one screen and reused the existing theme colors, spacing, radius and badge component.
+- The primary action is easier to spot because the animated circle now says `START` instead of the less direct `TAP`.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the larger start target should still be checked at phone size.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home should feel like one guided start action, not a dashboard.
+- If a first-viewport element has multiple text layers, remove the weakest one before adding anything new.
+- Keep XP visible as a reward, but small enough that it does not compete with `START`.
+
+Next suggested task:
+
+- Mobile-preview Home and, if the first viewport still feels busy, simplify or collapse the daily mission card under the start action.
+
 ## 2026-06-28: Quiet Foundation Handoff Chrome
 
 Polished the completed Foundation lesson handoff area after confirming the handoff content is already compact on this branch. The visible code change makes the Foundation back button smaller and pill-shaped, matching the quieter Roleplay chrome so `Continue to interview` remains the main action.
