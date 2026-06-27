@@ -14,6 +14,9 @@ type CreateFirstQuestFeedbackStateInput = {
   feedbackResult: RuleBasedFeedbackResult | null;
 };
 
+const FIRST_QUEST_SHORT_REWRITE =
+  'I helped my team finish a project on time by organizing tasks and sharing clear updates.';
+
 export function createFirstQuestFeedbackState({
   answerReview,
   feedbackResult,
@@ -30,8 +33,8 @@ export function createFirstQuestFeedbackState({
   }
 
   return {
-    body: 'This version is clearer. Save it to unlock the app.',
-    rewrite: feedbackResult.feedback.suggestedRewrite,
+    body: 'Short, clear and professional. Save it to unlock the app.',
+    rewrite: FIRST_QUEST_SHORT_REWRITE,
     rewriteLabel: 'Better English',
     title: 'Good. Say it like this.',
     xpLabel: `+${feedbackResult.xpReward} XP`,

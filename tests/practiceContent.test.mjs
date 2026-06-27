@@ -134,7 +134,11 @@ test('creates one simple first-quest feedback card', async () => {
 
   assert.equal(ready.title, 'Good. Say it like this.');
   assert.equal(ready.rewriteLabel, 'Better English');
-  assert.equal(ready.rewrite, 'I helped the team finish the project on time.');
+  assert.equal(
+    ready.rewrite,
+    'I helped my team finish a project on time by organizing tasks and sharing clear updates.',
+  );
+  assert.ok(ready.rewrite.length < 92);
   assert.equal(ready.xpLabel, '+40 XP');
 });
 

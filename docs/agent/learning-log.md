@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Short First Rewrite
+
+Built one focused first-run feedback improvement: the first Job Interview feedback now uses one short fixed rewrite that matches the taught `I + action + result` pattern, instead of showing the longer scenario-level mock rewrite.
+
+What went well:
+
+- The first feedback rewrite is now short enough to keep the save path closer on mobile.
+- The rewrite matches the foundation lesson structure and is easier for a beginner to copy.
+- Updated the first-quest feedback test to enforce a short rewrite length.
+- No new services, secrets or integrations were added.
+
+What went wrong:
+
+- Browser preview kept using an existing saved-session state, so it showed the richer roleplay instead of the first-run route.
+- The rewrite is still a fixed local example rather than adapting to the exact user answer.
+- A later pass should add a simple reset/debug path for testing first-run flows without clearing browser data manually.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 52 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run rewrites should be short enough that the next action stays visible.
+- Prefer beginner-copyable examples over comprehensive coaching in the first session.
+- Avoid forcing browser data resets during heartbeat runs; rely on helper tests when local state blocks first-run preview.
+
+Next suggested task:
+
+- After the first save, show a very simple success screen with one unlocked next step instead of dropping into the full app immediately.
+
 ## 2026-06-27: One-Card First Feedback
 
 Built one focused simplification: after `Check answer` in the first Job Interview flow, the user now sees one simple feedback card with a short confirmation, one `Better English` rewrite and the XP label. The same button then becomes `Save answer`.
