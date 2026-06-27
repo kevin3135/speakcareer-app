@@ -1,5 +1,25 @@
 # Agent Learning Log
 
+## 2026-06-27: One-Card Roleplay Feedback
+
+Simplified the Roleplay post-check state. After `Check answer`, the prompt and answer field now disappear and the learner sees one focused coach card: readiness label, XP, `Better English`, `Save answer` and `Try again`. The detailed multi-score feedback card is hidden from this core game step.
+
+What went well:
+
+- The Roleplay loop now stays closer to one thing at a time.
+- The feedback step feels more like a reward/correction moment and less like a report.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- No raw hex colors were added to screens/components.
+
+What went wrong:
+
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+- The detailed feedback component still exists for future advanced screens, but it is no longer used in the main Roleplay loop.
+
+Next suggested task:
+
+- Simplify the saved/complete Roleplay state so it shows `Saved`, XP and one next lesson button without extra progress panels.
+
 ## 2026-06-27: Back Buttons And One-Step Practice
 
 Added a clear `Back` button to the Foundation lesson and Roleplay screen. Simplified the Foundation game so it shows one active tap target at a time instead of three blocks plus multiple explanation cards. Simplified the Roleplay start so the user immediately sees one prompt, one answer box and one `Check answer` action.

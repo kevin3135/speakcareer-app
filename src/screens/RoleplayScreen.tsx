@@ -5,7 +5,6 @@ import {
   AppButton,
   Badge,
   Card,
-  FeedbackCard,
   GradientHero,
   LessonCard,
   ProgressBar,
@@ -51,7 +50,6 @@ export function RoleplayScreen({
   const openingLine = activeVariant?.openingLine ?? roleplay.openingLine;
   const xpReward = feedbackResult?.xpReward ?? roleplay.durationMinutes * 4;
   const nextRecommendation = createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays);
-  const isReady = Boolean(answerReview?.isReadyForFeedback && feedbackResult);
   const levelProfile = getStartingLevelProfile(startingLevelId);
 
   function reviewAnswer() {
@@ -168,56 +166,65 @@ export function RoleplayScreen({
         <Text style={styles.backText}>Back</Text>
       </Pressable>
 
-      <Card tone="strong">
-        <View style={styles.oneThingHeader}>
-          <Text style={styles.cardKicker}>Your turn</Text>
-          <Badge label={`${roleplay.durationMinutes} min`} tone="info" />
-        </View>
-        <Text style={styles.promptText}>{openingLine}</Text>
-        <TextInput
-          accessibilityHint="Type your roleplay answer"
-          accessibilityLabel="Roleplay answer"
-          multiline
-          onBlur={() => setIsAnswerFocused(false)}
-          onChangeText={(answer) => {
-            setDraftAnswer(answer);
-            setAnswerReview(null);
-            setFeedbackResult(null);
-          }}
-          onFocus={() => setIsAnswerFocused(true)}
-          placeholder={levelProfile.answerPlaceholder}
-          placeholderTextColor={colors.textMuted}
-          ref={answerInputRef}
-          style={[styles.answerInput, isAnswerFocused && styles.answerInputActive]}
-          textAlignVertical="top"
-          value={draftAnswer}
-        />
-        <View style={styles.answerAction}>
-          <AppButton
-            disabled={draftAnswer.trim().length === 0}
-            label={isReady ? 'Check again' : 'Check answer'}
-            onPress={reviewAnswer}
+      {!feedbackResult ? (
+        <Card tone="strong">
+          <View style={styles.oneThingHeader}>
+            <Text style={styles.cardKicker}>Your turn</Text>
+            <Badge label={`${roleplay.durationMinutes} min`} tone="info" />
+          </View>
+          <Text style={styles.promptText}>{openingLine}</Text>
+          <TextInput
+            accessibilityHint="Type your roleplay answer"
+            accessibilityLabel="Roleplay answer"
+            multiline
+            onBlur={() => setIsAnswerFocused(false)}
+            onChangeText={(answer) => {
+              setDraftAnswer(answer);
+              setAnswerReview(null);
+              setFeedbackResult(null);
+            }}
+            onFocus={() => setIsAnswerFocused(true)}
+            placeholder={levelProfile.answerPlaceholder}
+            placeholderTextColor={colors.textMuted}
+            ref={answerInputRef}
+            style={[styles.answerInput, isAnswerFocused && styles.answerInputActive]}
+            textAlignVertical="top"
+            value={draftAnswer}
           />
-        </View>
-      </Card>
+          <View style={styles.answerAction}>
+            <AppButton
+              disabled={draftAnswer.trim().length === 0}
+              label="Check answer"
+              onPress={reviewAnswer}
+            />
+          </View>
+        </Card>
+      ) : null}
 
       {feedbackResult ? (
-        <FeedbackCard
-          correctedVersion={feedbackResult.feedback.suggestedRewrite}
-          explanation="The stronger version adds structure, a concrete action and a clear result. That makes the answer easier to trust in a professional conversation."
-          onRetry={retryAnswer}
-          onSaveMistake={saveSession}
-          scores={[
-            { label: 'Grammar', value: feedbackResult.feedback.scores[0]?.value ?? 78 },
-            { label: 'Fluency', value: feedbackResult.feedback.scores[1]?.value ?? 76 },
-            { label: 'Professional tone', value: feedbackResult.feedback.scores[2]?.value ?? 82 },
-            { label: 'Confidence', value: feedbackResult.feedback.scores[3]?.value ?? 74 },
-          ]}
-          strongerVersion={feedbackResult.feedback.suggestedRewrite}
-          summary={feedbackResult.feedback.summary}
-          toImprove={feedbackResult.feedback.improvements}
-          wentWell={feedbackResult.feedback.strengths}
-        />
+        <Card tone="strong">
+          <View style={styles.oneThingHeader}>
+            <Text style={styles.cardKicker}>Coach says</Text>
+            <XPBadge label={`+${feedbackResult.xpReward} XP`} />
+          </View>
+          <Text style={styles.cardTitle}>{answerReview?.readinessLabel ?? 'Good start'}</Text>
+          <View style={styles.betterEnglishBox}>
+            <Text style={styles.betterEnglishLabel}>Better English</Text>
+            <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
+          </View>
+          <View style={styles.feedbackActions}>
+            <View style={styles.feedbackActionItem}>
+              <AppButton
+                disabled={!answerReview?.isReadyForFeedback}
+                label={answerReview?.isReadyForFeedback ? 'Save answer' : 'Add more first'}
+                onPress={saveSession}
+              />
+            </View>
+            <View style={styles.feedbackActionItem}>
+              <AppButton label="Try again" onPress={retryAnswer} variant="secondary" />
+            </View>
+          </View>
+        </Card>
       ) : null}
     </ScreenContainer>
   );
@@ -291,6 +298,35 @@ const styles = StyleSheet.create({
   },
   answerAction: {
     marginTop: spacing.lg,
+  },
+  betterEnglishBox: {
+    backgroundColor: colors.correctionSoft,
+    borderColor: colors.correction,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.lg,
+  },
+  betterEnglishLabel: {
+    color: colors.infoDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  betterEnglishText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  feedbackActions: {
+    gap: spacing.md,
+    marginTop: spacing.lg,
+  },
+  feedbackActionItem: {
+    flex: 1,
   },
   completeBadges: {
     flexDirection: 'row',
