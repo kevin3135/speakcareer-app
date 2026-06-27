@@ -48,6 +48,41 @@ test('keeps the guided first experience simple and action oriented', async () =>
   assert.ok(guidedIntroSteps.every((step) => step.body.length <= 72));
 });
 
+test('shows a first-quest banner only for the initial Job Interview run', async () => {
+  const { guidedStart } = await import('../src/data/guidedIntro.ts');
+  const { createRoleplayFirstQuestState } = await import('../src/utils/roleplayFirstQuest.ts');
+
+  const firstQuest = createRoleplayFirstQuestState({
+    guidedStart,
+    roleplayId: 'job-interview',
+    sessions: [],
+  });
+
+  assert.equal(firstQuest.eyebrow, 'First quest');
+  assert.equal(firstQuest.title, 'Quest 1: Job Interview');
+  assert.equal(firstQuest.progressLabel, '0/1 saved');
+  assert.equal(firstQuest.unlockLabel, 'Unlock Home and Progress');
+  assert.deepEqual(firstQuest.detailLabels, ['5 minutes', '2-4 sentences', 'Clear rewrite']);
+  assert.ok(firstQuest.body.includes('Save one short Job Interview answer'));
+
+  assert.equal(
+    createRoleplayFirstQuestState({
+      guidedStart,
+      roleplayId: 'meeting-practice',
+      sessions: [],
+    }),
+    null,
+  );
+  assert.equal(
+    createRoleplayFirstQuestState({
+      guidedStart,
+      roleplayId: 'job-interview',
+      sessions: [{ roleplayId: 'job-interview' }],
+    }),
+    null,
+  );
+});
+
 test('stores onboarding completion in local storage', async () => {
   const {
     ONBOARDING_COMPLETED_KEY,
@@ -1574,6 +1609,30 @@ test('creates a guided practice career path for first-time users', async () => {
     ['active', 'locked', 'locked', 'locked', 'locked'],
   );
   assert.equal(path.steps[0].caption, 'Interview | B1-B2 | 12 min');
+});
+
+test('creates simple professional practice map stats', async () => {
+  const { createPracticeMapStats } = await import('../src/utils/practiceMapStats.ts');
+
+  const emptyStats = createPracticeMapStats({
+    path: { progressLabel: '0 of 5 complete' },
+    sessions: [],
+  });
+
+  assert.deepEqual(emptyStats, [
+    { label: 'Streak', value: '0 day', tone: 'focus' },
+    { label: 'XP', value: '+40', tone: 'reward' },
+    { label: 'Path', value: '0 of 5 complete', tone: 'path' },
+  ]);
+
+  const activeStats = createPracticeMapStats({
+    path: { progressLabel: '2 of 5 complete' },
+    sessions: [{ xpReward: 32 }, { xpReward: 28 }],
+  });
+
+  assert.equal(activeStats[0].value, '2 day');
+  assert.equal(activeStats[1].value, '60');
+  assert.equal(activeStats[2].value, '2 of 5 complete');
 });
 
 test('unlocks the next practice sprint in sequence after saved sessions', async () => {

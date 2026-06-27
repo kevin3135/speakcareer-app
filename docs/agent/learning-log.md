@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Executive Career Map Theme
+
+Built one focused design improvement: the Practice screen now uses an Executive Emerald career-map theme with a compact streak/XP/path status row, a clear Unit 1 banner and large active/done/locked map nodes. The first Job Interview roleplay also now shows a first-quest banner so the onboarding handoff feels intentional.
+
+What went well:
+
+- The Practice tab now has a stronger Duolingo-like unlock loop without using childish mascots or playful clutter.
+- The first viewport is simpler: status, unit context, next recommended step and the active start node are clear.
+- The new `createPracticeMapStats` helper keeps streak, XP and path labels predictable and tested.
+- Mobile browser preview confirmed the map is readable at phone width.
+
+What went wrong:
+
+- The scenario library is still visible below the map, so a later pass may collapse it until the first quest is saved.
+- The map is static for now; it does not yet animate node unlocks or celebrate saves.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 51 tests.
+- `npm.cmd run lint` passed.
+- Mobile browser preview passed on `http://127.0.0.1:8091/`.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin wants more game-like motivation, but the product rule is still professional before playful.
+- Use Executive Emerald, ink and gold as the current app theme direction.
+- Prefer one guided path first; keep browsing/library features secondary until the first save.
+
+Next suggested task:
+
+- Collapse or soften the Scenario library for first-time users so the Practice tab feels even less overwhelming.
+
 ## 2026-06-27: Onboarding First Quest Handoff
 
 Built one focused onboarding improvement: the first-run CTA now uses "Start first quest" language and completing onboarding opens the Job Interview roleplay directly instead of dropping the user on Home first.

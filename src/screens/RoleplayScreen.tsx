@@ -6,6 +6,7 @@ import { Card } from '../components/Card';
 import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
+import { guidedStart } from '../data/guidedIntro';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { createAnswerCoachContent } from '../utils/answerCoach';
@@ -22,6 +23,7 @@ import {
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createRoleplayAnglePickerState } from '../utils/roleplayAnglePicker';
+import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayGuideState } from '../utils/roleplayGuide';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
 import { createRoleplayReadCard } from '../utils/roleplayReadCard';
@@ -147,6 +149,11 @@ export function RoleplayScreen({
     hasReviewedAnswer: Boolean(answerReview),
     isReadyForFeedback: Boolean(answerReview?.isReadyForFeedback && feedbackResult),
     isSaved: Boolean(savedSession),
+  });
+  const firstQuest = createRoleplayFirstQuestState({
+    guidedStart,
+    roleplayId: roleplay.id,
+    sessions: completionSessions,
   });
 
   useEffect(() => {
@@ -348,6 +355,27 @@ export function RoleplayScreen({
           ) : null}
         </View>
       </Card>
+
+      {firstQuest ? (
+        <Card>
+          <View style={styles.firstQuestHeader}>
+            <View style={styles.firstQuestTitleBlock}>
+              <Text style={styles.detailLabel}>{firstQuest.eyebrow}</Text>
+              <Text style={styles.firstQuestTitle}>{firstQuest.title}</Text>
+            </View>
+            <Text style={styles.firstQuestProgressPill}>{firstQuest.progressLabel}</Text>
+          </View>
+          <Text style={styles.firstQuestBody}>{firstQuest.body}</Text>
+          <View style={styles.firstQuestMetaRow}>
+            <Text style={styles.firstQuestUnlockPill}>{firstQuest.unlockLabel}</Text>
+            {firstQuest.detailLabels.map((label) => (
+              <Text key={label} style={styles.firstQuestDetailPill}>
+                {label}
+              </Text>
+            ))}
+          </View>
+        </Card>
+      ) : null}
 
       <View style={styles.scenarioPanel}>
         <View style={styles.scenarioSummary}>
@@ -933,6 +961,67 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  firstQuestHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  firstQuestTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  firstQuestTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+  },
+  firstQuestProgressPill: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.sm,
+    color: colors.accent,
+    fontSize: typography.small,
+    fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  firstQuestBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.sm,
+  },
+  firstQuestMetaRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: spacing.md,
+  },
+  firstQuestUnlockPill: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: 999,
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  firstQuestDetailPill: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginBottom: spacing.sm,
+    marginRight: spacing.sm,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   scenarioPanel: {
     backgroundColor: colors.surface,

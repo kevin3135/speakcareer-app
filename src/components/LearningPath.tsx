@@ -15,68 +15,97 @@ type LearningPathProps = {
   steps: LearningPathStep[];
 };
 
+const stateLabels = {
+  active: 'START',
+  done: 'DONE',
+  locked: 'LOCKED',
+};
+
 export function LearningPath({ steps }: LearningPathProps) {
   return (
-    <View>
+    <View style={styles.map}>
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1;
         const isInteractive = Boolean(step.onPress) && step.state !== 'locked';
-        const content = (
+        const isRight = index % 2 === 1;
+        const rowContent = (
           <>
-            <View style={styles.rail}>
-              <View style={[styles.node, styles[`${step.state}Node`]]}>
-                <Text style={[styles.nodeText, step.state === 'locked' && styles.lockedNodeText]}>
-                  {index + 1}
-                </Text>
+            <View style={styles.nodeStack}>
+              {step.state === 'active' ? (
+                <View style={styles.startBubble}>
+                  <Text style={styles.startBubbleText}>START</Text>
+                </View>
+              ) : null}
+              <View style={[styles.nodeShadow, nodeShadowStyles[step.state]]}>
+                <View style={[styles.nodeTop, nodeTopStyles[step.state]]}>
+                  <Text
+                    style={[
+                      styles.nodeText,
+                      step.state === 'locked' && styles.lockedNodeText,
+                    ]}
+                  >
+                    {String(index + 1).padStart(2, '0')}
+                  </Text>
+                </View>
               </View>
-              {!isLast ? <View style={[styles.line, step.state === 'done' && styles.doneLine]} /> : null}
             </View>
-            <View style={styles.body}>
-              <View style={styles.titleRow}>
+            <View
+              style={[
+                styles.copyPanel,
+                isRight && styles.copyPanelRight,
+                step.state === 'active' && styles.copyPanelActive,
+                step.state === 'locked' && styles.copyPanelLocked,
+              ]}
+            >
+              <View style={styles.copyHeader}>
                 <Text style={[styles.title, step.state === 'locked' && styles.lockedText]}>
                   {step.title}
                 </Text>
-                {step.xpLabel ? <Text style={styles.xp}>{step.xpLabel}</Text> : null}
+                {step.xpLabel ? (
+                  <Text style={[styles.xp, step.state === 'locked' && styles.lockedText]}>
+                    {step.xpLabel}
+                  </Text>
+                ) : null}
               </View>
               <Text style={[styles.caption, step.state === 'locked' && styles.lockedText]}>
                 {step.caption}
               </Text>
-              <Text style={[styles.stateLabel, styles[`${step.state}Label`]]}>
+              <Text style={[styles.statePill, statePillStyles[step.state]]}>
                 {stateLabels[step.state]}
               </Text>
             </View>
           </>
         );
 
-        const stepStyle = [
-          styles.step,
-          step.state === 'active' && styles.activeStep,
-        ];
-
-        if (isInteractive) {
-          return (
-            <Pressable
-              accessibilityHint="Opens the next recommended practice"
-              accessibilityLabel={`${step.title}. ${stateLabels[step.state]} step`}
-              accessibilityRole="button"
-              key={step.id}
-              onPress={step.onPress}
-              style={({ pressed }) => [
-                ...stepStyle,
-                pressed && styles.pressed,
-              ]}
-            >
-              {content}
-            </Pressable>
-          );
-        }
-
         return (
-          <View
-            key={step.id}
-            style={stepStyle}
-          >
-            {content}
+          <View key={step.id} style={styles.stepBlock}>
+            {isInteractive ? (
+              <Pressable
+                accessibilityHint="Opens this unlocked career practice step"
+                accessibilityLabel={`${step.title}. ${stateLabels[step.state]} step`}
+                accessibilityRole="button"
+                onPress={step.onPress}
+                style={({ pressed }) => [
+                  styles.stepContent,
+                  isRight && styles.stepContentRight,
+                  pressed && styles.pressed,
+                ]}
+              >
+                {rowContent}
+              </Pressable>
+            ) : (
+              <View style={[styles.stepContent, isRight && styles.stepContentRight]}>
+                {rowContent}
+              </View>
+            )}
+            {!isLast ? (
+              <View
+                style={[
+                  styles.connector,
+                  step.state === 'done' ? styles.connectorDone : styles.connectorMuted,
+                ]}
+              />
+            ) : null}
           </View>
         );
       })}
@@ -84,69 +113,116 @@ export function LearningPath({ steps }: LearningPathProps) {
   );
 }
 
-const stateLabels = {
-  active: 'NEXT',
-  done: 'DONE',
-  locked: 'LOCKED',
-};
-
 const styles = StyleSheet.create({
-  step: {
-    flexDirection: 'row',
+  map: {
     paddingVertical: spacing.sm,
   },
-  activeStep: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radii.md,
-    paddingHorizontal: spacing.sm,
+  stepBlock: {
+    width: '100%',
+  },
+  stepContent: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  stepContentRight: {
+    flexDirection: 'row-reverse',
   },
   pressed: {
     opacity: 0.84,
+    transform: [{ scale: 0.99 }],
   },
-  rail: {
+  nodeStack: {
     alignItems: 'center',
-    width: 42,
+    width: 84,
   },
-  node: {
-    alignItems: 'center',
+  startBubble: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: radii.md,
-    height: 34,
+    borderWidth: 2,
+    marginBottom: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  startBubbleText: {
+    color: colors.primary,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  nodeShadow: {
+    alignItems: 'center',
+    borderRadius: 999,
+    height: 78,
+    justifyContent: 'flex-start',
+    paddingTop: 4,
+    width: 78,
+    elevation: 3,
+    shadowColor: colors.ink,
+    shadowOffset: { height: 3, width: 0 },
+    shadowOpacity: 0.12,
+    shadowRadius: 4,
+  },
+  activeNodeShadow: {
+    backgroundColor: '#0D744F',
+  },
+  doneNodeShadow: {
+    backgroundColor: '#063F38',
+  },
+  lockedNodeShadow: {
+    backgroundColor: '#B9C2CA',
+  },
+  nodeTop: {
+    alignItems: 'center',
+    borderRadius: 999,
+    height: 68,
     justifyContent: 'center',
-    width: 34,
+    width: 68,
   },
-  doneNode: {
-    backgroundColor: colors.primary,
+  activeNodeTop: {
+    backgroundColor: '#2AC96F',
+    borderColor: colors.accentSoft,
+    borderWidth: 3,
   },
-  activeNode: {
-    backgroundColor: colors.accent,
+  doneNodeTop: {
+    backgroundColor: colors.primaryDark,
+    borderColor: colors.accent,
+    borderWidth: 3,
   },
-  lockedNode: {
-    backgroundColor: colors.border,
+  lockedNodeTop: {
+    backgroundColor: '#E5EAF0',
   },
   nodeText: {
     color: colors.surface,
-    fontSize: typography.body,
+    fontSize: typography.h2,
     fontWeight: '900',
   },
   lockedNodeText: {
-    color: colors.textMuted,
+    color: '#97A1AB',
   },
-  line: {
-    backgroundColor: colors.border,
+  copyPanel: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
     flex: 1,
-    marginTop: spacing.xs,
-    minHeight: 28,
-    width: 3,
+    marginLeft: spacing.md,
+    padding: spacing.md,
   },
-  doneLine: {
-    backgroundColor: colors.primary,
+  copyPanelRight: {
+    marginLeft: 0,
+    marginRight: spacing.md,
   },
-  body: {
-    flex: 1,
-    paddingBottom: spacing.sm,
+  copyPanelActive: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#9FD8C7',
   },
-  titleRow: {
-    alignItems: 'center',
+  copyPanelLocked: {
+    backgroundColor: '#F3F6F8',
+    borderColor: '#E0E6EB',
+  },
+  copyHeader: {
+    alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -155,12 +231,13 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.body,
     fontWeight: '900',
+    lineHeight: 20,
   },
   xp: {
     color: colors.accent,
     fontSize: typography.small,
     fontWeight: '900',
-    marginLeft: spacing.md,
+    marginLeft: spacing.sm,
   },
   caption: {
     color: colors.textMuted,
@@ -168,21 +245,60 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginTop: spacing.xs,
   },
-  stateLabel: {
+  statePill: {
+    alignSelf: 'flex-start',
+    borderRadius: 999,
     fontSize: 10,
     fontWeight: '900',
-    marginTop: spacing.xs,
+    marginTop: spacing.sm,
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
-  doneLabel: {
+  activeStatePill: {
+    backgroundColor: colors.surface,
     color: colors.primaryDark,
   },
-  activeLabel: {
-    color: colors.accent,
+  doneStatePill: {
+    backgroundColor: colors.primaryDark,
+    color: colors.surface,
   },
-  lockedLabel: {
-    color: colors.textMuted,
+  lockedStatePill: {
+    backgroundColor: '#E2E7EC',
+    color: '#6F7B86',
+  },
+  connector: {
+    alignSelf: 'center',
+    borderRadius: 999,
+    height: 28,
+    marginVertical: spacing.xs,
+    width: 5,
+  },
+  connectorDone: {
+    backgroundColor: colors.primary,
+  },
+  connectorMuted: {
+    backgroundColor: colors.border,
   },
   lockedText: {
     color: colors.textMuted,
   },
 });
+
+const nodeShadowStyles = {
+  active: styles.activeNodeShadow,
+  done: styles.doneNodeShadow,
+  locked: styles.lockedNodeShadow,
+};
+
+const nodeTopStyles = {
+  active: styles.activeNodeTop,
+  done: styles.doneNodeTop,
+  locked: styles.lockedNodeTop,
+};
+
+const statePillStyles = {
+  active: styles.activeStatePill,
+  done: styles.doneStatePill,
+  locked: styles.lockedStatePill,
+};

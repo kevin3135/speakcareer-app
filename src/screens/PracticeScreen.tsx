@@ -11,6 +11,7 @@ import { practiceContent } from '../data/content';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession, RoleplayId } from '../types';
 import { createPracticeCareerPath } from '../utils/practiceCareerPath';
+import { createPracticeMapStats } from '../utils/practiceMapStats';
 import {
   ALL_CATEGORIES_FILTER,
   ALL_LEVELS_FILTER,
@@ -35,6 +36,10 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const practiceMapStats = createPracticeMapStats({
+    path: practiceCareerPath,
+    sessions,
+  });
   const categoryFilters = getRoleplayCategoryFilters(practiceContent.roleplays);
   const levelFilters = getRoleplayLevelFilters(practiceContent.roleplays);
   const categoryFilteredRoleplays = filterRoleplaysByCategory(
@@ -46,33 +51,48 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
   return (
     <Screen
       title="Practice"
-      subtitle="Follow one guided English career path, then browse the full library."
+      subtitle="Start at the green step. Save one answer to unlock the next career conversation."
     >
-      <View style={styles.hero}>
-        <View style={styles.heroHeader}>
-          <Text style={styles.heroKicker}>Recommended next</Text>
-          <View style={styles.metaPill}>
-            <Text style={styles.metaPillText}>{practiceCareerPath.meta}</Text>
-          </View>
+      <View style={styles.statusRow}>
+        {practiceMapStats.map((stat) => {
+          const statusToneStyles = {
+            focus: styles.statusItemFocus,
+            path: styles.statusItemPath,
+            reward: styles.statusItemReward,
+          };
+
+          return (
+            <View key={stat.label} style={[styles.statusItem, statusToneStyles[stat.tone]]}>
+              <Text style={styles.statusLabel}>{stat.label}</Text>
+              <Text style={styles.statusValue}>{stat.value}</Text>
+            </View>
+          );
+        })}
+      </View>
+
+      <View style={styles.unitBanner}>
+        <View style={styles.unitCopy}>
+          <Text style={styles.unitEyebrow}>Unit 1 | Career English</Text>
+          <Text style={styles.unitTitle}>Professional conversation path</Text>
+          <Text style={styles.unitBody}>{practiceCareerPath.body}</Text>
         </View>
-        <Text style={styles.heroTitle}>{practiceCareerPath.title}</Text>
-        <Text style={styles.heroBody}>{practiceCareerPath.body}</Text>
-        <View style={styles.heroProgress}>
-          <ProgressBar label={practiceCareerPath.progressLabel} value={practiceCareerPath.progressPercent} />
-        </View>
-        <View style={styles.buttonRow}>
-          <AppButton
-            accessibilityHint="Starts the next recommended sprint from the Practice path"
-            label={practiceCareerPath.ctaLabel}
-            onPress={() => onOpenRoleplay(practiceCareerPath.roleplayId)}
-          />
+        <View style={styles.unitBadge}>
+          <Text style={styles.unitBadgeText}>MAP</Text>
         </View>
       </View>
 
       <Card>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Career path</Text>
-          <Text style={styles.sectionMeta}>{practiceCareerPath.progressLabel}</Text>
+        <View style={styles.mapHeader}>
+          <View style={styles.mapTitleBlock}>
+            <Text style={styles.mapKicker}>Recommended next</Text>
+            <Text style={styles.mapTitle}>{practiceCareerPath.title}</Text>
+          </View>
+          <View style={styles.metaPill}>
+            <Text style={styles.metaPillText}>{practiceCareerPath.meta}</Text>
+          </View>
+        </View>
+        <View style={styles.mapProgress}>
+          <ProgressBar label={practiceCareerPath.progressLabel} value={practiceCareerPath.progressPercent} />
         </View>
         <View style={styles.pathBody}>
           <LearningPath
@@ -80,6 +100,13 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
               ...step,
               onPress: () => onOpenRoleplay(step.roleplayId),
             }))}
+          />
+        </View>
+        <View style={styles.buttonRow}>
+          <AppButton
+            accessibilityHint="Starts the next recommended sprint from the Practice path"
+            label={practiceCareerPath.ctaLabel}
+            onPress={() => onOpenRoleplay(practiceCareerPath.roleplayId)}
           />
         </View>
       </Card>
@@ -150,23 +177,104 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    backgroundColor: '#F0F8F4',
-    borderColor: '#B7DED3',
+  statusRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  statusItem: {
     borderRadius: radii.md,
-    borderWidth: 1,
+    flex: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  statusItemFocus: {
+    backgroundColor: colors.primarySoft,
+  },
+  statusItemPath: {
+    backgroundColor: colors.infoSoft,
+  },
+  statusItemReward: {
+    backgroundColor: colors.accentSoft,
+  },
+  statusLabel: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  statusValue: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  unitBanner: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderBottomColor: colors.primaryDark,
+    borderBottomWidth: 5,
+    borderRadius: radii.md,
+    flexDirection: 'row',
+    marginTop: spacing.md,
     padding: spacing.xl,
   },
-  heroHeader: {
+  unitCopy: {
+    flex: 1,
+    paddingRight: spacing.lg,
+  },
+  unitEyebrow: {
+    color: '#DFF3EC',
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  unitTitle: {
+    color: colors.surface,
+    fontSize: typography.h1,
+    fontWeight: '900',
+    lineHeight: 31,
+    marginTop: spacing.xs,
+  },
+  unitBody: {
+    color: '#F0FBF7',
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.sm,
+  },
+  unitBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.primaryDark,
+    borderRadius: radii.md,
+    height: 62,
+    justifyContent: 'center',
+    width: 62,
+  },
+  unitBadgeText: {
+    color: colors.accentSoft,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  mapHeader: {
     alignItems: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  heroKicker: {
+  mapTitleBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  mapKicker: {
     color: colors.primaryDark,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
+  },
+  mapTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    marginTop: spacing.xs,
   },
   metaPill: {
     backgroundColor: colors.accentSoft,
@@ -179,20 +287,7 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
-  heroTitle: {
-    color: colors.ink,
-    fontSize: typography.h1,
-    fontWeight: '900',
-    lineHeight: 31,
-    marginTop: spacing.sm,
-  },
-  heroBody: {
-    color: colors.text,
-    fontSize: typography.body,
-    lineHeight: 22,
-    marginTop: spacing.md,
-  },
-  heroProgress: {
+  mapProgress: {
     marginTop: spacing.lg,
   },
   buttonRow: {
