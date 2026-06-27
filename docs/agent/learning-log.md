@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-27: Single Saved Roleplay Handoff
+
+Simplified the saved Roleplay completion state. After `Save answer`, the user now sees one focused success handoff with `Saved`, XP, `Streak updated`, the next recommended lesson title and one primary next-step button. The extra level momentum card, duplicate continue button and separate recommended lesson card were removed.
+
+What went well:
+
+- The main English practice loop now ends with one clearer next action.
+- Added a small `createSavedRoleplayHandoff` helper so the saved-state copy and CTA rules stay testable.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+- The change stayed inside the existing local Roleplay flow without adding integrations or new screens.
+
+What went wrong:
+
+- This run did not include browser preview QA, so the result was validated through code inspection and automated checks only.
+- The saved handoff still keeps the Back action visible; a later pass can decide whether completion should fully trap the user into the next recommended path.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep post-practice states to one reward surface and one primary button.
+- If progress context is useful, embed it inside the completion handoff instead of adding a second panel.
+- Preserve the app-led next lesson recommendation after a save; do not reopen broad browsing immediately.
+
+Next suggested task:
+
+- Make the next recommended roleplay start with one short `Why this next` coaching line above the prompt so the transition feels more intentional.
+
 ## 2026-06-27: One-Card Roleplay Feedback
 
 Simplified the Roleplay post-check state. After `Check answer`, the prompt and answer field now disappear and the learner sees one focused coach card: readiness label, XP, `Better English`, `Save answer` and `Try again`. The detailed multi-score feedback card is hidden from this core game step.

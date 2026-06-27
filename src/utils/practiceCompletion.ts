@@ -25,6 +25,16 @@ export type NextPracticeRecommendation = {
   ctaLabel: string;
 };
 
+export type SavedRoleplayHandoff = {
+  body: string;
+  ctaLabel: string;
+  ctaTarget: 'progress' | 'roleplay';
+  nextLabel: string;
+  nextTitle: string;
+  title: string;
+  xpLabel: string;
+};
+
 export type PracticeCompletionMilestone = {
   title: string;
   body: string;
@@ -96,6 +106,40 @@ export function createNextPracticeRecommendation(
     title: nextRoleplay.title,
     reason: `Train a different ${nextRoleplay.category.toLowerCase()} skill: ${nextRoleplay.focus}.`,
     ctaLabel: 'Start next roleplay',
+  };
+}
+
+type CreateSavedRoleplayHandoffInput = {
+  nextPracticeRecommendation: Pick<NextPracticeRecommendation, 'title'> | null;
+  xpReward: number;
+};
+
+export function createSavedRoleplayHandoff({
+  nextPracticeRecommendation,
+  xpReward,
+}: CreateSavedRoleplayHandoffInput): SavedRoleplayHandoff {
+  const safeXpReward = Math.max(0, xpReward);
+
+  if (!nextPracticeRecommendation) {
+    return {
+      body: 'Your answer is saved. Review Progress now, or come back later for another short English sprint.',
+      ctaLabel: 'Open Progress',
+      ctaTarget: 'progress',
+      nextLabel: 'Next stop',
+      nextTitle: 'Progress',
+      title: 'Saved',
+      xpLabel: `+${safeXpReward} XP`,
+    };
+  }
+
+  return {
+    body: 'Your answer is saved. Keep the streak moving with one more guided workplace conversation.',
+    ctaLabel: `Start ${nextPracticeRecommendation.title}`,
+    ctaTarget: 'roleplay',
+    nextLabel: 'Next lesson',
+    nextTitle: nextPracticeRecommendation.title,
+    title: 'Saved',
+    xpLabel: `+${safeXpReward} XP`,
   };
 }
 

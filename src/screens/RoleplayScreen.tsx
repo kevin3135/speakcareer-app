@@ -6,8 +6,6 @@ import {
   Badge,
   Card,
   GradientHero,
-  LessonCard,
-  ProgressBar,
   ScreenContainer,
   XPBadge,
 } from '../components/ui';
@@ -15,7 +13,7 @@ import { practiceContent } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario, StartingLevelId } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
-import { createNextPracticeRecommendation } from '../utils/practiceCompletion';
+import { createNextPracticeRecommendation, createSavedRoleplayHandoff } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
@@ -50,6 +48,10 @@ export function RoleplayScreen({
   const openingLine = activeVariant?.openingLine ?? roleplay.openingLine;
   const xpReward = feedbackResult?.xpReward ?? roleplay.durationMinutes * 4;
   const nextRecommendation = createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays);
+  const savedHandoff = createSavedRoleplayHandoff({
+    nextPracticeRecommendation: nextRecommendation,
+    xpReward,
+  });
   const levelProfile = getStartingLevelProfile(startingLevelId);
 
   function reviewAnswer() {
@@ -98,8 +100,8 @@ export function RoleplayScreen({
     return (
       <ScreenContainer
         overline="Lesson complete"
-        subtitle="Your answer is saved. Keep the rhythm going."
-        title="Nice work"
+        subtitle={nextRecommendation ? 'One next lesson is ready.' : 'Your progress is ready to review.'}
+        title={savedHandoff.title}
       >
         <Pressable
           accessibilityHint="Go back to Learn"
@@ -113,38 +115,21 @@ export function RoleplayScreen({
 
         <GradientHero
           overline="Career win"
-          subtitle="Your correction is saved to Wins and your next roleplay is ready."
-          title="Practice saved"
+          subtitle={savedHandoff.body}
+          title={savedHandoff.title}
           tone="success"
         >
           <View style={styles.completeBadges}>
-            <XPBadge label={`+${savedSession.xpReward} XP`} />
+            <XPBadge label={savedHandoff.xpLabel} />
             <Badge label="Streak updated" tone="accent" />
+          </View>
+          <View style={styles.savedNextStep}>
+            <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
+            <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
           </View>
         </GradientHero>
 
-        <Card tone="strong">
-          <Text style={styles.cardKicker}>Progress to next level</Text>
-          <Text style={styles.cardTitle}>Level momentum</Text>
-          <View style={styles.progressWrap}>
-            <ProgressBar value={68} tone="accent" />
-          </View>
-        </Card>
-
-        {nextRecommendation ? (
-          <LessonCard
-            body={nextRecommendation.reason}
-            ctaLabel="Continue"
-            index={2}
-            meta="Next recommended lesson"
-            onPress={continueToNext}
-            state="current"
-            title={nextRecommendation.title}
-            xpLabel="+45 XP"
-          />
-        ) : null}
-
-        <AppButton label="Continue" onPress={continueToNext} />
+        <AppButton label={savedHandoff.ctaLabel} onPress={continueToNext} />
       </ScreenContainer>
     );
   }
@@ -333,7 +318,26 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  progressWrap: {
+  savedNextLabel: {
+    color: colors.infoDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  savedNextStep: {
+    backgroundColor: colors.white,
+    borderColor: colors.successDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
     marginTop: spacing.lg,
+    padding: spacing.lg,
+  },
+  savedNextTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
   },
 });

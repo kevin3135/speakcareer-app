@@ -684,6 +684,7 @@ test('creates a rewarding roleplay completion summary', async () => {
     createPracticeCompletionMilestone,
     createPracticeCompletionSummary,
     createPracticeSavePrompt,
+    createSavedRoleplayHandoff,
   } = await import('../src/utils/practiceCompletion.ts');
 
   const firstAnswerPrompt = createPracticeSavePrompt({
@@ -761,8 +762,32 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(nextAfterSales.ctaLabel, 'Start next roleplay');
   assert.ok(nextAfterSales.reason.includes('small talk'));
 
+  const savedHandoff = createSavedRoleplayHandoff({
+    nextPracticeRecommendation: nextAfterSales,
+    xpReward: 45,
+  });
+
+  assert.equal(savedHandoff.title, 'Saved');
+  assert.equal(savedHandoff.ctaTarget, 'roleplay');
+  assert.equal(savedHandoff.ctaLabel, 'Start Workplace Small Talk');
+  assert.equal(savedHandoff.nextLabel, 'Next lesson');
+  assert.equal(savedHandoff.nextTitle, 'Workplace Small Talk');
+  assert.equal(savedHandoff.xpLabel, '+45 XP');
+  assert.ok(savedHandoff.body.includes('streak'));
+
   const nextAfterSmallTalk = createNextPracticeRecommendation('workplace-small-talk', practiceContent.roleplays);
   assert.equal(nextAfterSmallTalk.roleplayId, 'job-interview');
+
+  const fallbackSavedHandoff = createSavedRoleplayHandoff({
+    nextPracticeRecommendation: null,
+    xpReward: 25,
+  });
+
+  assert.equal(fallbackSavedHandoff.ctaTarget, 'progress');
+  assert.equal(fallbackSavedHandoff.ctaLabel, 'Open Progress');
+  assert.equal(fallbackSavedHandoff.nextLabel, 'Next stop');
+  assert.equal(fallbackSavedHandoff.nextTitle, 'Progress');
+  assert.equal(fallbackSavedHandoff.xpLabel, '+25 XP');
 });
 
 test('shows a locked mistake-bank preview before the first saved session', async () => {
