@@ -1,5 +1,36 @@
 # Agent Learning Log
 
+## 2026-06-27: Simpler Home First Step
+
+Changed the Learn/Home screen so the first-run experience has fewer competing actions. The hero now names the exact next step, the daily quest is a quiet progress card instead of a second CTA, lesson cards no longer show extra CTA labels, and the recommended roleplay card stays hidden until the learner has saved at least one practice.
+
+Why it changed:
+
+- Kevin wants the app to feel app-led and obvious at the start.
+- Home still exposed too many choices before the user had completed the first guided step.
+- The first viewport should answer one question: what do I press now?
+
+What went well:
+
+- The change stayed scoped to one screen.
+- The Home start now has one dominant action and less browsing pressure.
+- Theme tokens and existing UI components were used; no raw colors were added to screens/components.
+
+What failed:
+
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Checks run:
+
+- `npm.cmd run typecheck`
+- `npm.cmd run lint`
+- `npm.cmd run test`
+- `rg "#[0-9A-Fa-f]{3,8}" src\screens src\components`
+
+Next best design task:
+
+- Polish the returning Roleplay screen so the answer input appears earlier and scenario options feel secondary.
+
 ## 2026-06-27: Interactive Foundation Lesson
 
 Changed the first foundation lesson from a passive explanation into a small tap-to-build sentence exercise. The learner now taps `I`, `action`, and `result` in order, sees sentence progress, and only unlocks Continue after completing the three simple steps.
