@@ -11,7 +11,14 @@ import {
 } from '../components/ui';
 import { practiceContent } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
-import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario, StartingLevelId } from '../types';
+import type {
+  DailyPracticeTarget,
+  PracticeSession,
+  RoleplayId,
+  RoleplayScenario,
+  RoleplayWarmupCue,
+  StartingLevelId,
+} from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createNextPracticeRecommendation, createSavedRoleplayHandoff } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
@@ -27,6 +34,7 @@ type RoleplayScreenProps = {
   onSaveSession: (session: PracticeSession) => void;
   sessions: PracticeSession[];
   startingLevelId: StartingLevelId;
+  warmupCue?: RoleplayWarmupCue | null;
 };
 
 export function RoleplayScreen({
@@ -36,6 +44,7 @@ export function RoleplayScreen({
   roleplay,
   onSelectRoleplay,
   startingLevelId,
+  warmupCue,
 }: RoleplayScreenProps) {
   const answerInputRef = useRef<TextInput>(null);
   const [answerPulse] = useState(() => new Animated.Value(0));
@@ -197,6 +206,16 @@ export function RoleplayScreen({
             <Badge label="1 answer" tone="info" />
           </View>
           <Text style={styles.promptText}>{openingLine}</Text>
+          {warmupCue ? (
+            <View style={styles.warmupCueBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.warmupCueLabel}>{warmupCue.eyebrow}</Text>
+                <Badge label={warmupCue.badgeLabel} tone="secondary" />
+              </View>
+              <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
+              <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>
+            </View>
+          ) : null}
           <View style={styles.answerInputShell}>
             {shouldPulseAnswer ? (
               <Animated.View
@@ -344,6 +363,35 @@ const styles = StyleSheet.create({
   },
   answerAction: {
     marginTop: spacing.lg,
+  },
+  warmupCueBox: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.lg,
+  },
+  warmupCueLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  warmupCueText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
+  },
+  warmupCueNote: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,

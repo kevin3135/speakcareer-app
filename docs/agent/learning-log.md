@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-27: Progress Drill Warm-Up Cue
+
+Added one focused roleplay handoff improvement: when the learner starts a roleplay from the top Progress correction drill, the exact correction now follows into Roleplay as a compact warm-up cue above the answer box. The cue keeps the stronger sentence and note visible at the moment the learner needs to reuse it, without changing the rest of the roleplay loop.
+
+What went well:
+
+- The change stayed narrow: one new warm-up helper, one navigation context and one small Roleplay UI panel.
+- The Progress drill now connects directly to the next practice action instead of losing the correction at screen transition.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include Expo/browser visual QA, so the new warm-up panel still needs a quick mobile spacing check.
+- The warm-up cue only comes from the top Progress drill right now; the full mistake bank cards still open roleplay without exact correction context.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If Progress recommends one correction, carry that exact sentence into the next practice step instead of making the learner remember it.
+- A short warm-up panel above the answer box is enough; do not turn the drill handoff into another setup flow.
+- Keep roleplay launch context tiny and optional so normal roleplay entry points stay unchanged.
+
+Next suggested task:
+
+- Pass the exact correction cue from each mistake bank card too, not only from the top Progress drill.
+
 ## 2026-06-27: Home Mission Complete State
 
 Made the Home daily mission strip visually switch into a clearer complete state once today's target is hit. The card now uses a success-tinted background, success border, success badge and a shorter `Mission complete` kicker so the learner gets a stronger finish cue without seeing another button.

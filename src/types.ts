@@ -104,6 +104,14 @@ export type MistakeItem = {
   priority: 'High' | 'Medium' | 'Low';
 };
 
+export type RoleplayWarmupCue = {
+  mistakeId: string;
+  eyebrow: string;
+  badgeLabel: string;
+  correction: string;
+  note: string;
+};
+
 export type ProgressData = {
   summary: ProgressSummary;
   mistakeBank: MistakeItem[];

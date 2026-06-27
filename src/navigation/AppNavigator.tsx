@@ -13,7 +13,14 @@ import { ProfileScreen } from '../screens/ProfileScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { RoleplayScreen } from '../screens/RoleplayScreen';
 import { colors } from '../styles/theme';
-import type { DailyPracticeTarget, MainScreen, PracticeSession, RoleplayId, StartingLevelId } from '../types';
+import type {
+  DailyPracticeTarget,
+  MainScreen,
+  PracticeSession,
+  RoleplayId,
+  RoleplayWarmupCue,
+  StartingLevelId,
+} from '../types';
 import { readDailyTarget, saveDailyTarget } from '../utils/dailyTargetStorage';
 import { readPracticedMistakeIds, savePracticedMistakeIds } from '../utils/mistakePracticeStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
@@ -29,6 +36,7 @@ export function AppNavigator() {
   const [practicedMistakeIds, setPracticedMistakeIds] = useState<string[]>([]);
   const [dailyTarget, setDailyTarget] = useState<DailyPracticeTarget>(1);
   const [startingLevelId, setStartingLevelId] = useState<StartingLevelId>('basic');
+  const [roleplayWarmupCue, setRoleplayWarmupCue] = useState<RoleplayWarmupCue | null>(null);
 
   const selectedRoleplay = useMemo(
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
@@ -74,8 +82,9 @@ export function AppNavigator() {
     };
   }, []);
 
-  function openRoleplay(roleplayId: RoleplayId) {
+  function openRoleplay(roleplayId: RoleplayId, warmupCue?: RoleplayWarmupCue) {
     setSelectedRoleplayId(roleplayId);
+    setRoleplayWarmupCue(warmupCue ?? null);
     setActiveScreen('Roleplay');
   }
 
@@ -152,15 +161,16 @@ export function AppNavigator() {
         ) : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
-            key={selectedRoleplay.id}
+            key={`${selectedRoleplay.id}:${roleplayWarmupCue?.mistakeId ?? 'default'}`}
             dailyTarget={dailyTarget}
             onBack={() => setActiveScreen('Home')}
             onOpenProgress={() => setActiveScreen('Progress')}
             onSaveSession={savePracticeSession}
-            sessions={practiceSessions}
-            roleplay={selectedRoleplay}
             onSelectRoleplay={openRoleplay}
+            roleplay={selectedRoleplay}
+            sessions={practiceSessions}
             startingLevelId={startingLevelId}
+            warmupCue={roleplayWarmupCue}
           />
         ) : null}
         {activeScreen === 'Progress' ? (

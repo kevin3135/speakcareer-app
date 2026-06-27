@@ -15,19 +15,20 @@ import {
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
-import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayWarmupCue } from '../types';
 import { createDailyMission } from '../utils/gamification';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
+import { createRoleplayWarmupCue } from '../utils/roleplayWarmupCue';
 import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
   dailyTarget: DailyPracticeTarget;
   onMarkMistakePracticed: (mistakeId: string) => void;
-  onOpenRoleplay: (roleplayId: RoleplayId) => void;
+  onOpenRoleplay: (roleplayId: RoleplayId, warmupCue?: RoleplayWarmupCue) => void;
   practicedMistakeIds: string[];
   sessions: PracticeSession[];
 };
@@ -258,7 +259,12 @@ export function ProgressScreen({
               <View style={styles.cardAction}>
                 <AppButton
                   label={mistakeDrill.ctaLabel}
-                  onPress={() => onOpenRoleplay(mistakeDrill.roleplayId)}
+                  onPress={() =>
+                    onOpenRoleplay(
+                      mistakeDrill.roleplayId,
+                      createRoleplayWarmupCue(mistakeDrill.mistake),
+                    )
+                  }
                 />
               </View>
             </Card>

@@ -1299,6 +1299,7 @@ test('creates a guided next step for progress states', async () => {
 
 test('creates an actionable mistake practice drill', async () => {
   const { createMistakePracticeDrill, createMistakePracticeStatus } = await import('../src/utils/mistakePracticeDrill.ts');
+  const { createRoleplayWarmupCue } = await import('../src/utils/roleplayWarmupCue.ts');
   const interviewDrill = createMistakePracticeDrill(progressMock.mistakeBank);
 
   assert.equal(interviewDrill.roleplayId, 'job-interview');
@@ -1326,6 +1327,13 @@ test('creates an actionable mistake practice drill', async () => {
   assert.equal(salesDrill.roleplayId, 'sales-call');
   assert.equal(salesDrill.ctaLabel, 'Practice Sales Call');
   assert.equal(createMistakePracticeDrill([]), null);
+
+  const warmupCue = createRoleplayWarmupCue(interviewDrill.mistake);
+  assert.equal(warmupCue.mistakeId, interviewDrill.mistake.id);
+  assert.equal(warmupCue.eyebrow, 'Warm-up cue');
+  assert.equal(warmupCue.badgeLabel, 'From Progress');
+  assert.equal(warmupCue.correction, interviewDrill.mistake.correction);
+  assert.equal(warmupCue.note, interviewDrill.mistake.note);
 
   const readyStatus = createMistakePracticeStatus(false);
   assert.equal(readyStatus.label, 'Ready to repeat');
