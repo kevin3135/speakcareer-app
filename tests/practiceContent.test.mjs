@@ -40,10 +40,10 @@ test('keeps the guided first experience simple and action oriented', async () =>
   );
   assert.equal(guidedIntroSteps.length, 3);
   assert.equal(guidedStart.roleplayId, 'job-interview');
-  assert.equal(guidedStart.ctaLabel, 'Start first sprint');
+  assert.equal(guidedStart.ctaLabel, 'Start first quest');
   assert.deepEqual(guidedStart.detailLabels, ['5 minutes', '2-4 sentences', 'Clear rewrite']);
-  assert.ok(guidedStart.title.includes('Job Interview'));
-  assert.ok(guidedStart.subtitle.includes('one simple English interview answer'));
+  assert.equal(guidedStart.title, 'Quest 1: Job Interview');
+  assert.ok(guidedStart.subtitle.includes('save it for XP'));
   assert.ok(guidedIntroSteps.every((step) => step.title.length <= 32));
   assert.ok(guidedIntroSteps.every((step) => step.body.length <= 72));
 });
@@ -606,7 +606,7 @@ test('recommends the real next roleplay on Home after a saved session', async ()
   });
 
   assert.equal(firstVisitRecommendation.roleplayId, 'job-interview');
-  assert.equal(firstVisitRecommendation.ctaLabel, 'Start first sprint');
+  assert.equal(firstVisitRecommendation.ctaLabel, 'Start first quest');
   assert.ok(firstVisitRecommendation.title.includes('Job Interview'));
 
   const continueRecommendation = createHomePracticeRecommendation(
@@ -639,7 +639,7 @@ test('recommends the real next roleplay on Home after a saved session', async ()
   assert.ok(continueRecommendation.subtitle.includes('meeting'));
 });
 
-test('reuses guided first sprint labels in the Home hero', async () => {
+test('reuses guided first quest labels in the Home hero', async () => {
   const { guidedStart } = await import('../src/data/guidedIntro.ts');
   const { createHomeHeroFocusLabels } = await import('../src/utils/homeHeroLabels.ts');
 

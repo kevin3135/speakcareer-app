@@ -32,8 +32,8 @@ export const guidedStart: {
   roleplayId: RoleplayId;
 } = {
   detailLabels: ['5 minutes', '2-4 sentences', 'Clear rewrite'],
-  title: 'First sprint: Job Interview',
-  subtitle: 'Do one simple English interview answer first. The app guides the rest.',
-  ctaLabel: 'Start first sprint',
+  title: 'Quest 1: Job Interview',
+  subtitle: 'Start here: answer one interview prompt, get a clearer version and save it for XP.',
+  ctaLabel: 'Start first quest',
   roleplayId: 'job-interview',
 };

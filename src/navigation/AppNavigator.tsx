@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { BottomNav } from '../components/BottomNav';
 import { practiceContent } from '../data/content';
+import { guidedStart } from '../data/guidedIntro';
 import { HomeScreen } from '../screens/HomeScreen';
 import { OnboardingScreen } from '../screens/OnboardingScreen';
 import { PracticeScreen } from '../screens/PracticeScreen';
@@ -76,6 +77,8 @@ export function AppNavigator() {
   }
 
   function completeOnboarding() {
+    setSelectedRoleplayId(guidedStart.roleplayId);
+    setActiveScreen('Roleplay');
     setHasSeenOnboarding(true);
     void saveOnboardingCompletion(AsyncStorage).catch(() => undefined);
   }

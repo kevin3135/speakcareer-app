@@ -99,7 +99,7 @@ export function HomeScreen({ dailyTarget, onOpenRoleplay, sessions }: HomeScreen
         <View style={styles.buttonRow}>
           <AppButton
             accessibilityHint={`Opens the recommended ${featured.title} roleplay`}
-            label={homeRecommendation.ctaLabel.replace('sprint', 'quest')}
+            label={homeRecommendation.ctaLabel}
             onPress={() => onOpenRoleplay(featured.id)}
           />
         </View>

@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Onboarding First Quest Handoff
+
+Built one focused onboarding improvement: the first-run CTA now uses "Start first quest" language and completing onboarding opens the Job Interview roleplay directly instead of dropping the user on Home first.
+
+What went well:
+
+- The handoff now matches Kevin's request for a more guided, game-like flow.
+- Reused the existing `guidedStart` roleplay id so there is no new routing complexity.
+- Updated Home to trust the guided-start CTA directly instead of rewriting labels in the screen.
+- Tests verify the new quest CTA and first guided Job Interview copy.
+
+What went wrong:
+
+- This run did not add a visual transition animation; it only improves the route and copy.
+- This run only changed first-run language; later practice copy still uses "sprint" for short repeat sessions.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 49 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run users should land in the first practice action, not an overview screen.
+- Use "quest" language for the habit loop, while keeping the content professional.
+- The next useful improvement is visual polish on the first Roleplay screen so the direct handoff feels intentional.
+
+Next suggested task:
+
+- Add a small first-quest banner to the Roleplay screen when the selected roleplay is the first Job Interview quest.
+
 ## 2026-06-27: Single First-Save Progress CTA
 
 Built one focused Progress simplification: first-time users now get only one primary "save your first answer" action at the top of Progress. The Session history section no longer repeats the same quest with another button and step list; it now shows a quieter locked preview of what appears after the first save.

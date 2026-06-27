@@ -41,7 +41,7 @@ export function createPracticeCareerPath({
   if (roleplays.length === 0) {
     return {
       body: 'Start with one short English roleplay to begin your practice loop.',
-      ctaLabel: 'Start first sprint',
+      ctaLabel: 'Start first quest',
       meta: 'Start simple',
       progressLabel: '0 of 0 complete',
       progressPercent: 0,

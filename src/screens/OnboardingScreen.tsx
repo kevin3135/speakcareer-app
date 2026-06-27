@@ -16,15 +16,15 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
       <View style={styles.brandBlock}>
         <Text style={styles.kicker}>English career practice</Text>
         <Text style={styles.brand}>SpeakCareer</Text>
-        <Text style={styles.positioning}>Your first 5-minute English practice is ready.</Text>
+        <Text style={styles.positioning}>Your first career English quest is ready.</Text>
         <Text style={styles.intro}>
-          Start with one Job Interview answer. Read the prompt, write 2-4 sentences and review a clearer version.
+          Start with one Job Interview answer. The app opens the prompt first, then guides you through answer, review and save.
         </Text>
       </View>
 
       <View style={styles.firstPracticeCard}>
         <Card muted>
-          <Text style={styles.cardKicker}>First guided practice</Text>
+          <Text style={styles.cardKicker}>Quest 1</Text>
           <Text style={styles.cardTitle}>{guidedStart.title}</Text>
           <Text style={styles.body}>{guidedStart.subtitle}</Text>
           <View style={styles.detailRow}>
@@ -53,7 +53,7 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
 
       <View style={styles.footer}>
         <AppButton
-          accessibilityHint="Moves from onboarding to the Home screen"
+          accessibilityHint="Opens the first guided Job Interview roleplay"
           label={guidedStart.ctaLabel}
           onPress={onContinue}
         />
