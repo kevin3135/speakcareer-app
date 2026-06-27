@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: One-Button First Interview
+
+Built one focused first-run simplification: the first Job Interview roleplay now has a special simple mode before any session is saved. New users see only one interview question, the `I + action + result` structure, one answer box and one primary button that changes from `Check answer` to `Save answer`.
+
+What went well:
+
+- The first career practice screen now matches the simplified Home and Step 1 principle.
+- Scenario switching, angle picking, timers, writing support and follow-up panels are hidden for brand-new users.
+- The full roleplay screen still exists after the first saved session, so later practice can stay richer.
+- Mobile preview confirmed the first interview step has no bottom nav and only one main action.
+
+What went wrong:
+
+- The simple first interview mode is currently embedded in `RoleplayScreen`, so later it may deserve a small component extraction.
+- The first answer still uses the full review/save logic underneath, so the code path is simple for the user but not fully minimal internally.
+- No new component test was added because the current test stack only covers data/helpers, not React Native rendering.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 51 tests.
+- `npm.cmd run lint` passed.
+- Mobile browser preview passed for the simplified first interview step.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- For first-run users, hide all advanced roleplay controls until after the first saved answer.
+- Keep the first practice screen to one prompt, one input and one action.
+- Next simplification should make the post-check feedback equally simple before saving.
+
+Next suggested task:
+
+- Simplify the first-run feedback state so after `Check answer` the user sees one short correction and one `Save answer` button.
+
 ## 2026-06-27: Dumb-Simple First Steps
 
 Built one focused simplification pass: Home now has one visible path, one lesson card and one button. The bottom navigation is hidden until the user saves the first practice session, so new users cannot wander into Practice, Progress or Profile before the app teaches the first structure.

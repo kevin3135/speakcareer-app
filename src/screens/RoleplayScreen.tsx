@@ -6,7 +6,7 @@ import { Card } from '../components/Card';
 import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
-import { guidedStart } from '../data/guidedIntro';
+import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { createAnswerCoachContent } from '../utils/answerCoach';
@@ -155,6 +155,7 @@ export function RoleplayScreen({
     roleplayId: roleplay.id,
     sessions: completionSessions,
   });
+  const isFirstQuestMode = Boolean(firstQuest);
 
   useEffect(() => {
     if (!isTimerRunning) {
@@ -277,6 +278,67 @@ export function RoleplayScreen({
 
     clearAnswer();
     onSelectRoleplay(nextPracticeRecommendation.roleplayId);
+  }
+
+  if (isFirstQuestMode && firstQuest) {
+    const isSimpleAnswerReady = Boolean(answerReview?.isReadyForFeedback && feedbackResult);
+
+    return (
+      <Screen
+        title="Interview step"
+        subtitle="Write one short answer. The app checks it."
+      >
+        <View style={styles.simpleQuestPanel}>
+          <Text style={styles.simpleQuestKicker}>Step 2 of 3</Text>
+          <Text style={styles.simpleQuestTitle}>Answer this question</Text>
+          <Text style={styles.simpleQuestPrompt}>{readCard.openingLine}</Text>
+
+          <View style={styles.simpleFormulaRow}>
+            {foundationStart.structure.map((part) => (
+              <View key={part} style={styles.simpleFormulaChip}>
+                <Text style={styles.simpleFormulaText}>{part}</Text>
+              </View>
+            ))}
+          </View>
+
+          <TextInput
+            accessibilityLabel="First interview answer"
+            accessibilityHint="Write one short answer using the simple sentence structure"
+            multiline
+            onBlur={() => setIsAnswerFocused(false)}
+            onChangeText={setDraftAnswer}
+            onFocus={() => setIsAnswerFocused(true)}
+            placeholder="I helped..."
+            placeholderTextColor={colors.textMuted}
+            style={[
+              styles.simpleAnswerInput,
+              (isAnswerFocused || draftAnswer.trim().length > 0) && styles.answerInputActive,
+            ]}
+            textAlignVertical="top"
+            value={draftAnswer}
+          />
+
+          {answerReview ? (
+            <View style={styles.simpleReviewBox}>
+              <Text style={styles.simpleReviewTitle}>{answerReview.readinessLabel}</Text>
+              <Text style={styles.simpleReviewBody}>{answerReview.reviewNote}</Text>
+              {isSimpleAnswerReady && feedbackResult ? (
+                <Text style={styles.simpleRewardText}>Ready to save: +{feedbackResult.xpReward} XP</Text>
+              ) : null}
+            </View>
+          ) : null}
+
+          <View style={styles.simpleQuestAction}>
+            <AppButton
+              accessibilityHint="Checks or saves your first interview answer"
+              disabled={draftAnswer.trim().length === 0}
+              label={isSimpleAnswerReady ? 'Save answer' : 'Check answer'}
+              onPress={isSimpleAnswerReady ? saveSession : reviewAnswer}
+            />
+          </View>
+        </View>
+      </Screen>
+    );
   }
 
   return (
@@ -821,6 +883,99 @@ export function RoleplayScreen({
 }
 
 const styles = StyleSheet.create({
+  simpleQuestPanel: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    padding: spacing.xl,
+  },
+  simpleQuestKicker: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  simpleQuestTitle: {
+    color: colors.ink,
+    fontSize: typography.h1,
+    fontWeight: '900',
+    lineHeight: 32,
+    marginTop: spacing.sm,
+  },
+  simpleQuestPrompt: {
+    backgroundColor: colors.ink,
+    borderRadius: radii.md,
+    color: colors.surface,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 23,
+    marginTop: spacing.lg,
+    overflow: 'hidden',
+    padding: spacing.lg,
+  },
+  simpleFormulaRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  simpleFormulaChip: {
+    alignItems: 'center',
+    backgroundColor: colors.primarySoft,
+    borderColor: '#A9DCCF',
+    borderRadius: radii.md,
+    borderWidth: 1,
+    flex: 1,
+    minHeight: 54,
+    justifyContent: 'center',
+    padding: spacing.sm,
+  },
+  simpleFormulaText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
+  simpleAnswerInput: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    color: colors.ink,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.lg,
+    minHeight: 132,
+    padding: spacing.lg,
+  },
+  simpleReviewBox: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radii.md,
+    marginTop: spacing.lg,
+    padding: spacing.lg,
+  },
+  simpleReviewTitle: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  simpleReviewBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.xs,
+  },
+  simpleRewardText: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.sm,
+    textTransform: 'uppercase',
+  },
+  simpleQuestAction: {
+    marginTop: spacing.lg,
+  },
   guideHeader: {
     alignItems: 'center',
     flexDirection: 'row',
