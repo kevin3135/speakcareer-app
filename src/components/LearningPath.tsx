@@ -164,13 +164,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   activeNodeShadow: {
-    backgroundColor: '#0D744F',
+    backgroundColor: colors.secondaryDark,
   },
   doneNodeShadow: {
-    backgroundColor: '#063F38',
+    backgroundColor: colors.primaryDark,
   },
   lockedNodeShadow: {
-    backgroundColor: '#B9C2CA',
+    backgroundColor: colors.locked,
   },
   nodeTop: {
     alignItems: 'center',
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     width: 68,
   },
   activeNodeTop: {
-    backgroundColor: '#2AC96F',
+    backgroundColor: colors.secondary,
     borderColor: colors.accentSoft,
     borderWidth: 3,
   },
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
   },
   lockedNodeTop: {
-    backgroundColor: '#E5EAF0',
+    backgroundColor: colors.lockedSoft,
   },
   nodeText: {
     color: colors.surface,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   lockedNodeText: {
-    color: '#97A1AB',
+    color: colors.textMuted,
   },
   copyPanel: {
     backgroundColor: colors.surface,
@@ -215,11 +215,11 @@ const styles = StyleSheet.create({
   },
   copyPanelActive: {
     backgroundColor: colors.primarySoft,
-    borderColor: '#9FD8C7',
+    borderColor: colors.primaryGlow,
   },
   copyPanelLocked: {
-    backgroundColor: '#F3F6F8',
-    borderColor: '#E0E6EB',
+    backgroundColor: colors.lockedSoft,
+    borderColor: colors.border,
   },
   copyHeader: {
     alignItems: 'flex-start',
@@ -264,8 +264,8 @@ const styles = StyleSheet.create({
     color: colors.surface,
   },
   lockedStatePill: {
-    backgroundColor: '#E2E7EC',
-    color: '#6F7B86',
+    backgroundColor: colors.lockedSoft,
+    color: colors.textMuted,
   },
   connector: {
     alignSelf: 'center',

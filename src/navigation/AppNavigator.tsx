@@ -30,7 +30,9 @@ export function AppNavigator() {
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
     [selectedRoleplayId],
   );
-  const shouldShowBottomNav = practiceSessions.length > 0;
+  const shouldShowBottomNav =
+    practiceSessions.length > 0 &&
+    !['Foundation', 'Roleplay'].includes(activeScreen);
 
   useEffect(() => {
     let isMounted = true;
@@ -102,6 +104,8 @@ export function AppNavigator() {
       <View style={styles.body}>
         {activeScreen === 'Home' ? (
           <HomeScreen
+            dailyTarget={dailyTarget}
+            onOpenRoleplay={openRoleplay}
             onStartFoundation={() => setActiveScreen('Foundation')}
             sessions={practiceSessions}
           />

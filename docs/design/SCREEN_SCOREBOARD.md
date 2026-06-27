@@ -2,21 +2,22 @@
 
 Scoring: `1` = weak, `10` = excellent.
 
-This scoreboard reflects the current app state on 2026-06-27 after live mobile preview and code review.
+This scoreboard reflects the current app state on 2026-06-27 after the major design-system upgrade. Scores are based on code review, existing live preview context and local server availability. The in-app browser controller timed out during the final screenshot pass, so the next design run should capture fresh mobile screenshots before further visual work.
 
 | Screen | First impression | Clarity | Visual hierarchy | Spacing | Colors | CTA strength | Premium feel | Learning motivation | Mobile usability | Consistency | Priority |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Onboarding level assessment | 7 | 7 | 7 | 7 | 8 | 7 | 6 | 7 | 7 | 7 | Medium |
-| Learn/Home | 7 | 8 | 7 | 7 | 8 | 8 | 6 | 7 | 7 | 7 | High |
-| Foundation Step 1 | 6 | 8 | 6 | 7 | 6 | 8 | 5 | 6 | 7 | 7 | High |
-| Practice path/library | 6 | 5 | 5 | 6 | 7 | 6 | 5 | 7 | 5 | 5 | Low until reintroduced |
-| Roleplay first-quest mode | 7 | 8 | 7 | 7 | 7 | 8 | 6 | 8 | 7 | 7 | High |
-| Roleplay returning/full | 5 | 4 | 4 | 5 | 6 | 5 | 5 | 6 | 4 | 5 | Critical |
-| First-save completion | 7 | 8 | 7 | 7 | 7 | 8 | 6 | 8 | 8 | 7 | Medium |
-| Wins/Progress | 5 | 5 | 4 | 5 | 6 | 5 | 5 | 6 | 4 | 5 | High |
-| Profile/Me | 4 | 5 | 5 | 6 | 5 | 5 | 4 | 3 | 6 | 5 | Medium |
-| FeedbackPanel | 4 | 5 | 4 | 5 | 5 | 4 | 4 | 5 | 5 | 5 | High |
-| Bottom navigation shell | 5 | 6 | 5 | 7 | 6 | 5 | 5 | 5 | 7 | 6 | High |
+| Onboarding level assessment | 8 | 8 | 8 | 8 | 9 | 8 | 8 | 8 | 8 | 8 | Medium |
+| Learn/Home | 9 | 9 | 9 | 8 | 9 | 9 | 8 | 9 | 8 | 9 | High |
+| Foundation Step 1 | 8 | 9 | 8 | 8 | 8 | 9 | 8 | 8 | 8 | 9 | Medium |
+| Practice category screen | 8 | 8 | 8 | 8 | 9 | 8 | 8 | 8 | 8 | 9 | Medium |
+| Roleplay conversation screen | 8 | 8 | 8 | 8 | 9 | 8 | 8 | 9 | 8 | 9 | Critical |
+| AI Feedback card | 8 | 8 | 8 | 8 | 9 | 8 | 8 | 8 | 8 | 9 | High |
+| Lesson Complete state | 8 | 9 | 8 | 8 | 9 | 9 | 8 | 9 | 8 | 9 | High |
+| Wins/Progress | 8 | 8 | 8 | 8 | 9 | 8 | 8 | 8 | 8 | 9 | High |
+| Mistake Bank | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 9 | High |
+| Profile/Me | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 7 | 8 | 9 | Medium |
+| Premium mock section | 8 | 8 | 8 | 8 | 9 | 7 | 9 | 8 | 8 | 9 | Medium |
+| Bottom navigation shell | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 8 | 9 | Medium |
 
 ## Notes By Screen
 
@@ -34,7 +35,12 @@ Problems:
 - The screen borrows the broad pattern of popular apps but needs its own career identity.
 - The selected level is not yet visually connected to the first lesson.
 
-Recommended fix:
+Current status:
+
+- Upgraded to a lighter premium start with coach bubble, level cards and a clearer Continue state.
+- Uses the shared theme tokens instead of raw screen colors.
+
+Next fix:
 
 - Add a professional coach badge style and a stronger "we will start simple" handoff.
 
@@ -52,9 +58,13 @@ Problems:
 - It is still a single large card rather than a path.
 - It says "Start here" even for returning users.
 
-Recommended fix:
+Current status:
 
-- Convert to a vertical lesson path with one active node and locked next nodes.
+- Converted to a career lesson path with one active card, locked future cards, XP/streak badges, daily quest and recommended roleplay.
+
+Next fix:
+
+- Add small animation or visual unlock motion after saving a lesson.
 
 ### Foundation Step 1
 
@@ -70,7 +80,11 @@ Problems:
 - Not game-like enough.
 - White card feels less branded than Home.
 
-Recommended fix:
+Current status:
+
+- Restyled with the new hero, coach bubble and stronger structure blocks.
+
+Next fix:
 
 - Turn into a tap-to-build sentence lesson: `I`, `action`, `result`.
 
@@ -88,9 +102,13 @@ Problems:
 - Filters make the user choose too much.
 - It is currently not part of the simplified nav, so its role is unclear.
 
-Recommended fix:
+Current status:
 
-- Keep the map concept, but fold it into Learn instead of a separate tab.
+- Reframed as beautiful category cards with difficulty, time, XP and CTA.
+
+Next fix:
+
+- Decide whether Practice should stay hidden behind Learn or become a later secondary destination.
 
 ### Roleplay First-Quest Mode
 
@@ -106,9 +124,13 @@ Problems:
 - Could make the answer box feel more central.
 - Needs a better success transition after save.
 
-Recommended fix:
+Current status:
 
-- Use a chat-like coach prompt and a larger "Your answer" input.
+- Rebuilt as a conversation-first screen with coach bubble, scenario hero, chat area, mock microphone, type action, feedback card and completion state.
+
+Next fix:
+
+- Add real voice recording only after backend/audio strategy is approved.
 
 ### Roleplay Returning / Full
 
@@ -125,9 +147,13 @@ Problems:
 - Bottom nav remains visible during a focused exercise.
 - It feels like a configuration page, not a conversation.
 
-Recommended fix:
+Current status:
 
-- Rebuild as a conversation flow with optional controls hidden behind `Options`.
+- The old dense returning flow has been replaced with the same conversation-first flow.
+
+Next fix:
+
+- Add a compact `Options` drawer later if scenario/angle switching is needed again.
 
 ### First-Save Completion
 
@@ -141,9 +167,13 @@ Problems:
 - Needs more visual reward energy.
 - Should be tied to lesson-node unlock.
 
-Recommended fix:
+Current status:
 
-- Add a simple unlock animation later; for now, use a stronger reward card.
+- Completion now uses a celebratory hero, XP badge, streak update, progress bar, next lesson and Continue button.
+
+Next fix:
+
+- Add a subtle node-unlock animation later.
 
 ### Wins / Progress
 
@@ -158,9 +188,13 @@ Problems:
 - Looks like analytics instead of motivating wins.
 - Full mistake list appears too early.
 
-Recommended fix:
+Current status:
 
-- Top card: "Your latest win". Then one mistake to fix. Hide the rest.
+- Progress now opens with total XP, streak, daily goal, latest win, skill cards, weekly chart and styled mistake cards.
+
+Next fix:
+
+- Add collapse/expand for long mistake-bank lists.
 
 ### Profile / Me
 
@@ -175,9 +209,13 @@ Problems:
 - Low emotional value.
 - Looks unfinished.
 
-Recommended fix:
+Current status:
 
-- Make it a quiet learner settings page with daily target, language, local data and future account placeholder only.
+- Removed the technical integration checklist and added learner settings, language plan, privacy note and premium mock section.
+
+Next fix:
+
+- Split Premium into a dedicated preview screen only if navigation stays simple.
 
 ### FeedbackPanel
 
@@ -191,9 +229,13 @@ Problems:
 - Too much feedback at once.
 - "Mock AI feedback" breaks product immersion.
 
-Recommended fix:
+Current status:
 
-- Replace with "Coach feedback" and one highlighted correction first.
+- Replaced by reusable `FeedbackCard` with overall score, four skill scores, strengths, improvements, corrected version and stronger professional version.
+
+Next fix:
+
+- Tune score copy after observing real user answers.
 
 ### Bottom Navigation Shell
 
@@ -208,6 +250,10 @@ Problems:
 - Active state is mild.
 - Tabs imply browsing instead of guided learning.
 
-Recommended fix:
+Current status:
 
-- Keep tabs for later, but during lessons use a focused mode with no bottom nav.
+- Bottom nav now has a premium pill shell and is hidden during Foundation and Roleplay.
+
+Next fix:
+
+- Consider hiding bottom nav until after several saved sessions if users still wander.

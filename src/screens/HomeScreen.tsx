@@ -1,167 +1,150 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { AppButton } from '../components/AppButton';
-import { Screen } from '../components/Screen';
+import {
+  DailyQuestCard,
+  GradientButton,
+  GradientHero,
+  LessonCard,
+  RoleplayCard,
+  ScreenContainer,
+  SectionHeader,
+  StreakBadge,
+  XPBadge,
+} from '../components/ui';
+import { practiceContent, progressData } from '../data/content';
 import { foundationStart } from '../data/guidedIntro';
-import { colors, fonts, radii, spacing, typography } from '../styles/theme';
-import type { PracticeSession } from '../types';
+import { spacing } from '../theme';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
+import { createDailyMission } from '../utils/gamification';
 
 type HomeScreenProps = {
+  dailyTarget: DailyPracticeTarget;
+  onOpenRoleplay: (roleplayId: RoleplayId) => void;
   onStartFoundation: () => void;
   sessions: PracticeSession[];
 };
 
-export function HomeScreen({ onStartFoundation, sessions }: HomeScreenProps) {
+export function HomeScreen({
+  dailyTarget,
+  onOpenRoleplay,
+  onStartFoundation,
+  sessions,
+}: HomeScreenProps) {
+  const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const hasSavedPractice = sessions.length > 0;
+  const recommendedRoleplay =
+    practiceContent.roleplays.find((roleplay) => roleplay.id === (hasSavedPractice ? 'meeting-practice' : 'job-interview')) ??
+    practiceContent.roleplays[0];
+  const startToday = hasSavedPractice
+    ? () => onOpenRoleplay(recommendedRoleplay.id)
+    : onStartFoundation;
+
+  const lessonPath = [
+    {
+      body: 'Learn the sentence shape that makes work English clear.',
+      ctaLabel: hasSavedPractice ? undefined : 'Start here',
+      meta: '2 min foundation',
+      state: hasSavedPractice ? 'completed' as const : 'current' as const,
+      title: 'Clear sentence',
+      xpLabel: '+20 XP',
+      onPress: hasSavedPractice ? undefined : onStartFoundation,
+    },
+    {
+      body: 'Use the same shape in a real interview answer.',
+      ctaLabel: hasSavedPractice ? 'Continue' : undefined,
+      meta: '5 min roleplay',
+      state: hasSavedPractice ? 'current' as const : 'locked' as const,
+      title: 'Interview answer',
+      xpLabel: '+40 XP',
+      onPress: hasSavedPractice ? () => onOpenRoleplay('job-interview') : undefined,
+    },
+    {
+      body: 'Give a short update without rambling.',
+      meta: 'Unlocks after interview',
+      state: sessions.some((session) => session.roleplayId === 'meeting-practice')
+        ? 'completed' as const
+        : 'locked' as const,
+      title: 'Meeting update',
+      xpLabel: '+45 XP',
+    },
+  ];
 
   return (
-    <Screen
-      title="Start here"
-      subtitle="Do this first. One lesson, one button."
+    <ScreenContainer
+      overline="Career Arcade"
+      right={
+        <View>
+          <StreakBadge label={`${mission.streakDays} day streak`} />
+        </View>
+      }
+      subtitle="One short English practice. The app chooses the next step."
+      title="Ready for today?"
     >
-      <View style={styles.lessonPanel}>
-        <Text style={styles.kicker}>{hasSavedPractice ? 'Next step' : 'First step'}</Text>
-        <Text style={styles.title}>
-          {hasSavedPractice ? 'Practice one more sentence' : foundationStart.title}
-        </Text>
-        <Text style={styles.body}>
-          {hasSavedPractice
-            ? 'Same structure. One short answer. Then continue.'
-            : foundationStart.subtitle}
-        </Text>
-
-        <View style={styles.formulaRow}>
-          {foundationStart.structure.map((part, index) => (
-            <View key={part} style={styles.formulaItem}>
-              <Text style={styles.formulaNumber}>{index + 1}</Text>
-              <Text style={styles.formulaText}>{part}</Text>
-            </View>
-          ))}
+      <GradientHero
+        overline="Today's practice"
+        subtitle="Build one confident workplace answer and unlock the next lesson."
+        title={hasSavedPractice ? 'Keep your streak alive' : foundationStart.title}
+        tone="primary"
+      >
+        <View>
+          <GradientButton label="Start today's practice" onPress={startToday} />
         </View>
+      </GradientHero>
 
-        <View style={styles.exampleBlock}>
-          <Text style={styles.exampleLabel}>Copy this idea</Text>
-          <Text style={styles.exampleText}>{foundationStart.example}</Text>
-        </View>
-
-        <View style={styles.nextStrip}>
-          <Text style={styles.nextStripLabel}>After this</Text>
-          <Text style={styles.nextStripText}>{foundationStart.nextLabel}</Text>
-        </View>
-
-        <View style={styles.buttonRow}>
-          <AppButton
-            accessibilityHint="Opens the first language foundation lesson"
-            label={foundationStart.ctaLabel}
-            onPress={onStartFoundation}
-          />
-        </View>
+      <View style={styles.badgeRow}>
+        <XPBadge label={`${mission.xpTotal} XP`} />
+        <XPBadge label={`Level ${mission.level}`} />
       </View>
-    </Screen>
+
+      <DailyQuestCard
+        body="Finish one guided practice and bank a useful correction."
+        ctaLabel="Start quest"
+        onPress={startToday}
+        progress={mission.progressPercent}
+        reward={mission.rewardLabel}
+        title={mission.title}
+      />
+
+      <SectionHeader
+        subtitle="Follow the active card. Locked lessons show what comes next."
+        title="Your path"
+      />
+      {lessonPath.map((lesson, index) => (
+        <LessonCard
+          body={lesson.body}
+          ctaLabel={lesson.ctaLabel}
+          index={index + 1}
+          key={lesson.title}
+          meta={lesson.meta}
+          onPress={lesson.onPress}
+          state={lesson.state}
+          title={lesson.title}
+          xpLabel={lesson.xpLabel}
+        />
+      ))}
+
+      <SectionHeader
+        subtitle="The next conversation the coach will guide."
+        title="Recommended roleplay"
+      />
+      <RoleplayCard
+        category={recommendedRoleplay.category}
+        ctaLabel="Start"
+        description={recommendedRoleplay.description}
+        difficulty={recommendedRoleplay.targetLevel}
+        focus={recommendedRoleplay.focus}
+        onPress={() => onOpenRoleplay(recommendedRoleplay.id)}
+        time={`${recommendedRoleplay.durationMinutes} min`}
+        title={recommendedRoleplay.title}
+        xp={`+${recommendedRoleplay.durationMinutes * 4} XP`}
+      />
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  lessonPanel: {
-    backgroundColor: colors.primary,
-    borderBottomColor: colors.primaryDark,
-    borderBottomWidth: 5,
-    borderRadius: radii.md,
-    padding: spacing.xl,
-  },
-  kicker: {
-    color: '#DFF3EC',
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  title: {
-    color: colors.surface,
-    fontFamily: fonts.rounded,
-    fontSize: typography.h1,
-    fontWeight: '900',
-    lineHeight: 32,
-    marginTop: spacing.sm,
-  },
-  body: {
-    color: '#F0FBF7',
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '700',
-    lineHeight: 22,
-    marginTop: spacing.md,
-  },
-  formulaRow: {
+  badgeRow: {
     flexDirection: 'row',
-    gap: spacing.sm,
-    marginTop: spacing.xl,
-  },
-  formulaItem: {
-    backgroundColor: colors.surface,
-    borderRadius: radii.md,
-    flex: 1,
-    minHeight: 76,
-    padding: spacing.md,
-  },
-  formulaNumber: {
-    color: colors.accent,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  formulaText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.h3,
-    fontWeight: '900',
-    marginTop: spacing.xs,
-    textTransform: 'uppercase',
-  },
-  exampleBlock: {
-    backgroundColor: colors.primaryDark,
-    borderRadius: radii.md,
-    marginTop: spacing.lg,
-    padding: spacing.lg,
-  },
-  exampleLabel: {
-    color: colors.accentSoft,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  exampleText: {
-    color: colors.surface,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '800',
-    lineHeight: 22,
-    marginTop: spacing.xs,
-  },
-  buttonRow: {
-    marginTop: spacing.lg,
-  },
-  nextStrip: {
-    alignItems: 'center',
-    backgroundColor: '#EAF7F2',
-    borderRadius: radii.md,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.lg,
-    padding: spacing.md,
-  },
-  nextStripLabel: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-  },
-  nextStripText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
+    gap: spacing.md,
   },
 });

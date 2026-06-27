@@ -1,9 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Card } from '../components/Card';
-import { Screen } from '../components/Screen';
+import {
+  Badge,
+  Card,
+  GradientHero,
+  PremiumCard,
+  ScreenContainer,
+  SectionHeader,
+} from '../components/ui';
 import { practiceContent } from '../data/content';
-import { colors, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget } from '../types';
 
 type ProfileScreenProps = {
@@ -15,19 +21,22 @@ const dailyTargetOptions: DailyPracticeTarget[] = [1, 2, 3];
 
 export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScreenProps) {
   return (
-    <Screen
-      title="Profile"
-      subtitle="Local mock profile. Auth, subscriptions and analytics are intentionally not connected yet."
+    <ScreenContainer
+      overline="Me"
+      subtitle="Your local learner settings for the English MVP."
+      title="English Career Learner"
     >
-      <Card>
-        <Text style={styles.name}>English Career Learner</Text>
-        <Text style={styles.meta}>Goal: confident professional conversations</Text>
-        <Text style={styles.meta}>Current language: {practiceContent.firstTargetLanguage}</Text>
-      </Card>
+      <GradientHero
+        overline="Goal"
+        subtitle="Practice job interviews, meetings and professional conversations with AI."
+        title="Confident professional English"
+        tone="purple"
+      />
 
       <Card>
-        <Text style={styles.sectionTitle}>Daily target</Text>
-        <Text style={styles.meta}>Choose how many career roleplays you want to complete per day.</Text>
+        <Text style={styles.cardKicker}>Daily target</Text>
+        <Text style={styles.cardTitle}>How hard should today feel?</Text>
+        <Text style={styles.cardBody}>Keep it light and consistent. You can change this anytime.</Text>
         <View style={styles.segmentedControl}>
           {dailyTargetOptions.map((target) => {
             const isActive = target === dailyTarget;
@@ -56,67 +65,80 @@ export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScree
             );
           })}
         </View>
-        <Text style={styles.targetNote}>
-          Saved on this device. Home and Progress update automatically.
-        </Text>
       </Card>
 
+      <SectionHeader title="Language plan" />
       <Card>
-        <Text style={styles.sectionTitle}>Language plan</Text>
-        <View style={styles.languageList}>
-          <Text style={styles.activeLanguage}>English - MVP active</Text>
-          {practiceContent.plannedLanguages.map((language) => (
-            <Text key={language} style={styles.plannedLanguage}>{language} - planned later</Text>
-          ))}
+        <View style={styles.languageRow}>
+          <Text style={styles.languageName}>{practiceContent.firstTargetLanguage}</Text>
+          <Badge label="MVP active" tone="success" />
         </View>
+        {practiceContent.plannedLanguages.map((language) => (
+          <View key={language} style={styles.languageRow}>
+            <Text style={styles.plannedLanguage}>{language}</Text>
+            <Badge label="Later" tone="info" />
+          </View>
+        ))}
       </Card>
 
-      <Card muted>
-        <Text style={styles.sectionTitle}>Integration status</Text>
-        <View style={styles.integrationList}>
-          <Text style={styles.integration}>Supabase auth and database - later</Text>
-          <Text style={styles.integration}>OpenAI through backend only - later</Text>
-          <Text style={styles.integration}>RevenueCat subscriptions - later</Text>
-          <Text style={styles.integration}>PostHog analytics - later</Text>
-          <Text style={styles.integration}>Sentry error tracking - later</Text>
-        </View>
+      <PremiumCard
+        benefits={[
+          'Unlimited AI roleplays',
+          'Advanced feedback and stronger rewrites',
+          'Full mistake bank history',
+          'Interview and meeting packs',
+          'Future Spanish, French and Mandarin access',
+        ]}
+        subtitle="A future upgrade preview for serious career practice. No payment is connected."
+        title="SpeakCareer Pro"
+      />
+
+      <Card tone="muted">
+        <Text style={styles.cardKicker}>Privacy</Text>
+        <Text style={styles.cardTitle}>Local MVP mode</Text>
+        <Text style={styles.cardBody}>Practice progress is stored on this device for now. No real auth, payments or AI API are connected.</Text>
       </Card>
-    </Screen>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  name: {
-    color: colors.ink,
-    fontSize: typography.h2,
+  cardKicker: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
     fontWeight: '900',
   },
-  meta: {
+  cardTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    lineHeight: typography.lineH2,
+    marginTop: spacing.xs,
+  },
+  cardBody: {
     color: colors.textMuted,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
-    lineHeight: 22,
+    lineHeight: typography.lineBody,
     marginTop: spacing.sm,
-  },
-  sectionTitle: {
-    color: colors.ink,
-    fontSize: typography.h2,
-    fontWeight: '900',
-    marginBottom: spacing.md,
   },
   segmentedControl: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
-    borderRadius: radii.md,
+    borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
+    gap: spacing.xs,
     marginTop: spacing.lg,
     padding: spacing.xs,
   },
   segment: {
     alignItems: 'center',
-    borderRadius: radii.sm,
+    borderRadius: radius.md,
     flex: 1,
-    minHeight: 58,
+    minHeight: 62,
     justifyContent: 'center',
   },
   segmentActive: {
@@ -127,44 +149,39 @@ const styles = StyleSheet.create({
   },
   segmentValue: {
     color: colors.textMuted,
+    fontFamily: fonts.rounded,
     fontSize: typography.h2,
     fontWeight: '900',
   },
   segmentValueActive: {
-    color: colors.surface,
+    color: colors.white,
   },
   segmentLabel: {
     color: colors.textMuted,
-    fontSize: 11,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
     fontWeight: '900',
     marginTop: spacing.xs,
-    textTransform: 'uppercase',
   },
   segmentLabelActive: {
-    color: colors.surface,
+    color: colors.white,
   },
-  targetNote: {
-    color: colors.textMuted,
-    fontSize: typography.small,
-    lineHeight: 18,
-    marginTop: spacing.md,
+  languageRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: spacing.sm,
   },
-  languageList: {},
-  activeLanguage: {
-    color: colors.primaryDark,
+  languageName: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
   },
   plannedLanguage: {
     color: colors.textMuted,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
-    fontWeight: '700',
-    marginTop: spacing.sm,
-  },
-  integrationList: {},
-  integration: {
-    color: colors.text,
-    fontSize: typography.body,
-    lineHeight: 22,
+    fontWeight: '800',
   },
 });

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import type { DimensionValue } from 'react-native';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { AppButton } from '../components/AppButton';
+import { AppButton, CoachBubble, ProgressBar } from '../components/ui';
 import { foundationStart, levelAssessment, type LevelAssessmentChoice } from '../data/guidedIntro';
-import { colors, fonts, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 
 type OnboardingScreenProps = {
   onContinue: () => void;
@@ -16,17 +16,21 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: progressWidth }]} />
+      <View style={styles.progressShell}>
+        <View style={styles.progressTrack}>
+          <View style={[styles.progressFill, { width: progressWidth }]} />
+        </View>
       </View>
 
-      <View style={styles.coachRow}>
-        <View style={styles.coachBadge}>
-          <Text style={styles.coachInitials}>SC</Text>
-        </View>
-        <View style={styles.speechBubble}>
-          <Text style={styles.question}>{levelAssessment.question}</Text>
-        </View>
+      <CoachBubble
+        label="SpeakCareer coach"
+        message="First I need your starting level. Then I will guide the first English step."
+      />
+
+      <View style={styles.hero}>
+        <Text style={styles.kicker}>Start simple</Text>
+        <Text style={styles.title}>{levelAssessment.question}</Text>
+        <Text style={styles.subtitle}>No test pressure. Pick the card that feels closest today.</Text>
       </View>
 
       <View style={styles.optionList}>
@@ -62,13 +66,16 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.foundationHint}>{foundationStart.title}</Text>
-        <AppButton
-          accessibilityHint="Continues to the first guided English foundation lesson"
-          disabled={!selectedLevelId}
-          label="Continue"
-          onPress={onContinue}
-        />
+        <Text style={styles.foundationHint}>Next: {foundationStart.title}</Text>
+        <ProgressBar value={levelAssessment.progressPercent} tone="accent" />
+        <View style={styles.footerButton}>
+          <AppButton
+            accessibilityHint="Continues to the first guided English foundation lesson"
+            disabled={!selectedLevelId}
+            label="Continue"
+            onPress={onContinue}
+          />
+        </View>
       </View>
     </ScrollView>
   );
@@ -76,116 +83,113 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#101C22',
+    backgroundColor: colors.background,
     flexGrow: 1,
-    padding: spacing.xl,
+    padding: spacing.screen,
+    paddingBottom: spacing.xxxl,
+  },
+  progressShell: {
+    marginBottom: spacing.xl,
+    marginTop: spacing.md,
   },
   progressTrack: {
-    backgroundColor: '#35444D',
-    borderRadius: 999,
-    height: 16,
-    marginTop: spacing.lg,
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: radius.pill,
+    height: 14,
     overflow: 'hidden',
   },
   progressFill: {
-    backgroundColor: '#92E044',
-    borderRadius: 999,
-    height: 16,
+    backgroundColor: colors.accent,
+    borderRadius: radius.pill,
+    height: 14,
   },
-  coachRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginTop: spacing.xxl,
+  hero: {
+    backgroundColor: colors.navy,
+    borderRadius: radius.xl,
+    marginTop: spacing.xl,
+    padding: spacing.xl,
+    ...shadows.medium,
   },
-  coachBadge: {
-    alignItems: 'center',
-    backgroundColor: colors.primary,
-    borderBottomColor: colors.primaryDark,
-    borderBottomWidth: 5,
-    borderRadius: radii.md,
-    height: 88,
-    justifyContent: 'center',
-    width: 88,
-  },
-  coachInitials: {
-    color: colors.surface,
+  kicker: {
+    color: colors.accent,
     fontFamily: fonts.rounded,
-    fontSize: typography.h1,
+    fontSize: typography.small,
     fontWeight: '900',
   },
-  speechBubble: {
-    borderColor: '#34454F',
-    borderRadius: radii.md,
-    borderWidth: 2,
-    flex: 1,
-    marginLeft: spacing.lg,
-    padding: spacing.lg,
-  },
-  question: {
-    color: colors.surface,
+  title: {
+    color: colors.white,
     fontFamily: fonts.rounded,
-    fontSize: typography.h2,
-    fontWeight: '800',
-    lineHeight: 28,
+    fontSize: typography.title,
+    fontWeight: '900',
+    lineHeight: typography.lineTitle,
+    marginTop: spacing.sm,
+  },
+  subtitle: {
+    color: colors.primarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
   },
   optionList: {
-    marginTop: spacing.xxl,
+    gap: spacing.md,
+    marginTop: spacing.xl,
   },
   optionCard: {
     alignItems: 'center',
-    backgroundColor: '#12232B',
-    borderColor: '#34454F',
-    borderRadius: radii.md,
-    borderWidth: 2,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
     flexDirection: 'row',
-    marginBottom: spacing.md,
-    minHeight: 118,
+    minHeight: 112,
     padding: spacing.lg,
+    ...shadows.soft,
   },
   optionCardSelected: {
-    borderColor: '#92E044',
-    backgroundColor: '#172D26',
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
   },
   optionCardPressed: {
     opacity: 0.86,
+    transform: [{ scale: 0.99 }],
   },
   levelBadge: {
     alignItems: 'center',
-    backgroundColor: '#22323A',
-    borderRadius: radii.md,
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.md,
     height: 58,
     justifyContent: 'center',
-    width: 68,
+    width: 72,
   },
   levelBadgeSelected: {
-    backgroundColor: '#92E044',
+    backgroundColor: colors.primary,
   },
   levelBadgeText: {
-    color: colors.surface,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
   },
   levelBadgeTextSelected: {
-    color: '#102019',
+    color: colors.white,
   },
   optionCopy: {
     flex: 1,
     marginLeft: spacing.lg,
   },
   optionTitle: {
-    color: colors.surface,
+    color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.h3,
     fontWeight: '900',
-    lineHeight: 22,
+    lineHeight: typography.lineH3,
   },
   optionBody: {
-    color: '#B7C4CB',
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '700',
-    lineHeight: 19,
+    lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
   footer: {
@@ -193,11 +197,14 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xxl,
   },
   foundationHint: {
-    color: '#B7C4CB',
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
     marginBottom: spacing.md,
     textAlign: 'center',
+  },
+  footerButton: {
+    marginTop: spacing.md,
   },
 });

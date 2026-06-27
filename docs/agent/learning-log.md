@@ -1,5 +1,42 @@
 # Agent Learning Log
 
+## 2026-06-27: Major Design System Upgrade
+
+Built a broad visual upgrade around the new `Career Arcade` design direction. Added theme tokens in `src/theme`, a reusable UI layer in `src/components/ui`, and redesigned the main app surfaces to feel more premium, colorful, modern and guided.
+
+What changed:
+
+- Added centralized colors, spacing, typography, radius and shadow tokens.
+- Added reusable UI components for screen containers, headers, heroes, buttons, cards, lesson cards, roleplay cards, feedback cards, progress bars, XP/streak/level badges, daily quest cards, coach bubbles, mistake cards, skill progress cards, premium preview cards, empty states and section headers.
+- Redesigned Learn/Home into a guided lesson path with daily quest, streak/XP badges, locked/current lesson cards and recommended roleplay.
+- Redesigned Roleplay into a conversation-first mock AI screen with coach bubble, scenario hero, chat area, mock microphone, type fallback, coach feedback and lesson-complete state.
+- Redesigned Progress/Wins with total XP, streak, daily goal, latest win, skill progress cards, weekly activity chart and polished mistake cards.
+- Redesigned Profile/Me into learner settings with a premium mock preview and no technical integration checklist.
+- Updated Onboarding, Foundation, Practice and BottomNav to use the new premium visual system.
+
+What went well:
+
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` passed.
+- Raw hex colors now live in `src/theme/colors.ts`; redesigned screens use theme tokens.
+- The app is much more app-led and visually motivating without adding real APIs, payments or secrets.
+- Screen scoreboard was updated with all redesigned screens scoring at least 8/10.
+
+What went wrong:
+
+- The in-app browser controller timed out during final screenshot QA, although `http://localhost:8091/` returned HTTP 200.
+- The mock microphone is visual only and intentionally does not record audio.
+- The premium area is a mock preview section inside Profile, not a real payment screen.
+
+Agent memory for next time:
+
+- Keep the new design system as the source of truth; avoid raw colors and ad hoc spacing in screens.
+- The next best design step is interaction quality, not more surfaces.
+- Foundation Step 1 should become a tap-to-build mini lesson so the first learning moment feels truly interactive.
+
+Next suggested task:
+
+- Make Foundation Step 1 interactive: tap `I`, `action`, `result` in order, build the example sentence, then unlock Continue.
+
 ## 2026-06-27: Design Research And UX Audit
 
 Created a documentation-only design research and audit pass for SpeakCareer. Reviewed public patterns from Duolingo, Speak, ELSA Speak, Praktika, Babbel, Apple Human Interface Guidelines and Material Design, then inspected the current mobile app preview and source screens.
