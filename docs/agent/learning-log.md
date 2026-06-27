@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Locked First-Time Mistake Bank Preview
+
+Built one focused Progress simplification: first-time users no longer see the full mistake drill and mistake list before saving a session. Progress now shows one locked preview card with `0/1 saved`, the first correction waiting, and how many patterns unlock after the first save.
+
+What went well:
+
+- Kept the change inside the existing Progress flow by adding a small helper for the locked preview state.
+- The unlocked mistake-bank experience stays unchanged after the first saved session.
+- Tests now verify the locked preview copy, first correction selection and unlock count.
+- This reduces below-the-fold overload on first visit while preserving the motivating unlock loop.
+
+What went wrong:
+
+- Progress still repeats the first-save action in both the top guide and Session history card; that duplication is smaller now, but still present.
+- The first-time mistake-bank preview is informative rather than interactive, so a later pass may connect it more explicitly to the recommended next sprint.
+- Tests will still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 49 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-time Progress should reveal one upcoming correction, not the entire mistake system.
+- Keep unlock-based motivation professional by showing what opens next without dumping every detail.
+- The next useful improvement is likely reducing repeated first-save CTAs across the Progress screen.
+
+Next suggested task:
+
+- Merge or simplify the duplicate first-save prompts between the Progress guide card and Session history unlock card.
+
 ## 2026-06-27: Progress First Save Quest Card
 
 Built one focused clarity improvement: the empty Session history state in Progress is now a "First save quest" unlock card. It shows `0/1 saved`, a `+40 XP` reward, three clear steps and a direct button to start the first save quest.

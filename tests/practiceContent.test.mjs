@@ -582,6 +582,19 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(nextAfterSmallTalk.roleplayId, 'job-interview');
 });
 
+test('shows a locked mistake-bank preview before the first saved session', async () => {
+  const { createProgressMistakeBankPreview } = await import('../src/utils/progressMistakeBankPreview.ts');
+  const preview = createProgressMistakeBankPreview(progressMock.mistakeBank);
+
+  assert.equal(preview.eyebrow, 'Locked until first save');
+  assert.equal(preview.title, 'Your first correction is ready');
+  assert.equal(preview.progressLabel, '0/1 saved');
+  assert.equal(preview.previewCategory, 'Interview Structure');
+  assert.ok(preview.previewCorrection.includes('customer feedback analysis'));
+  assert.equal(preview.totalPatternsLabel, '4 patterns ready after unlock');
+  assert.equal(createProgressMistakeBankPreview([]), null);
+});
+
 test('recommends the real next roleplay on Home after a saved session', async () => {
   const { createHomePracticeRecommendation } = await import('../src/utils/homeRecommendation.ts');
   const { guidedStart } = await import('../src/data/guidedIntro.ts');

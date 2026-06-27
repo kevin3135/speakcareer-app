@@ -12,6 +12,7 @@ import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
+import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { formatSessionDate } from '../utils/sessionHistory';
 
@@ -29,11 +30,13 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
   const mistakeDrill = createMistakePracticeDrill(mistakeBank);
   const mistakePracticeStatus = createMistakePracticeStatus(isMistakeDrillPracticed);
   const progressEmptyState = createProgressEmptyState();
+  const mistakeBankPreview = createProgressMistakeBankPreview(mistakeBank);
   const progressGuide = createProgressNextStepGuide({
     dailyTarget,
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const hasSavedSessions = sessions.length > 0;
 
   return (
     <Screen
@@ -189,64 +192,84 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
       )}
 
       <Text style={styles.sectionTitle}>Mistake bank</Text>
-      {mistakeDrill ? (
-        <Card>
-          <Text style={styles.drillKicker}>{mistakeDrill.eyebrow}</Text>
-          <Text style={styles.drillTitle}>{mistakeDrill.title}</Text>
-          <Text style={styles.drillBody}>{mistakeDrill.body}</Text>
-          <View style={styles.drillCompare}>
-            <View style={styles.drillBoxMuted}>
-              <Text style={styles.drillLabel}>Instead of</Text>
-              <Text style={styles.drillOriginal}>{mistakeDrill.mistake.original}</Text>
-            </View>
-            <View style={styles.drillBoxStrong}>
-              <Text style={styles.drillLabelStrong}>Say this</Text>
-              <Text style={styles.drillCorrection}>{mistakeDrill.mistake.correction}</Text>
-            </View>
-          </View>
-          <View style={styles.drillSteps}>
-            {mistakeDrill.steps.map((step, index) => (
-              <View key={step} style={styles.drillStepRow}>
-                <Text style={styles.drillStepNumber}>{index + 1}</Text>
-                <Text style={styles.drillStepText}>{step}</Text>
+      {hasSavedSessions ? (
+        <>
+          {mistakeDrill ? (
+            <Card>
+              <Text style={styles.drillKicker}>{mistakeDrill.eyebrow}</Text>
+              <Text style={styles.drillTitle}>{mistakeDrill.title}</Text>
+              <Text style={styles.drillBody}>{mistakeDrill.body}</Text>
+              <View style={styles.drillCompare}>
+                <View style={styles.drillBoxMuted}>
+                  <Text style={styles.drillLabel}>Instead of</Text>
+                  <Text style={styles.drillOriginal}>{mistakeDrill.mistake.original}</Text>
+                </View>
+                <View style={styles.drillBoxStrong}>
+                  <Text style={styles.drillLabelStrong}>Say this</Text>
+                  <Text style={styles.drillCorrection}>{mistakeDrill.mistake.correction}</Text>
+                </View>
               </View>
-            ))}
+              <View style={styles.drillSteps}>
+                {mistakeDrill.steps.map((step, index) => (
+                  <View key={step} style={styles.drillStepRow}>
+                    <Text style={styles.drillStepNumber}>{index + 1}</Text>
+                    <Text style={styles.drillStepText}>{step}</Text>
+                  </View>
+                ))}
+              </View>
+              <View style={styles.drillStatus}>
+                <Text style={styles.drillStatusLabel}>{mistakePracticeStatus.label}</Text>
+                <Text style={styles.drillStatusBody}>{mistakePracticeStatus.body}</Text>
+              </View>
+              <View style={styles.drillAction}>
+                <AppButton
+                  accessibilityHint="Marks this correction drill as practiced for this session"
+                  label={mistakePracticeStatus.ctaLabel}
+                  onPress={() => setIsMistakeDrillPracticed(true)}
+                  variant={isMistakeDrillPracticed ? 'quiet' : 'primary'}
+                />
+              </View>
+              <View style={styles.drillSecondaryAction}>
+                <AppButton
+                  accessibilityHint="Opens the roleplay connected to this mistake correction"
+                  label={mistakeDrill.ctaLabel}
+                  onPress={() => onOpenRoleplay(mistakeDrill.roleplayId)}
+                  variant="secondary"
+                />
+              </View>
+            </Card>
+          ) : null}
+          {mistakeBank.map((mistake) => (
+            <Card key={mistake.id}>
+              <View style={styles.mistakeHeader}>
+                <Text style={styles.category}>{mistake.category}</Text>
+                <Text style={[styles.priority, styles[`priority${mistake.priority}`]]}>{mistake.priority}</Text>
+              </View>
+              <Text style={styles.label}>Original</Text>
+              <Text style={styles.original}>{mistake.original}</Text>
+              <Text style={styles.label}>Correction</Text>
+              <Text style={styles.correction}>{mistake.correction}</Text>
+              <Text style={styles.note}>{mistake.note}</Text>
+            </Card>
+          ))}
+        </>
+      ) : mistakeBankPreview ? (
+        <Card>
+          <Text style={styles.previewKicker}>{mistakeBankPreview.eyebrow}</Text>
+          <Text style={styles.previewTitle}>{mistakeBankPreview.title}</Text>
+          <Text style={styles.previewBody}>{mistakeBankPreview.body}</Text>
+          <View style={styles.previewProgress}>
+            <Text style={styles.previewProgressLabel}>{mistakeBankPreview.progressLabel}</Text>
+            <Text style={styles.previewProgressMeta}>{mistakeBankPreview.totalPatternsLabel}</Text>
           </View>
-          <View style={styles.drillStatus}>
-            <Text style={styles.drillStatusLabel}>{mistakePracticeStatus.label}</Text>
-            <Text style={styles.drillStatusBody}>{mistakePracticeStatus.body}</Text>
-          </View>
-          <View style={styles.drillAction}>
-            <AppButton
-              accessibilityHint="Marks this correction drill as practiced for this session"
-              label={mistakePracticeStatus.ctaLabel}
-              onPress={() => setIsMistakeDrillPracticed(true)}
-              variant={isMistakeDrillPracticed ? 'quiet' : 'primary'}
-            />
-          </View>
-          <View style={styles.drillSecondaryAction}>
-            <AppButton
-              accessibilityHint="Opens the roleplay connected to this mistake correction"
-              label={mistakeDrill.ctaLabel}
-              onPress={() => onOpenRoleplay(mistakeDrill.roleplayId)}
-              variant="secondary"
-            />
+          <View style={styles.previewCorrectionCard}>
+            <Text style={styles.previewCategory}>{mistakeBankPreview.previewCategory}</Text>
+            <Text style={styles.previewLabel}>{mistakeBankPreview.previewLabel}</Text>
+            <Text style={styles.previewCorrection}>{mistakeBankPreview.previewCorrection}</Text>
+            <Text style={styles.previewNote}>{mistakeBankPreview.previewNote}</Text>
           </View>
         </Card>
       ) : null}
-      {mistakeBank.map((mistake) => (
-        <Card key={mistake.id}>
-          <View style={styles.mistakeHeader}>
-            <Text style={styles.category}>{mistake.category}</Text>
-            <Text style={[styles.priority, styles[`priority${mistake.priority}`]]}>{mistake.priority}</Text>
-          </View>
-          <Text style={styles.label}>Original</Text>
-          <Text style={styles.original}>{mistake.original}</Text>
-          <Text style={styles.label}>Correction</Text>
-          <Text style={styles.correction}>{mistake.correction}</Text>
-          <Text style={styles.note}>{mistake.note}</Text>
-        </Card>
-      ))}
     </Screen>
   );
 }
@@ -549,6 +572,75 @@ const styles = StyleSheet.create({
   },
   emptyQuestTitleBlock: {
     flex: 1,
+  },
+  previewBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    lineHeight: 22,
+    marginTop: spacing.sm,
+  },
+  previewCategory: {
+    color: colors.ink,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  previewCorrection: {
+    color: colors.ink,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 22,
+    marginTop: spacing.xs,
+  },
+  previewCorrectionCard: {
+    backgroundColor: colors.primarySoft,
+    borderColor: '#BDE7DC',
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.lg,
+  },
+  previewKicker: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  previewLabel: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.md,
+    textTransform: 'uppercase',
+  },
+  previewNote: {
+    color: colors.text,
+    fontSize: typography.small,
+    lineHeight: 18,
+    marginTop: spacing.sm,
+  },
+  previewProgress: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.lg,
+  },
+  previewProgressLabel: {
+    color: colors.ink,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  previewProgressMeta: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginLeft: spacing.md,
+  },
+  previewTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    lineHeight: 25,
+    marginTop: spacing.xs,
   },
   sessionHeader: {
     alignItems: 'center',
