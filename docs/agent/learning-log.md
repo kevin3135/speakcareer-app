@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-27: Home Mission Complete State
+
+Made the Home daily mission strip visually switch into a clearer complete state once today's target is hit. The card now uses a success-tinted background, success border, success badge and a shorter `Mission complete` kicker so the learner gets a stronger finish cue without seeing another button.
+
+What went well:
+
+- The change stayed focused on one Home surface and did not add any new flows or choices.
+- Existing mission progress data was enough to drive the visual state, so no new storage or mock data was needed.
+- Theme colors were reused and the raw color scan found no screen/component hex colors.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include Expo/browser visual QA, so the complete-state spacing still needs a quick mobile check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- A completed Home mission should feel rewarding, but it should not introduce another primary action.
+- Keep the daily habit loop visible in one compact card under the start card.
+- Use existing mission progress helpers before adding new Home state.
+
+Next suggested task:
+
+- Do a quick mobile visual pass on Home and tighten spacing if the start card plus mission strip feels too tall.
+
 ## 2026-06-27: Home Daily Mission Strip
 
 Added a compact daily mission strip to the Home screen so the learner sees today's target progress directly under the main start card. The strip now shows one professional mission title, `saved` progress, a progress bar and the XP reward, while keeping the primary tap target focused on the current lesson.

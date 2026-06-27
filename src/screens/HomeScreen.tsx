@@ -56,6 +56,7 @@ export function HomeScreen({
     : onStartFoundation;
   const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
+  const isMissionComplete = missionCard.progressPercent >= 100;
 
   return (
     <ScreenContainer>
@@ -73,13 +74,26 @@ export function HomeScreen({
         xpLabel={activeLesson.xpLabel}
       />
 
-      <Card style={styles.missionCard} tone="muted">
+      <Card
+        style={[styles.missionCard, isMissionComplete && styles.missionCardComplete]}
+        tone="muted"
+      >
         <View style={styles.missionHeader}>
           <View style={styles.missionCopy}>
-            <Text style={styles.missionKicker}>Daily mission</Text>
+            <Text
+              style={[
+                styles.missionKicker,
+                isMissionComplete && styles.missionKickerComplete,
+              ]}
+            >
+              {isMissionComplete ? 'Mission complete' : 'Daily mission'}
+            </Text>
             <Text style={styles.missionTitle}>{missionCard.title}</Text>
           </View>
-          <Badge label={missionCard.targetLabel} tone="secondary" />
+          <Badge
+            label={missionCard.targetLabel}
+            tone={isMissionComplete ? 'success' : 'secondary'}
+          />
         </View>
         <Text style={styles.missionBody}>{missionCard.body}</Text>
         <View style={styles.missionProgress}>
@@ -90,7 +104,9 @@ export function HomeScreen({
           />
         </View>
         <View style={styles.missionFooter}>
-          <Text style={styles.missionMeta}>{missionCard.meta}</Text>
+          <Text style={[styles.missionMeta, isMissionComplete && styles.missionMetaComplete]}>
+            {missionCard.meta}
+          </Text>
           <XPBadge label={missionCard.rewardLabel} />
         </View>
       </Card>
@@ -299,6 +315,10 @@ const styles = StyleSheet.create({
   missionCard: {
     padding: spacing.md,
   },
+  missionCardComplete: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
   missionCopy: {
     flex: 1,
     paddingRight: spacing.md,
@@ -319,11 +339,17 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
+  missionKickerComplete: {
+    color: colors.successDark,
+  },
   missionMeta: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
+  },
+  missionMetaComplete: {
+    color: colors.successDark,
   },
   missionProgress: {
     marginTop: spacing.md,
