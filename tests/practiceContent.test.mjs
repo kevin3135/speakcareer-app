@@ -950,12 +950,16 @@ test('creates a first-time progress action for new users', async () => {
   const emptyState = createProgressEmptyState();
 
   assert.equal(emptyState.roleplayId, 'job-interview');
-  assert.equal(emptyState.ctaLabel, 'Start Job Interview');
-  assert.ok(emptyState.body.includes('save'));
+  assert.equal(emptyState.ctaLabel, 'Start first save quest');
+  assert.equal(emptyState.eyebrow, 'First save quest');
+  assert.equal(emptyState.progressLabel, '0/1 saved');
+  assert.equal(emptyState.rewardLabel, '+40 XP');
+  assert.equal(emptyState.title, 'Unlock Progress');
+  assert.ok(emptyState.body.includes('Progress unlocks'));
   assert.deepEqual(emptyState.steps, [
-    'Choose a scenario',
-    'Write a spoken-style answer',
-    'Review and save for XP',
+    'Start Job Interview',
+    'Review your rewrite',
+    'Save to unlock history',
   ]);
 });
 

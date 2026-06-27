@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Progress First Save Quest Card
+
+Built one focused clarity improvement: the empty Session history state in Progress is now a "First save quest" unlock card. It shows `0/1 saved`, a `+40 XP` reward, three clear steps and a direct button to start the first save quest.
+
+What went well:
+
+- Reused the existing `createProgressEmptyState` helper instead of adding new screen-level logic.
+- The empty Progress state now matches the Home and Practice quest language.
+- Tests verify the new first-save quest copy, reward and unlock steps.
+- Mobile preview confirmed the old "No saved sessions yet" copy is gone and the new unlock card appears.
+
+What went wrong:
+
+- Progress still has a lot below the fold because the full mistake bank remains visible for first-time users.
+- The first top guide and Session history unlock card repeat a similar first-save action; a later pass can merge or simplify them.
+- Tests still print the known harmless Node warning when importing TypeScript helpers directly.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 48 tests.
+- `npm.cmd run lint` passed.
+- Expo web preview was checked at `http://127.0.0.1:8091` on a 390x844 viewport.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep turning empty or broad overview states into single clear quests.
+- Progress should eventually hide advanced mistake-bank detail until the first saved session.
+- Kevin wants the app to feel game-like through guided progression, not through childish visuals.
+
+Next suggested task:
+
+- Simplify first-time Progress further by collapsing the mistake bank into one locked preview until a session is saved.
+
 ## 2026-06-27: Guided Practice Career Path
 
 Built one focused practice-flow improvement: the Practice screen now opens with a guided career path instead of starting with a flat module list. Users see one recommended next sprint, path progress, locked and unlocked roleplays, and the full scenario library remains available below.

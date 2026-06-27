@@ -11,6 +11,7 @@ import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types'
 import { createLessonCompleteSummary } from '../utils/lessonComplete';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
+import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { formatSessionDate } from '../utils/sessionHistory';
 
@@ -27,6 +28,7 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
   const mistakeDrill = createMistakePracticeDrill(mistakeBank);
   const mistakePracticeStatus = createMistakePracticeStatus(isMistakeDrillPracticed);
+  const progressEmptyState = createProgressEmptyState();
   const progressGuide = createProgressNextStepGuide({
     dailyTarget,
     roleplays: practiceContent.roleplays,
@@ -131,12 +133,42 @@ export function ProgressScreen({ dailyTarget, onOpenRoleplay, sessions }: Progre
 
       <Text style={styles.sectionTitle}>Session history</Text>
       {sessions.length === 0 ? (
-        <Card muted>
-          <Text style={styles.emptyTitle}>No saved sessions yet</Text>
-          <Text style={styles.emptyCopy}>
-            Your saved roleplay sessions will appear here after your first review.
-          </Text>
-        </Card>
+        <View style={styles.emptyQuestCard}>
+          <View style={styles.emptyQuestHeader}>
+            <View style={styles.emptyQuestTitleBlock}>
+              <Text style={styles.emptyQuestKicker}>{progressEmptyState.eyebrow}</Text>
+              <Text style={styles.emptyQuestTitle}>{progressEmptyState.title}</Text>
+            </View>
+            <View style={styles.emptyQuestReward}>
+              <Text style={styles.emptyQuestRewardValue}>{progressEmptyState.rewardLabel}</Text>
+              <Text style={styles.emptyQuestRewardLabel}>Reward</Text>
+            </View>
+          </View>
+          <Text style={styles.emptyQuestBody}>{progressEmptyState.body}</Text>
+          <View style={styles.emptyQuestProgress}>
+            <Text style={styles.emptyQuestProgressLabel}>{progressEmptyState.progressLabel}</Text>
+            <View style={styles.emptyQuestProgressTrack}>
+              <View style={styles.emptyQuestProgressFill} />
+            </View>
+          </View>
+          <View style={styles.emptyQuestSteps}>
+            {progressEmptyState.steps.map((step, index) => (
+              <View key={step} style={styles.emptyQuestStepRow}>
+                <View style={styles.emptyQuestStepNumber}>
+                  <Text style={styles.emptyQuestStepNumberText}>{index + 1}</Text>
+                </View>
+                <Text style={styles.emptyQuestStepText}>{step}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={styles.emptyQuestAction}>
+            <AppButton
+              accessibilityHint="Starts the first roleplay needed to unlock Progress history"
+              label={progressEmptyState.ctaLabel}
+              onPress={() => onOpenRoleplay(progressEmptyState.roleplayId)}
+            />
+          </View>
+        </View>
       ) : (
         sessions.map((session) => (
           <Card key={session.id}>
@@ -409,16 +441,114 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginTop: spacing.lg,
   },
-  emptyTitle: {
+  emptyQuestAction: {
+    marginTop: spacing.lg,
+  },
+  emptyQuestBody: {
+    color: colors.text,
+    fontSize: typography.body,
+    fontWeight: '700',
+    lineHeight: 22,
+    marginTop: spacing.md,
+  },
+  emptyQuestCard: {
+    backgroundColor: colors.surface,
+    borderColor: '#BDE7DC',
+    borderRadius: 8,
+    borderWidth: 1,
+    padding: spacing.xl,
+  },
+  emptyQuestHeader: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  emptyQuestKicker: {
+    color: colors.primaryDark,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  emptyQuestProgress: {
+    marginTop: spacing.lg,
+  },
+  emptyQuestProgressFill: {
+    backgroundColor: colors.primary,
+    borderRadius: 999,
+    height: 8,
+    width: '0%',
+  },
+  emptyQuestProgressLabel: {
     color: colors.ink,
-    fontSize: typography.h3,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.sm,
+  },
+  emptyQuestProgressTrack: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: 999,
+    height: 8,
+    overflow: 'hidden',
+  },
+  emptyQuestReward: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: 8,
+    marginLeft: spacing.md,
+    minWidth: 72,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  emptyQuestRewardLabel: {
+    color: colors.ink,
+    fontSize: 10,
+    fontWeight: '900',
+    marginTop: 1,
+    textTransform: 'uppercase',
+  },
+  emptyQuestRewardValue: {
+    color: colors.ink,
+    fontSize: typography.body,
     fontWeight: '900',
   },
-  emptyCopy: {
-    color: colors.textMuted,
-    fontSize: typography.body,
-    lineHeight: 22,
+  emptyQuestStepNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.ink,
+    borderRadius: 999,
+    height: 28,
+    justifyContent: 'center',
+    marginRight: spacing.md,
+    width: 28,
+  },
+  emptyQuestStepNumberText: {
+    color: colors.surface,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  emptyQuestStepRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
     marginTop: spacing.sm,
+  },
+  emptyQuestStepText: {
+    color: colors.ink,
+    flex: 1,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: 21,
+  },
+  emptyQuestSteps: {
+    marginTop: spacing.lg,
+  },
+  emptyQuestTitle: {
+    color: colors.ink,
+    fontSize: typography.h2,
+    fontWeight: '900',
+    lineHeight: 25,
+    marginTop: spacing.xs,
+  },
+  emptyQuestTitleBlock: {
+    flex: 1,
   },
   sessionHeader: {
     alignItems: 'center',
