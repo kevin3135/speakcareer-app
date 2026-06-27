@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import {
   Badge,
-  Card,
-  GradientButton,
-  GradientHero,
-  LessonCard,
   ScreenContainer,
   StreakBadge,
   XPBadge,
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
 import { foundationStart } from '../data/guidedIntro';
-import { colors, fonts, radius, spacing, typography } from '../theme';
+import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeLearnState } from '../utils/homeLearnState';
@@ -38,14 +34,6 @@ export function HomeScreen({
     roleplays: practiceContent.roleplays,
     sessions,
   });
-  function startToday() {
-    if (learnState.hero.target === 'foundation') {
-      onStartFoundation();
-      return;
-    }
-
-    onOpenRoleplay(learnState.hero.target);
-  }
   const activeLessonIndex = Math.max(
     0,
     learnState.steps.findIndex((lesson) => lesson.state === 'current'),
@@ -59,44 +47,17 @@ export function HomeScreen({
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
 
   return (
-    <ScreenContainer
-      overline="Career Arcade"
-      right={
-        <View>
-          <StreakBadge label={`${mission.streakDays} day streak`} />
-        </View>
-      }
-      subtitle="One short English practice. The app chooses the next step."
-      title="Ready for today?"
-    >
-      <GradientHero
-        overline={learnState.hero.eyebrow}
-        subtitle={learnState.hero.body}
-        title={learnState.hero.title}
-        tone="primary"
-      >
-        <View>
-          <GradientButton label={learnState.hero.ctaLabel} onPress={startToday} />
-        </View>
-      </GradientHero>
-
-      <View style={styles.badgeRow}>
+    <ScreenContainer>
+      <View style={styles.statusRow}>
+        <StreakBadge label={`${mission.streakDays} day streak`} />
         <XPBadge label={`${mission.xpTotal} XP`} />
         <Badge label={`Level ${mission.level}`} tone="purple" />
       </View>
 
-      <AnimatedInstructionCard
-        ctaLabel={learnState.hero.ctaLabel}
-        stepTitle={activeLesson.title}
-      />
-
-      <LessonCard
-        body={activeLesson.body}
-        ctaLabel={activeLesson.ctaLabel}
-        index={activeLessonIndex + 1}
+      <AnimatedStartCard
+        ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
         meta={activeLesson.meta}
         onPress={startActiveLesson}
-        state={activeLesson.state}
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
       />
@@ -112,12 +73,18 @@ export function HomeScreen({
   );
 }
 
-function AnimatedInstructionCard({
+function AnimatedStartCard({
   ctaLabel,
-  stepTitle,
+  meta,
+  onPress,
+  title,
+  xpLabel,
 }: {
   ctaLabel: string;
-  stepTitle: string;
+  meta: string;
+  onPress: () => void;
+  title: string;
+  xpLabel: string;
 }) {
   const [pulse] = useState(() => new Animated.Value(0));
 
@@ -156,84 +123,127 @@ function AnimatedInstructionCard({
   });
 
   return (
-    <Card tone="accent" style={styles.instructionCard}>
-      <View style={styles.instructionTarget}>
-        <Animated.View
-          style={[
-            styles.instructionRing,
-            {
-              opacity: ringOpacity,
-              transform: [{ scale: ringScale }],
-            },
-          ]}
-        />
-        <Text style={styles.instructionTargetText}>TAP</Text>
+    <Pressable
+      accessibilityHint={`Starts ${title}`}
+      accessibilityLabel={ctaLabel}
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => [styles.startCard, pressed && styles.pressed]}
+    >
+      <View style={styles.startTopRow}>
+        <Text style={styles.startKicker}>Today</Text>
+        <Badge label={xpLabel} tone="accent" />
       </View>
-      <View style={styles.instructionCopy}>
-        <Text style={styles.instructionKicker}>Do this now</Text>
-        <Text style={styles.instructionTitle}>{ctaLabel}</Text>
-        <Text style={styles.instructionBody}>Then finish {stepTitle}. Nothing else to choose.</Text>
+
+      <View style={styles.startMainRow}>
+        <View style={styles.startTarget}>
+          <Animated.View
+            style={[
+              styles.startRing,
+              {
+                opacity: ringOpacity,
+                transform: [{ scale: ringScale }],
+              },
+            ]}
+          />
+          <Text style={styles.startTargetText}>TAP</Text>
+        </View>
+
+        <View style={styles.startCopy}>
+          <Text style={styles.startTitle}>{title}</Text>
+          <Text style={styles.startMeta}>{meta}</Text>
+        </View>
       </View>
-    </Card>
+
+      <View style={styles.startFooter}>
+        <Text style={styles.startCta}>{ctaLabel}</Text>
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  badgeRow: {
+  statusRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.md,
   },
-  instructionCard: {
+  startCard: {
+    backgroundColor: colors.success,
+    borderColor: colors.successDark,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    gap: spacing.lg,
+    overflow: 'hidden',
+    padding: spacing.xl,
+    ...shadows.medium,
+  },
+  startTopRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: spacing.lg,
+    justifyContent: 'space-between',
   },
-  instructionTarget: {
-    alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderRadius: radius.pill,
-    height: 58,
-    justifyContent: 'center',
-    marginRight: spacing.lg,
-    width: 58,
-  },
-  instructionRing: {
-    backgroundColor: colors.accentSoft,
-    borderRadius: radius.pill,
-    height: 58,
-    position: 'absolute',
-    width: 58,
-  },
-  instructionTargetText: {
+  startKicker: {
     color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  startMainRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.lg,
+  },
+  startTarget: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderRadius: radius.pill,
+    height: 66,
+    justifyContent: 'center',
+    width: 66,
+  },
+  startRing: {
+    backgroundColor: colors.secondarySoft,
+    borderRadius: radius.pill,
+    height: 66,
+    position: 'absolute',
+    width: 66,
+  },
+  startTargetText: {
+    color: colors.successDark,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
   },
-  instructionCopy: {
+  startCopy: {
     flex: 1,
   },
-  instructionKicker: {
-    color: colors.accentDark,
+  startTitle: {
+    color: colors.white,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.h1,
     fontWeight: '900',
+    lineHeight: typography.lineH1,
   },
-  instructionTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.h2,
-    fontWeight: '900',
-    lineHeight: typography.lineH2,
-    marginTop: spacing.xs,
-  },
-  instructionBody: {
-    color: colors.textMuted,
+  startMeta: {
+    color: colors.secondarySoft,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
-    lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  startFooter: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.white,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+  },
+  startCta: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
   },
   nextUnlock: {
     alignItems: 'center',
@@ -257,5 +267,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  pressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.99 }],
   },
 });

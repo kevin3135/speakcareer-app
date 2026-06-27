@@ -1,5 +1,25 @@
 # Agent Learning Log
 
+## 2026-06-27: One-Card Learn Start
+
+Simplified the Learn/Home top area into one tappable start card. The old stack of screen header, hero card, animated instruction card and lesson card is now a compact status row plus one large pulsing `TAP` card that starts the active lesson. The next unlock hint stays below as quiet context.
+
+What went well:
+
+- The first viewport now has one obvious primary action instead of multiple large surfaces.
+- XP, streak and level remain visible without competing with the start action.
+- The active lesson card uses theme colors, spacing and shadow tokens; no raw screen colors were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include browser screenshot QA, so the exact mobile composition still needs visual review in Expo.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the new Learn/Home start card on mobile and tune the card height/text wrapping if it feels too large.
+
 ## 2026-06-27: Animated Roleplay Answer Cue
 
 Added a subtle pulsing focus ring around the empty Roleplay answer field. The cue appears only before the learner has focused or typed, then disappears so the screen stays calm. The answer field now also keeps its active styling once text is present, making the next action feel more obvious without adding more copy.
