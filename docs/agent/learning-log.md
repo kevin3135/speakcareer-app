@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Onboarding Plan Card
+
+Made the onboarding first-path preview more compact after level selection. The plan card now uses tighter padding, a smaller level title, shorter step spacing and two-line limits for coach, step detail and starter text so the `Continue` action has a better chance of staying close on small phones.
+
+What went well:
+
+- This kept the new onboarding reassurance pattern while reducing visual height.
+- The change stayed in one screen and reused existing spacing and typography tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The browser viewport override was reset after the attempted mobile QA.
+
+What went wrong:
+
+- The in-app browser timed out while trying to reset local app storage and reload onboarding, so this run used code inspection instead of a fresh screenshot.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The onboarding plan preview is useful, but it must stay short enough that the learner still sees the next action quickly.
+- Prefer line limits and tighter spacing before removing the reassurance content entirely.
+- If browser reset is flaky, avoid making broad visual guesses and keep the code change tiny.
+
+Next suggested task:
+
+- Add a small test or helper state for keeping onboarding plan copy short, then do a fresh mobile screenshot when browser control is stable.
+
 ## 2026-06-28: Onboarding Plan Preview
 
 Finished the onboarding level handoff by showing a simple first-path preview after the learner picks a starting level. The preview explains the first two steps, shows the selected level, includes the coach note and gives the first answer starter before the learner continues.

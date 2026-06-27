@@ -97,21 +97,27 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
             <Badge label="2-step start" tone="success" />
           </View>
 
-          <Text style={styles.planCoachNote}>{planPreview.coachNote}</Text>
+          <Text numberOfLines={2} style={styles.planCoachNote}>
+            {planPreview.coachNote}
+          </Text>
 
           <View style={styles.planSteps}>
             {planPreview.steps.map((step) => (
               <View key={step.label} style={styles.planStep}>
                 <Text style={styles.planStepLabel}>{step.label}</Text>
                 <Text style={styles.planStepTitle}>{step.title}</Text>
-                <Text style={styles.planStepDetail}>{step.detail}</Text>
+                <Text numberOfLines={2} style={styles.planStepDetail}>
+                  {step.detail}
+                </Text>
               </View>
             ))}
           </View>
 
           <View style={styles.planStarter}>
             <Text style={styles.planStarterLabel}>First answer starter</Text>
-            <Text style={styles.planStarterText}>{planPreview.starterPrompt}</Text>
+            <Text numberOfLines={2} style={styles.planStarterText}>
+              {planPreview.starterPrompt}
+            </Text>
           </View>
         </View>
       ) : null}
@@ -195,8 +201,8 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderRadius: radius.xl,
     borderWidth: 1,
-    marginTop: spacing.xl,
-    padding: spacing.lg,
+    marginTop: spacing.lg,
+    padding: spacing.md,
     ...shadows.soft,
   },
   planHeader: {
@@ -216,9 +222,9 @@ const styles = StyleSheet.create({
   planTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.h2,
+    fontSize: typography.h3,
     fontWeight: '900',
-    lineHeight: typography.lineH2,
+    lineHeight: typography.lineH3,
     marginTop: spacing.xs,
   },
   planCoachNote: {
@@ -230,7 +236,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   planSteps: {
-    gap: spacing.sm,
+    gap: spacing.xs,
     marginTop: spacing.md,
   },
   planStep: {
@@ -238,7 +244,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
   planStepLabel: {
     color: colors.textMuted,
@@ -267,7 +273,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     marginTop: spacing.md,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
   planStarterLabel: {
     color: colors.primaryDark,
