@@ -63,7 +63,6 @@ export function HomeScreen({
       <View style={styles.statusRow}>
         <StreakBadge label={`${mission.streakDays} day streak`} />
         <XPBadge label={`${mission.xpTotal} XP`} />
-        <Badge label={`Level ${mission.level}`} tone="purple" />
       </View>
 
       <AnimatedStartCard
@@ -215,16 +214,16 @@ const styles = StyleSheet.create({
   statusRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   startCard: {
     backgroundColor: colors.success,
     borderColor: colors.successDark,
     borderRadius: radius.xl,
     borderWidth: 1,
-    gap: spacing.lg,
+    gap: spacing.md,
     overflow: 'hidden',
-    padding: spacing.xl,
+    padding: spacing.lg,
     ...shadows.medium,
   },
   startTopRow: {
@@ -241,22 +240,22 @@ const styles = StyleSheet.create({
   startMainRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.lg,
+    gap: spacing.md,
   },
   startTarget: {
     alignItems: 'center',
     backgroundColor: colors.white,
     borderRadius: radius.pill,
-    height: 66,
+    height: 60,
     justifyContent: 'center',
-    width: 66,
+    width: 60,
   },
   startRing: {
     backgroundColor: colors.secondarySoft,
     borderRadius: radius.pill,
-    height: 66,
+    height: 60,
     position: 'absolute',
-    width: 66,
+    width: 60,
   },
   startTargetText: {
     color: colors.successDark,
@@ -270,9 +269,9 @@ const styles = StyleSheet.create({
   startTitle: {
     color: colors.white,
     fontFamily: fonts.rounded,
-    fontSize: typography.h1,
+    fontSize: typography.h2,
     fontWeight: '900',
-    lineHeight: typography.lineH1,
+    lineHeight: typography.lineH2,
   },
   startMeta: {
     color: colors.secondarySoft,
@@ -285,8 +284,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     backgroundColor: colors.white,
     borderRadius: radius.pill,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
   startCta: {
     color: colors.successDark,

@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-27: Compact Home Start Area
+
+Made the top of Home calmer and shorter. The first status row now keeps only streak and XP, and the animated start card uses tighter spacing, a smaller tap target and a smaller title size so the next action and the daily mission fit with less visual noise.
+
+What went well:
+
+- This directly supports the app-led Home direction: fewer signals before the single main `Start` action.
+- The change stayed in one screen and reused existing theme spacing and typography tokens.
+- Removing the level badge from the first viewport reduced clutter without removing progress from the product.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This was code-reviewed without a fresh mobile screenshot, so Home still needs a visual check in Expo/browser.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home should show streak and XP early, but level is secondary and does not need to compete with Start.
+- Compact spacing is better than adding another explanation when a screen feels overwhelming.
+- Keep the first viewport focused on one action plus one habit cue.
+
+Next suggested task:
+
+- Give the Roleplay first viewport the same simplification treatment: one coach prompt, one answer area and one clear action before optional helpers.
+
 ## 2026-06-27: Progress Drill Warm-Up Cue
 
 Added one focused roleplay handoff improvement: when the learner starts a roleplay from the top Progress correction drill, the exact correction now follows into Roleplay as a compact warm-up cue above the answer box. The cue keeps the stronger sentence and note visible at the moment the learner needs to reuse it, without changing the rest of the roleplay loop.
