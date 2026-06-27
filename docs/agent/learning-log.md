@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-27: Three-Tab Simple Navigation
+
+Built one focused simplification: the bottom navigation no longer shows `Home`, `Practice`, `Roleplay`, `Progress`, `Profile`. After the first save it now shows only three simple choices: `Learn`, `Wins` and `Me`. Practice and Roleplay stay app-led instead of user-selected tabs. The first-run screens also received a rounder, friendlier system font treatment.
+
+What went well:
+
+- Removed the most confusing navigation labels from the bottom bar.
+- `Practice` and `Roleplay` are no longer presented as top-level choices.
+- `Home` became `Learn`, which better matches the app-led flow.
+- Shared typography now uses a rounder font family where the platform supports it.
+
+What went wrong:
+
+- Browser preview timed out twice during reload, so this run relied on typecheck/tests/lint instead of a screenshot.
+- The full rich screens still exist after the first save; later simplification should continue there.
+- The font is platform-dependent because no custom font package has been added yet.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 52 tests.
+- `npm.cmd run lint` passed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Kevin does not want users choosing between `Home`, `Practice`, `Roleplay`, `Progress` at the start.
+- Keep navigation app-led: Learn first, then unlock richer areas only when needed.
+- If browser reload times out, do not burn the run; rely on checks and report the limitation.
+
+Next suggested task:
+
+- Replace the rich post-save completion screen with one simple unlock screen: `Saved`, `+XP`, `Next lesson`.
+
 ## 2026-06-27: Short First Rewrite
 
 Built one focused first-run feedback improvement: the first Job Interview feedback now uses one short fixed rewrite that matches the taught `I + action + result` pattern, instead of showing the longer scenario-level mock rewrite.

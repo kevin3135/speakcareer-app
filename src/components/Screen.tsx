@@ -1,7 +1,7 @@
 import { Children, type PropsWithChildren } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { colors, spacing, typography } from '../styles/theme';
+import { colors, fonts, spacing, typography } from '../styles/theme';
 
 type ScreenProps = PropsWithChildren<{
   title: string;
@@ -37,11 +37,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.h1,
     fontWeight: '900',
   },
   subtitle: {
     color: colors.textMuted,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.sm,

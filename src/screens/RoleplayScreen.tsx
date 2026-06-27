@@ -7,7 +7,7 @@ import { FeedbackPanel } from '../components/FeedbackPanel';
 import { Screen } from '../components/Screen';
 import { practiceContent, progressData } from '../data/content';
 import { foundationStart, guidedStart } from '../data/guidedIntro';
-import { colors, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radii, spacing, typography } from '../styles/theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 import { createAnswerCoachContent } from '../utils/answerCoach';
 import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
@@ -905,12 +905,14 @@ const styles = StyleSheet.create({
   },
   simpleQuestKicker: {
     color: colors.primaryDark,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   simpleQuestTitle: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.h1,
     fontWeight: '900',
     lineHeight: 32,
@@ -920,6 +922,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.ink,
     borderRadius: radii.md,
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '800',
     lineHeight: 23,
@@ -945,6 +948,7 @@ const styles = StyleSheet.create({
   },
   simpleFormulaText: {
     color: colors.primaryDark,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textAlign: 'center',
@@ -956,6 +960,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.lg,
@@ -975,6 +980,7 @@ const styles = StyleSheet.create({
   },
   simpleReviewTitle: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     flex: 1,
     fontSize: typography.h3,
     fontWeight: '900',
@@ -983,6 +989,7 @@ const styles = StyleSheet.create({
   },
   simpleReviewBody: {
     color: colors.text,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.xs,
@@ -991,6 +998,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: 999,
     color: colors.primaryDark,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     overflow: 'hidden',
@@ -1006,12 +1014,14 @@ const styles = StyleSheet.create({
   },
   simpleRewriteLabel: {
     color: colors.primaryDark,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   simpleRewriteText: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '800',
     lineHeight: 22,

@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 export const colors = {
   background: '#F4F7FB',
   surface: '#FFFFFF',
@@ -15,6 +17,15 @@ export const colors = {
   success: '#25855A',
   danger: '#B42318',
   ink: '#111827',
+};
+
+export const fonts = {
+  rounded: Platform.select({
+    android: 'sans-serif-medium',
+    ios: 'Avenir Next',
+    web: 'Avenir Next, Nunito, ui-rounded, system-ui, sans-serif',
+    default: undefined,
+  }),
 };
 
 export const spacing = {

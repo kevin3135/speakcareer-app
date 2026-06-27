@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { Screen } from '../components/Screen';
 import { foundationStart, guidedStart } from '../data/guidedIntro';
-import { colors, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radii, spacing, typography } from '../styles/theme';
 
 type FoundationScreenProps = {
   onStartCareerPractice: () => void;
@@ -59,12 +59,14 @@ const styles = StyleSheet.create({
   },
   kicker: {
     color: colors.primaryDark,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.h1,
     fontWeight: '900',
     lineHeight: 32,
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
   },
   structureText: {
     color: colors.primaryDark,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
     textAlign: 'center',
@@ -101,12 +104,14 @@ const styles = StyleSheet.create({
   },
   exampleLabel: {
     color: colors.accentSoft,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   exampleText: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.h3,
     fontWeight: '900',
     lineHeight: 23,
@@ -120,11 +125,13 @@ const styles = StyleSheet.create({
   },
   ruleTitle: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.h3,
     fontWeight: '900',
   },
   ruleText: {
     color: colors.text,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: 22,
     marginTop: spacing.xs,

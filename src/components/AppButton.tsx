@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-import { colors, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radii, spacing, typography } from '../styles/theme';
 
 type AppButtonProps = {
   accessibilityHint?: string;
@@ -73,8 +73,9 @@ const styles = StyleSheet.create({
     opacity: 0.45,
   },
   label: {
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
-    fontWeight: '700',
+    fontWeight: '900',
   },
   primaryLabel: {
     color: colors.surface,

@@ -1,9 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { colors, spacing } from '../styles/theme';
+import { colors, fonts, radii, spacing } from '../styles/theme';
 import type { MainScreen } from '../types';
 
-const tabs: MainScreen[] = ['Home', 'Practice', 'Roleplay', 'Progress', 'Profile'];
+type BottomTab = {
+  label: string;
+  screen: MainScreen;
+};
+
+const tabs: BottomTab[] = [
+  { label: 'Learn', screen: 'Home' },
+  { label: 'Wins', screen: 'Progress' },
+  { label: 'Me', screen: 'Profile' },
+];
 
 type BottomNavProps = {
   activeScreen: MainScreen;
@@ -14,20 +23,22 @@ export function BottomNav({ activeScreen, onChange }: BottomNavProps) {
   return (
     <View style={styles.container}>
       {tabs.map((tab) => {
-        const isActive = tab === activeScreen;
+        const isActive =
+          tab.screen === activeScreen ||
+          (tab.screen === 'Home' && ['Foundation', 'Practice', 'Roleplay'].includes(activeScreen));
 
         return (
           <Pressable
-            accessibilityHint={`Open the ${tab} screen`}
-            accessibilityLabel={`${tab} tab`}
+            accessibilityHint={`Open ${tab.label}`}
+            accessibilityLabel={`${tab.label} tab`}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
-            key={tab}
-            onPress={() => onChange(tab)}
+            key={tab.screen}
+            onPress={() => onChange(tab.screen)}
             style={[styles.tab, isActive && styles.activeTab]}
           >
             <View style={[styles.indicator, isActive && styles.activeIndicator]} />
-            <Text style={[styles.label, isActive && styles.activeLabel]}>{tab}</Text>
+            <Text style={[styles.label, isActive && styles.activeLabel]}>{tab.label}</Text>
           </Pressable>
         );
       })}
@@ -47,9 +58,9 @@ const styles = StyleSheet.create({
   },
   tab: {
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: radii.md,
     flex: 1,
-    minHeight: 44,
+    minHeight: 50,
     justifyContent: 'center',
     paddingHorizontal: 2,
   },
@@ -68,8 +79,9 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.textMuted,
-    fontSize: 11,
-    fontWeight: '700',
+    fontFamily: fonts.rounded,
+    fontSize: 12,
+    fontWeight: '900',
   },
   activeLabel: {
     color: colors.primaryDark,

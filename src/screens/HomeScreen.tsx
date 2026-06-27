@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AppButton } from '../components/AppButton';
 import { Screen } from '../components/Screen';
 import { foundationStart } from '../data/guidedIntro';
-import { colors, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radii, spacing, typography } from '../styles/theme';
 import type { PracticeSession } from '../types';
 
 type HomeScreenProps = {
@@ -71,12 +71,14 @@ const styles = StyleSheet.create({
   },
   kicker: {
     color: '#DFF3EC',
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.h1,
     fontWeight: '900',
     lineHeight: 32,
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
   },
   body: {
     color: '#F0FBF7',
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '700',
     lineHeight: 22,
@@ -103,11 +106,13 @@ const styles = StyleSheet.create({
   },
   formulaNumber: {
     color: colors.accent,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
   formulaText: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.h3,
     fontWeight: '900',
     marginTop: spacing.xs,
@@ -121,12 +126,14 @@ const styles = StyleSheet.create({
   },
   exampleLabel: {
     color: colors.accentSoft,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   exampleText: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '800',
     lineHeight: 22,
@@ -146,12 +153,14 @@ const styles = StyleSheet.create({
   },
   nextStripLabel: {
     color: colors.textMuted,
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   nextStripText: {
     color: colors.ink,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
   },

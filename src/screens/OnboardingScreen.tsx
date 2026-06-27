@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { AppButton } from '../components/AppButton';
 import { foundationStart, levelAssessment, type LevelAssessmentChoice } from '../data/guidedIntro';
-import { colors, radii, spacing, typography } from '../styles/theme';
+import { colors, fonts, radii, spacing, typography } from '../styles/theme';
 
 type OnboardingScreenProps = {
   onContinue: () => void;
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   },
   coachInitials: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.h1,
     fontWeight: '900',
   },
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
   },
   question: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.h2,
     fontWeight: '800',
     lineHeight: 28,
@@ -160,6 +162,7 @@ const styles = StyleSheet.create({
   },
   levelBadgeText: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
   },
@@ -172,12 +175,14 @@ const styles = StyleSheet.create({
   },
   optionTitle: {
     color: colors.surface,
+    fontFamily: fonts.rounded,
     fontSize: typography.h3,
     fontWeight: '900',
     lineHeight: 22,
   },
   optionBody: {
     color: '#B7C4CB',
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '700',
     lineHeight: 19,
@@ -189,6 +194,7 @@ const styles = StyleSheet.create({
   },
   foundationHint: {
     color: '#B7C4CB',
+    fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
     marginBottom: spacing.md,
