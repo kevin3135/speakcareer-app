@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-27: Actionable Progress Coaching
+
+Turned the Progress screen into a clearer coach surface after a saved roleplay. The old generic daily-goal card now uses the existing next-step guidance helper, showing one recommended action, three short steps and a direct CTA into the right next roleplay. Progress also now highlights one top-priority correction as a focused practice drill before the full mistake bank.
+
+What went well:
+
+- The Progress screen now tells the learner exactly what to do next instead of acting like a passive dashboard.
+- The top mistake is now elevated into one concrete correction drill, which fits the product goal of small daily improvement.
+- Existing helper logic for next-step guidance, first-save empty states and mistake previews was reused instead of adding new architecture.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include Expo/browser visual QA, so the new Progress composition still needs a mobile layout check.
+- The screen still uses mock summary totals and weekly activity data; this run improved actionability, not data realism.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- On Progress, lead with one recommended next action before showing supporting stats.
+- Elevating one mistake into a drill is stronger than presenting the full correction list first.
+- Reuse helper logic that already exists in `src/utils` before adding new state builders.
+
+Next suggested task:
+
+- Persist one practiced correction locally so the top mistake drill can switch to a real `Practiced once` state.
+
 ## 2026-06-27: One-Card Learn Start
 
 Simplified the Learn/Home top area into one tappable start card. The old stack of screen header, hero card, animated instruction card and lesson card is now a compact status row plus one large pulsing `TAP` card that starts the active lesson. The next unlock hint stays below as quiet context.
