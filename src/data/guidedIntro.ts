@@ -68,12 +68,12 @@ export const foundationStart: {
   subtitle: string;
   title: string;
 } = {
-  ctaLabel: 'Start lesson 1',
+  ctaLabel: 'Start lesson',
   example: 'I helped the team finish the project on time.',
-  nextLabel: 'Next: Job Interview',
+  nextLabel: 'Then: Job Interview',
   structure: ['I', 'action', 'result'],
-  subtitle: 'First learn the basic English answer shape. Career practice comes after.',
-  title: 'Lesson 1: Build a clear sentence',
+  subtitle: 'Learn one sentence shape first. The app handles the next step.',
+  title: 'Learn one clear sentence',
 };
 
 export const guidedStart: {

@@ -30,6 +30,7 @@ export function AppNavigator() {
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
     [selectedRoleplayId],
   );
+  const shouldShowBottomNav = practiceSessions.length > 0;
 
   useEffect(() => {
     let isMounted = true;
@@ -133,10 +134,12 @@ export function AppNavigator() {
           <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={changeDailyTarget} />
         ) : null}
       </View>
-      <BottomNav
-        activeScreen={activeScreen === 'Foundation' ? 'Home' : activeScreen}
-        onChange={setActiveScreen}
-      />
+      {shouldShowBottomNav ? (
+        <BottomNav
+          activeScreen={activeScreen === 'Foundation' ? 'Home' : activeScreen}
+          onChange={setActiveScreen}
+        />
+      ) : null}
     </View>
   );
 }

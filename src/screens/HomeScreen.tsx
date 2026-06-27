@@ -16,17 +16,17 @@ export function HomeScreen({ onStartFoundation, sessions }: HomeScreenProps) {
 
   return (
     <Screen
-      title="SpeakCareer"
-      subtitle="The app will guide you. Start with the basic English structure first."
+      title="Start here"
+      subtitle="Do this first. One lesson, one button."
     >
       <View style={styles.lessonPanel}>
-        <Text style={styles.kicker}>{hasSavedPractice ? 'Step 2 of 3' : 'Step 1 of 3'}</Text>
+        <Text style={styles.kicker}>{hasSavedPractice ? 'Next step' : 'First step'}</Text>
         <Text style={styles.title}>
-          {hasSavedPractice ? 'Keep building clear English' : foundationStart.title}
+          {hasSavedPractice ? 'Practice one more sentence' : foundationStart.title}
         </Text>
         <Text style={styles.body}>
           {hasSavedPractice
-            ? 'Use the same sentence shape again, then continue with career practice.'
+            ? 'Same structure. One short answer. Then continue.'
             : foundationStart.subtitle}
         </Text>
 
@@ -40,8 +40,13 @@ export function HomeScreen({ onStartFoundation, sessions }: HomeScreenProps) {
         </View>
 
         <View style={styles.exampleBlock}>
-          <Text style={styles.exampleLabel}>Example</Text>
+          <Text style={styles.exampleLabel}>Copy this idea</Text>
           <Text style={styles.exampleText}>{foundationStart.example}</Text>
+        </View>
+
+        <View style={styles.nextStrip}>
+          <Text style={styles.nextStripLabel}>After this</Text>
+          <Text style={styles.nextStripText}>{foundationStart.nextLabel}</Text>
         </View>
 
         <View style={styles.buttonRow}>
@@ -51,14 +56,6 @@ export function HomeScreen({ onStartFoundation, sessions }: HomeScreenProps) {
             onPress={onStartFoundation}
           />
         </View>
-      </View>
-
-      <View style={styles.nextPanel}>
-        <Text style={styles.nextLabel}>Next unlock</Text>
-        <Text style={styles.nextTitle}>{foundationStart.nextLabel}</Text>
-        <Text style={styles.nextBody}>
-          After this structure, the app puts it inside a professional answer.
-        </Text>
       </View>
     </Screen>
   );
@@ -138,29 +135,24 @@ const styles = StyleSheet.create({
   buttonRow: {
     marginTop: spacing.lg,
   },
-  nextPanel: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
+  nextStrip: {
+    alignItems: 'center',
+    backgroundColor: '#EAF7F2',
     borderRadius: radii.md,
-    borderWidth: 1,
-    padding: spacing.lg,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.lg,
+    padding: spacing.md,
   },
-  nextLabel: {
+  nextStripLabel: {
     color: colors.textMuted,
     fontSize: typography.small,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
-  nextTitle: {
+  nextStripText: {
     color: colors.ink,
-    fontSize: typography.h2,
-    fontWeight: '900',
-    marginTop: spacing.xs,
-  },
-  nextBody: {
-    color: colors.textMuted,
     fontSize: typography.body,
-    lineHeight: 22,
-    marginTop: spacing.sm,
+    fontWeight: '900',
   },
 });

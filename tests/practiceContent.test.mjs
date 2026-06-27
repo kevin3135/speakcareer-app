@@ -49,9 +49,9 @@ test('keeps the guided first experience simple and action oriented', async () =>
     levelAssessment.choices.map((choice) => choice.label),
     ['A1-A2', 'B1', 'B2'],
   );
-  assert.equal(foundationStart.ctaLabel, 'Start lesson 1');
+  assert.equal(foundationStart.ctaLabel, 'Start lesson');
   assert.deepEqual(foundationStart.structure, ['I', 'action', 'result']);
-  assert.ok(foundationStart.subtitle.includes('basic English answer shape'));
+  assert.ok(foundationStart.subtitle.includes('one sentence shape'));
   assert.equal(guidedStart.roleplayId, 'job-interview');
   assert.deepEqual(guidedStart.detailLabels, ['5 minutes', '2-4 sentences', 'Clear rewrite']);
   assert.equal(guidedStart.title, 'Quest 1: Job Interview');

@@ -1,5 +1,48 @@
 # Agent Learning Log
 
+## 2026-06-27: Dumb-Simple First Steps
+
+Built one focused simplification pass: Home now has one visible path, one lesson card and one button. The bottom navigation is hidden until the user saves the first practice session, so new users cannot wander into Practice, Progress or Profile before the app teaches the first structure.
+
+What went well:
+
+- Home now reads like a guided instruction screen instead of a dashboard.
+- The first lesson now says exactly what to do: read this, then tap Continue.
+- Mobile preview confirmed there is no bottom navigation before the first saved session.
+- The first two steps now each have only one primary button.
+
+What went wrong:
+
+- The Roleplay screen is still denser than the new Home and Lesson 1 screens.
+- The first lesson is still read-only; the user does not yet tap or type inside the structure itself.
+- The app still has older Home helper utilities and tests that are not used by the simplified Home screen.
+
+Checks run:
+
+- `npm.cmd run typecheck` passed.
+- `npm.cmd run test` passed with 51 tests.
+- `npm.cmd run lint` passed.
+- Mobile browser preview passed for the simplified Home and Step 1 flow.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 4
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep first-run screens almost impossible to misunderstand: one screen, one job, one button.
+- Hide global navigation until the first saved answer so the app stays in charge.
+- Next simplification should target the Roleplay screen before adding more content.
+
+Next suggested task:
+
+- Strip the first Job Interview roleplay down to one prompt, one answer box and one save path for brand-new users.
+
 ## 2026-06-27: Language Foundation First Start
 
 Built one focused usability improvement: the app now starts with a dark, Duolingo-inspired level assessment before opening the product. Home was simplified into one app-led foundation lesson, and Lesson 1 teaches the basic `I + action + result` English structure before sending the user into the Job Interview roleplay.

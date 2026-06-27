@@ -12,11 +12,11 @@ type FoundationScreenProps = {
 export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProps) {
   return (
     <Screen
-      title="Lesson 1"
-      subtitle="Build the sentence first. Then use it in a work situation."
+      title="Step 1"
+      subtitle="Read this. Then tap Continue."
     >
       <View style={styles.stage}>
-        <Text style={styles.kicker}>Basic structure</Text>
+        <Text style={styles.kicker}>Remember this</Text>
         <Text style={styles.title}>I + action + result</Text>
 
         <View style={styles.structureRow}>
@@ -28,7 +28,7 @@ export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProp
         </View>
 
         <View style={styles.exampleCard}>
-          <Text style={styles.exampleLabel}>Say it like this</Text>
+          <Text style={styles.exampleLabel}>Example</Text>
           <Text style={styles.exampleText}>{foundationStart.example}</Text>
         </View>
 
@@ -40,7 +40,7 @@ export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProp
         <View style={styles.buttonRow}>
           <AppButton
             accessibilityHint={`Uses this sentence structure in ${guidedStart.title}`}
-            label="Use this in Job Interview"
+            label="Continue to interview"
             onPress={onStartCareerPractice}
           />
         </View>
