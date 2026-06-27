@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import {
   AppButton,
   CoachBubble,
   GradientHero,
+  ProgressBar,
   ScreenContainer,
   SectionHeader,
 } from '../components/ui';
@@ -14,7 +16,23 @@ type FoundationScreenProps = {
   onStartCareerPractice: () => void;
 };
 
+const sentencePieces = ['I', 'helped the team finish', 'the project on time.'];
+
 export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProps) {
+  const [completedSteps, setCompletedSteps] = useState(0);
+  const totalSteps = foundationStart.structure.length;
+  const isComplete = completedSteps >= totalSteps;
+  const builtSentence =
+    completedSteps > 0
+      ? sentencePieces.slice(0, completedSteps).join(' ')
+      : 'Tap the first block to build the sentence.';
+
+  function selectStructurePart(index: number) {
+    if (index === completedSteps) {
+      setCompletedSteps((steps) => Math.min(steps + 1, totalSteps));
+    }
+  }
+
   return (
     <ScreenContainer
       overline="Lesson 1"
@@ -28,22 +46,50 @@ export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProp
         tone="secondary"
       />
 
-      <CoachBubble
-        message="This is the basic shape. First say who did it, then the action, then the result."
-      />
+      <CoachBubble message="Tap the blocks in order. Build the sentence, then continue to interview practice." />
 
       <View style={styles.structureRow}>
-        {foundationStart.structure.map((part, index) => (
-          <View key={part} style={styles.structureBlock}>
-            <Text style={styles.structureNumber}>{index + 1}</Text>
-            <Text style={styles.structureText}>{part}</Text>
-          </View>
-        ))}
+        {foundationStart.structure.map((part, index) => {
+          const isDone = index < completedSteps;
+          const isActive = index === completedSteps;
+
+          return (
+            <Pressable
+              accessibilityHint={
+                isActive
+                  ? 'Adds this part to the example sentence'
+                  : 'This part unlocks after the previous part'
+              }
+              accessibilityLabel={`Step ${index + 1}: ${part}`}
+              accessibilityRole="button"
+              disabled={!isActive}
+              key={part}
+              onPress={() => selectStructurePart(index)}
+              style={({ pressed }) => [
+                styles.structureBlock,
+                isActive && styles.structureBlockActive,
+                isDone && styles.structureBlockDone,
+                pressed && styles.structureBlockPressed,
+              ]}
+            >
+              <Text style={styles.structureNumber}>{index + 1}</Text>
+              <Text style={[styles.structureText, isDone && styles.structureTextDone]}>{part}</Text>
+              <Text style={[styles.structureStatus, isDone && styles.structureStatusDone]}>
+                {isDone ? 'Added' : isActive ? 'Tap' : 'Next'}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
 
-      <SectionHeader title="Copy this example" />
+      <View style={styles.progressCard}>
+        <Text style={styles.progressLabel}>Sentence progress</Text>
+        <ProgressBar value={(completedSteps / totalSteps) * 100} tone="secondary" />
+      </View>
+
+      <SectionHeader title="Build this example" />
       <View style={styles.exampleCard}>
-        <Text style={styles.exampleText}>{foundationStart.example}</Text>
+        <Text style={styles.exampleText}>{builtSentence}</Text>
       </View>
 
       <View style={styles.ruleBox}>
@@ -53,7 +99,8 @@ export function FoundationScreen({ onStartCareerPractice }: FoundationScreenProp
 
       <AppButton
         accessibilityHint={`Uses this sentence structure in ${guidedStart.title}`}
-        label="Continue to interview"
+        disabled={!isComplete}
+        label={isComplete ? 'Continue to interview' : 'Tap the 3 blocks first'}
         onPress={onStartCareerPractice}
       />
     </ScreenContainer>
@@ -76,6 +123,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.sm,
   },
+  structureBlockActive: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  structureBlockDone: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+  },
+  structureBlockPressed: {
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
+  },
   structureNumber: {
     color: colors.accent,
     fontFamily: fonts.rounded,
@@ -89,6 +148,33 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: spacing.xs,
     textAlign: 'center',
+  },
+  structureTextDone: {
+    color: colors.secondaryDark,
+  },
+  structureStatus: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  structureStatusDone: {
+    color: colors.secondaryDark,
+  },
+  progressCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    padding: spacing.lg,
+  },
+  progressLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.sm,
   },
   exampleCard: {
     backgroundColor: colors.navy,

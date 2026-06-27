@@ -1,5 +1,37 @@
 # Agent Learning Log
 
+## 2026-06-27: Interactive Foundation Lesson
+
+Changed the first foundation lesson from a passive explanation into a small tap-to-build sentence exercise. The learner now taps `I`, `action`, and `result` in order, sees sentence progress, and only unlocks Continue after completing the three simple steps.
+
+Why it changed:
+
+- Kevin wants the app to take charge and feel much simpler at the start.
+- The first lesson should teach one basic English structure before asking for career roleplay.
+- A tiny interaction creates more game-like momentum without adding new APIs or large features.
+
+What went well:
+
+- The change stayed focused on one visible screen.
+- The lesson now has one obvious action at a time.
+- Existing theme tokens and reusable UI components were used; no raw colors were added to screens.
+
+What failed:
+
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Checks run:
+
+- `npm.cmd run typecheck`
+- `npm.cmd run lint`
+- `npm.cmd run test`
+- `rg "#[0-9A-Fa-f]{3,8}" src\screens src\components`
+
+Agent memory for next time:
+
+- Keep early learning extremely guided: one prompt, one tap, one clear next step.
+- The next best design task is to simplify the first Home/Learn decision after the foundation lesson so the user does not see too many paths at once.
+
 ## 2026-06-27: Major Design System Upgrade
 
 Built a broad visual upgrade around the new `Career Arcade` design direction. Added theme tokens in `src/theme`, a reusable UI layer in `src/components/ui`, and redesigned the main app surfaces to feel more premium, colorful, modern and guided.
