@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 
 import {
   Badge,
@@ -6,9 +7,7 @@ import {
   GradientButton,
   GradientHero,
   LessonCard,
-  ProgressBar,
   ScreenContainer,
-  SectionHeader,
   StreakBadge,
   XPBadge,
 } from '../components/ui';
@@ -18,7 +17,6 @@ import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeLearnState } from '../utils/homeLearnState';
-import { createHomeLibraryState } from '../utils/homeLibrary';
 
 type HomeScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -34,20 +32,12 @@ export function HomeScreen({
   sessions,
 }: HomeScreenProps) {
   const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
-  const hasSavedPractice = sessions.length > 0;
   const learnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
     foundationTitle: foundationStart.title,
     roleplays: practiceContent.roleplays,
     sessions,
   });
-  const guidedRoleplayId: RoleplayId =
-    learnState.hero.target === 'foundation' ? 'job-interview' : learnState.hero.target;
-  const homeLibrary = createHomeLibraryState(
-    sessions,
-    practiceContent.roleplays,
-    guidedRoleplayId,
-  );
   function startToday() {
     if (learnState.hero.target === 'foundation') {
       onStartFoundation();
@@ -66,6 +56,7 @@ export function HomeScreen({
     ? () => onOpenRoleplay(activeRoleplayId)
     : onStartFoundation;
   const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
+  const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
 
   return (
     <ScreenContainer
@@ -91,32 +82,14 @@ export function HomeScreen({
 
       <View style={styles.badgeRow}>
         <XPBadge label={`${mission.xpTotal} XP`} />
-        <XPBadge label={`Level ${mission.level}`} />
+        <Badge label={`Level ${mission.level}`} tone="purple" />
       </View>
 
-      {hasSavedPractice ? (
-        <Card tone="strong">
-          <View style={styles.questHeader}>
-            <View style={styles.questIcon}>
-              <Text style={styles.questIconText}>1</Text>
-            </View>
-            <View style={styles.questCopy}>
-              <Text style={styles.questKicker}>Today</Text>
-              <Text style={styles.questTitle}>{mission.title}</Text>
-              <Text style={styles.questBody}>One short lesson is enough for your streak.</Text>
-            </View>
-            <XPBadge label={mission.rewardLabel} />
-          </View>
-          <View style={styles.questProgress}>
-            <ProgressBar label="Daily goal" value={mission.progressPercent} tone="secondary" />
-          </View>
-        </Card>
-      ) : null}
-
-      <SectionHeader
-        subtitle="Follow the one card marked Now. The rest stay visible, but quieter."
-        title="Your path"
+      <AnimatedInstructionCard
+        ctaLabel={learnState.hero.ctaLabel}
+        stepTitle={activeLesson.title}
       />
+
       <LessonCard
         body={activeLesson.body}
         ctaLabel={activeLesson.ctaLabel}
@@ -127,64 +100,81 @@ export function HomeScreen({
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
       />
-      <Card tone="muted">
-        <Text style={styles.previewLessonsLabel}>Later on this path</Text>
-        <View style={styles.previewLessonsList}>
-          {previewLessons.map((lesson, index) => (
-            <View key={lesson.title} style={styles.previewLessonRow}>
-              <View style={styles.previewLessonNumber}>
-                <Text style={styles.previewLessonNumberText}>
-                  {String(index >= activeLessonIndex ? index + 2 : index + 1).padStart(2, '0')}
-                </Text>
-              </View>
-              <View style={styles.previewLessonCopy}>
-                <View style={styles.previewLessonTitleRow}>
-                  <Text style={styles.previewLessonTitle}>{lesson.title}</Text>
-                  <Badge
-                    label={lesson.state === 'completed' ? 'Done' : 'Locked'}
-                    tone={lesson.state === 'completed' ? 'secondary' : 'purple'}
-                  />
-                </View>
-                <Text style={styles.previewLessonMeta}>{lesson.meta}</Text>
-                <Text style={styles.previewLessonBody}>{lesson.body}</Text>
-              </View>
-            </View>
-          ))}
-        </View>
-      </Card>
 
-      <SectionHeader
-        action={<Badge label={homeLibrary.meta} tone="info" />}
-        subtitle="See what opens next without adding another button to press."
-        title={homeLibrary.title}
-      />
-      <Card tone="muted">
-        <Text style={styles.unlockBody}>{homeLibrary.body}</Text>
-        <View style={styles.unlockList}>
-          {homeLibrary.previewRoleplays.map((roleplay, index) => {
-            const statusLabel = hasSavedPractice && index === 0 ? 'Next' : 'Locked';
-
-            return (
-              <View key={roleplay.id} style={styles.unlockRow}>
-                <View style={styles.unlockCopy}>
-                  <View style={styles.unlockTitleRow}>
-                    <Text style={styles.unlockTitle}>{roleplay.title}</Text>
-                    <Badge
-                      label={statusLabel}
-                      tone={hasSavedPractice && index === 0 ? 'secondary' : 'purple'}
-                    />
-                  </View>
-                  <Text style={styles.unlockMeta}>
-                    {roleplay.category} | {roleplay.targetLevel}
-                  </Text>
-                  <Text style={styles.unlockFocus}>{roleplay.focus}</Text>
-                </View>
-              </View>
-            );
-          })}
+      {nextUnlock ? (
+        <View style={styles.nextUnlock}>
+          <Text style={styles.nextUnlockLabel}>Unlocks next</Text>
+          <Text style={styles.nextUnlockTitle}>{nextUnlock.title}</Text>
+          <Badge label={nextUnlock.state === 'completed' ? 'Done' : 'Later'} tone="info" />
         </View>
-      </Card>
+      ) : null}
     </ScreenContainer>
+  );
+}
+
+function AnimatedInstructionCard({
+  ctaLabel,
+  stepTitle,
+}: {
+  ctaLabel: string;
+  stepTitle: string;
+}) {
+  const [pulse] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          duration: 850,
+          easing: Easing.out(Easing.quad),
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulse, {
+          duration: 650,
+          easing: Easing.in(Easing.quad),
+          toValue: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [pulse]);
+
+  const ringScale = pulse.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.22],
+  });
+  const ringOpacity = pulse.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.35, 0.95],
+  });
+
+  return (
+    <Card tone="accent" style={styles.instructionCard}>
+      <View style={styles.instructionTarget}>
+        <Animated.View
+          style={[
+            styles.instructionRing,
+            {
+              opacity: ringOpacity,
+              transform: [{ scale: ringScale }],
+            },
+          ]}
+        />
+        <Text style={styles.instructionTargetText}>TAP</Text>
+      </View>
+      <View style={styles.instructionCopy}>
+        <Text style={styles.instructionKicker}>Do this now</Text>
+        <Text style={styles.instructionTitle}>{ctaLabel}</Text>
+        <Text style={styles.instructionBody}>Then finish {stepTitle}. Nothing else to choose.</Text>
+      </View>
+    </Card>
   );
 }
 
@@ -193,36 +183,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.md,
   },
-  questHeader: {
+  instructionCard: {
     alignItems: 'center',
     flexDirection: 'row',
+    paddingVertical: spacing.lg,
   },
-  questIcon: {
+  instructionTarget: {
     alignItems: 'center',
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.accent,
     borderRadius: radius.pill,
-    height: 46,
+    height: 58,
     justifyContent: 'center',
-    marginRight: spacing.md,
-    width: 46,
+    marginRight: spacing.lg,
+    width: 58,
   },
-  questIconText: {
+  instructionRing: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.pill,
+    height: 58,
+    position: 'absolute',
+    width: 58,
+  },
+  instructionTargetText: {
     color: colors.white,
     fontFamily: fonts.rounded,
-    fontSize: typography.h2,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
-  questCopy: {
+  instructionCopy: {
     flex: 1,
-    paddingRight: spacing.md,
   },
-  questKicker: {
-    color: colors.secondaryDark,
+  instructionKicker: {
+    color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  questTitle: {
+  instructionTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.h2,
@@ -230,7 +227,7 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineH2,
     marginTop: spacing.xs,
   },
-  questBody: {
+  instructionBody: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
@@ -238,113 +235,27 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
-  questProgress: {
-    marginTop: spacing.lg,
-  },
-  previewLessonsLabel: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  previewLessonsList: {
-    gap: spacing.sm,
-    marginTop: spacing.md,
-  },
-  previewLessonRow: {
+  nextUnlock: {
     alignItems: 'center',
-    flexDirection: 'row',
-  },
-  previewLessonNumber: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceStrong,
-    borderRadius: radius.pill,
-    height: 42,
-    justifyContent: 'center',
-    marginRight: spacing.md,
-    width: 42,
-  },
-  previewLessonNumberText: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  previewLessonCopy: {
-    flex: 1,
-    gap: spacing.xs,
-  },
-  previewLessonTitleRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  previewLessonTitle: {
-    color: colors.ink,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  previewLessonMeta: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
-  },
-  previewLessonBody: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '700',
-    lineHeight: typography.lineSmall,
-  },
-  unlockBody: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '700',
-    lineHeight: typography.lineSmall,
-  },
-  unlockList: {
-    gap: spacing.sm,
-    marginTop: spacing.lg,
-  },
-  unlockRow: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    padding: spacing.md,
-  },
-  unlockCopy: {
-    gap: spacing.xs,
-  },
-  unlockTitleRow: {
-    alignItems: 'center',
     flexDirection: 'row',
     gap: spacing.sm,
-    justifyContent: 'space-between',
+    padding: spacing.md,
   },
-  unlockTitle: {
-    color: colors.ink,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  unlockMeta: {
+  nextUnlockLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '800',
+    fontWeight: '900',
   },
-  unlockFocus: {
+  nextUnlockTitle: {
     color: colors.primaryDark,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '800',
-    lineHeight: typography.lineSmall,
+    fontWeight: '900',
   },
 });

@@ -1,5 +1,25 @@
 # Agent Learning Log
 
+## 2026-06-27: Simpler Animated Home Instruction
+
+Simplified the Learn/Home screen again and added a real pulsing `Animated` instruction card. The page now keeps the hero CTA, a compact XP/level row, one animated `TAP` instruction, one active lesson card, and one tiny `Unlocks next` hint. The larger daily mission panel, path preview card and roleplay unlock preview were removed from Home to reduce noise.
+
+What went well:
+
+- Home now feels more app-led and less like a dashboard.
+- The animated instruction tells the user exactly what to do without adding another button.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- Browser preview at `http://localhost:8091/` loaded successfully and showed only two tap targets on Home.
+
+What went wrong:
+
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+- The animation is a subtle pulse only; richer motion should wait until the main flow is stable.
+
+Next suggested task:
+
+- Simplify the returning Roleplay screen so the answer input appears in the first viewport with one clear `Check answer` action.
+
 ## 2026-06-27: Single Active Learn Path
 
 Built one focused onboarding and practice-flow improvement: the Learn screen now shows one highlighted current lesson card and moves the rest of the path into softer preview rows. The quiet `What unlocks next` preview stays below that path, so the user sees one clear next action without losing a sense of progress.
