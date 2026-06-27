@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-27: Compact Roleplay Answer Card
+
+Made the first Roleplay answer card shorter and calmer so the learner reaches the answer box and `Check answer` action faster. The coach question now uses a smaller heading size, the answer field is slightly shorter, and warm-up cue spacing is tighter while keeping the same single-step practice flow.
+
+What went well:
+
+- This improved the highest-priority Roleplay issue without adding another component or feature.
+- The change stayed in one screen and only adjusted existing theme typography and spacing tokens.
+- The first viewport should now feel closer to one coach prompt, one answer area and one clear action.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the exact mobile fold still needs a screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Roleplay is already functionally simple; the remaining work is mostly reducing vertical height and optional visual noise.
+- Keep the answer field and primary check action visible as early as possible.
+- Avoid adding explanation above the answer box unless it directly helps the learner answer.
+
+Next suggested task:
+
+- Use the in-app browser/mobile preview to verify the Roleplay first viewport and adjust only if the answer CTA still falls too low.
+
 ## 2026-06-27: Compact Home Start Area
 
 Made the top of Home calmer and shorter. The first status row now keeps only streak and XP, and the animated start card uses tighter spacing, a smaller tap target and a smaller title size so the next action and the daily mission fit with less visual noise.

@@ -321,10 +321,10 @@ const styles = StyleSheet.create({
   promptText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.h2,
+    fontSize: typography.h3,
     fontWeight: '900',
-    lineHeight: typography.lineH2,
-    marginTop: spacing.lg,
+    lineHeight: typography.lineH3,
+    marginTop: spacing.md,
   },
   pressed: {
     opacity: 0.84,
@@ -339,8 +339,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: typography.lineBody,
-    minHeight: 150,
-    padding: spacing.lg,
+    minHeight: 132,
+    padding: spacing.md,
   },
   answerInputActive: {
     backgroundColor: colors.white,
@@ -362,15 +362,15 @@ const styles = StyleSheet.create({
     top: -4,
   },
   answerAction: {
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
   },
   warmupCueBox: {
     backgroundColor: colors.secondarySoft,
     borderColor: colors.secondary,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.lg,
-    padding: spacing.lg,
+    marginTop: spacing.md,
+    padding: spacing.md,
   },
   warmupCueLabel: {
     color: colors.secondaryDark,
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
   warmupCueNote: {
     color: colors.text,
