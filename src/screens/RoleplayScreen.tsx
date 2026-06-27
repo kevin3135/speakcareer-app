@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import {
   AppButton,
@@ -38,6 +38,7 @@ export function RoleplayScreen({
   startingLevelId,
 }: RoleplayScreenProps) {
   const answerInputRef = useRef<TextInput>(null);
+  const [answerPulse] = useState(() => new Animated.Value(0));
   const [draftAnswer, setDraftAnswer] = useState('');
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
@@ -54,6 +55,48 @@ export function RoleplayScreen({
   });
   const levelProfile = getStartingLevelProfile(startingLevelId);
   const isReviewStep = Boolean(feedbackResult);
+  const hasDraftAnswer = draftAnswer.trim().length > 0;
+  const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
+  const answerPulseStyle = {
+    opacity: answerPulse.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.16, 0.46],
+    }),
+    transform: [
+      {
+        scale: answerPulse.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.99, 1.035],
+        }),
+      },
+    ],
+  };
+
+  useEffect(() => {
+    if (!shouldPulseAnswer) {
+      answerPulse.stopAnimation(() => answerPulse.setValue(0));
+      return;
+    }
+
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(answerPulse, {
+          duration: 900,
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+        Animated.timing(answerPulse, {
+          duration: 900,
+          toValue: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+
+    pulse.start();
+
+    return () => pulse.stop();
+  }, [answerPulse, shouldPulseAnswer]);
 
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
@@ -154,24 +197,32 @@ export function RoleplayScreen({
             <Badge label="1 answer" tone="info" />
           </View>
           <Text style={styles.promptText}>{openingLine}</Text>
-          <TextInput
-            accessibilityHint="Type your roleplay answer"
-            accessibilityLabel="Roleplay answer"
-            multiline
-            onBlur={() => setIsAnswerFocused(false)}
-            onChangeText={(answer) => {
-              setDraftAnswer(answer);
-              setAnswerReview(null);
-              setFeedbackResult(null);
-            }}
-            onFocus={() => setIsAnswerFocused(true)}
-            placeholder={levelProfile.answerPlaceholder}
-            placeholderTextColor={colors.textMuted}
-            ref={answerInputRef}
-            style={[styles.answerInput, isAnswerFocused && styles.answerInputActive]}
-            textAlignVertical="top"
-            value={draftAnswer}
-          />
+          <View style={styles.answerInputShell}>
+            {shouldPulseAnswer ? (
+              <Animated.View
+                pointerEvents="none"
+                style={[styles.answerPulseRing, answerPulseStyle]}
+              />
+            ) : null}
+            <TextInput
+              accessibilityHint="Type your roleplay answer"
+              accessibilityLabel="Roleplay answer"
+              multiline
+              onBlur={() => setIsAnswerFocused(false)}
+              onChangeText={(answer) => {
+                setDraftAnswer(answer);
+                setAnswerReview(null);
+                setFeedbackResult(null);
+              }}
+              onFocus={() => setIsAnswerFocused(true)}
+              placeholder={levelProfile.answerPlaceholder}
+              placeholderTextColor={colors.textMuted}
+              ref={answerInputRef}
+              style={[styles.answerInput, (isAnswerFocused || hasDraftAnswer) && styles.answerInputActive]}
+              textAlignVertical="top"
+              value={draftAnswer}
+            />
+          </View>
           <View style={styles.answerAction}>
             <AppButton
               disabled={draftAnswer.trim().length === 0}
@@ -269,13 +320,27 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: typography.lineBody,
-    marginTop: spacing.md,
     minHeight: 150,
     padding: spacing.lg,
   },
   answerInputActive: {
     backgroundColor: colors.white,
     borderColor: colors.primary,
+  },
+  answerInputShell: {
+    marginTop: spacing.md,
+    position: 'relative',
+  },
+  answerPulseRing: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+    borderRadius: radius.xl,
+    borderWidth: 2,
+    bottom: -4,
+    left: -4,
+    position: 'absolute',
+    right: -4,
+    top: -4,
   },
   answerAction: {
     marginTop: spacing.lg,

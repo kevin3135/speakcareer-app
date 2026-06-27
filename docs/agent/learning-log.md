@@ -1,5 +1,26 @@
 # Agent Learning Log
 
+## 2026-06-27: Animated Roleplay Answer Cue
+
+Added a subtle pulsing focus ring around the empty Roleplay answer field. The cue appears only before the learner has focused or typed, then disappears so the screen stays calm. The answer field now also keeps its active styling once text is present, making the next action feel more obvious without adding more copy.
+
+What went well:
+
+- The Roleplay step now visually points to the exact place the learner should tap.
+- The change stayed inside the existing Roleplay screen and did not add buttons, screens or integrations.
+- Theme colors and spacing tokens were used; no raw colors were added to screens/components.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first lint run caught a React ref rule around `Animated.Value`; it was fixed by initializing the animation value with state.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+- This run did not include browser screenshot QA, so the animation was verified through code inspection and automated checks.
+
+Next best design task:
+
+- Simplify the Learn/Home top area one more step by showing only the active lesson path, XP/streak and one animated start cue in the first viewport.
+
 ## 2026-06-27: Short Roleplay Step Header
 
 Simplified the active Roleplay header so the game step shows `Step 1 of 3` with `Your turn`, then changes to `Step 2 of 3` with `Better English` after checking an answer. The saved state no longer repeats a separate screen header above the success card, and the first prompt card now says `Question` with a simple `1 answer` badge.
