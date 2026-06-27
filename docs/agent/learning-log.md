@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Foundation-to-Interview Starter Handoff
+
+Made one focused practice-flow improvement: after the learner finishes the Foundation sentence, the screen now shows a compact handoff card for `Quest 1: Job Interview` with a level-matched starter answer and the matching coach note. This makes the first interview response easier to begin before the learner enters Roleplay.
+
+What went well:
+
+- The improvement stayed inside the existing Foundation-to-Roleplay path and reused the existing starting-level profile data.
+- A tiny helper now keeps the handoff copy explicit instead of burying it inside the screen.
+- The new card gives the learner one concrete next sentence without adding another step or storing new data.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the completed Foundation state still needs a quick phone-sized spacing check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first interview feels easier when the app carries one exact sentence starter from Foundation into the next step.
+- Reuse starting-level profiles for scaffolding before inventing new onboarding or practice state.
+- Keep handoff support compact and concrete so the learner still reaches the main CTA quickly.
+
+Next suggested task:
+
+- Show the same level-matched starter answer as an optional reminder at the top of the very first Job Interview answer card.
+
 ## 2026-06-28: Compact Onboarding Plan Card
 
 Made the onboarding first-path preview more compact after level selection. The plan card now uses tighter padding, a smaller level title, shorter step spacing and two-line limits for coach, step detail and starter text so the `Continue` action has a better chance of staying close on small phones.

@@ -11,6 +11,7 @@ import {
 import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { StartingLevelId } from '../types';
+import { createFoundationHandoff } from '../utils/foundationHandoff';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type FoundationScreenProps = {
@@ -28,6 +29,11 @@ export function FoundationScreen({ onBack, onStartCareerPractice, startingLevelI
   const activeStepIndex = Math.min(completedSteps, totalSteps - 1);
   const activePart = foundationStart.structure[activeStepIndex];
   const activePiece = sentencePieces[activeStepIndex];
+  const handoff = createFoundationHandoff({
+    coachNote: levelProfile.coachMessage,
+    nextQuestTitle: guidedStart.title,
+    starterAnswer: levelProfile.starterAnswer,
+  });
   const builtSentence =
     completedSteps > 0
       ? sentencePieces.slice(0, completedSteps).join(' ')
@@ -91,6 +97,26 @@ export function FoundationScreen({ onBack, onStartCareerPractice, startingLevelI
         <View style={styles.previewSentence}>
           <Text style={styles.previewSentenceText}>{builtSentence}</Text>
         </View>
+      ) : null}
+
+      {isComplete ? (
+        <Card tone="accent">
+          <View style={styles.handoffHeader}>
+            <Text style={styles.handoffKicker}>{handoff.eyebrow}</Text>
+            <Badge label="Quest 1" tone="accent" />
+          </View>
+          <Text style={styles.handoffTitle}>{handoff.title}</Text>
+          <Text style={styles.handoffBody}>{handoff.body}</Text>
+          <View style={styles.handoffExampleBox}>
+            <Text style={styles.handoffExampleLabel}>{handoff.starterLabel}</Text>
+            <Text numberOfLines={2} style={styles.handoffExampleText}>
+              {handoff.starterAnswer}
+            </Text>
+          </View>
+          <Text numberOfLines={2} style={styles.handoffCoachNote}>
+            {handoff.coachNote}
+          </Text>
+        </Card>
       ) : null}
 
       <AppButton
@@ -195,5 +221,60 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
+  },
+  handoffHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  handoffKicker: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  handoffTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.sm,
+  },
+  handoffBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  handoffExampleBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  handoffExampleLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  handoffExampleText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  handoffCoachNote: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.md,
   },
 });

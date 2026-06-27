@@ -341,6 +341,36 @@ test('personalizes the first lesson and answer starter by starting level', async
   assert.equal(getStartingLevelProfile(null).foundationExample, basicProfile.foundationExample);
 });
 
+test('creates a level-matched foundation handoff before the first interview', async () => {
+  const { guidedStart } = await import('../src/data/guidedIntro.ts');
+  const { createFoundationHandoff } = await import('../src/utils/foundationHandoff.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const confidentProfile = getStartingLevelProfile('confident');
+  const starterHandoff = createFoundationHandoff({
+    coachNote: starterProfile.coachMessage,
+    nextQuestTitle: guidedStart.title,
+    starterAnswer: starterProfile.starterAnswer,
+  });
+  const confidentHandoff = createFoundationHandoff({
+    coachNote: confidentProfile.coachMessage,
+    nextQuestTitle: guidedStart.title,
+    starterAnswer: confidentProfile.starterAnswer,
+  });
+
+  assert.equal(starterHandoff.eyebrow, 'Next step');
+  assert.equal(starterHandoff.title, 'Quest 1: Job Interview');
+  assert.equal(starterHandoff.starterLabel, 'Starter answer');
+  assert.ok(starterHandoff.body.includes('first interview answer'));
+  assert.ok(starterHandoff.coachNote.includes('Keep it simple'));
+  assert.ok(starterHandoff.starterAnswer.includes('The result was'));
+
+  assert.ok(confidentHandoff.coachNote.includes('business result'));
+  assert.ok(confidentHandoff.starterAnswer.includes('As a result'));
+  assert.notEqual(confidentHandoff.starterAnswer, starterHandoff.starterAnswer);
+});
+
 test('provides mock feedback and mistake-bank data', () => {
   for (const roleplay of practiceContent.roleplays) {
     assert.ok(roleplay.feedback.summary.length > 20);
