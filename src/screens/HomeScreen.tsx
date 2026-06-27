@@ -3,6 +3,8 @@ import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-nativ
 
 import {
   Badge,
+  Card,
+  ProgressBar,
   ScreenContainer,
   StreakBadge,
   XPBadge,
@@ -12,7 +14,9 @@ import { foundationStart } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
+import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -28,6 +32,13 @@ export function HomeScreen({
   sessions,
 }: HomeScreenProps) {
   const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
+  const localProgress = createLocalProgressStats(progressData.summary, sessions, dailyTarget);
+  const missionCard = createHomeDailyMissionCard({
+    dailyMission: mission,
+    dailyTarget,
+    localProgress,
+    sessions,
+  });
   const learnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
     foundationTitle: foundationStart.title,
@@ -61,6 +72,28 @@ export function HomeScreen({
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
       />
+
+      <Card style={styles.missionCard} tone="muted">
+        <View style={styles.missionHeader}>
+          <View style={styles.missionCopy}>
+            <Text style={styles.missionKicker}>Daily mission</Text>
+            <Text style={styles.missionTitle}>{missionCard.title}</Text>
+          </View>
+          <Badge label={missionCard.targetLabel} tone="secondary" />
+        </View>
+        <Text style={styles.missionBody}>{missionCard.body}</Text>
+        <View style={styles.missionProgress}>
+          <ProgressBar
+            label={missionCard.progressLabel}
+            tone="success"
+            value={missionCard.progressPercent}
+          />
+        </View>
+        <View style={styles.missionFooter}>
+          <Text style={styles.missionMeta}>{missionCard.meta}</Text>
+          <XPBadge label={missionCard.rewardLabel} />
+        </View>
+      </Card>
 
       {nextUnlock ? (
         <View style={styles.nextUnlock}>
@@ -254,6 +287,54 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     padding: spacing.md,
+  },
+  missionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  missionCard: {
+    padding: spacing.md,
+  },
+  missionCopy: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  missionFooter: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+  },
+  missionHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  missionKicker: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  missionMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  missionProgress: {
+    marginTop: spacing.md,
+  },
+  missionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
   },
   nextUnlockLabel: {
     color: colors.textMuted,

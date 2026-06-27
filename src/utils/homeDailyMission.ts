@@ -32,14 +32,14 @@ export function createHomeDailyMissionCard({
 
   if (completed === 0) {
     return {
-      body: 'Write 2-4 spoken sentences, review one clearer version and save it to Progress.',
+      body: 'Finish the short foundation step, then save one guided answer to start your streak.',
       meta: '5-minute sprint',
       progressLabel: 'Mission progress',
       progressPercent: 0,
       reason: 'A small daily answer makes real interview English easier when it matters.',
       rewardLabel: dailyMission.rewardLabel,
       targetLabel,
-      title: 'Save one Job Interview answer',
+      title: 'Save your first practice answer',
     };
   }
 

@@ -1037,11 +1037,11 @@ test('creates one clear Home daily mission card', async () => {
     sessions: [],
   });
 
-  assert.equal(firstRunMission.title, 'Save one Job Interview answer');
+  assert.equal(firstRunMission.title, 'Save your first practice answer');
   assert.equal(firstRunMission.meta, '5-minute sprint');
   assert.equal(firstRunMission.targetLabel, '0/1 saved');
   assert.equal(firstRunMission.progressPercent, 0);
-  assert.ok(firstRunMission.body.includes('2-4 spoken sentences'));
+  assert.ok(firstRunMission.body.includes('foundation'));
   assert.ok(firstRunMission.reason.includes('interview English'));
 
   const partialMission = createHomeDailyMissionCard({

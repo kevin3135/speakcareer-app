@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-27: Home Daily Mission Strip
+
+Added a compact daily mission strip to the Home screen so the learner sees today's target progress directly under the main start card. The strip now shows one professional mission title, `saved` progress, a progress bar and the XP reward, while keeping the primary tap target focused on the current lesson.
+
+What went well:
+
+- This made the habit loop more visible without adding a second CTA or a new screen.
+- The existing `createHomeDailyMissionCard` and `createLocalProgressStats` helpers were reused instead of adding more state logic to Home.
+- First-run mission copy is now more accurate because it points to the foundation step before the first saved answer.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include Expo/browser visual QA, so the new strip still needs a quick mobile spacing check.
+- The mission strip is still based on local mock progress, not a real date-aware streak/history model yet.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home can carry one quiet progress surface as long as the main start card remains the only obvious action.
+- Mission copy must respect the first-run order: foundation first, then the first saved roleplay.
+- Reuse existing local progress helpers before inventing another home-state layer.
+
+Next suggested task:
+
+- Add a compact post-save "daily target complete" state on Home so the learner gets a stronger same-day finish cue after hitting the goal.
+
 ## 2026-06-27: Persisted Mistake Drill Practice
 
 Persisted the top Wins correction drill locally so the learner can mark one correction as practiced and return to a real `Practiced once` state later. The Progress drill now shows a short repeat-status panel, stores practiced mistake IDs in AsyncStorage, and keeps the linked roleplay CTA available for immediate reuse.
@@ -4303,3 +4339,4 @@ Agent memory for next time:
 Next suggested task:
 
 - Combine the Answer plan and Helpful phrases helper blocks into one compact writing support area.
+
