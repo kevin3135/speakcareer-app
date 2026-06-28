@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Focused Roleplay Save Step
+
+Made one focused Roleplay feedback polish: after the learner taps `Use better English` and checks the improved answer again, the feedback card no longer repeats the same secondary action. The next visible action becomes the `Save answer` card, which keeps the loop clearer: answer, improve, save.
+
+What went well:
+
+- This removes a repeated choice instead of adding another button.
+- The change stays local to `RoleplayScreen` with one small state flag for whether the better rewrite has already been applied.
+- Manual edits, starter help and warm-up starters reset the flag, so the helper action can return when it is useful again.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the post-rewrite feedback/save state should still be checked in the local preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- After a learner applies the rewrite, stop offering the same rewrite action again.
+- Preserve one clear next action per roleplay state, especially around feedback and save.
+- Reset helper state when the learner edits or uses another starter path.
+
+Next suggested task:
+
+- Mobile-preview the full answer, feedback, use-rewrite and save loop to confirm the card stack feels simple on a 390px viewport.
+
 ## 2026-06-28: Better English Retry Action
 
 Made one focused Roleplay feedback polish: when feedback is ready, the secondary feedback action now says `Use better English` and moves the suggested rewrite back into the answer box. This replaces the vague `Try again` action with a clearer one-tap improvement loop.

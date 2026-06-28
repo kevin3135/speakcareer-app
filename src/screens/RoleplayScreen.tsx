@@ -69,6 +69,7 @@ export function RoleplayScreen({
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
   const [savedSession, setSavedSession] = useState<PracticeSession | null>(null);
   const [followUpAnswer, setFollowUpAnswer] = useState('');
+  const [hasAppliedBetterEnglish, setHasAppliedBetterEnglish] = useState(false);
   const [isFollowUpOpen, setIsFollowUpOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
 
@@ -187,6 +188,7 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setAnswerReview(null);
     setFollowUpAnswer('');
+    setHasAppliedBetterEnglish(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
     answerInputRef.current?.focus();
@@ -201,6 +203,7 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setAnswerReview(null);
     setFollowUpAnswer('');
+    setHasAppliedBetterEnglish(true);
     setIsFollowUpOpen(false);
     setSavedSession(null);
   }
@@ -241,6 +244,7 @@ export function RoleplayScreen({
     setDraftAnswer(starterReminder.starterAnswer);
     setAnswerReview(null);
     setFeedbackResult(null);
+    setHasAppliedBetterEnglish(false);
     answerInputRef.current?.focus();
   }
 
@@ -252,6 +256,7 @@ export function RoleplayScreen({
     setDraftAnswer(warmupCue.starterAnswer);
     setAnswerReview(null);
     setFeedbackResult(null);
+    setHasAppliedBetterEnglish(false);
     answerInputRef.current?.focus();
   }
 
@@ -386,6 +391,7 @@ export function RoleplayScreen({
                 setDraftAnswer(answer);
                 setAnswerReview(null);
                 setFeedbackResult(null);
+                setHasAppliedBetterEnglish(false);
               }}
               onFocus={() => setIsAnswerFocused(true)}
               placeholder={levelProfile.answerPlaceholder}
@@ -435,20 +441,22 @@ export function RoleplayScreen({
             <Text style={styles.betterEnglishLabel}>Better English</Text>
             <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
           </View>
-          <View style={styles.feedbackActions}>
-            <View style={styles.feedbackActionItem}>
-              <AppButton
-                accessibilityHint={
-                  answerReview?.isReadyForFeedback
-                    ? 'Moves the better English rewrite back into the answer box'
-                    : 'Returns to the answer box so you can add more detail'
-                }
-                label={answerReview?.isReadyForFeedback ? 'Use better English' : 'Add more first'}
-                onPress={answerReview?.isReadyForFeedback ? useBetterEnglishAnswer : retryAnswer}
-                variant="secondary"
-              />
+          {answerReview?.isReadyForFeedback && hasAppliedBetterEnglish ? null : (
+            <View style={styles.feedbackActions}>
+              <View style={styles.feedbackActionItem}>
+                <AppButton
+                  accessibilityHint={
+                    answerReview?.isReadyForFeedback
+                      ? 'Moves the better English rewrite back into the answer box'
+                      : 'Returns to the answer box so you can add more detail'
+                  }
+                  label={answerReview?.isReadyForFeedback ? 'Use better English' : 'Add more first'}
+                  onPress={answerReview?.isReadyForFeedback ? useBetterEnglishAnswer : retryAnswer}
+                  variant="secondary"
+                />
+              </View>
             </View>
-          </View>
+          )}
         </Card>
       ) : null}
 
