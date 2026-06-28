@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Tighter Progress Latest Win Card
+
+Made one focused Progress design improvement: when a saved session has a coach target, the `Latest win` card now leads with one `Next correction` panel and moves the saved answer into a quiet one-line context row.
+
+Why it changed:
+
+- Progress should reinforce one correction, not feel like a report with answer preview, summary and coaching target competing.
+- Kevin wants the app to guide the learner toward the next useful action with less text.
+- Putting the correction first keeps the loop consistent with Roleplay's one-step feedback style.
+
+What went well:
+
+- The change stayed inside `src/screens/ProgressScreen.tsx` and only adjusted the latest-win card hierarchy.
+- Legacy sessions without a stored coach target still show the older preview and feedback summary fallback.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include live Expo/mobile screenshot QA, so the new answer context row should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Tighten the Progress mistake-bank section so it shows one active drill first and keeps the queue visually secondary.
+
 ## 2026-06-28: Progress Next-Step Status Badge
 
 Made one focused Progress design improvement: the main next-step card now shows a compact status badge such as `First save`, `Guided path`, `Back on path`, `Target done` or `Optional replay`.

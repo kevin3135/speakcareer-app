@@ -197,24 +197,35 @@ export function ProgressScreen({
               <Text style={styles.metaLine}>
                 {formatSessionDate(latestSession.completedAt)} - {latestSession.wordCount} words - +{latestSession.xpReward} XP
               </Text>
-              <Text numberOfLines={2} style={styles.sessionPreview}>
-                {latestSession.answerPreview}
-              </Text>
-              <Text numberOfLines={2} style={styles.sessionFeedback}>
-                {latestSession.feedbackSummary}
-              </Text>
               {latestSessionFocusText ? (
-                <View style={styles.latestFocusBox}>
-                  <View style={styles.rowBetween}>
-                    <Text style={styles.latestFocusLabel}>Carry this next</Text>
-                    <Badge
-                      label={latestSession.nextFocusLabel?.trim() || 'Coach target'}
-                      tone="accent"
-                    />
+                <>
+                  <View style={styles.latestFocusBox}>
+                    <View style={styles.rowBetween}>
+                      <Text style={styles.latestFocusLabel}>Next correction</Text>
+                      <Badge
+                        label={latestSession.nextFocusLabel?.trim() || 'Coach target'}
+                        tone="accent"
+                      />
+                    </View>
+                    <Text style={styles.latestFocusText}>{latestSessionFocusText}</Text>
                   </View>
-                  <Text style={styles.latestFocusText}>{latestSessionFocusText}</Text>
-                </View>
-              ) : null}
+                  <View style={styles.latestAnswerBox}>
+                    <Text style={styles.latestAnswerLabel}>Saved answer</Text>
+                    <Text numberOfLines={1} style={styles.latestAnswerText}>
+                      {latestSession.answerPreview}
+                    </Text>
+                  </View>
+                </>
+              ) : (
+                <>
+                  <Text numberOfLines={2} style={styles.sessionPreview}>
+                    {latestSession.answerPreview}
+                  </Text>
+                  <Text numberOfLines={2} style={styles.sessionFeedback}>
+                    {latestSession.feedbackSummary}
+                  </Text>
+                </>
+              )}
               <View style={styles.cardAction}>
                 <AppButton
                   label="Retry this scenario"
@@ -532,9 +543,29 @@ const styles = StyleSheet.create({
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
-    fontWeight: '800',
+    fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.sm,
+  },
+  latestAnswerBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.md,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  latestAnswerLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  latestAnswerText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   unlockLabel: {
     color: colors.primaryDark,
