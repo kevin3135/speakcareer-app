@@ -593,12 +593,14 @@ export function RoleplayScreen({
           >
             <View style={styles.oneThingHeader}>
               <Text style={styles.writingSupportToggleLabel}>{writingSupport.title}</Text>
-              <Badge label={writingSupport.summaryLabel} tone="info" />
-            </View>
-            <View style={styles.writingSupportToggleMeta}>
-              <Text style={styles.writingSupportHelperText}>{writingSupport.helperText}</Text>
               <Text style={styles.writingSupportToggleCta}>{writingSupport.toggleLabel}</Text>
             </View>
+            {isWritingSupportOpen ? (
+              <View style={styles.writingSupportToggleMeta}>
+                <Text style={styles.writingSupportHelperText}>{writingSupport.helperText}</Text>
+                <Badge label={writingSupport.summaryLabel} tone="info" />
+              </View>
+            ) : null}
           </Pressable>
           {isWritingSupportOpen ? (
             <View style={styles.writingSupportBox}>

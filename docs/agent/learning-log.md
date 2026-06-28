@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Quieter Writing Support Toggle
+
+Made one focused Roleplay polish: the collapsed `Writing support` drawer now shows only a short label and `More`, while the helper copy and support badge appear only after the learner opens it.
+
+Why it changed:
+
+- The drawer was collapsed, but it still showed helper text and a support badge under the answer box.
+- Kevin wants the practice step to stay simple and avoid extra visible instructions unless the learner asks for help.
+- A one-line closed drawer keeps writing support available without competing with the answer field or `Check answer`.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No helper logic, content data, storage or backend behavior changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the opened drawer still needs a narrow-phone check for phrase-chip wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the opened writing support drawer on mobile and tighten phrase chips only if they wrap awkwardly.
+
 ## 2026-06-28: Compact Roleplay Writing Support Drawer
 
 Made one focused Roleplay improvement: the answer step now has one compact `Writing support` drawer that quietly combines a coach note, a short answer plan, and tap-to-insert helpful phrases without pushing the main answer box out of focus.
