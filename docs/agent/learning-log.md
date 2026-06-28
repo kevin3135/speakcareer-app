@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Progress Correction Queue
+
+Made one focused Progress/Mistake Bank polish: the correction queue now caps its body and correction text to two lines, shows only the first two queued corrections, and summarizes the rest with a quiet count. The active correction still stays above, while the queue feels lighter on mobile.
+
+What went well:
+
+- This keeps the new active correction loop intact while reducing lower-page visual weight.
+- The change stayed inside one screen and reused existing `Card`, `Badge`, colors, spacing and typography tokens.
+- The user still understands there are more corrections, but does not see a long review stack.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the correction queue should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Mistake Bank should show one active correction and a quiet queue, not a full list.
+- Use line limits and item caps before adding new collapse state.
+- Keep correction review scannable so Progress still feels like coaching.
+
+Next suggested task:
+
+- Add a `Retry this scenario` CTA to the `Latest win` card so Progress turns the saved answer into one-tap practice.
+
 ## 2026-06-28: Active Progress Mistake Queue
 
 Made one focused Progress improvement: the active correction drill now advances to the next unpracticed mistake after the learner marks one as practiced, and the long mistake-bank card list is replaced with a compact correction queue. This keeps Progress coaching one clear English fix at a time instead of repeating the same top mistake and showing a long review stack.

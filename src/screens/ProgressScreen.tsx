@@ -289,10 +289,10 @@ export function ProgressScreen({
                 </View>
                 <Badge label={mistakeQueue.progressLabel} tone="info" />
               </View>
-              <Text style={styles.cardBody}>{mistakeQueue.body}</Text>
+              <Text numberOfLines={2} style={styles.cardBody}>{mistakeQueue.body}</Text>
               {mistakeQueue.items.length > 0 ? (
                 <View style={styles.queueList}>
-                  {mistakeQueue.items.map((mistake) => (
+                  {mistakeQueue.items.slice(0, 2).map((mistake) => (
                     <View key={mistake.id} style={styles.queueItem}>
                       <View style={styles.rowBetween}>
                         <Badge
@@ -304,9 +304,16 @@ export function ProgressScreen({
                           tone={mistake.isPracticed ? 'success' : 'info'}
                         />
                       </View>
-                      <Text style={styles.queueCorrection}>{mistake.correction}</Text>
+                      <Text numberOfLines={2} style={styles.queueCorrection}>
+                        {mistake.correction}
+                      </Text>
                     </View>
                   ))}
+                  {mistakeQueue.items.length > 2 ? (
+                    <Text style={styles.queueMoreLabel}>
+                      +{mistakeQueue.items.length - 2} quieter review items
+                    </Text>
+                  ) : null}
                 </View>
               ) : null}
             </Card>
@@ -523,7 +530,14 @@ const styles = StyleSheet.create({
   },
   queueList: {
     gap: spacing.sm,
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
+  },
+  queueMoreLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textAlign: 'center',
   },
   mistakeCorrection: {
     backgroundColor: colors.secondarySoft,
