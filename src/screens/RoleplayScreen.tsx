@@ -520,20 +520,6 @@ export function RoleplayScreen({
               />
             </View>
           </View>
-          <View style={styles.dailyTargetPreviewBox}>
-            <View style={styles.oneThingHeader}>
-              <Text style={styles.dailyTargetPreviewLabel}>Today</Text>
-              <Badge label={targetPreview.badgeLabel} tone={targetPreview.tone} />
-            </View>
-            <Text style={styles.dailyTargetPreviewTitle}>{targetPreview.title}</Text>
-            <View style={styles.dailyTargetPreviewProgress}>
-              <ProgressBar
-                label={targetPreview.progressLabel}
-                tone={targetPreview.tone}
-                value={targetPreview.progressPercent}
-              />
-            </View>
-          </View>
           {starterReminder && !warmupCue && !hasDraftAnswer ? (
             <Pressable
               accessibilityHint="Adds a simple starter answer to the answer box"
@@ -555,6 +541,19 @@ export function RoleplayScreen({
               label="Check answer"
               onPress={reviewAnswer}
             />
+          </View>
+          <View style={styles.dailyTargetPreviewBox}>
+            <View style={styles.oneThingHeader}>
+              <Text style={styles.dailyTargetPreviewLabel}>After save</Text>
+              <Badge label={targetPreview.badgeLabel} tone={targetPreview.tone} />
+            </View>
+            <View style={styles.dailyTargetPreviewProgress}>
+              <ProgressBar
+                label={targetPreview.progressLabel}
+                tone={targetPreview.tone}
+                value={targetPreview.progressPercent}
+              />
+            </View>
           </View>
         </Card>
       ) : null}
@@ -893,26 +892,18 @@ const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   dailyTargetPreviewBox: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
   },
   dailyTargetPreviewLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-  },
-  dailyTargetPreviewTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
   },
   dailyTargetPreviewProgress: {
     marginTop: spacing.sm,

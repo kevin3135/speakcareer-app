@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Quieter Roleplay Target Preview
+
+Made one focused Roleplay answer-step polish: the daily target preview now appears after `Check answer` as a compact row, instead of interrupting the answer-to-check flow as a fuller card.
+
+Why it changed:
+
+- The learner's main job in the answer step is to type one answer and check it.
+- The daily target cue is motivating, but it should not sit between the answer box and the primary action.
+- Moving it below the CTA keeps the habit loop visible while making `Check answer` feel like the obvious next tap.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- The preview still uses the existing target helper and progress bar, so no new state or feature logic was added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the new order should still be checked on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the full Roleplay answer screen and decide whether the compact target row should become even smaller or disappear until the answer has text.
+
 ## 2026-06-28: Quieter Roleplay Bonus Chip
 
 Made one focused Roleplay save-step polish: the collapsed optional bonus turn is now a small chip instead of a wide helper row with body copy and a separate button.
