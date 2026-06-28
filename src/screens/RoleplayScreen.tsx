@@ -334,22 +334,6 @@ export function RoleplayScreen({
               <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>
             </View>
           ) : null}
-          {starterReminder && !hasDraftAnswer ? (
-            <View style={styles.starterReminderBox}>
-              <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
-              <Text style={styles.starterReminderNote}>{starterReminder.body}</Text>
-              <Text numberOfLines={3} style={styles.starterReminderText}>
-                {starterReminder.starterAnswer}
-              </Text>
-              <View style={styles.starterReminderAction}>
-                <AppButton
-                  label={starterReminder.ctaLabel}
-                  onPress={useStarterAnswer}
-                  variant="secondary"
-                />
-              </View>
-            </View>
-          ) : null}
           <View style={styles.answerInputShell}>
             {shouldPulseAnswer ? (
               <Animated.View
@@ -376,6 +360,24 @@ export function RoleplayScreen({
               value={draftAnswer}
             />
           </View>
+          {starterReminder && !hasDraftAnswer ? (
+            <View style={styles.starterReminderRow}>
+              <View style={styles.starterReminderCopy}>
+                <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
+                <Text numberOfLines={1} style={styles.starterReminderNote}>
+                  {starterReminder.body}
+                </Text>
+              </View>
+              <View style={styles.starterReminderButton}>
+                <AppButton
+                  label={starterReminder.ctaLabel}
+                  onPress={useStarterAnswer}
+                  size="small"
+                  variant="quiet"
+                />
+              </View>
+            </View>
+          ) : null}
           <View style={styles.answerAction}>
             <AppButton
               disabled={draftAnswer.trim().length === 0}
@@ -647,16 +649,25 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
-  starterReminderBox: {
+  starterReminderRow: {
+    alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
+    borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  starterReminderCopy: {
+    flex: 1,
+    minWidth: 0,
   },
   starterReminderLabel: {
-    color: colors.primaryDark,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
@@ -666,18 +677,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
   },
-  starterReminderText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
-  },
-  starterReminderAction: {
-    marginTop: spacing.md,
+  starterReminderButton: {
+    minWidth: 116,
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,

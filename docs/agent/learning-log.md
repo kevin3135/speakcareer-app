@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Roleplay Starter Help
+
+Made one focused Roleplay polish: the first Job Interview starter help is no longer a full text block before the answer field. It now appears as a compact helper row after the answer box, with one small `Use starter` action. This keeps the first viewport closer to the simple flow: question, answer, check.
+
+What went well:
+
+- The first quest cue remains visible, but the starter answer no longer competes with the main task.
+- The user still has a shortcut if they are stuck, and tapping it fills the same starter answer as before.
+- The change stayed inside `RoleplayScreen` and reused the existing `AppButton`, spacing, radius, typography and color tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run still did not capture a fresh phone-sized screenshot, so the first Job Interview viewport needs visual confirmation in the browser or Expo Go.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Starter help is useful, but it should sit below the answer field so the learner sees the main task first.
+- Do not show full starter answers unless the user asks for help.
+- For first-run screens, reduce visible helper copy before adding more guidance.
+
+Next suggested task:
+
+- Preview the first Job Interview on a 390px mobile viewport and tune the vertical spacing if the cue, question and answer field still feel crowded.
+
 ## 2026-06-28: First Roleplay Arrival Cue
 
 Made one focused Roleplay polish: the first Job Interview now shows a compact `First quest` arrival cue before the question when there are no saved sessions yet. It reuses the existing guided-start data, shows `0/1 saved`, and keeps the instruction short so the first real practice feels like the next step after Foundation instead of a fresh choice screen.
