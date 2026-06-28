@@ -48,7 +48,7 @@ export function createProgressMistakeBankQueue(
     category: mistake.category,
     correction: mistake.correction,
     isPracticed: practicedMistakeIdSet.has(mistake.id),
-    statusLabel: practicedMistakeIdSet.has(mistake.id) ? 'Done' : 'Next',
+    statusLabel: practicedMistakeIdSet.has(mistake.id) ? 'Done' : 'Later',
   }));
   const practicedCount = prioritizedMistakes.filter(
     (mistake) => practicedMistakeIdSet.has(mistake.id),
@@ -77,11 +77,11 @@ export function createProgressMistakeBankQueue(
 
   return {
     body: practicedCount === 0
-      ? 'Stay with one active correction first. The rest wait here so Progress coaches one clear improvement at a time.'
-      : 'Nice. Progress moved you to the next correction. The rest stay queued here instead of competing for attention.',
+      ? 'One correction is active above. The rest stay here for later so Progress coaches one clear improvement at a time.'
+      : 'Nice. Progress moved you to the next correction. The rest stay saved for later instead of competing for attention.',
     eyebrow: 'Correction queue',
     items: queueItems,
     progressLabel: `${practicedCount}/${prioritizedMistakes.length} practiced`,
-    title: `${upcomingCount} more ${upcomingCount === 1 ? 'correction' : 'corrections'} waiting`,
+    title: `${upcomingCount} saved for later`,
   };
 }

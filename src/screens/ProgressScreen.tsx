@@ -354,7 +354,7 @@ export function ProgressScreen({
                   ))}
                   {hiddenMistakeQueueCount > 0 ? (
                     <Text style={styles.queueMoreLabel}>
-                      {hiddenMistakeQueueCount} hidden until you need them
+                      {hiddenMistakeQueueCount} saved for later
                     </Text>
                   ) : null}
                   {mistakeQueue.items.length > 1 ? (

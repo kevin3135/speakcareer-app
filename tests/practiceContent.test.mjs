@@ -1207,20 +1207,20 @@ test('keeps the unlocked mistake bank focused on one active correction', async (
 
   const initialQueue = createProgressMistakeBankQueue(progressMock.mistakeBank, []);
   assert.equal(initialQueue.eyebrow, 'Correction queue');
-  assert.equal(initialQueue.title, '3 more corrections waiting');
+  assert.equal(initialQueue.title, '3 saved for later');
   assert.equal(initialQueue.progressLabel, '0/4 practiced');
   assert.deepEqual(
     initialQueue.items.map((item) => item.category),
     ['Meeting Clarity', 'Sales Calls', 'Small Talk'],
   );
-  assert.ok(initialQueue.body.includes('one active correction'));
+  assert.ok(initialQueue.body.includes('active above'));
 
   const nextQueue = createProgressMistakeBankQueue(progressMock.mistakeBank, ['m-001']);
-  assert.equal(nextQueue.title, '2 more corrections waiting');
+  assert.equal(nextQueue.title, '2 saved for later');
   assert.equal(nextQueue.progressLabel, '1/4 practiced');
   assert.deepEqual(
     nextQueue.items.map((item) => `${item.category}:${item.statusLabel}`),
-    ['Sales Calls:Next', 'Small Talk:Next', 'Interview Structure:Done'],
+    ['Sales Calls:Later', 'Small Talk:Later', 'Interview Structure:Done'],
   );
   assert.ok(nextQueue.body.includes('moved you to the next correction'));
 

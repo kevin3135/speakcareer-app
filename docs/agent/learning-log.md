@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Quieter Progress Mistake Queue
+
+Made one focused Progress mistake-bank polish: queued corrections now read as saved for later instead of competing with the active correction.
+
+Why it changed:
+
+- The active mistake drill should be the one clear correction the learner acts on.
+- Queue badges previously said `Next`, which made the waiting list feel like another immediate action.
+- Renaming queued corrections to `Later` and `saved for later` keeps the queue useful but visually and mentally secondary.
+
+What went well:
+
+- The change stayed focused in `src/utils/progressMistakeBankQueue.ts`, `src/screens/ProgressScreen.tsx` and the related test.
+- The active drill behavior did not change; only the queue framing changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first test run failed because one assertion still expected the old body copy; updating the assertion fixed it.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the Progress screen and tighten only if the mistake queue badges or saved-for-later text wrap awkwardly.
+
 ## 2026-06-28: Clearer Completion Daily Target Badge
 
 Made one focused Roleplay completion polish: after saving a lesson, the completion hero now shows the daily target state as a human action label like `One more sprint today`, `2 sprints left today` or `Daily target complete`.
