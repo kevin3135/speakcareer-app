@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Home Level Strip
+
+Made one focused Home polish: the level progress area inside the main `START` card is now a slimmer strip with the current level, one progress label and the progress track.
+
+Why it changed:
+
+- The Home start card had become more motivating after the daily habit badge, but the level box still used three rows.
+- Kevin wants the app to stay extremely simple at the start, with one obvious action and less visual weight.
+- A compact strip keeps progress visible without pushing the daily mission and next unlock further down.
+
+What went well:
+
+- The change stayed inside `src/screens/HomeScreen.tsx`.
+- No progress data, navigation, storage or backend behavior changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the Home card should still be checked at `390x844`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the Home screen and decide whether the separate daily mission card can become even quieter now that the start card shows the daily target.
+
 ## 2026-06-28: Home Start Habit Badge
 
 Made one focused Home polish: the main `START` card now shows a compact daily habit badge with the current target state, for example `Today goal` and `0/1 saved`.

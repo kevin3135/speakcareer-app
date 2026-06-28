@@ -81,9 +81,7 @@ export function HomeScreen({
         levelLabel={levelProgress.currentLevelLabel}
         levelProgressLabel={levelProgress.progressLabel}
         levelProgressPercent={levelProgress.progressPercent}
-        nextLevelLabel={levelProgress.nextLevelLabel}
         onPress={startActiveLesson}
-        totalXpLabel={levelProgress.totalXpLabel}
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
       />
@@ -162,9 +160,7 @@ function AnimatedStartCard({
   levelLabel,
   levelProgressLabel,
   levelProgressPercent,
-  nextLevelLabel,
   onPress,
-  totalXpLabel,
   title,
   xpLabel,
 }: {
@@ -174,9 +170,7 @@ function AnimatedStartCard({
   levelLabel: string;
   levelProgressLabel: string;
   levelProgressPercent: number;
-  nextLevelLabel: string;
   onPress: () => void;
-  totalXpLabel: string;
   title: string;
   xpLabel: string;
 }) {
@@ -260,7 +254,9 @@ function AnimatedStartCard({
           <View style={styles.startLevelPill}>
             <Text style={styles.startLevelPillText}>{levelLabel}</Text>
           </View>
-          <Text style={styles.startLevelMeta}>{nextLevelLabel}</Text>
+          <Text numberOfLines={1} style={styles.startLevelMeta}>
+            {levelProgressLabel}
+          </Text>
         </View>
         <View style={styles.startLevelTrack}>
           <View
@@ -269,10 +265,6 @@ function AnimatedStartCard({
               { width: `${Math.max(0, Math.min(levelProgressPercent, 100))}%` },
             ]}
           />
-        </View>
-        <View style={styles.startLevelFooter}>
-          <Text style={styles.startLevelProgress}>{levelProgressLabel}</Text>
-          <Text style={styles.startLevelProgress}>{totalXpLabel}</Text>
         </View>
       </View>
     </Pressable>
@@ -383,18 +375,13 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.18)',
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.lg,
-    padding: spacing.md,
+    marginTop: spacing.md,
+    padding: spacing.sm,
   },
   startLevelFill: {
     backgroundColor: colors.accentSoft,
     borderRadius: radius.pill,
     height: '100%',
-  },
-  startLevelFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.sm,
   },
   startLevelHeader: {
     alignItems: 'center',
@@ -405,9 +392,9 @@ const styles = StyleSheet.create({
     color: colors.white,
     flex: 1,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '800',
-    marginLeft: spacing.md,
+    marginLeft: spacing.sm,
     textAlign: 'right',
   },
   startLevelPill: {
@@ -424,17 +411,11 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
-  startLevelProgress: {
-    color: colors.secondarySoft,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
-  },
   startLevelTrack: {
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
     borderRadius: radius.pill,
-    height: 10,
-    marginTop: spacing.md,
+    height: 8,
+    marginTop: spacing.sm,
     overflow: 'hidden',
   },
   nextUnlock: {
