@@ -5,7 +5,6 @@ import {
   Badge,
   Card,
   GradientHero,
-  MistakeCard,
   ProgressBar,
   ScreenContainer,
   SectionHeader,
@@ -20,6 +19,7 @@ import { createDailyMission } from '../utils/gamification';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
+import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { createRoleplayWarmupCue } from '../utils/roleplayWarmupCue';
@@ -57,7 +57,12 @@ export function ProgressScreen({
   const primaryGuideStep = nextStepGuide.steps[0];
   const emptyState = isFirstSaveLocked ? createProgressEmptyState() : null;
   const mistakePreview = isFirstSaveLocked ? createProgressMistakeBankPreview(mistakeBank) : null;
-  const mistakeDrill = isFirstSaveLocked ? null : createMistakePracticeDrill(mistakeBank);
+  const mistakeDrill = isFirstSaveLocked
+    ? null
+    : createMistakePracticeDrill(mistakeBank, practicedMistakeIds);
+  const mistakeQueue = isFirstSaveLocked
+    ? null
+    : createProgressMistakeBankQueue(mistakeBank, practicedMistakeIds);
   const isTopMistakePracticed = mistakeDrill
     ? practicedMistakeIds.includes(mistakeDrill.mistake.id)
     : false;
@@ -272,20 +277,40 @@ export function ProgressScreen({
           ) : null}
 
           <SectionHeader
-            subtitle="Fix one pattern, then use it again in roleplay."
+            subtitle="One active correction stays above. The rest wait here quietly."
             title="Mistake bank"
           />
-          {mistakeBank.map((mistake, index) => (
-            <MistakeCard
-              category={mistake.category}
-              correction={mistake.correction}
-              explanation={mistake.note}
-              key={mistake.id}
-              onPractice={() => onOpenRoleplay(index === 1 ? 'meeting-practice' : 'job-interview')}
-              original={mistake.original}
-              repeatedCount={index + 1}
-            />
-          ))}
+          {mistakeQueue ? (
+            <Card tone="muted">
+              <View style={styles.rowBetween}>
+                <View style={styles.flexOne}>
+                  <Text style={styles.cardKicker}>{mistakeQueue.eyebrow}</Text>
+                  <Text style={styles.cardTitle}>{mistakeQueue.title}</Text>
+                </View>
+                <Badge label={mistakeQueue.progressLabel} tone="info" />
+              </View>
+              <Text style={styles.cardBody}>{mistakeQueue.body}</Text>
+              {mistakeQueue.items.length > 0 ? (
+                <View style={styles.queueList}>
+                  {mistakeQueue.items.map((mistake) => (
+                    <View key={mistake.id} style={styles.queueItem}>
+                      <View style={styles.rowBetween}>
+                        <Badge
+                          label={mistake.category}
+                          tone={mistake.isPracticed ? 'success' : 'secondary'}
+                        />
+                        <Badge
+                          label={mistake.statusLabel}
+                          tone={mistake.isPracticed ? 'success' : 'info'}
+                        />
+                      </View>
+                      <Text style={styles.queueCorrection}>{mistake.correction}</Text>
+                    </View>
+                  ))}
+                </View>
+              ) : null}
+            </Card>
+          ) : null}
         </>
       )}
     </ScreenContainer>
@@ -480,6 +505,25 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
+  },
+  queueCorrection: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  queueItem: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  queueList: {
+    gap: spacing.sm,
+    marginTop: spacing.lg,
   },
   mistakeCorrection: {
     backgroundColor: colors.secondarySoft,

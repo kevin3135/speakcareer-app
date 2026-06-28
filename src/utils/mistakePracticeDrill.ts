@@ -36,14 +36,21 @@ const ROLEPLAY_LINKS: RoleplayLink[] = [
   { match: 'small talk', roleplayId: 'workplace-small-talk', roleplayTitle: 'Workplace Small Talk' },
 ];
 
-export function createMistakePracticeDrill(mistakes: MistakeItem[]): MistakePracticeDrill | null {
+export function createMistakePracticeDrill(
+  mistakes: MistakeItem[],
+  practicedMistakeIds: string[] = [],
+): MistakePracticeDrill | null {
   if (mistakes.length === 0) {
     return null;
   }
 
-  const mistake = [...mistakes].sort(
+  const practicedMistakeIdSet = new Set(practicedMistakeIds);
+  const prioritizedMistakes = [...mistakes].sort(
     (left, right) => PRIORITY_ORDER[left.priority] - PRIORITY_ORDER[right.priority],
-  )[0];
+  );
+  const mistake = prioritizedMistakes.find(
+    (item) => !practicedMistakeIdSet.has(item.id),
+  ) ?? prioritizedMistakes[0];
   const roleplayLink = getRoleplayLink(mistake.category);
 
   return {

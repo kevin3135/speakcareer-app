@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Active Progress Mistake Queue
+
+Made one focused Progress improvement: the active correction drill now advances to the next unpracticed mistake after the learner marks one as practiced, and the long mistake-bank card list is replaced with a compact correction queue. This keeps Progress coaching one clear English fix at a time instead of repeating the same top mistake and showing a long review stack.
+
+What went well:
+
+- The change fixed a real loop issue: `Mark practiced` now moves the learner forward to the next correction instead of leaving Progress stuck on the same one.
+- The new `src/utils/progressMistakeBankQueue.ts` helper keeps the queue order explicit and testable, with upcoming corrections first and practiced ones moved quietly to the end.
+- The UI change stayed inside `ProgressScreen` and reused existing `Card`, `Badge` and theme tokens, so the MVP flow stayed simple.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new compact queue card should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress works better when one correction is active and the rest are visibly queued, not equally loud.
+- If a review action says `Mark practiced`, the next state should advance immediately instead of confirming without movement.
+- Quiet review summaries can still show progress if upcoming and completed items are visually separated.
+
+Next suggested task:
+
+- Add a `Retry this scenario` CTA to the `Latest win` card so Progress turns review into one-tap practice.
+
 ## 2026-06-28: Compact Progress Weekly Chart
 
 Made one focused Progress/Wins design polish: the weekly activity chart is now a quieter muted card with one short label, a lower chart height and softer bars. This keeps the habit signal visible without making the lower Progress page feel like analytics.

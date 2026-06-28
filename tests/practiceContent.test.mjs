@@ -991,6 +991,31 @@ test('shows a locked mistake-bank preview before the first saved session', async
   assert.equal(createProgressMistakeBankPreview([]), null);
 });
 
+test('keeps the unlocked mistake bank focused on one active correction', async () => {
+  const { createProgressMistakeBankQueue } = await import('../src/utils/progressMistakeBankQueue.ts');
+
+  const initialQueue = createProgressMistakeBankQueue(progressMock.mistakeBank, []);
+  assert.equal(initialQueue.eyebrow, 'Correction queue');
+  assert.equal(initialQueue.title, '3 more corrections waiting');
+  assert.equal(initialQueue.progressLabel, '0/4 practiced');
+  assert.deepEqual(
+    initialQueue.items.map((item) => item.category),
+    ['Meeting Clarity', 'Sales Calls', 'Small Talk'],
+  );
+  assert.ok(initialQueue.body.includes('one active correction'));
+
+  const nextQueue = createProgressMistakeBankQueue(progressMock.mistakeBank, ['m-001']);
+  assert.equal(nextQueue.title, '2 more corrections waiting');
+  assert.equal(nextQueue.progressLabel, '1/4 practiced');
+  assert.deepEqual(
+    nextQueue.items.map((item) => `${item.category}:${item.statusLabel}`),
+    ['Sales Calls:Next', 'Small Talk:Next', 'Interview Structure:Done'],
+  );
+  assert.ok(nextQueue.body.includes('moved you to the next correction'));
+
+  assert.equal(createProgressMistakeBankQueue([], []), null);
+});
+
 test('recommends the real next roleplay on Home after a saved session', async () => {
   const { createHomePracticeRecommendation } = await import('../src/utils/homeRecommendation.ts');
   const { guidedStart } = await import('../src/data/guidedIntro.ts');
@@ -1482,6 +1507,11 @@ test('creates an actionable mistake practice drill', async () => {
   assert.equal(salesDrill.roleplayId, 'sales-call');
   assert.equal(salesDrill.ctaLabel, 'Practice Sales Call');
   assert.equal(createMistakePracticeDrill([]), null);
+
+  const nextDrill = createMistakePracticeDrill(progressMock.mistakeBank, ['m-001']);
+  assert.equal(nextDrill.roleplayId, 'meeting-practice');
+  assert.equal(nextDrill.ctaLabel, 'Practice Meeting Practice');
+  assert.ok(nextDrill.title.includes('Meeting Clarity'));
 
   const warmupCue = createRoleplayWarmupCue(interviewDrill.mistake);
   assert.equal(warmupCue.mistakeId, interviewDrill.mistake.id);
