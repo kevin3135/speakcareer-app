@@ -348,7 +348,14 @@ export function RoleplayScreen({
         >
           <View style={styles.completeBadges}>
             <XPBadge label={savedHandoff.xpLabel} />
-            <Badge label="Streak updated" tone="accent" />
+            {savedMilestone ? (
+              <>
+                <Badge label={savedMilestone.todayValue} tone="info" />
+                <Badge label={`Streak ${savedMilestone.streakValue}`} tone="secondary" />
+              </>
+            ) : (
+              <Badge label="Streak updated" tone="accent" />
+            )}
             {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
           </View>
           {!savedPathProgress ? (
@@ -386,30 +393,6 @@ export function RoleplayScreen({
               <Text style={styles.levelUpText}>
                 You moved from {levelUpMoment.previousLevelLabel} to {levelUpMoment.currentLevelLabel}.
               </Text>
-            </View>
-          ) : null}
-          {savedMilestone ? (
-            <View style={styles.savedMilestoneBox}>
-              <View style={styles.savedMilestoneHeader}>
-                <Text style={styles.savedMilestoneLabel}>Habit progress</Text>
-                <View style={styles.savedMilestoneBadges}>
-                  <Badge label={savedMilestone.todayValue} tone="info" />
-                  <Badge label={savedMilestone.streakValue} tone="secondary" />
-                </View>
-              </View>
-              <Text numberOfLines={1} style={styles.savedMilestoneTitle}>
-                {savedMilestone.title}
-              </Text>
-              <Text numberOfLines={1} style={styles.savedMilestoneBody}>
-                {savedMilestone.body}
-              </Text>
-              <View style={styles.savedMilestoneProgress}>
-                <ProgressBar
-                  label={savedMilestone.progressLabel}
-                  tone={savedMilestone.progressPercent === 100 ? 'success' : 'secondary'}
-                  value={savedMilestone.progressPercent}
-                />
-              </View>
             </View>
           ) : null}
         </GradientHero>
@@ -1212,50 +1195,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineH3,
     marginTop: spacing.xs,
-  },
-  savedMilestoneBadges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  savedMilestoneBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
-  },
-  savedMilestoneBox: {
-    backgroundColor: colors.white,
-    borderColor: colors.successDark,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.sm,
-  },
-  savedMilestoneHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  savedMilestoneLabel: {
-    color: colors.successDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  savedMilestoneProgress: {
-    marginTop: spacing.sm,
-  },
-  savedMilestoneTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
   },
   savedPathBox: {
     backgroundColor: colors.white,

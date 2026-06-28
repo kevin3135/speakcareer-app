@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Simpler Roleplay Completion Reward
+
+Made one focused Roleplay completion design improvement: the saved lesson screen no longer shows a separate `Habit progress` card after the career path card.
+
+Why it changed:
+
+- The completion state should feel like one reward and one next step, not a small dashboard.
+- Kevin wants less text while the user is in the game loop.
+- Daily progress and streak are still visible, but now as compact reward badges near the XP badge.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx` and removed visual clutter without changing saved-session behavior.
+- The completion screen now keeps the next lesson card and continue button closer together.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include live Expo screenshot QA, so badge wrapping should still be checked on narrow phone widths.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Simplify the finish/save prompt before completion so it has one main save action and the optional follow-up feels visually secondary.
+
 ## 2026-06-28: Simpler Roleplay Feedback Focus
 
 Made one focused Roleplay feedback design improvement: after checking an answer, the first feedback card now leads with one clear `Next move` instead of showing the summary, best area, next area and answer preview as equal-weight text.
