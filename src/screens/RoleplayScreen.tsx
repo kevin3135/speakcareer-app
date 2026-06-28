@@ -516,22 +516,19 @@ export function RoleplayScreen({
             </View>
           </View>
           {starterReminder && !warmupCue && !hasDraftAnswer ? (
-            <View style={styles.starterReminderRow}>
-              <View style={styles.starterReminderCopy}>
-                <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
-                <Text numberOfLines={1} style={styles.starterReminderNote}>
-                  {starterReminder.body}
-                </Text>
-              </View>
-              <View style={styles.starterReminderButton}>
-                <AppButton
-                  label={starterReminder.ctaLabel}
-                  onPress={useStarterAnswer}
-                  size="small"
-                  variant="quiet"
-                />
-              </View>
-            </View>
+            <Pressable
+              accessibilityHint="Adds a simple starter answer to the answer box"
+              accessibilityLabel="Use starter answer"
+              accessibilityRole="button"
+              onPress={useStarterAnswer}
+              style={({ pressed }) => [
+                styles.starterReminderChip,
+                pressed && styles.starterReminderChipPressed,
+              ]}
+            >
+              <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
+              <Text style={styles.starterReminderCta}>{starterReminder.ctaLabel}</Text>
+            </Pressable>
           ) : null}
           <View style={styles.answerAction}>
             <AppButton
@@ -915,37 +912,34 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
-  starterReminderRow: {
+  starterReminderChip: {
     alignItems: 'center',
+    alignSelf: 'flex-start',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
-    borderRadius: radius.lg,
+    borderRadius: radius.pill,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
+    gap: spacing.xs,
     marginTop: spacing.sm,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
-  starterReminderCopy: {
-    flex: 1,
-    minWidth: 0,
+  starterReminderChipPressed: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  starterReminderCta: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   starterReminderLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-  },
-  starterReminderNote: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-  },
-  starterReminderButton: {
-    minWidth: 116,
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,

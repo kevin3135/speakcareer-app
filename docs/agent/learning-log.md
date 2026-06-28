@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Quieter Roleplay Starter Chip
+
+Made one focused Roleplay polish: the first-answer starter reminder is now a small optional chip instead of a full helper row with body text and a button.
+
+Why it changed:
+
+- Kevin wants the practice step to show one obvious action and avoid extra buttons.
+- The starter reminder is useful for beginners, but it should feel secondary to typing the answer.
+- A compact chip keeps help available without competing with the answer field and `Check answer`.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- The UI still uses existing theme tokens and keeps the starter accessible as a button.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the chip should still be checked on a real narrow phone view.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Continue simplifying the Roleplay answer step by making optional writing support feel like a quiet drawer instead of another visible module.
+
 ## 2026-06-28: Compact Roleplay Draft Status
 
 Made one focused Roleplay polish: the live draft-status under the answer box now shows one short status line, the word-count badge and progress, instead of a separate `Draft check` label plus extra explanatory text.
