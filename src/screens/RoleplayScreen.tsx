@@ -382,13 +382,19 @@ export function RoleplayScreen({
           ) : null}
           {savedMilestone ? (
             <View style={styles.savedMilestoneBox}>
-              <Text style={styles.savedMilestoneLabel}>Habit progress</Text>
-              <View style={styles.savedMilestoneBadges}>
-                <Badge label={savedMilestone.todayValue} tone="info" />
-                <Badge label={savedMilestone.streakValue} tone="secondary" />
+              <View style={styles.savedMilestoneHeader}>
+                <Text style={styles.savedMilestoneLabel}>Habit progress</Text>
+                <View style={styles.savedMilestoneBadges}>
+                  <Badge label={savedMilestone.todayValue} tone="info" />
+                  <Badge label={savedMilestone.streakValue} tone="secondary" />
+                </View>
               </View>
-              <Text style={styles.savedMilestoneTitle}>{savedMilestone.title}</Text>
-              <Text style={styles.savedMilestoneBody}>{savedMilestone.body}</Text>
+              <Text numberOfLines={1} style={styles.savedMilestoneTitle}>
+                {savedMilestone.title}
+              </Text>
+              <Text numberOfLines={1} style={styles.savedMilestoneBody}>
+                {savedMilestone.body}
+              </Text>
               <View style={styles.savedMilestoneProgress}>
                 <ProgressBar
                   label={savedMilestone.progressLabel}
@@ -1168,14 +1174,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
-    marginTop: spacing.sm,
   },
   savedMilestoneBody: {
     color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   savedMilestoneBox: {
     backgroundColor: colors.white,
@@ -1183,7 +1188,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     marginTop: spacing.md,
-    padding: spacing.md,
+    padding: spacing.sm,
+  },
+  savedMilestoneHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
   },
   savedMilestoneLabel: {
     color: colors.successDark,
@@ -1192,7 +1204,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   savedMilestoneProgress: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
   savedMilestoneTitle: {
     color: colors.ink,
@@ -1200,7 +1212,7 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
   savedPathBox: {
     backgroundColor: colors.white,

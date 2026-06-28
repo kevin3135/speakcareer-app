@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Roleplay Habit Progress
+
+Made one focused Roleplay completion polish: the `Habit progress` card now uses a compact header with badges, tighter spacing and one-line title/body text.
+
+Why it changed:
+
+- The saved completion screen was becoming a stack of reward and progress cards.
+- Kevin wants the app to feel guided and game-like without forcing users to read too much.
+- Habit progress is useful, but it should not push the main next-action button too far down.
+
+What went well:
+
+- The change stayed inside `RoleplayScreen` and only adjusted the saved completion layout.
+- The card still shows today's progress, streak and progress bar, but takes less vertical space.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the completion stack should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion progress details should be compact after the main reward and path card.
+- One-line support copy is enough when the progress bar already communicates state.
+- Keep shrinking repeated reward UI before adding new completion effects.
+
+Next suggested task:
+
+- Mobile-preview the Roleplay completion stack and decide whether the level-up card should also become a compact row.
+
 ## 2026-06-28: Cleaner Roleplay Completion Next Step
 
 Made one focused Roleplay completion simplification: when career-path progress is available, the saved screen no longer shows a separate `Next lesson` card before the `Career path` card.
