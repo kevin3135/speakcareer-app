@@ -351,7 +351,10 @@ export function RoleplayScreen({
             <XPBadge label={savedHandoff.xpLabel} />
             {savedMilestone ? (
               <>
-                <Badge label={savedMilestone.todayValue} tone="info" />
+                <Badge
+                  label={savedMilestone.title}
+                  tone={savedMilestone.progressPercent === 100 ? 'success' : 'info'}
+                />
                 <Badge label={`Streak ${savedMilestone.streakValue}`} tone="secondary" />
               </>
             ) : (

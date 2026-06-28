@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Clearer Completion Daily Target Badge
+
+Made one focused Roleplay completion polish: after saving a lesson, the completion hero now shows the daily target state as a human action label like `One more sprint today`, `2 sprints left today` or `Daily target complete`.
+
+Why it changed:
+
+- Onboarding asks the learner to commit to a daily practice target, but the first completion state only showed a numeric `1/2 done` badge.
+- Kevin wants the day-one habit loop to stay obvious after the first win.
+- A short target-status badge keeps the completion screen simple while making the next action clearer.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx` and reused existing milestone copy instead of adding a new component.
+- The badge still uses the existing design tokens and turns success-colored when the daily target is complete.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include live Expo/mobile screenshot QA, so the longer badge labels should still be checked on small phones.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Tighten the Progress mistake-bank section so it shows one active drill first and keeps the queue visually secondary.
+
 ## 2026-06-28: Onboarding Commitment Footer
 
 Made one focused onboarding improvement: once the learner selects a starting level, the footer now switches from a generic `Continue` prompt to a concrete first commitment with a level-matched CTA and day-one practice note.
