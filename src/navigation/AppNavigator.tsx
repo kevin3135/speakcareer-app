@@ -142,13 +142,18 @@ export function AppNavigator() {
     });
   }
 
-  function completeOnboarding(selectedLevel: StartingLevelId) {
+  function completeOnboarding(
+    selectedLevel: StartingLevelId,
+    selectedDailyTarget: DailyPracticeTarget,
+  ) {
     setSelectedRoleplayId(guidedStart.roleplayId);
     setActiveScreen('Foundation');
     setHasSeenOnboarding(true);
+    setDailyTarget(selectedDailyTarget);
     setStartingLevelId(selectedLevel);
     setFoundationCompletedSteps(0);
     void saveOnboardingCompletion(AsyncStorage).catch(() => undefined);
+    void saveDailyTarget(AsyncStorage, selectedDailyTarget).catch(() => undefined);
     void saveStartingLevel(AsyncStorage, selectedLevel).catch(() => undefined);
     void saveFoundationProgress(AsyncStorage, 0, FOUNDATION_TOTAL_STEPS).catch(() => undefined);
   }
@@ -167,7 +172,7 @@ export function AppNavigator() {
   }
 
   if (!hasSeenOnboarding) {
-    return <OnboardingScreen onContinue={completeOnboarding} />;
+    return <OnboardingScreen dailyTarget={dailyTarget} onContinue={completeOnboarding} />;
   }
 
   return (

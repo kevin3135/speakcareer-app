@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-28: Onboarding Daily Target Selection
+
+Made one focused onboarding improvement: first-run users can now choose a daily roleplay target during onboarding, and that target is saved immediately before they enter the Foundation lesson.
+
+Why it changed:
+
+- The app already had local daily targets, but new users only discovered that setting later in Profile.
+- Bringing the target into onboarding makes the streak and mission loop feel intentional from the first session.
+- The onboarding plan preview now reflects both the selected English level and the chosen daily practice rhythm.
+
+What went well:
+
+- The change stayed small across onboarding UI, the onboarding preview helper and the existing local daily-target storage flow.
+- The onboarding plan card now gives one clearer habit commitment: level, first path and daily pace in one place.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new onboarding target selector should still be checked on a phone-sized viewport for height and tap comfort.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Put habit settings in the first-run flow when they shape the rest of the loop.
+- Reuse existing local settings and storage instead of creating separate onboarding-only state.
+- Keep onboarding personalization compact: one level choice, one target choice, one preview of the first path.
+
+Next suggested task:
+
+- Mobile-preview the onboarding daily-target card at phone width and trim the layout if the selector makes the first screen feel too tall.
+
 ## 2026-06-28: Compact Foundation Rail Labels
 
 Made one focused Foundation rail polish: the three-slot sentence rail now uses short status labels (`Done`, `Tap`, `Next`) instead of placing long sentence fragments inside narrow mobile slots.

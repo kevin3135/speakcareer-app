@@ -10,15 +10,23 @@ import {
   type LevelAssessmentChoice,
 } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
+import type { DailyPracticeTarget } from '../types';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type OnboardingScreenProps = {
-  onContinue: (selectedLevelId: LevelAssessmentChoice['id']) => void;
+  dailyTarget: DailyPracticeTarget;
+  onContinue: (
+    selectedLevelId: LevelAssessmentChoice['id'],
+    selectedDailyTarget: DailyPracticeTarget,
+  ) => void;
 };
 
-export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
+const dailyTargetOptions: DailyPracticeTarget[] = [1, 2, 3];
+
+export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenProps) {
   const [selectedLevelId, setSelectedLevelId] = useState<LevelAssessmentChoice['id'] | null>(null);
+  const [selectedDailyTarget, setSelectedDailyTarget] = useState<DailyPracticeTarget>(dailyTarget);
   const progressWidth = `${levelAssessment.progressPercent}%` as DimensionValue;
   const selectedChoice =
     levelAssessment.choices.find((choice) => choice.id === selectedLevelId) ?? null;
@@ -27,6 +35,7 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
     selectedChoice && selectedProfile
       ? createOnboardingPlanPreview({
           coachNote: selectedProfile.coachMessage,
+          dailyTarget: selectedDailyTarget,
           firstLessonDetail: selectedProfile.foundationRule,
           firstLessonTitle: foundationStart.title,
           firstQuestSubtitle: guidedStart.subtitle,
@@ -94,12 +103,48 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
               <Text style={styles.planKicker}>{planPreview.title}</Text>
               <Text style={styles.planTitle}>Start at {planPreview.levelLabel}</Text>
             </View>
-            <Badge label="2-step start" tone="success" />
+            <Badge label={planPreview.dailyTargetLabel} tone="success" />
           </View>
 
           <Text numberOfLines={2} style={styles.planCoachNote}>
             {planPreview.coachNote}
           </Text>
+
+          <View style={styles.targetCard}>
+            <View style={styles.targetHeader}>
+              <Text style={styles.targetLabel}>Daily rhythm</Text>
+              <Text style={styles.targetTitle}>{planPreview.dailyTargetLabel}</Text>
+            </View>
+            <Text style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
+            <View style={styles.segmentedControl}>
+              {dailyTargetOptions.map((target) => {
+                const isActive = target === selectedDailyTarget;
+
+                return (
+                  <Pressable
+                    accessibilityHint="Sets how many short roleplays you want each day"
+                    accessibilityLabel={`Set onboarding daily target to ${target} ${target === 1 ? 'roleplay' : 'roleplays'}`}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isActive }}
+                    key={target}
+                    onPress={() => setSelectedDailyTarget(target)}
+                    style={({ pressed }) => [
+                      styles.segment,
+                      isActive && styles.segmentActive,
+                      pressed && styles.segmentPressed,
+                    ]}
+                  >
+                    <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
+                      {target}
+                    </Text>
+                    <Text style={[styles.segmentLabel, isActive && styles.segmentLabelActive]}>
+                      {target === 1 ? 'roleplay' : 'roleplays'}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
 
           <View style={styles.planSteps}>
             {planPreview.steps.map((step) => (
@@ -132,7 +177,7 @@ export function OnboardingScreen({ onContinue }: OnboardingScreenProps) {
             label="Continue"
             onPress={() => {
               if (selectedLevelId) {
-                onContinue(selectedLevelId);
+                onContinue(selectedLevelId, selectedDailyTarget);
               }
             }}
           />
@@ -234,6 +279,82 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.md,
+  },
+  targetCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  targetHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  targetLabel: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  targetTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginLeft: spacing.md,
+    textAlign: 'right',
+  },
+  targetBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  segmentedControl: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.md,
+    padding: spacing.xs,
+  },
+  segment: {
+    alignItems: 'center',
+    borderRadius: radius.md,
+    flex: 1,
+    justifyContent: 'center',
+    minHeight: 56,
+  },
+  segmentActive: {
+    backgroundColor: colors.primary,
+  },
+  segmentPressed: {
+    opacity: 0.82,
+  },
+  segmentValue: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  segmentValueActive: {
+    color: colors.white,
+  },
+  segmentLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  segmentLabelActive: {
+    color: colors.white,
   },
   planSteps: {
     gap: spacing.xs,

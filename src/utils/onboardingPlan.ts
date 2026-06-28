@@ -1,3 +1,5 @@
+import type { DailyPracticeTarget } from '../types';
+
 type OnboardingPlanStep = {
   detail: string;
   label: string;
@@ -6,6 +8,7 @@ type OnboardingPlanStep = {
 
 export type OnboardingPlanPreviewInput = {
   coachNote: string;
+  dailyTarget: DailyPracticeTarget;
   firstLessonDetail: string;
   firstLessonTitle: string;
   firstQuestSubtitle: string;
@@ -16,6 +19,8 @@ export type OnboardingPlanPreviewInput = {
 
 export type OnboardingPlanPreview = {
   coachNote: string;
+  dailyTargetLabel: string;
+  dailyTargetNote: string;
   levelLabel: string;
   starterPrompt: string;
   steps: [OnboardingPlanStep, OnboardingPlanStep];
@@ -24,6 +29,7 @@ export type OnboardingPlanPreview = {
 
 export function createOnboardingPlanPreview({
   coachNote,
+  dailyTarget,
   firstLessonDetail,
   firstLessonTitle,
   firstQuestSubtitle,
@@ -33,6 +39,8 @@ export function createOnboardingPlanPreview({
 }: OnboardingPlanPreviewInput): OnboardingPlanPreview {
   return {
     coachNote,
+    dailyTargetLabel: createDailyTargetLabel(dailyTarget),
+    dailyTargetNote: createDailyTargetNote(dailyTarget),
     levelLabel,
     starterPrompt,
     steps: [
@@ -49,4 +57,20 @@ export function createOnboardingPlanPreview({
     ],
     title: 'Your first English path',
   };
+}
+
+function createDailyTargetLabel(dailyTarget: DailyPracticeTarget) {
+  return `${dailyTarget} ${dailyTarget === 1 ? 'roleplay' : 'roleplays'} a day`;
+}
+
+function createDailyTargetNote(dailyTarget: DailyPracticeTarget) {
+  if (dailyTarget === 1) {
+    return 'Light start. Best for a steady five-minute work-English habit.';
+  }
+
+  if (dailyTarget === 2) {
+    return 'Balanced pace. Enough repetition to build confidence faster.';
+  }
+
+  return 'Focused push. Best when you want extra interview reps today.';
 }

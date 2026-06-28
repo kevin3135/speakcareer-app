@@ -314,6 +314,7 @@ test('creates a personalized onboarding first-path preview from the selected lev
   const starterProfile = getStartingLevelProfile('starter');
   const starterPreview = createOnboardingPlanPreview({
     coachNote: starterProfile.coachMessage,
+    dailyTarget: 1,
     firstLessonDetail: starterProfile.foundationRule,
     firstLessonTitle: foundationStart.title,
     firstQuestSubtitle: guidedStart.subtitle,
@@ -325,6 +326,7 @@ test('creates a personalized onboarding first-path preview from the selected lev
   const confidentProfile = getStartingLevelProfile('confident');
   const confidentPreview = createOnboardingPlanPreview({
     coachNote: confidentProfile.coachMessage,
+    dailyTarget: 3,
     firstLessonDetail: confidentProfile.foundationRule,
     firstLessonTitle: foundationStart.title,
     firstQuestSubtitle: guidedStart.subtitle,
@@ -342,11 +344,15 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(starterPreview.steps[1].title, 'Quest 1: Job Interview');
   assert.ok(starterPreview.coachNote.includes('Keep it simple'));
   assert.ok(starterPreview.starterPrompt.includes('I worked on'));
+  assert.equal(starterPreview.dailyTargetLabel, '1 roleplay a day');
+  assert.ok(starterPreview.dailyTargetNote.includes('steady five-minute'));
 
   assert.equal(confidentPreview.levelLabel, 'B2');
   assert.ok(confidentPreview.steps[0].detail.includes('business result'));
   assert.ok(confidentPreview.coachNote.includes('business result'));
   assert.ok(confidentPreview.starterPrompt.includes('In my current role'));
+  assert.equal(confidentPreview.dailyTargetLabel, '3 roleplays a day');
+  assert.ok(confidentPreview.dailyTargetNote.includes('extra interview reps'));
 });
 
 test('stores the daily practice target in local storage', async () => {
