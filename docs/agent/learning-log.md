@@ -1,5 +1,39 @@
 # Agent Learning Log
 
+## 2026-06-28: Progress Warm-Up Answer Starter
+
+Made one focused practice-flow improvement: when the learner opens a Roleplay from the active Progress correction card, the warm-up cue now includes a one-tap `Use this line` action that drops the saved correction into the answer box. The generic first-interview starter helper is also suppressed for this case, so the learner sees one relevant coaching action instead of two competing prompts.
+
+What went well:
+
+- This makes the mistake-bank-to-roleplay handoff more usable without adding a new screen, state model or storage path.
+- The change stayed small by extending the existing `RoleplayWarmupCue` shape and reusing the current `RoleplayScreen` draft-answer flow.
+- A focused test now covers the reusable warm-up cue contract, and `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the warm-up cue spacing and button placement should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When Progress sends a saved correction into Roleplay, turn it into the default coaching action instead of showing a second generic helper.
+- Reusing an existing correction as the first sentence is a stronger habit loop than only displaying the sentence as static review text.
+- Keep correction-to-practice handoffs one tap away and avoid adding another layer of navigation.
+
+Next suggested task:
+
+- Add a one-tap `Use better English` action on the feedback step so learners can retry with the suggested rewrite immediately.
+
 ## 2026-06-28: Compact Roleplay Starter Help
 
 Made one focused Roleplay polish: the first Job Interview starter help is no longer a full text block before the answer field. It now appears as a compact helper row after the answer box, with one small `Use starter` action. This keeps the first viewport closer to the simple flow: question, answer, check.

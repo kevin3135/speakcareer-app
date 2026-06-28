@@ -231,6 +231,17 @@ export function RoleplayScreen({
     answerInputRef.current?.focus();
   }
 
+  function useWarmupStarter() {
+    if (!warmupCue) {
+      return;
+    }
+
+    setDraftAnswer(warmupCue.starterAnswer);
+    setAnswerReview(null);
+    setFeedbackResult(null);
+    answerInputRef.current?.focus();
+  }
+
   if (savedSession) {
     return (
       <ScreenContainer>
@@ -332,6 +343,18 @@ export function RoleplayScreen({
               </View>
               <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
               <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>
+              {!hasDraftAnswer ? (
+                <View style={styles.warmupCueAction}>
+                  <AppButton
+                    accessibilityHint="Starts your answer with the saved correction"
+                    accessibilityLabel="Use warm-up line"
+                    label={warmupCue.ctaLabel}
+                    onPress={useWarmupStarter}
+                    size="small"
+                    variant="quiet"
+                  />
+                </View>
+              ) : null}
             </View>
           ) : null}
           <View style={styles.answerInputShell}>
@@ -360,7 +383,7 @@ export function RoleplayScreen({
               value={draftAnswer}
             />
           </View>
-          {starterReminder && !hasDraftAnswer ? (
+          {starterReminder && !warmupCue && !hasDraftAnswer ? (
             <View style={styles.starterReminderRow}>
               <View style={styles.starterReminderCopy}>
                 <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
@@ -633,6 +656,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  warmupCueAction: {
+    marginTop: spacing.md,
   },
   warmupCueText: {
     color: colors.ink,

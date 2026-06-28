@@ -110,6 +110,8 @@ export type RoleplayWarmupCue = {
   badgeLabel: string;
   correction: string;
   note: string;
+  ctaLabel: string;
+  starterAnswer: string;
 };
 
 export type ProgressData = {

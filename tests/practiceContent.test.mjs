@@ -1057,6 +1057,17 @@ test('keeps the unlocked mistake bank focused on one active correction', async (
   assert.equal(createProgressMistakeBankQueue([], []), null);
 });
 
+test('creates a reusable warm-up cue from a saved correction', async () => {
+  const { createRoleplayWarmupCue } = await import('../src/utils/roleplayWarmupCue.ts');
+  const cue = createRoleplayWarmupCue(progressMock.mistakeBank[0]);
+
+  assert.equal(cue.eyebrow, 'Warm-up cue');
+  assert.equal(cue.badgeLabel, 'From Progress');
+  assert.equal(cue.ctaLabel, 'Use this line');
+  assert.equal(cue.starterAnswer, progressMock.mistakeBank[0].correction);
+  assert.ok(cue.note.includes('specific action and result'));
+});
+
 test('recommends the real next roleplay on Home after a saved session', async () => {
   const { createHomePracticeRecommendation } = await import('../src/utils/homeRecommendation.ts');
   const { guidedStart } = await import('../src/data/guidedIntro.ts');
