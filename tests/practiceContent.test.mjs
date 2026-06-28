@@ -2183,6 +2183,26 @@ test('creates a professional daily mission from progress data', async () => {
   assert.ok(mission.progressPercent <= 100);
 });
 
+test('creates level progress labels from total XP', async () => {
+  const { createLevelProgress } = await import('../src/utils/levelProgress.ts');
+
+  assert.deepEqual(createLevelProgress(0), {
+    currentLevelLabel: 'Level 1',
+    nextLevelLabel: '180 XP to Level 2',
+    progressLabel: '0/180 XP',
+    progressPercent: 0,
+    totalXpLabel: '0 total XP',
+  });
+
+  assert.deepEqual(createLevelProgress(218), {
+    currentLevelLabel: 'Level 2',
+    nextLevelLabel: '142 XP to Level 3',
+    progressLabel: '38/180 XP',
+    progressPercent: 21,
+    totalXpLabel: '218 total XP',
+  });
+});
+
 test('creates a guided practice career path for first-time users', async () => {
   const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
   const path = createPracticeCareerPath({

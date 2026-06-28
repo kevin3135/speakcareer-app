@@ -17,6 +17,7 @@ import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
+import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
@@ -44,6 +45,7 @@ export function HomeScreen({
     localProgress,
     sessions,
   });
+  const levelProgress = createLevelProgress(mission.xpTotal);
   const learnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
     foundationCompletedSteps,
@@ -74,7 +76,12 @@ export function HomeScreen({
 
       <AnimatedStartCard
         ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
+        levelLabel={levelProgress.currentLevelLabel}
+        levelProgressLabel={levelProgress.progressLabel}
+        levelProgressPercent={levelProgress.progressPercent}
+        nextLevelLabel={levelProgress.nextLevelLabel}
         onPress={startActiveLesson}
+        totalXpLabel={levelProgress.totalXpLabel}
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
       />
@@ -148,12 +155,22 @@ export function HomeScreen({
 
 function AnimatedStartCard({
   ctaLabel,
+  levelLabel,
+  levelProgressLabel,
+  levelProgressPercent,
+  nextLevelLabel,
   onPress,
+  totalXpLabel,
   title,
   xpLabel,
 }: {
   ctaLabel: string;
+  levelLabel: string;
+  levelProgressLabel: string;
+  levelProgressPercent: number;
+  nextLevelLabel: string;
   onPress: () => void;
+  totalXpLabel: string;
   title: string;
   xpLabel: string;
 }) {
@@ -224,6 +241,26 @@ function AnimatedStartCard({
             </Text>
             <Badge label={xpLabel} tone="accent" />
           </View>
+        </View>
+      </View>
+      <View style={styles.startLevelBox}>
+        <View style={styles.startLevelHeader}>
+          <View style={styles.startLevelPill}>
+            <Text style={styles.startLevelPillText}>{levelLabel}</Text>
+          </View>
+          <Text style={styles.startLevelMeta}>{nextLevelLabel}</Text>
+        </View>
+        <View style={styles.startLevelTrack}>
+          <View
+            style={[
+              styles.startLevelFill,
+              { width: `${Math.max(0, Math.min(levelProgressPercent, 100))}%` },
+            ]}
+          />
+        </View>
+        <View style={styles.startLevelFooter}>
+          <Text style={styles.startLevelProgress}>{levelProgressLabel}</Text>
+          <Text style={styles.startLevelProgress}>{totalXpLabel}</Text>
         </View>
       </View>
     </Pressable>
@@ -301,6 +338,65 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     marginTop: spacing.md,
+  },
+  startLevelBox: {
+    backgroundColor: colors.successDark,
+    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  startLevelFill: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.pill,
+    height: '100%',
+  },
+  startLevelFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.sm,
+  },
+  startLevelHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  startLevelMeta: {
+    color: colors.white,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginLeft: spacing.md,
+    textAlign: 'right',
+  },
+  startLevelPill: {
+    backgroundColor: 'rgba(255, 255, 255, 0.14)',
+    borderColor: 'rgba(255, 255, 255, 0.22)',
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  startLevelPillText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  startLevelProgress: {
+    color: colors.secondarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  startLevelTrack: {
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderRadius: radius.pill,
+    height: 10,
+    marginTop: spacing.md,
+    overflow: 'hidden',
   },
   nextUnlock: {
     alignItems: 'center',

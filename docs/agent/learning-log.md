@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Home Level Progress Rail
+
+Made one focused habit-loop improvement on Home: the main `Do this now` start card now includes a compact level-progress rail that shows the learner's current level, XP progress inside the level, total XP, and how many XP remain until the next level.
+
+What went well:
+
+- This reused the existing local XP model instead of adding new state, storage or another screen.
+- The level cue now sits beside the primary next action, so progress feels motivating without weakening the `Start` CTA.
+- A small helper in `src/utils/levelProgress.ts` keeps the math and copy testable and easy to reuse later.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new level rail should still be checked on a phone-sized viewport for wrapping and contrast.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Reuse the existing XP model before inventing new progression systems.
+- Put motivation cues beside the main next action, not in a separate dashboard card.
+- Keep level language compact and businesslike so the app stays professional.
+
+Next suggested task:
+
+- Add a small level-up moment on the saved-answer completion screen when a roleplay crosses the next XP threshold.
+
 ## 2026-06-28: Single Roleplay Handoff Cue
 
 Made one focused Roleplay simplification: when a Foundation or Progress warm-up cue is present, the separate `First quest` banner is hidden. The learner now sees one guidance card before the question instead of two competing cues.
