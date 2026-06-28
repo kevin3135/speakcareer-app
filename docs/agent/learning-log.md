@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Simpler Progress Next Step
+
+Made one focused Progress/Wins simplification: the top next-step card now shows one `Do now` action instead of three numbered guide rows. The explanatory body is capped to two lines so the screen feels more like a coach telling the learner the next move, not a progress report.
+
+What went well:
+
+- This directly addresses the audit note that Progress can feel too dense and analytical.
+- The change stayed in one screen and reused existing theme colors, radius, spacing and typography tokens.
+- The primary CTA remains unchanged, so the learning flow is safer while the visual hierarchy improves.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the new `Do now` panel should still be checked at phone size.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress should coach one next action before showing stats.
+- If a progress card has a CTA, avoid showing multiple equal instruction rows above it.
+- Keep dense review details lower on the page, after the next action is clear.
+
+Next suggested task:
+
+- Mobile-preview Progress after one saved session and, if it still feels busy, reduce the stat grid or weekly chart weight.
+
 ## 2026-06-28: Quiet Home Next Unlock
 
 Made one focused Home simplification: the `Unlocks next` row is now a quiet preview strip with one small `Next` or `Done` node and one lesson title. The old secondary badge was removed so the row feels like future context, not another button or dashboard signal.

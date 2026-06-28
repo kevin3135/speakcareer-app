@@ -54,6 +54,7 @@ export function ProgressScreen({
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const primaryGuideStep = nextStepGuide.steps[0];
   const emptyState = isFirstSaveLocked ? createProgressEmptyState() : null;
   const mistakePreview = isFirstSaveLocked ? createProgressMistakeBankPreview(mistakeBank) : null;
   const mistakeDrill = isFirstSaveLocked ? null : createMistakePracticeDrill(mistakeBank);
@@ -91,17 +92,13 @@ export function ProgressScreen({
           </View>
           <XPBadge label={mission.rewardLabel} />
         </View>
-        <Text style={styles.cardBody}>{nextStepGuide.body}</Text>
-        <View style={styles.guideSteps}>
-          {nextStepGuide.steps.map((step, index) => (
-            <View key={step} style={styles.guideStepRow}>
-              <View style={styles.guideStepIndex}>
-                <Text style={styles.guideStepIndexText}>{index + 1}</Text>
-              </View>
-              <Text style={styles.guideStepText}>{step}</Text>
-            </View>
-          ))}
-        </View>
+        <Text numberOfLines={2} style={styles.cardBody}>{nextStepGuide.body}</Text>
+        {primaryGuideStep ? (
+          <View style={styles.nextFocusBox}>
+            <Text style={styles.nextFocusLabel}>Do now</Text>
+            <Text style={styles.nextFocusText}>{primaryGuideStep}</Text>
+          </View>
+        ) : null}
         {!isFirstSaveLocked ? (
           <View style={styles.progressWrap}>
             <ProgressBar
@@ -394,6 +391,28 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     marginTop: spacing.sm,
+  },
+  nextFocusBox: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  nextFocusLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  nextFocusText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
   },
   sessionPreview: {
     color: colors.ink,
