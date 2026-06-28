@@ -21,6 +21,7 @@ import type {
   RoleplayWarmupCue,
   StartingLevelId,
 } from '../types';
+import { createAnswerReadinessCue } from '../utils/answerReadinessCue';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
@@ -85,6 +86,8 @@ export function RoleplayScreen({
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
   const [levelUpMoment, setLevelUpMoment] = useState<LevelUpMoment | null>(null);
 
+  const liveAnswerReview = summarizePracticeAnswer(draftAnswer);
+  const answerReadinessCue = createAnswerReadinessCue(liveAnswerReview);
   const activeVariant = roleplay.promptVariants?.[0];
   const openingLine = activeVariant?.openingLine ?? roleplay.openingLine;
   const baseXpReward = feedbackResult?.xpReward ?? roleplay.durationMinutes * 4;
@@ -497,6 +500,21 @@ export function RoleplayScreen({
               value={draftAnswer}
             />
           </View>
+          <View style={styles.answerReadinessBox}>
+            <View style={styles.oneThingHeader}>
+              <Text style={styles.answerReadinessLabel}>Draft check</Text>
+              <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
+            </View>
+            <Text style={styles.answerReadinessTitle}>{answerReadinessCue.title}</Text>
+            <Text style={styles.answerReadinessNote}>{answerReadinessCue.note}</Text>
+            <View style={styles.answerReadinessProgress}>
+              <ProgressBar
+                label={answerReadinessCue.progressLabel}
+                tone={answerReadinessCue.tone}
+                value={answerReadinessCue.progressPercent}
+              />
+            </View>
+          </View>
           {starterReminder && !warmupCue && !hasDraftAnswer ? (
             <View style={styles.starterReminderRow}>
               <View style={styles.starterReminderCopy}>
@@ -844,6 +862,38 @@ const styles = StyleSheet.create({
   },
   answerAction: {
     marginTop: spacing.md,
+  },
+  answerReadinessBox: {
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  answerReadinessLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  answerReadinessNote: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  answerReadinessProgress: {
+    marginTop: spacing.md,
+  },
+  answerReadinessTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   warmupCueBox: {
     backgroundColor: colors.secondarySoft,

@@ -196,6 +196,41 @@ test('creates a concrete coach snapshot from the learner answer', async () => {
   );
 });
 
+test('creates a live readiness cue for the roleplay draft answer', async () => {
+  const { createAnswerReadinessCue } = await import('../src/utils/answerReadinessCue.ts');
+  const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
+
+  const emptyCue = createAnswerReadinessCue(summarizePracticeAnswer(''));
+  const shortCue = createAnswerReadinessCue(
+    summarizePracticeAnswer('I helped the team with updates and tasks this week.'),
+  );
+  const readyCue = createAnswerReadinessCue(
+    summarizePracticeAnswer(
+      [
+        'In my previous role, I organized weekly client updates for the support team.',
+        'First, I clarified the top issues and assigned clear owners.',
+        'As a result, we reduced repeated questions and moved the launch forward on time.',
+      ].join(' '),
+    ),
+  );
+
+  assert.equal(emptyCue.title, 'Write your first answer');
+  assert.equal(emptyCue.tone, 'secondary');
+  assert.equal(emptyCue.progressLabel, '0/12 words to unlock feedback');
+  assert.equal(emptyCue.badgeLabel, '0 words');
+
+  assert.equal(shortCue.title, 'Needs more detail');
+  assert.equal(shortCue.tone, 'secondary');
+  assert.equal(shortCue.progressLabel, '10/12 words to unlock feedback');
+  assert.equal(shortCue.progressPercent, 29);
+
+  assert.equal(readyCue.title, 'Ready for feedback');
+  assert.equal(readyCue.tone, 'success');
+  assert.equal(readyCue.progressLabel, 'Strong short answer');
+  assert.equal(readyCue.badgeLabel, '37 words');
+  assert.equal(readyCue.progressPercent, 100);
+});
+
 test('creates a simple first-quest completion handoff', async () => {
   const { createFirstQuestCompletionState } = await import('../src/utils/firstQuestCompletion.ts');
 

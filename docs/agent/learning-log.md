@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-28: Live Draft Readiness Cue
+
+Made one focused practice-flow improvement: the Roleplay writing step now shows a live `Draft check` cue under the answer box so the learner can see word count, readiness status, and whether the answer is strong enough before pressing `Check answer`.
+
+Why it changed:
+
+- The Roleplay draft step previously gave no live guidance between an empty answer box and the review screen.
+- Kevin wants the English MVP loop to feel guided and habit-forming, which means the writing step should coach the learner before the first submit, not only after it.
+- A compact readiness cue makes the next action clearer without adding a new screen, new storage, or new backend logic.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx` with one small helper in `src/utils/answerReadinessCue.ts`.
+- The cue reuses the existing answer-review thresholds, so the live guidance matches the later feedback gate instead of inventing a second rule set.
+- Added focused coverage in `tests/practiceContent.test.mjs` for empty, too-short and strong-answer states.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first test run failed because two expected word-count values in the new test were off; fixing those assertions resolved it.
+- This run did not include fresh Expo/mobile visual QA, so the new readiness box should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the app already has answer-readiness rules, expose them live in the draft step before adding new review mechanics.
+- Keep writing guidance compact and attached to the answer box so it feels like coaching, not another lesson card.
+- When a new cue depends on counts or thresholds, test exact output strings to catch mismatched assumptions quickly.
+
+Next suggested task:
+
+- Show today's daily-target sprint progress inside the active Roleplay step so the current answer feels connected to the habit loop before save.
+
 ## 2026-06-28: Quieter Progress Mistake Queue
 
 Made one focused Progress mistake-bank polish: queued corrections now read as saved for later instead of competing with the active correction.
