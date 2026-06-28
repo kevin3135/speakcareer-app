@@ -146,6 +146,27 @@ test('creates one simple first-quest feedback card', async () => {
   assert.equal(ready.xpLabel, '+40 XP');
 });
 
+test('summarizes roleplay feedback scores for the coach step', async () => {
+  const { createFeedbackScoreSummary } = await import('../src/utils/feedbackScoreSummary.ts');
+
+  assert.deepEqual(createFeedbackScoreSummary([]), {
+    nextFocusArea: null,
+    overallScore: 0,
+    strongestArea: null,
+  });
+
+  const summary = createFeedbackScoreSummary([
+    { label: 'Clarity', value: 78.4 },
+    { label: 'Confidence', value: 61.2 },
+    { label: 'Structure', value: 105 },
+    { label: 'Vocabulary', value: -5 },
+  ]);
+
+  assert.equal(summary.overallScore, 60);
+  assert.deepEqual(summary.strongestArea, { label: 'Structure', value: 100 });
+  assert.deepEqual(summary.nextFocusArea, { label: 'Vocabulary', value: 0 });
+});
+
 test('creates a simple first-quest completion handoff', async () => {
   const { createFirstQuestCompletionState } = await import('../src/utils/firstQuestCompletion.ts');
 

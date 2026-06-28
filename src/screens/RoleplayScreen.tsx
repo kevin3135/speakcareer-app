@@ -22,6 +22,7 @@ import type {
   StartingLevelId,
 } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
+import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import {
   createNextPracticeRecommendation,
@@ -115,6 +116,9 @@ export function RoleplayScreen({
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
+  const feedbackScoreSummary = feedbackResult
+    ? createFeedbackScoreSummary(feedbackResult.feedback.scores)
+    : null;
   const followUpPrompt = answerReview?.isReadyForFeedback
     ? createAdaptiveFollowUpPrompt(roleplay, draftAnswer, answerReview)
     : null;
@@ -433,10 +437,57 @@ export function RoleplayScreen({
       {feedbackResult ? (
         <Card tone="strong">
           <View style={styles.oneThingHeader}>
-            <Text style={styles.cardKicker}>Coach says</Text>
-            <XPBadge label={`+${baseXpReward} XP`} />
+            <View style={styles.feedbackHeroCopy}>
+              <Text style={styles.cardKicker}>Coach says</Text>
+              <Text style={styles.cardTitle}>{answerReview?.readinessLabel ?? 'Good start'}</Text>
+            </View>
+            <View style={styles.feedbackScoreWrap}>
+              <View style={styles.feedbackScoreBadge}>
+                <Text style={styles.feedbackScoreValue}>
+                  {feedbackScoreSummary?.overallScore ?? 0}
+                </Text>
+                <Text style={styles.feedbackScoreLabel}>Score</Text>
+              </View>
+              <View style={styles.feedbackXpBadge}>
+                <XPBadge label={`+${baseXpReward} XP`} />
+              </View>
+            </View>
           </View>
-          <Text style={styles.cardTitle}>{answerReview?.readinessLabel ?? 'Good start'}</Text>
+          <Text style={styles.feedbackSummaryText}>{feedbackResult.feedback.summary}</Text>
+          {feedbackScoreSummary?.strongestArea && feedbackScoreSummary.nextFocusArea ? (
+            <View style={styles.feedbackSnapshotBox}>
+              <Text style={styles.feedbackSnapshotLabel}>Quick read</Text>
+              <Text style={styles.feedbackSnapshotText}>
+                Best right now: {feedbackScoreSummary.strongestArea.label} {feedbackScoreSummary.strongestArea.value}.
+                {' '}Next focus: {feedbackScoreSummary.nextFocusArea.label} {feedbackScoreSummary.nextFocusArea.value}.
+              </Text>
+            </View>
+          ) : null}
+          <View style={styles.feedbackScores}>
+            {feedbackResult.feedback.scores.map((score) => (
+              <View key={score.label} style={styles.feedbackScoreRow}>
+                <ProgressBar label={score.label} tone="primary" value={score.value} />
+              </View>
+            ))}
+          </View>
+          <View style={styles.feedbackChecklist}>
+            <View style={styles.feedbackChecklistBox}>
+              <Text style={styles.feedbackChecklistTitle}>Working well</Text>
+              {feedbackResult.feedback.strengths.map((strength) => (
+                <Text key={strength} style={styles.feedbackChecklistItem}>
+                  - {strength}
+                </Text>
+              ))}
+            </View>
+            <View style={styles.feedbackChecklistBox}>
+              <Text style={styles.feedbackChecklistTitle}>Improve next</Text>
+              {feedbackResult.feedback.improvements.map((improvement) => (
+                <Text key={improvement} style={styles.feedbackChecklistItem}>
+                  - {improvement}
+                </Text>
+              ))}
+            </View>
+          </View>
           <View style={styles.betterEnglishBox}>
             <Text style={styles.betterEnglishLabel}>Better English</Text>
             <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
@@ -755,12 +806,104 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
   },
+  feedbackChecklist: {
+    gap: spacing.md,
+    marginTop: spacing.lg,
+  },
+  feedbackChecklistBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  feedbackChecklistItem: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  feedbackChecklistTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
   feedbackActions: {
     gap: spacing.md,
     marginTop: spacing.lg,
   },
   feedbackActionItem: {
     flex: 1,
+  },
+  feedbackHeroCopy: {
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  feedbackScoreWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  feedbackScoreBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radius.pill,
+    height: 76,
+    justifyContent: 'center',
+    width: 76,
+  },
+  feedbackScoreLabel: {
+    color: colors.primarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  feedbackScoreRow: {
+    backgroundColor: colors.white,
+    borderRadius: radius.md,
+    padding: spacing.md,
+  },
+  feedbackScores: {
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  feedbackXpBadge: {
+    marginTop: spacing.sm,
+  },
+  feedbackScoreValue: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h1,
+    fontWeight: '900',
+  },
+  feedbackSnapshotBox: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  feedbackSnapshotLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  feedbackSnapshotText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  feedbackSummaryText: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
   },
   followUpAction: {
     marginTop: spacing.md,

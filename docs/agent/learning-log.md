@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Visible Roleplay Coach Feedback
+
+Made one focused AI feedback UI improvement: the Roleplay coach step now shows the actual local feedback summary, score breakdown, strongest area, next focus, and the generated strengths/improvements lists before the rewrite. This makes the mock coach feel useful instead of only showing a better sentence.
+
+What went well:
+
+- This closes a real MVP gap because the app was already computing scores, strengths and improvements but not surfacing them on the main feedback step.
+- The change stayed focused on one screen, with one small helper in `src/utils/feedbackScoreSummary.ts` to keep the score summary logic reusable and testable.
+- The feedback card still preserves the simple loop: review, optionally use better English, then save.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new feedback card height and spacing should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the app computes coach feedback details, show them in the core practice loop instead of hiding them in data only.
+- Keep feedback structured as summary, strengths, improvements, rewrite and one next action.
+- Preserve the score/XP motivation cues without adding another screen.
+
+Next suggested task:
+
+- Add a one-tap starter for the optional follow-up turn so the bonus answer is easier to begin.
+
 ## 2026-06-28: Focused Roleplay Save Step
 
 Made one focused Roleplay feedback polish: after the learner taps `Use better English` and checks the improved answer again, the feedback card no longer repeats the same secondary action. The next visible action becomes the `Save answer` card, which keeps the loop clearer: answer, improve, save.
