@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Home Coach Focus Recap
+
+Made one focused Home polish: returning users now see one compact `Coach` recap under the main `START` card with the latest saved session's next coaching target.
+
+Why it changed:
+
+- The Roleplay save step now explains what gets locked into Progress, but Home did not yet remind the learner what to improve next.
+- Kevin wants the app to guide the user instead of making them hunt through screens.
+- A single coach-focus strip keeps the next practice personal without adding a new button, tab or dashboard.
+
+What went well:
+
+- The change stayed inside `src/screens/HomeScreen.tsx`.
+- It reuses existing `PracticeSession.nextFocusLabel`, `nextFocusText` and feedback summary data.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the new coach strip should still be checked on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the Home screen after a saved session and decide whether the separate daily mission card should be visually quieter.
+
 ## 2026-06-28: Roleplay Save Lock-In Preview
 
 Made one focused practice-flow improvement: the Roleplay save step now shows a compact `Locks in` summary before `Complete lesson`, so the learner can see exactly what will be saved to Progress, how today changes, and how much XP gets banked.

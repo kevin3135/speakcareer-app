@@ -66,6 +66,14 @@ export function HomeScreen({
   const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
   const isMissionComplete = missionCard.progressPercent >= 100;
+  const latestSession = sessions[0];
+  const latestCoachFocusText = latestSession?.nextFocusText?.trim() || latestSession?.feedbackSummary?.trim();
+  const latestCoachFocus = latestCoachFocusText
+    ? {
+        label: latestSession?.nextFocusLabel?.trim() || 'Coach focus',
+        text: latestCoachFocusText,
+      }
+    : null;
 
   return (
     <ScreenContainer>
@@ -85,6 +93,20 @@ export function HomeScreen({
         title={activeLesson.title}
         xpLabel={activeLesson.xpLabel}
       />
+
+      {latestCoachFocus ? (
+        <View style={styles.coachFocusStrip}>
+          <View style={styles.coachFocusBadge}>
+            <Text style={styles.coachFocusBadgeText}>Coach</Text>
+          </View>
+          <View style={styles.coachFocusCopy}>
+            <Text style={styles.coachFocusLabel}>{latestCoachFocus.label}</Text>
+            <Text numberOfLines={1} style={styles.coachFocusText}>
+              {latestCoachFocus.text}
+            </Text>
+          </View>
+        </View>
+      ) : null}
 
       <Card
         style={[styles.missionCard, isMissionComplete && styles.missionCardComplete]}
@@ -272,6 +294,46 @@ function AnimatedStartCard({
 }
 
 const styles = StyleSheet.create({
+  coachFocusBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.coach,
+    borderRadius: radius.pill,
+    height: 42,
+    justifyContent: 'center',
+    width: 58,
+  },
+  coachFocusBadgeText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  coachFocusCopy: {
+    flex: 1,
+  },
+  coachFocusLabel: {
+    color: colors.coach,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  coachFocusStrip: {
+    alignItems: 'center',
+    backgroundColor: colors.coachSoft,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.md,
+    padding: spacing.md,
+  },
+  coachFocusText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
   statusRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
