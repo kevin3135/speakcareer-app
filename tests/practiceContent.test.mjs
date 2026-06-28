@@ -551,7 +551,10 @@ test('shows a starter reminder only on the first Job Interview answer card', asy
 });
 
 test('creates a foundation handoff cue for the first interview answer', async () => {
-  const { createFoundationWarmupCue } = await import('../src/utils/roleplayWarmupCue.ts');
+  const {
+    createFoundationWarmupCue,
+    createRoleplayWarmupCue,
+  } = await import('../src/utils/roleplayWarmupCue.ts');
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 
   const starterProfile = getStartingLevelProfile('starter');
@@ -569,10 +572,22 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.equal(starterCue.eyebrow, 'Foundation handoff');
   assert.equal(starterCue.badgeLabel, 'From Lesson 1');
   assert.equal(starterCue.ctaLabel, 'Use starter line');
+  assert.equal(starterCue.autoApplyStarter, true);
   assert.ok(starterCue.note.includes('Keep it simple'));
   assert.ok(starterCue.starterAnswer.includes('The result was'));
   assert.ok(confidentCue.note.includes('business result'));
   assert.ok(confidentCue.starterAnswer.includes('As a result'));
+
+  const progressCue = createRoleplayWarmupCue({
+    category: 'Grammar',
+    correction: 'I led the handoff and clarified the next step.',
+    id: 'mistake-1',
+    note: 'Keep the verb in the past tense.',
+    original: 'I lead the handoff and clarify the next step.',
+    priority: 'High',
+  });
+
+  assert.equal(progressCue.autoApplyStarter, false);
 });
 
 test('provides mock feedback and mistake-bank data', () => {

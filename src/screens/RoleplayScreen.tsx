@@ -76,7 +76,9 @@ export function RoleplayScreen({
   const answerInputRef = useRef<TextInput>(null);
   const followUpInputRef = useRef<TextInput>(null);
   const [answerPulse] = useState(() => new Animated.Value(0));
-  const [draftAnswer, setDraftAnswer] = useState('');
+  const [draftAnswer, setDraftAnswer] = useState(
+    () => (warmupCue?.autoApplyStarter ? warmupCue.starterAnswer : ''),
+  );
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
   const [savedSession, setSavedSession] = useState<PracticeSession | null>(null);
@@ -138,6 +140,9 @@ export function RoleplayScreen({
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
+  const isWarmupStarterLoaded = Boolean(
+    warmupCue?.autoApplyStarter && draftAnswer.trim() === warmupCue.starterAnswer.trim(),
+  );
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
   const feedbackScoreSummary = feedbackResult
     ? createFeedbackScoreSummary(feedbackResult.feedback.scores)
@@ -461,6 +466,11 @@ export function RoleplayScreen({
                 <Badge label={warmupCue.badgeLabel} tone="secondary" />
               </View>
               <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
+              {isWarmupStarterLoaded ? (
+                <Text style={styles.warmupCueLoadedNote}>
+                  Starter loaded into your draft. Edit it before you check.
+                </Text>
+              ) : null}
               <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>
               {!hasDraftAnswer ? (
                 <View style={styles.warmupCueAction}>
@@ -931,6 +941,14 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  warmupCueLoadedNote: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
   warmupCueNote: {

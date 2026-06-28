@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-28: Auto-Loaded Foundation Starter Draft
+
+Made one focused onboarding-to-practice improvement: the first Foundation handoff into `Quest 1: Job Interview` now opens with the level-matched starter answer already loaded into the draft, and the warmup card explains that the learner can edit it before checking.
+
+Why it changed:
+
+- The app already generated a helpful first-answer starter from the selected English level, but the learner still landed on an empty answer box and had to tap again.
+- Kevin wants the English MVP to feel guided and habit-forming, which means the first roleplay should start with less friction.
+- Auto-loading the starter keeps the level-matched support visible while preserving the user's control to edit the answer.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx`, `src/utils/roleplayWarmupCue.ts`, `src/types.ts` and one test block in `tests/practiceContent.test.mjs`.
+- Progress mistake-bank warmup cues still stay manual, so only the Foundation handoff gets the auto-loaded draft behavior.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the loaded-starter note should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the app already knows the learner's first safe answer shape, load it directly into the first roleplay draft instead of asking for another tap.
+- Keep auto-applied support specific to onboarding/foundation moments; Progress correction drills should stay opt-in.
+- When reducing first-answer friction, make it obvious the loaded text is editable so the learner still feels ownership.
+
+Next suggested task:
+
+- Preview the first Foundation-to-Roleplay handoff on a phone and, if needed, make the warmup card more compact once the starter is already loaded.
+
 ## 2026-06-28: Quieter Roleplay Target Preview
 
 Made one focused Roleplay answer-step polish: the daily target preview now appears after `Check answer` as a compact row, instead of interrupting the answer-to-check flow as a fuller card.

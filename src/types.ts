@@ -112,6 +112,7 @@ export type RoleplayWarmupCue = {
   note: string;
   ctaLabel: string;
   starterAnswer: string;
+  autoApplyStarter?: boolean;
 };
 
 export type ProgressData = {

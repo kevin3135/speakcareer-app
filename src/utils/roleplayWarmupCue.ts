@@ -2,6 +2,7 @@ import type { MistakeItem, RoleplayWarmupCue } from '../types';
 
 export function createRoleplayWarmupCue(mistake: MistakeItem): RoleplayWarmupCue {
   return {
+    autoApplyStarter: false,
     cueId: mistake.id,
     eyebrow: 'Warm-up cue',
     badgeLabel: 'From Progress',
@@ -22,6 +23,7 @@ export function createFoundationWarmupCue({
   starterAnswer,
 }: FoundationWarmupCueInput): RoleplayWarmupCue {
   return {
+    autoApplyStarter: true,
     cueId: 'foundation-starter',
     eyebrow: 'Foundation handoff',
     badgeLabel: 'From Lesson 1',
