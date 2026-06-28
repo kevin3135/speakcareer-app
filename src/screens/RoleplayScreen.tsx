@@ -688,14 +688,14 @@ export function RoleplayScreen({
                     <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
                     <Badge label={`+${FOLLOW_UP_BONUS_XP} XP`} tone="secondary" />
                   </View>
-                  <Text numberOfLines={2} style={styles.followUpSummaryText}>
+                  <Text numberOfLines={1} style={styles.followUpSummaryText}>
                     {followUpPrompt.coachingNote}
                   </Text>
                 </View>
                 <View style={styles.followUpSummaryButton}>
                   <AppButton
                     accessibilityHint="Starts the optional follow-up with an editable starter sentence"
-                    label="Add bonus turn"
+                    label="Try bonus"
                     onPress={startFollowUpWithStarter}
                     size="small"
                     variant="quiet"
@@ -1130,7 +1130,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   followUpSummaryButton: {
-    minWidth: 142,
+    minWidth: 104,
   },
   followUpSummaryCopy: {
     flex: 1,
@@ -1144,8 +1144,8 @@ const styles = StyleSheet.create({
   },
   followUpSummaryRow: {
     alignItems: 'center',
-    backgroundColor: colors.white,
-    borderColor: colors.accent,
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',

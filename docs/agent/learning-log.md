@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Quieter Roleplay Bonus Row
+
+Made one focused Roleplay save-step polish: the collapsed optional bonus-turn row is now quieter, shorter and more mobile-friendly.
+
+Why it changed:
+
+- The save step already made `Complete lesson` the primary action, but the optional bonus row still had a long CTA and strong border.
+- Kevin wants the app to guide the user instead of presenting equal choices.
+- A shorter `Try bonus` action keeps the extra practice available without competing with lesson completion.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx` and only adjusted the collapsed optional row.
+- The row now uses a calmer border/background, one-line helper copy and a smaller button width.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run still did not include live mobile screenshot QA, so the save step should be checked visually in Expo when possible.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the Roleplay save step on a phone viewport and then tighten only if the bonus row or XP badges wrap awkwardly.
+
 ## 2026-06-28: Simpler Roleplay Save Prompt
 
 Made one focused practice-flow improvement: the Roleplay review step now presents one primary `Complete lesson` action first, while the optional follow-up stays collapsed as a compact bonus-turn row until the learner chooses it.
