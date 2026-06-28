@@ -1042,6 +1042,7 @@ test('creates a rewarding roleplay completion summary', async () => {
     createNextPracticeRecommendation,
     createPracticeCompletionMilestone,
     createPracticeCompletionSummary,
+    createPracticeSaveLockInPreview,
     createPracticeSavePrompt,
     createPracticeTargetPreview,
     createSavedRoleplayMilestone,
@@ -1068,6 +1069,33 @@ test('creates a rewarding roleplay completion summary', async () => {
 
   assert.equal(followUpPrompt.followUpLabel, 'Bonus turn added');
   assert.ok(followUpPrompt.body.includes('both turns'));
+
+  const firstAnswerLockIn = createPracticeSaveLockInPreview({
+    includedFollowUp: false,
+    progressLabel: 'After save: 1/2 roleplays today',
+    progressTitle: 'One more sprint after this',
+    xpReward: 55,
+  });
+
+  assert.equal(firstAnswerLockIn.eyebrow, 'Locks in');
+  assert.deepEqual(firstAnswerLockIn.items, [
+    { label: 'Progress', value: 'Save this answer to Progress' },
+    { label: 'Today', value: 'Reaches 1/2 today' },
+    { label: 'XP', value: 'Bank +55 XP' },
+  ]);
+
+  const bonusLockIn = createPracticeSaveLockInPreview({
+    includedFollowUp: true,
+    progressLabel: '1/1 roleplay today',
+    progressTitle: 'Daily target already complete',
+    xpReward: 70,
+  });
+
+  assert.deepEqual(bonusLockIn.items, [
+    { label: 'Progress', value: 'Save both turns to Progress' },
+    { label: 'Today', value: 'Counts as bonus practice' },
+    { label: 'XP', value: 'Bank +70 XP' },
+  ]);
 
   const firstAnswerSummary = createPracticeCompletionSummary({
     includedFollowUp: false,

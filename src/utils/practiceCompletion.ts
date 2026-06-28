@@ -27,6 +27,14 @@ export type PracticeSavePrompt = {
   xpLabel: string;
 };
 
+export type PracticeSaveLockInPreview = {
+  eyebrow: string;
+  items: {
+    label: string;
+    value: string;
+  }[];
+};
+
 export type NextPracticeRecommendation = {
   roleplayId: RoleplayId;
   title: string;
@@ -86,6 +94,13 @@ type CreatePracticeSavePromptInput = {
   xpReward: number;
 };
 
+type CreatePracticeSaveLockInPreviewInput = {
+  includedFollowUp: boolean;
+  progressLabel: string;
+  progressTitle: string;
+  xpReward: number;
+};
+
 export function createPracticeSavePrompt({
   includedFollowUp,
   xpReward,
@@ -101,6 +116,34 @@ export function createPracticeSavePrompt({
     followUpLabel: includedFollowUp ? 'Bonus turn added' : 'Bonus turn optional',
     title: 'Save this lesson',
     xpLabel: `+${safeXpReward} XP`,
+  };
+}
+
+export function createPracticeSaveLockInPreview({
+  includedFollowUp,
+  progressLabel,
+  progressTitle,
+  xpReward,
+}: CreatePracticeSaveLockInPreviewInput): PracticeSaveLockInPreview {
+  const safeXpReward = Math.max(0, xpReward);
+  const todayValue = createTodayLockInValue(progressLabel, progressTitle);
+
+  return {
+    eyebrow: 'Locks in',
+    items: [
+      {
+        label: 'Progress',
+        value: includedFollowUp ? 'Save both turns to Progress' : 'Save this answer to Progress',
+      },
+      {
+        label: 'Today',
+        value: todayValue,
+      },
+      {
+        label: 'XP',
+        value: `Bank +${safeXpReward} XP`,
+      },
+    ],
   };
 }
 
@@ -323,4 +366,21 @@ function createRewardLabel(xpReward: number) {
   }
 
   return 'Practice banked';
+}
+
+function createTodayLockInValue(progressLabel: string, progressTitle: string) {
+  if (progressTitle === 'Daily target already complete') {
+    return 'Counts as bonus practice';
+  }
+
+  const progressMatch = progressLabel.match(/(\d+\/\d+)/);
+  const progressValue = progressMatch
+    ? `${progressMatch[1]} today`
+    : progressLabel.replace(/^After save:\s*/, '');
+
+  if (progressTitle === 'This lesson completes today\'s target') {
+    return `Completes ${progressValue}`;
+  }
+
+  return `Reaches ${progressValue}`;
 }

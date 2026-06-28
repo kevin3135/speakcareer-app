@@ -32,6 +32,7 @@ import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import {
   createPracticeCompletionSummary,
+  createPracticeSaveLockInPreview,
   createPracticeSavePrompt,
   createPracticeTargetPreview,
   createSavedRoleplayMilestone,
@@ -193,6 +194,14 @@ export function RoleplayScreen({
     completedSessions: sessions.length,
     dailyTarget,
   });
+  const saveLockInPreview = answerReview?.isReadyForFeedback
+    ? createPracticeSaveLockInPreview({
+      includedFollowUp,
+      progressLabel: targetPreview.progressLabel,
+      progressTitle: targetPreview.title,
+      xpReward: totalXpReward,
+    })
+    : null;
   const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
   const answerPulseStyle = {
     opacity: answerPulse.interpolate({
@@ -810,6 +819,17 @@ export function RoleplayScreen({
           </View>
           <Text style={styles.cardTitle}>{savePrompt.title}</Text>
           <Text style={styles.followUpBody}>{savePrompt.body}</Text>
+          {saveLockInPreview ? (
+            <View style={styles.saveLockInBox}>
+              <Text style={styles.saveLockInLabel}>{saveLockInPreview.eyebrow}</Text>
+              {saveLockInPreview.items.map((item) => (
+                <View key={item.label} style={styles.saveLockInRow}>
+                  <Text style={styles.saveLockInItemLabel}>{item.label}</Text>
+                  <Text style={styles.saveLockInItemValue}>{item.value}</Text>
+                </View>
+              ))}
+            </View>
+          ) : null}
           <View style={styles.feedbackActions}>
             <View style={styles.feedbackActionItem}>
               <AppButton label={savePrompt.ctaLabel} onPress={saveSession} />
@@ -1414,6 +1434,41 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
+  },
+  saveLockInBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.sm,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  saveLockInItemLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  saveLockInItemValue: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginLeft: spacing.md,
+    textAlign: 'right',
+  },
+  saveLockInLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  saveLockInRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   followUpInput: {
     backgroundColor: colors.white,

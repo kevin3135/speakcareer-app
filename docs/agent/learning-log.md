@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-28: Roleplay Save Lock-In Preview
+
+Made one focused practice-flow improvement: the Roleplay save step now shows a compact `Locks in` summary before `Complete lesson`, so the learner can see exactly what will be saved to Progress, how today changes, and how much XP gets banked.
+
+Why it changed:
+
+- The review step already explained the feedback, but the final save action still depended too much on the generic `Complete lesson` label.
+- The MVP should make the habit loop obvious: get feedback, save once, and see the progress move.
+- A compact lock-in summary makes the primary action more concrete while keeping the optional bonus turn secondary.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx`, `src/utils/practiceCompletion.ts` and `tests/practiceContent.test.mjs`.
+- It reuses the existing daily-target preview and XP data instead of adding new state, storage or navigation logic.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new save-summary rows should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a CTA is what actually advances XP, streaks or saved history, say what it locks in right next to the button.
+- Reuse existing progress signals at the save moment before adding more reward mechanics.
+- Keep optional bonus turns clearly secondary to the main save action.
+
+Next suggested task:
+
+- Add one compact latest-coaching-target recap to the Home start area so returning users know what to improve before opening the next roleplay.
+
 ## 2026-06-28: Compact Home Level Strip
 
 Made one focused Home polish: the level progress area inside the main `START` card is now a slimmer strip with the current level, one progress label and the progress track.
