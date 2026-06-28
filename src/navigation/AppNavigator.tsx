@@ -95,8 +95,21 @@ export function AppNavigator() {
   }, []);
 
   function openRoleplay(roleplayId: RoleplayId, warmupCue?: RoleplayWarmupCue) {
+    const hasSavedInterview = practiceSessions.some((session) => session.roleplayId === guidedStart.roleplayId);
+    const shouldUseFoundationCue =
+      !warmupCue &&
+      roleplayId === guidedStart.roleplayId &&
+      foundationCompletedSteps >= FOUNDATION_TOTAL_STEPS &&
+      !hasSavedInterview;
+    const nextWarmupCue = shouldUseFoundationCue
+      ? createFoundationWarmupCue({
+        coachNote: startingLevelProfile.coachMessage,
+        starterAnswer: startingLevelProfile.starterAnswer,
+      })
+      : warmupCue ?? null;
+
     setSelectedRoleplayId(roleplayId);
-    setRoleplayWarmupCue(warmupCue ?? null);
+    setRoleplayWarmupCue(nextWarmupCue);
     setActiveScreen('Roleplay');
   }
 

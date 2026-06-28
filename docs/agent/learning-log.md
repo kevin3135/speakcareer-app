@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Home First Interview Starter Cue
+
+Made one focused handoff polish: when Home opens the first Job Interview after Foundation is complete and before any interview answer is saved, `AppNavigator` now automatically attaches the same level-matched Foundation warm-up cue. The starter survives leaving Foundation, while explicit warm-up cues from Progress still take priority.
+
+What went well:
+
+- This keeps the app-led first interview flow consistent even if the learner returns to Home before starting.
+- The change stayed small inside `AppNavigator` and reused the existing `createFoundationWarmupCue` model.
+- The cue only appears for the first Job Interview after Foundation completion, so later practice stays quieter.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the Home-to-Roleplay first interview cue should still be checked in the local preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run guidance should survive route changes, not only direct button handoffs.
+- Prefer adding automatic context in the navigator over duplicating first-run UI in screens.
+- Explicit Progress warm-up cues should always override default Foundation starter cues.
+
+Next suggested task:
+
+- Mobile-preview the Home-to-first-interview path and confirm the warm-up cue, first quest cue and answer box still fit comfortably.
+
 ## 2026-06-28: Foundation Interview Starter Handoff
 
 Made one focused practice-flow improvement: finishing Foundation now opens the first Job Interview with a level-matched warm-up cue already attached. The Roleplay screen reuses the existing warm-up pattern to show the starter line and coach note from Lesson 1, so the first English answer feels easier to begin immediately after the handoff.
