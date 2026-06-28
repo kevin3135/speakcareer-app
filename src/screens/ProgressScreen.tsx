@@ -201,9 +201,8 @@ export function ProgressScreen({
             <SkillProgressCard label="Structure" tone="accent" value={82} />
           </View>
 
-          <Card>
-            <Text style={styles.cardKicker}>Weekly activity</Text>
-            <Text style={styles.cardTitle}>Practice rhythm</Text>
+          <Card style={styles.weekCard} tone="muted">
+            <Text style={styles.cardKicker}>Weekly rhythm</Text>
             <View style={styles.chart}>
               {weekActivity.map((value, index) => (
                 <View key={`${value}-${index}`} style={styles.chartColumn}>
@@ -526,12 +525,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.md,
   },
+  weekCard: {
+    padding: spacing.md,
+  },
   chart: {
     alignItems: 'flex-end',
     flexDirection: 'row',
-    gap: spacing.sm,
-    height: 104,
-    marginTop: spacing.lg,
+    gap: spacing.xs,
+    height: 74,
+    marginTop: spacing.md,
   },
   chartColumn: {
     alignItems: 'center',
@@ -541,7 +543,8 @@ const styles = StyleSheet.create({
   chartBar: {
     backgroundColor: colors.primary,
     borderRadius: radius.pill,
-    minHeight: 16,
+    minHeight: 12,
+    opacity: 0.76,
     width: '100%',
   },
   chartLabel: {

@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Progress Weekly Chart
+
+Made one focused Progress/Wins design polish: the weekly activity chart is now a quieter muted card with one short label, a lower chart height and softer bars. This keeps the habit signal visible without making the lower Progress page feel like analytics.
+
+What went well:
+
+- This follows the previous recommendation to reduce the weekly chart weight after simplifying the stats strip.
+- The change stayed inside one screen and reused existing `Card`, theme colors, spacing and typography tokens.
+- The weekly rhythm remains visible, but it now supports the page instead of competing with the next action.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the lower Progress page should still be checked visually.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress charts should be habit cues, not analytics blocks.
+- If a chart is not the next action, keep its label short and its visual height modest.
+- Preserve motivating data, but keep it below the active practice recommendation.
+
+Next suggested task:
+
+- Mobile-preview Progress after one saved session and decide whether the Mistake Bank list should be collapsed to one top correction.
+
 ## 2026-06-28: Compact Progress Stats Strip
 
 Made one focused Progress/Wins design polish: the three separate stat cards for minutes, roleplays and fixes are now one compact muted stats strip. This keeps the numbers visible, but makes the page feel less like an analytics dashboard after the coach's next-step card.
