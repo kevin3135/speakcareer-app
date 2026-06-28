@@ -1710,6 +1710,8 @@ test('creates a guided next step for progress states', async () => {
   assert.equal(firstTimeGuide.roleplayId, 'job-interview');
   assert.equal(firstTimeGuide.ctaLabel, 'Start Job Interview');
   assert.equal(firstTimeGuide.title, 'Save your first answer');
+  assert.equal(firstTimeGuide.statusLabel, 'First save');
+  assert.equal(firstTimeGuide.statusTone, 'info');
   assert.ok(firstTimeGuide.body.includes('first saved answer'));
 
   const oneSavedSession = [
@@ -1733,6 +1735,8 @@ test('creates a guided next step for progress states', async () => {
 
   assert.equal(returningGuide.roleplayId, 'meeting-practice');
   assert.equal(returningGuide.title, '2 sprints left today');
+  assert.equal(returningGuide.statusLabel, 'Guided path');
+  assert.equal(returningGuide.statusTone, 'secondary');
   assert.ok(returningGuide.body.includes('Job Interview'));
   assert.ok(returningGuide.steps.some((step) => step.includes('Meeting Practice')));
   assert.equal(returningGuide.ctaLabel, 'Start Meeting Practice');
@@ -1757,6 +1761,8 @@ test('creates a guided next step for progress states', async () => {
 
   assert.equal(offPathGuide.roleplayId, 'job-interview');
   assert.equal(offPathGuide.ctaLabel, 'Start Job Interview');
+  assert.equal(offPathGuide.statusLabel, 'Back on path');
+  assert.equal(offPathGuide.statusTone, 'accent');
   assert.ok(offPathGuide.body.includes('Return to Job Interview'));
   assert.ok(offPathGuide.steps.some((step) => step.includes('Return to Job Interview')));
 
@@ -1768,6 +1774,8 @@ test('creates a guided next step for progress states', async () => {
 
   assert.equal(completeGuide.title, 'Daily target complete');
   assert.equal(completeGuide.ctaLabel, 'Start Meeting Practice');
+  assert.equal(completeGuide.statusLabel, 'Target done');
+  assert.equal(completeGuide.statusTone, 'success');
   assert.ok(completeGuide.body.includes('1/1 target'));
   assert.ok(completeGuide.steps.some((step) => step.includes('Meeting Practice')));
 });

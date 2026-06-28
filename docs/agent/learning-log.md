@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Progress Next-Step Status Badge
+
+Made one focused Progress design improvement: the main next-step card now shows a compact status badge such as `First save`, `Guided path`, `Back on path`, `Target done` or `Optional replay`.
+
+Why it changed:
+
+- The Progress card already chose the next roleplay, but it did not quickly explain what kind of next step it was.
+- Kevin wants the app to take charge, so the card should say whether the user is following the guided path or doing an optional replay.
+- A small badge improves clarity without adding another card or more body text.
+
+What went well:
+
+- The change stayed focused in `src/utils/progressNextStep.ts`, `src/screens/ProgressScreen.tsx` and one test section.
+- The card now uses status language instead of another XP badge, making the next action easier to understand.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include live mobile screenshot QA, so the new badge should still be checked for wrapping on small phones.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Tighten the Progress latest-win card so the repeated coaching target feels like one clear correction, not another report section.
+
 ## 2026-06-28: Progress Coaching Focus Carryover
 
 Made one focused Progress improvement: each newly saved roleplay session now stores its strongest next coaching target, and the Progress screen repeats that target inside the `Latest win` card.

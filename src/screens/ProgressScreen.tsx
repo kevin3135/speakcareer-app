@@ -104,7 +104,7 @@ export function ProgressScreen({
             <Text style={styles.cardKicker}>{nextStepGuide.eyebrow}</Text>
             <Text style={styles.cardTitle}>{nextStepGuide.title}</Text>
           </View>
-          <XPBadge label={mission.rewardLabel} />
+          <Badge label={nextStepGuide.statusLabel} tone={nextStepGuide.statusTone} />
         </View>
         <Text numberOfLines={2} style={styles.cardBody}>{nextStepGuide.body}</Text>
         {primaryGuideStep ? (

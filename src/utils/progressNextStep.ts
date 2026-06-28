@@ -7,6 +7,8 @@ export type ProgressNextStepGuide = {
   title: string;
   body: string;
   steps: string[];
+  statusLabel: string;
+  statusTone: 'accent' | 'info' | 'secondary' | 'success';
   ctaLabel: string;
   roleplayId: RoleplayId;
 };
@@ -30,6 +32,8 @@ export function createProgressNextStepGuide({
       title: 'Save your first answer',
       body: 'Do one short English roleplay first. Progress becomes useful after your first saved answer.',
       steps: ['Pick one work situation', 'Write 2-4 spoken sentences', 'Review feedback and save'],
+      statusLabel: 'First save',
+      statusTone: 'info',
       ctaLabel: path.ctaLabel,
       roleplayId: path.roleplayId,
     };
@@ -56,6 +60,8 @@ export function createProgressNextStepGuide({
       title: 'Daily target complete',
       body: `Your ${Math.min(sessions.length, dailyTarget)}/${dailyTarget} target is complete. Keep it light: review one correction or do an optional ${nextRoleplayTitle} sprint.`,
       steps: ['Read one saved feedback note', 'Repeat one correction out loud', `${path.progressPercent === 100 ? 'Replay' : 'Practice'} ${nextRoleplayTitle}`],
+      statusLabel: path.progressPercent === 100 ? 'Optional replay' : 'Target done',
+      statusTone: 'success',
       ctaLabel: path.ctaLabel,
       roleplayId: nextRoleplayId,
     };
@@ -72,6 +78,8 @@ export function createProgressNextStepGuide({
       `${isOffPathLatestSave ? 'Return to' : 'Practice'} ${nextRoleplayTitle}`,
       'Save one more answer for XP',
     ],
+    statusLabel: isOffPathLatestSave ? 'Back on path' : 'Guided path',
+    statusTone: isOffPathLatestSave ? 'accent' : 'secondary',
     ctaLabel: path.ctaLabel,
     roleplayId: nextRoleplayId,
   };
