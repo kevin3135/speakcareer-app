@@ -113,13 +113,6 @@ export function HomeScreen({
         tone="muted"
       >
         <View style={styles.missionHeader}>
-          <View style={[styles.missionNode, isMissionComplete && styles.missionNodeComplete]}>
-            <Text
-              style={[styles.missionNodeText, isMissionComplete && styles.missionNodeTextComplete]}
-            >
-              {isMissionComplete ? 'Done' : 'Goal'}
-            </Text>
-          </View>
           <View style={styles.missionCopy}>
             <Text
               style={[
@@ -129,8 +122,8 @@ export function HomeScreen({
             >
               {isMissionComplete ? 'Mission complete' : 'Today'}
             </Text>
-            <Text numberOfLines={1} style={styles.missionTitle}>
-              {missionCard.title}
+            <Text numberOfLines={1} style={styles.missionTarget}>
+              {missionCard.targetLabel}
             </Text>
           </View>
           <XPBadge label={missionCard.rewardLabel} />
@@ -515,33 +508,10 @@ const styles = StyleSheet.create({
   missionKickerComplete: {
     color: colors.successDark,
   },
-  missionNode: {
-    alignItems: 'center',
-    backgroundColor: colors.secondarySoft,
-    borderColor: colors.secondary,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    height: 46,
-    justifyContent: 'center',
-    width: 46,
-  },
-  missionNodeComplete: {
-    backgroundColor: colors.success,
-    borderColor: colors.successDark,
-  },
-  missionNodeText: {
-    color: colors.secondaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  missionNodeTextComplete: {
-    color: colors.white,
-  },
   missionProgress: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
-  missionTitle: {
+  missionTarget: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.body,

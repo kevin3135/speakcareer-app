@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-29: Quieter Home Mission Card
+
+Made one focused Home polish: the daily mission card is now a quieter progress strip that shows the current saved target and XP reward without the extra `Goal/Done` node.
+
+Why it changed:
+
+- The Home start card already shows the daily target, level progress and latest coach focus.
+- The separate mission card was still visually loud for a secondary confirmation area.
+- Removing the node keeps the main `START` card dominant while preserving the daily progress signal.
+
+What went well:
+
+- The change stayed inside `src/screens/HomeScreen.tsx`.
+- No mission logic, storage, navigation or backend behavior changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the quieter Home stack should still be checked at `390x844`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the full Home stack after a saved session and decide whether the `Coach` recap should become a smaller pill if it pushes the next unlock too low.
+
 ## 2026-06-28: Home Coach Focus Recap
 
 Made one focused Home polish: returning users now see one compact `Coach` recap under the main `START` card with the latest saved session's next coaching target.
