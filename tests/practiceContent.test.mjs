@@ -971,18 +971,18 @@ test('creates a rewarding roleplay completion summary', async () => {
   });
 
   assert.equal(firstAnswerPrompt.eyebrow, 'Finish lesson');
-  assert.equal(firstAnswerPrompt.title, 'Ready to complete this lesson');
+  assert.equal(firstAnswerPrompt.title, 'Save this lesson');
   assert.equal(firstAnswerPrompt.xpLabel, '+55 XP');
   assert.equal(firstAnswerPrompt.ctaLabel, 'Complete lesson (+55 XP)');
-  assert.equal(firstAnswerPrompt.followUpLabel, 'Follow-up optional');
-  assert.ok(firstAnswerPrompt.body.includes('bonus XP'));
+  assert.equal(firstAnswerPrompt.followUpLabel, 'Bonus turn optional');
+  assert.ok(firstAnswerPrompt.body.includes('optional'));
 
   const followUpPrompt = createPracticeSavePrompt({
     includedFollowUp: true,
     xpReward: 70,
   });
 
-  assert.equal(followUpPrompt.followUpLabel, 'Follow-up included');
+  assert.equal(followUpPrompt.followUpLabel, 'Bonus turn added');
   assert.ok(followUpPrompt.body.includes('both turns'));
 
   const firstAnswerSummary = createPracticeCompletionSummary({

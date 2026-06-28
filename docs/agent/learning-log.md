@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-28: Simpler Roleplay Save Prompt
+
+Made one focused practice-flow improvement: the Roleplay review step now presents one primary `Complete lesson` action first, while the optional follow-up stays collapsed as a compact bonus-turn row until the learner chooses it.
+
+Why it changed:
+
+- The review step still asked the learner to process a full save panel and a full optional follow-up panel at the same time.
+- Kevin wants the app loop to feel more guided, polished and habit-forming, which means one obvious finish action should win visually.
+- Keeping the bonus turn available but quieter preserves the extra practice without slowing down lesson completion.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx` and `src/utils/practiceCompletion.ts` with one small test update in `tests/practiceContent.test.mjs`.
+- The save card now leads with XP and one clear completion CTA, and the bonus turn only expands after the learner opts in or already typed a follow-up.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the collapsed bonus-turn row should still be checked on a narrow phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In the lesson-finish step, save should stay primary and optional practice should stay collapsed until invited.
+- Bonus practice works better as a compact secondary row than as a second full card competing with completion.
+- When tightening the loop, prefer changing visual hierarchy before adding more reward mechanics.
+
+Next suggested task:
+
+- Mobile-preview the updated save step and tighten the collapsed bonus-turn row if the CTA wraps on smaller phones.
+
 ## 2026-06-28: Simpler Roleplay Completion Reward
 
 Made one focused Roleplay completion design improvement: the saved lesson screen no longer shows a separate `Habit progress` card after the career path card.

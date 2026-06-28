@@ -154,6 +154,7 @@ export function RoleplayScreen({
       xpReward: totalXpReward,
     })
     : null;
+  const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
   const answerPulseStyle = {
     opacity: answerPulse.interpolate({
       inputRange: [0, 1],
@@ -626,10 +627,7 @@ export function RoleplayScreen({
         <Card tone="accent">
           <View style={styles.oneThingHeader}>
             <Text style={styles.cardKicker}>{savePrompt.eyebrow}</Text>
-            <Badge
-              label={savePrompt.followUpLabel}
-              tone={includedFollowUp ? 'success' : 'info'}
-            />
+            <XPBadge label={savePrompt.xpLabel} />
           </View>
           <Text style={styles.cardTitle}>{savePrompt.title}</Text>
           <Text style={styles.followUpBody}>{savePrompt.body}</Text>
@@ -639,27 +637,18 @@ export function RoleplayScreen({
             </View>
           </View>
           {followUpPrompt ? (
-            <View style={styles.followUpPromptBox}>
-              <View style={styles.oneThingHeader}>
-                <Text style={styles.followUpPromptLabel}>Optional bonus turn</Text>
-                <Badge
-                  label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpPrompt.focusLabel}
-                  tone={includedFollowUp ? 'success' : 'secondary'}
-                />
-              </View>
-              <Text style={styles.followUpPromptText}>{followUpPrompt.prompt}</Text>
-              <Text style={styles.followUpPromptNote}>{followUpPrompt.coachingNote}</Text>
-              {!isFollowUpOpen ? (
-                <View style={styles.followUpAction}>
-                  <AppButton
-                    accessibilityHint="Starts the optional follow-up with an editable starter sentence"
-                    label="Use starter"
-                    onPress={startFollowUpWithStarter}
-                    variant="secondary"
+            isFollowUpExpanded ? (
+              <View style={styles.followUpPromptBox}>
+                <View style={styles.oneThingHeader}>
+                  <Text style={styles.followUpPromptLabel}>{savePrompt.followUpLabel}</Text>
+                  <Badge
+                    label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpPrompt.focusLabel}
+                    tone={includedFollowUp ? 'success' : 'secondary'}
                   />
                 </View>
-              ) : (
-                <>
+                <Text style={styles.followUpPromptText}>{followUpPrompt.prompt}</Text>
+                <Text style={styles.followUpPromptNote}>{followUpPrompt.coachingNote}</Text>
+                {!isFollowUpOpen ? null : (
                   <View style={styles.followUpInputShell}>
                     <TextInput
                       accessibilityHint="Type an optional follow-up answer"
@@ -674,25 +663,46 @@ export function RoleplayScreen({
                       value={followUpAnswer}
                     />
                   </View>
-                  {followUpReview ? (
-                    <View style={styles.followUpStatusBox}>
-                      <View style={styles.oneThingHeader}>
-                        <Text style={styles.followUpStatusLabel}>{followUpReview.readinessLabel}</Text>
-                        <Badge
-                          label={includedFollowUp ? 'Bonus unlocked' : 'Bonus locked'}
-                          tone={includedFollowUp ? 'success' : 'info'}
-                        />
-                      </View>
-                      <Text style={styles.followUpStatusText}>
-                        {includedFollowUp
-                          ? 'Good. Save now to bank the bonus XP and the extra turn.'
-                          : `${followUpReview.reviewNote} Bonus XP unlocks after one stronger follow-up.`}
-                      </Text>
+                )}
+                {followUpReview ? (
+                  <View style={styles.followUpStatusBox}>
+                    <View style={styles.oneThingHeader}>
+                      <Text style={styles.followUpStatusLabel}>{followUpReview.readinessLabel}</Text>
+                      <Badge
+                        label={includedFollowUp ? 'Bonus unlocked' : 'Bonus locked'}
+                        tone={includedFollowUp ? 'success' : 'info'}
+                      />
                     </View>
-                  ) : null}
-                </>
-              )}
-            </View>
+                    <Text style={styles.followUpStatusText}>
+                      {includedFollowUp
+                        ? 'Good. Save now to bank the bonus XP and the extra turn.'
+                        : `${followUpReview.reviewNote} Bonus XP unlocks after one stronger follow-up.`}
+                    </Text>
+                  </View>
+                ) : null}
+              </View>
+            ) : (
+              <View style={styles.followUpSummaryRow}>
+                <View style={styles.followUpSummaryCopy}>
+                  <View style={styles.oneThingHeader}>
+                    <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
+                    <Badge label={`+${FOLLOW_UP_BONUS_XP} XP`} tone="secondary" />
+                  </View>
+                  <Text numberOfLines={2} style={styles.followUpSummaryText}>
+                    {followUpPrompt.coachingNote}
+                  </Text>
+                </View>
+                <View style={styles.followUpSummaryButton}>
+                  <AppButton
+                    accessibilityHint="Starts the optional follow-up with an editable starter sentence"
+                    label="Add bonus turn"
+                    onPress={startFollowUpWithStarter}
+                    size="small"
+                    variant="quiet"
+                  />
+                </View>
+              </View>
+            )
           ) : null}
         </Card>
       ) : null}
@@ -1068,9 +1078,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
   },
-  followUpAction: {
-    marginTop: spacing.md,
-  },
   followUpBody: {
     color: colors.text,
     fontFamily: fonts.rounded,
@@ -1120,6 +1127,38 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  followUpSummaryButton: {
+    minWidth: 142,
+  },
+  followUpSummaryCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  followUpSummaryLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  followUpSummaryRow: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  followUpSummaryText: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
   followUpStatusBox: {
