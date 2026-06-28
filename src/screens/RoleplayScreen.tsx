@@ -452,10 +452,7 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
-          <View style={styles.oneThingHeader}>
-            <Text style={styles.cardKicker}>Question</Text>
-            <Badge label="1 answer" tone="info" />
-          </View>
+          <Text style={styles.promptLabel}>Coach asks</Text>
           <Text style={styles.promptText}>{openingLine}</Text>
           {warmupCue ? (
             <View style={[styles.warmupCueBox, isAutoWarmupCue && styles.warmupCueBoxCompact]}>
@@ -846,7 +843,13 @@ const styles = StyleSheet.create({
     fontSize: typography.h3,
     fontWeight: '900',
     lineHeight: typography.lineH3,
-    marginTop: spacing.md,
+    marginTop: spacing.xs,
+  },
+  promptLabel: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   pressed: {
     opacity: 0.84,

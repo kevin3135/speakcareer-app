@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Shorter Roleplay Prompt Header
+
+Made one focused Roleplay answer-step polish: the question area now uses one small `Coach asks` label instead of a full `Question` header row with a `1 answer` badge.
+
+Why it changed:
+
+- The first Roleplay screen still had extra header chrome above the prompt.
+- Kevin wants the answer box to appear sooner and the practice step to feel less busy.
+- Removing the extra badge row keeps the coach question clear while moving the learner closer to the editable answer.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No feature logic changed; this was a pure hierarchy and spacing polish.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the first viewport should still be checked on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the first Roleplay screen and, if the answer field is still too low, tighten the outer screen header or first quest cue next.
+
 ## 2026-06-28: Compact Foundation Warmup Card
 
 Made one focused Roleplay handoff polish: when the Foundation starter answer is auto-loaded, the warmup card now becomes a compact confirmation row instead of repeating the full starter answer and coach note above the answer box.
