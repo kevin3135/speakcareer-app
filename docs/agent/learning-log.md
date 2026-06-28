@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Focused Practice Next Path
+
+Made one focused Practice improvement: the Practice tab now leads with one recommended next roleplay and keeps the rest of the library hidden behind a quiet `Show list` action. The off-path `Exam Speaking` card was removed so the screen stays aligned with the English career-conversation MVP.
+
+What went well:
+
+- The change reused the existing `createPracticeCareerPath` sequence instead of inventing another recommendation model.
+- `src/utils/practiceLibraryState.ts` now gives the screen one testable state shape for the recommended card and the hidden library list.
+- The Practice tab now feels more app-led: one `Do this now` card first, with the full library available only on request.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the collapsed and expanded Practice states should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the Practice tab centered on one recommended next conversation, not a full library first.
+- Reuse the existing guided path helpers before adding another recommendation system.
+- Remove off-positioning practice cards instead of trying to explain them with UI copy.
+
+Next suggested task:
+
+- Mobile-preview the closed and expanded Practice library states and trim spacing if the toggle starts to compete with the main recommended card.
+
 ## 2026-06-28: Collapsed Progress Mistake Bank
 
 Made one focused Progress simplification: the Mistake Bank queue now shows one queued correction by default and hides the rest behind a quiet `Show all` toggle.

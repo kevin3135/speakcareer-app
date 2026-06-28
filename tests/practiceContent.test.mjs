@@ -2285,6 +2285,40 @@ test('loops the practice career path after all core roleplays are complete', asy
   assert.equal(path.steps.filter((step) => step.state === 'done').length, 4);
 });
 
+test('keeps the Practice tab focused on one recommended roleplay first', async () => {
+  const { createPracticeLibraryState } = await import('../src/utils/practiceLibraryState.ts');
+
+  const firstRunState = createPracticeLibraryState({
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+  });
+
+  assert.equal(firstRunState.title, 'Next: Job Interview');
+  assert.equal(firstRunState.meta, 'Start simple');
+  assert.equal(firstRunState.progressLabel, '0 of 5 complete');
+  assert.equal(firstRunState.recommendedCard.roleplayId, 'job-interview');
+  assert.equal(firstRunState.recommendedCard.categoryLabel, 'Next');
+  assert.equal(firstRunState.recommendedCard.ctaLabel, 'Start now');
+  assert.equal(firstRunState.browseCards.length, 4);
+  assert.equal(firstRunState.browseCards[0].categoryLabel, 'Later');
+  assert.equal(firstRunState.browseLabel, '4 more roleplays');
+
+  const activeState = createPracticeLibraryState({
+    roleplays: practiceContent.roleplays,
+    sessions: [
+      { roleplayId: 'meeting-practice' },
+      { roleplayId: 'job-interview' },
+    ],
+  });
+
+  assert.equal(activeState.title, 'Next: Presentation Practice');
+  assert.equal(activeState.progressPercent, 40);
+  assert.equal(activeState.recommendedCard.roleplayId, 'presentation-practice');
+  assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').categoryLabel, 'Completed');
+  assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').ctaLabel, 'Practice again');
+  assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'sales-call').categoryLabel, 'Later');
+});
+
 test('formats the five-minute focus timer', async () => {
   const {
     createFocusTimerControls,

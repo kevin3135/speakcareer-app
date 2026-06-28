@@ -1,92 +1,158 @@
-import { GradientHero, RoleplayCard, ScreenContainer, SectionHeader } from '../components/ui';
+import { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+
+import {
+  AppButton,
+  Badge,
+  Card,
+  GradientHero,
+  ProgressBar,
+  RoleplayCard,
+  ScreenContainer,
+  SectionHeader,
+} from '../components/ui';
 import { practiceContent } from '../data/content';
-import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
+import { colors, fonts, spacing, typography } from '../theme';
+import type { PracticeSession, RoleplayId } from '../types';
+import { createPracticeLibraryState } from '../utils/practiceLibraryState';
 
 type PracticeScreenProps = {
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
   sessions: PracticeSession[];
 };
 
-type PracticeCategory = {
-  description: string;
-  difficulty: string;
-  focus: string;
-  id: string;
-  roleplayId: RoleplayId;
-  time: string;
-  title: string;
-  xp: string;
-};
-
-function toCategory(roleplay: RoleplayScenario): PracticeCategory {
-  const categoryTitles: Record<RoleplayId, string> = {
-    'job-interview': 'Job Interview',
-    'meeting-practice': 'Meetings',
-    'presentation-practice': 'Presentations',
-    'sales-call': 'Sales Calls',
-    'workplace-small-talk': 'Workplace Small Talk',
-  };
-
-  return {
-    description: roleplay.description,
-    difficulty: roleplay.targetLevel,
-    focus: roleplay.focus,
-    id: roleplay.id,
-    roleplayId: roleplay.id,
-    time: `${roleplay.durationMinutes} min`,
-    title: categoryTitles[roleplay.id],
-    xp: `+${roleplay.durationMinutes * 4} XP`,
-  };
-}
-
 export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps) {
-  const completedIds = new Set(sessions.map((session) => session.roleplayId));
-  const categories: PracticeCategory[] = [
-    ...practiceContent.roleplays.map(toCategory),
-    {
-      description: 'Practice structured answers for future speaking exams with career topics.',
-      difficulty: 'B1-B2',
-      focus: 'Answer clearly under time pressure',
-      id: 'exam-speaking',
-      roleplayId: 'presentation-practice',
-      time: '10 min',
-      title: 'Exam Speaking',
-      xp: '+40 XP',
-    },
-  ];
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+  const libraryState = createPracticeLibraryState({
+    roleplays: practiceContent.roleplays,
+    sessions,
+  });
 
   return (
     <ScreenContainer
       overline="Practice library"
-      subtitle="Pick a career category when you want extra practice. The main path still guides your day."
-      title="Choose a skill"
+      subtitle="One recommended conversation first. Open the full library only when you want a different focus."
+      title="Practice path"
     >
       <GradientHero
-        overline="Career categories"
-        subtitle="Interview, meetings, presentations, sales and small talk are ready as guided mock roleplays."
-        title={`${completedIds.size}/${practiceContent.roleplays.length} core skills started`}
-        tone="purple"
+        overline="Recommended next"
+        subtitle={libraryState.subtitle}
+        title={libraryState.title}
+        tone="primary"
+      >
+        <Card style={styles.heroProgressCard} tone="dark">
+          <View style={styles.heroProgressHeader}>
+            <Text style={styles.heroProgressLabel}>Career path</Text>
+            <Badge label={libraryState.meta} tone="accent" />
+          </View>
+          <ProgressBar
+            label={libraryState.progressLabel}
+            tone="accent"
+            value={libraryState.progressPercent}
+          />
+        </Card>
+      </GradientHero>
+
+      <SectionHeader
+        subtitle="Stay in sequence when you want the clearest next action."
+        title="Do this now"
+      />
+
+      <RoleplayCard
+        category={libraryState.recommendedCard.categoryLabel}
+        ctaLabel={libraryState.recommendedCard.ctaLabel}
+        description={libraryState.recommendedCard.description}
+        difficulty={libraryState.recommendedCard.difficulty}
+        focus={libraryState.recommendedCard.focus}
+        onPress={() => onOpenRoleplay(libraryState.recommendedCard.roleplayId)}
+        time={libraryState.recommendedCard.time}
+        title={libraryState.recommendedCard.title}
+        xp={libraryState.recommendedCard.xp}
       />
 
       <SectionHeader
-        subtitle="Beautiful cards, short sessions, clear XP."
-        title="Practice categories"
+        action={libraryState.browseCards.length > 0 ? (
+          <AppButton
+            accessibilityHint={isLibraryOpen
+              ? 'Hide the rest of the practice library'
+              : 'Show the rest of the practice library'}
+            label={isLibraryOpen ? 'Hide list' : 'Show list'}
+            onPress={() => setIsLibraryOpen((isOpen) => !isOpen)}
+            size="small"
+            variant="quiet"
+          />
+        ) : undefined}
+        subtitle="Use this only when you want to break sequence and practice another work situation."
+        title="Full library"
       />
 
-      {categories.map((category) => (
-        <RoleplayCard
-          category={completedIds.has(category.roleplayId) ? 'Started' : 'New'}
-          ctaLabel={completedIds.has(category.roleplayId) ? 'Practice again' : 'Start'}
-          description={category.description}
-          difficulty={category.difficulty}
-          focus={category.focus}
-          key={category.id}
-          onPress={() => onOpenRoleplay(category.roleplayId)}
-          time={category.time}
-          title={category.title}
-          xp={category.xp}
-        />
-      ))}
+      {libraryState.browseCards.length > 0 ? (
+        isLibraryOpen ? (
+          libraryState.browseCards.map((card) => (
+            <RoleplayCard
+              category={card.categoryLabel}
+              ctaLabel={card.ctaLabel}
+              description={card.description}
+              difficulty={card.difficulty}
+              focus={card.focus}
+              key={card.id}
+              onPress={() => onOpenRoleplay(card.roleplayId)}
+              time={card.time}
+              title={card.title}
+              xp={card.xp}
+            />
+          ))
+        ) : (
+          <Card tone="muted">
+            <Text style={styles.libraryKicker}>Hidden by default</Text>
+            <Text style={styles.libraryTitle}>{libraryState.browseLabel}</Text>
+            <Text style={styles.libraryBody}>
+              Keep the next action simple first. Open the rest when you want a different career conversation.
+            </Text>
+          </Card>
+        )
+      ) : null}
     </ScreenContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  heroProgressCard: {
+    backgroundColor: 'rgba(12, 26, 42, 0.38)',
+    borderColor: 'rgba(255, 255, 255, 0.18)',
+    padding: spacing.md,
+  },
+  heroProgressHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.sm,
+  },
+  heroProgressLabel: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  libraryBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  libraryKicker: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  libraryTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
+  },
+});
