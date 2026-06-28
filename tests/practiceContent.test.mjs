@@ -371,6 +371,47 @@ test('creates a level-matched foundation handoff before the first interview', as
   assert.notEqual(confidentHandoff.starterAnswer, starterHandoff.starterAnswer);
 });
 
+test('shows a starter reminder only on the first Job Interview answer card', async () => {
+  const { createRoleplayStarterReminder } = await import('../src/utils/roleplayStarterReminder.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const confidentProfile = getStartingLevelProfile('confident');
+  const starterReminder = createRoleplayStarterReminder({
+    roleplayId: 'job-interview',
+    sessions: [],
+    starterAnswer: starterProfile.starterAnswer,
+  });
+  const confidentReminder = createRoleplayStarterReminder({
+    roleplayId: 'job-interview',
+    sessions: [],
+    starterAnswer: confidentProfile.starterAnswer,
+  });
+
+  assert.equal(starterReminder.eyebrow, 'Starter reminder');
+  assert.equal(starterReminder.ctaLabel, 'Use starter');
+  assert.ok(starterReminder.body.includes('faster first answer'));
+  assert.ok(starterReminder.starterAnswer.includes('The result was'));
+  assert.ok(confidentReminder.starterAnswer.includes('As a result'));
+
+  assert.equal(
+    createRoleplayStarterReminder({
+      roleplayId: 'meeting-practice',
+      sessions: [],
+      starterAnswer: starterProfile.starterAnswer,
+    }),
+    null,
+  );
+  assert.equal(
+    createRoleplayStarterReminder({
+      roleplayId: 'job-interview',
+      sessions: [{ roleplayId: 'job-interview' }],
+      starterAnswer: starterProfile.starterAnswer,
+    }),
+    null,
+  );
+});
+
 test('provides mock feedback and mistake-bank data', () => {
   for (const roleplay of practiceContent.roleplays) {
     assert.ok(roleplay.feedback.summary.length > 20);

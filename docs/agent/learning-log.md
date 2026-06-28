@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: First Interview Starter Reminder
+
+Made one focused practice-flow improvement: the first unsaved `Job Interview` answer card now shows a compact starter reminder with the learner's level-matched sample answer and a `Use starter` action. The reminder only appears before the learner has typed and disappears for returning interview sessions, so it supports the first answer without adding noise to the wider Roleplay flow.
+
+What went well:
+
+- This directly extends the new Foundation handoff into the exact moment the learner needs help starting.
+- The logic stayed small by using one new helper in `src/utils/roleplayStarterReminder.ts` plus a compact panel inside the existing [`/C:/Dev/speakcareer-app/src/screens/RoleplayScreen.tsx`](/C:/Dev/speakcareer-app/src/screens/RoleplayScreen.tsx).
+- A focused test now protects the first-time interview-only behavior and level-matched starter copy.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile Expo/browser QA, so the starter reminder height and spacing should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Starter scaffolding is strongest when it appears at the exact answer box, not only in onboarding or Foundation.
+- Keep first-time support specific to the initial `Job Interview` run so repeat practice stays clean.
+- If a starter helper can prefill the answer safely, hide it once the learner begins typing.
+
+Next suggested task:
+
+- Check the first `Job Interview` viewport on mobile and, if the card stack feels tall, tighten the reminder spacing or move `Use starter` inline.
+
 ## 2026-06-28: Compact Home Daily Mission
 
 Made one focused Home simplification: the daily mission card is now a compact goal strip instead of a text-heavy mini dashboard. It shows a small `Goal` or `Done` node, the short mission title, the XP reward and one progress bar. The extra body paragraph, target badge and meta footer were removed from the visible Home UI.

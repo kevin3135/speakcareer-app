@@ -30,6 +30,7 @@ import {
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
+import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
 
 type RoleplayScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -51,6 +52,7 @@ export function RoleplayScreen({
   onSaveSession,
   roleplay,
   onSelectRoleplay,
+  sessions,
   startingLevelId,
   warmupCue,
 }: RoleplayScreenProps) {
@@ -86,6 +88,11 @@ export function RoleplayScreen({
     })
     : null;
   const levelProfile = getStartingLevelProfile(startingLevelId);
+  const starterReminder = createRoleplayStarterReminder({
+    roleplayId: roleplay.id,
+    sessions,
+    starterAnswer: levelProfile.starterAnswer,
+  });
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
@@ -195,6 +202,17 @@ export function RoleplayScreen({
     onOpenProgress();
   }
 
+  function useStarterAnswer() {
+    if (!starterReminder) {
+      return;
+    }
+
+    setDraftAnswer(starterReminder.starterAnswer);
+    setAnswerReview(null);
+    setFeedbackResult(null);
+    answerInputRef.current?.focus();
+  }
+
   if (savedSession) {
     return (
       <ScreenContainer>
@@ -261,6 +279,22 @@ export function RoleplayScreen({
               </View>
               <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
               <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>
+            </View>
+          ) : null}
+          {starterReminder && !hasDraftAnswer ? (
+            <View style={styles.starterReminderBox}>
+              <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
+              <Text style={styles.starterReminderNote}>{starterReminder.body}</Text>
+              <Text numberOfLines={3} style={styles.starterReminderText}>
+                {starterReminder.starterAnswer}
+              </Text>
+              <View style={styles.starterReminderAction}>
+                <AppButton
+                  label={starterReminder.ctaLabel}
+                  onPress={useStarterAnswer}
+                  variant="secondary"
+                />
+              </View>
             </View>
           ) : null}
           <View style={styles.answerInputShell}>
@@ -510,6 +544,38 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
+  },
+  starterReminderBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  starterReminderLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  starterReminderNote: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  starterReminderText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  starterReminderAction: {
+    marginTop: spacing.md,
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,
