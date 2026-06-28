@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import {
@@ -42,6 +43,7 @@ export function ProgressScreen({
   practicedMistakeIds,
   sessions,
 }: ProgressScreenProps) {
+  const [isMistakeQueueOpen, setIsMistakeQueueOpen] = useState(false);
   const { summary, mistakeBank } = progressData;
   const mission = createDailyMission(summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
@@ -69,6 +71,12 @@ export function ProgressScreen({
   const mistakePracticeStatus = mistakeDrill
     ? createMistakePracticeStatus(isTopMistakePracticed)
     : null;
+  const visibleMistakeQueueItems = mistakeQueue
+    ? mistakeQueue.items.slice(0, isMistakeQueueOpen ? mistakeQueue.items.length : 1)
+    : [];
+  const hiddenMistakeQueueCount = mistakeQueue
+    ? Math.max(0, mistakeQueue.items.length - visibleMistakeQueueItems.length)
+    : 0;
 
   return (
     <ScreenContainer
@@ -288,7 +296,7 @@ export function ProgressScreen({
           ) : null}
 
           <SectionHeader
-            subtitle="One active correction stays above. The rest wait here quietly."
+            subtitle="One correction first. Open the full list only when needed."
             title="Mistake bank"
           />
           {mistakeQueue ? (
@@ -303,7 +311,7 @@ export function ProgressScreen({
               <Text numberOfLines={2} style={styles.cardBody}>{mistakeQueue.body}</Text>
               {mistakeQueue.items.length > 0 ? (
                 <View style={styles.queueList}>
-                  {mistakeQueue.items.slice(0, 2).map((mistake) => (
+                  {visibleMistakeQueueItems.map((mistake) => (
                     <View key={mistake.id} style={styles.queueItem}>
                       <View style={styles.rowBetween}>
                         <Badge
@@ -320,10 +328,23 @@ export function ProgressScreen({
                       </Text>
                     </View>
                   ))}
-                  {mistakeQueue.items.length > 2 ? (
+                  {hiddenMistakeQueueCount > 0 ? (
                     <Text style={styles.queueMoreLabel}>
-                      +{mistakeQueue.items.length - 2} quieter review items
+                      {hiddenMistakeQueueCount} hidden until you need them
                     </Text>
+                  ) : null}
+                  {mistakeQueue.items.length > 1 ? (
+                    <View style={styles.queueToggleAction}>
+                      <AppButton
+                        accessibilityHint={isMistakeQueueOpen
+                          ? 'Hide the extra queued mistakes'
+                          : 'Show the full queued mistake bank'}
+                        label={isMistakeQueueOpen ? 'Hide list' : `Show all ${mistakeQueue.items.length}`}
+                        onPress={() => setIsMistakeQueueOpen((isOpen) => !isOpen)}
+                        size="small"
+                        variant="quiet"
+                      />
+                    </View>
                   ) : null}
                 </View>
               ) : null}
@@ -549,6 +570,10 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     textAlign: 'center',
+  },
+  queueToggleAction: {
+    alignSelf: 'center',
+    marginTop: spacing.xs,
   },
   mistakeCorrection: {
     backgroundColor: colors.secondarySoft,

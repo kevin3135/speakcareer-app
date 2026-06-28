@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Collapsed Progress Mistake Bank
+
+Made one focused Progress simplification: the Mistake Bank queue now shows one queued correction by default and hides the rest behind a quiet `Show all` toggle.
+
+Why it changed:
+
+- Progress was still drifting toward a list view, while the product principle says one active correction should lead.
+- The full mistake bank is useful, but it should not compete with the current correction drill.
+- This keeps the screen more app-led without removing access to the saved corrections.
+
+What went well:
+
+- The change stayed inside `ProgressScreen` and reused existing card, badge, button and theme tokens.
+- The queue is now calmer by default: one correction visible, the rest intentionally hidden until needed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the collapsed and expanded Mistake Bank states should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress should coach one fix first, then reveal lists only on request.
+- A quiet toggle is better than showing multiple correction cards by default.
+- Keep mistake-bank copy short so the active correction remains the main action.
+
+Next suggested task:
+
+- Mobile-preview the collapsed Mistake Bank and tune the `Show all` row if it feels like another primary CTA.
+
 ## 2026-06-28: Roleplay Level-Up Moment
 
 Made one focused completion polish: the saved Roleplay success state now detects when the newly saved session crosses an XP level boundary and shows one compact `Level up` reward card with the new level and total XP.
