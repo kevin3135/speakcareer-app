@@ -264,6 +264,15 @@ export function RoleplayScreen({
     answerInputRef.current?.focus();
   }
 
+  function startFollowUpWithStarter() {
+    if (!followUpPrompt) {
+      return;
+    }
+
+    setFollowUpAnswer(followUpPrompt.starterAnswer);
+    setIsFollowUpOpen(true);
+  }
+
   if (savedSession) {
     return (
       <ScreenContainer>
@@ -541,8 +550,9 @@ export function RoleplayScreen({
               {!isFollowUpOpen ? (
                 <View style={styles.followUpAction}>
                   <AppButton
-                    label="Answer follow-up"
-                    onPress={() => setIsFollowUpOpen(true)}
+                    accessibilityHint="Starts the optional follow-up with an editable starter sentence"
+                    label="Use starter"
+                    onPress={startFollowUpWithStarter}
                     variant="secondary"
                   />
                 </View>

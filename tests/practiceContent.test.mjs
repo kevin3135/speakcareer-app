@@ -2131,6 +2131,7 @@ test('adapts follow-up prompts to the first answer weakness', async () => {
 
   assert.equal(vaguePrompt.focus, 'result');
   assert.ok(vaguePrompt.prompt.includes('result') || vaguePrompt.prompt.includes('impact'));
+  assert.ok(vaguePrompt.starterAnswer.includes('As a result'));
 
   const strongAnswer = [
     'In my previous role, I led a customer feedback project with my team.',
@@ -2141,6 +2142,7 @@ test('adapts follow-up prompts to the first answer weakness', async () => {
 
   assert.equal(strongPrompt.focus, 'next-step');
   assert.equal(strongPrompt.prompt, roleplay.followUpPrompts[0]);
+  assert.ok(strongPrompt.starterAnswer.includes('next step'));
 });
 
 test('creates a professional daily mission from progress data', async () => {
