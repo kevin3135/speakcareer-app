@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Better English Retry Action
+
+Made one focused Roleplay feedback polish: when feedback is ready, the secondary feedback action now says `Use better English` and moves the suggested rewrite back into the answer box. This replaces the vague `Try again` action with a clearer one-tap improvement loop.
+
+What went well:
+
+- The feedback step now tells the learner exactly what to do with the better sentence.
+- This keeps the screen simple by changing one existing action instead of adding another button.
+- The change stayed inside `RoleplayScreen` and reused existing feedback data, `AppButton` and theme tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the feedback card should still be checked in the local preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Feedback actions should be specific: tell the learner how to use the rewrite, not just to try again.
+- Prefer replacing vague buttons over adding more buttons.
+- Keep the roleplay loop as answer, check, use better English, save.
+
+Next suggested task:
+
+- Preview the feedback state on mobile and consider making `Save answer` the only primary action after the learner uses the better English rewrite.
+
 ## 2026-06-28: Progress Warm-Up Answer Starter
 
 Made one focused practice-flow improvement: when the learner opens a Roleplay from the active Progress correction card, the warm-up cue now includes a one-tap `Use this line` action that drops the saved correction into the answer box. The generic first-interview starter helper is also suppressed for this case, so the learner sees one relevant coaching action instead of two competing prompts.

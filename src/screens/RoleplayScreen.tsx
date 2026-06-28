@@ -192,6 +192,19 @@ export function RoleplayScreen({
     answerInputRef.current?.focus();
   }
 
+  function useBetterEnglishAnswer() {
+    if (!feedbackResult) {
+      return;
+    }
+
+    setDraftAnswer(feedbackResult.feedback.suggestedRewrite);
+    setFeedbackResult(null);
+    setAnswerReview(null);
+    setFollowUpAnswer('');
+    setIsFollowUpOpen(false);
+    setSavedSession(null);
+  }
+
   function saveSession() {
     if (!answerReview?.isReadyForFeedback || !feedbackResult) {
       return;
@@ -425,8 +438,13 @@ export function RoleplayScreen({
           <View style={styles.feedbackActions}>
             <View style={styles.feedbackActionItem}>
               <AppButton
-                label={answerReview?.isReadyForFeedback ? 'Try again' : 'Add more first'}
-                onPress={retryAnswer}
+                accessibilityHint={
+                  answerReview?.isReadyForFeedback
+                    ? 'Moves the better English rewrite back into the answer box'
+                    : 'Returns to the answer box so you can add more detail'
+                }
+                label={answerReview?.isReadyForFeedback ? 'Use better English' : 'Add more first'}
+                onPress={answerReview?.isReadyForFeedback ? useBetterEnglishAnswer : retryAnswer}
                 variant="secondary"
               />
             </View>
