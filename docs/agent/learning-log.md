@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Actionable Roleplay Feedback Snapshot
+
+Made one focused AI feedback UI improvement: the Roleplay coach step now restates the learner's answer in a compact preview and highlights the single clearest next move beside the strongest and weakest score areas.
+
+Why it changed:
+
+- The review state already showed a summary, score and rewrite, but it still asked the learner to mentally remember what they had just written.
+- Kevin wants the practice loop to feel guided and habit-forming, which means each coach screen should turn into one obvious action.
+- A compact answer snapshot makes the feedback feel more concrete without adding another screen or more navigation.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx` with one new helper in `src/utils/feedbackSnapshot.ts`.
+- The new snapshot keeps the original answer, best area and next focus in one visible block before the learner opens detailed scores.
+- Added a focused helper test in `tests/practiceContent.test.mjs` so the coach snapshot stays concrete and concise.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new feedback snapshot should still be checked on a narrow phone layout.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Feedback becomes more useful when the learner can see their own answer and the next correction in the same glance.
+- Keep the first coach step concrete and compact; hide the full score breakdown behind an optional details toggle.
+- When improving feedback UI, prefer one clear next move over adding more summary copy.
+
+Next suggested task:
+
+- Carry the latest `Next move` coaching focus into Progress so the learner sees one repeated skill target across sessions.
+
 ## 2026-06-28: Path-Aware Progress Next Step
 
 Made one focused Progress improvement: the main next-step card now uses the same guided career path as Home, Practice and Roleplay instead of choosing the next roleplay from simple library order.

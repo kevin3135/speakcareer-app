@@ -23,6 +23,7 @@ import type {
 } from '../types';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
+import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
@@ -136,6 +137,13 @@ export function RoleplayScreen({
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
   const feedbackScoreSummary = feedbackResult
     ? createFeedbackScoreSummary(feedbackResult.feedback.scores)
+    : null;
+  const feedbackSnapshot = feedbackResult && feedbackScoreSummary
+    ? createFeedbackSnapshot({
+      answer: draftAnswer,
+      improvements: feedbackResult.feedback.improvements,
+      summary: feedbackScoreSummary,
+    })
     : null;
   const followUpPrompt = answerReview?.isReadyForFeedback
     ? createAdaptiveFollowUpPrompt(roleplay, draftAnswer, answerReview)
@@ -550,13 +558,18 @@ export function RoleplayScreen({
             </View>
           </View>
           <Text style={styles.feedbackSummaryText}>{feedbackResult.feedback.summary}</Text>
-          {feedbackScoreSummary?.strongestArea && feedbackScoreSummary.nextFocusArea ? (
+          {feedbackSnapshot ? (
             <View style={styles.feedbackSnapshotBox}>
               <Text style={styles.feedbackSnapshotLabel}>Quick read</Text>
-              <Text style={styles.feedbackSnapshotText}>
-                Best right now: {feedbackScoreSummary.strongestArea.label} {feedbackScoreSummary.strongestArea.value}.
-                {' '}Next focus: {feedbackScoreSummary.nextFocusArea.label} {feedbackScoreSummary.nextFocusArea.value}.
+              <Text style={styles.feedbackSnapshotAnswerLabel}>Your answer</Text>
+              <Text numberOfLines={3} style={styles.feedbackSnapshotAnswerText}>
+                {feedbackSnapshot.answerPreview}
               </Text>
+              <View style={styles.feedbackSnapshotBadges}>
+                <Badge label={`Best: ${feedbackSnapshot.strongestLabel}`} tone="secondary" />
+                <Badge label={`Next: ${feedbackSnapshot.nextFocusLabel}`} tone="accent" />
+              </View>
+              <Text style={styles.feedbackSnapshotText}>{feedbackSnapshot.nextMoveText}</Text>
             </View>
           ) : null}
           <Pressable
@@ -1028,12 +1041,33 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
+  feedbackSnapshotAnswerLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.sm,
+  },
+  feedbackSnapshotAnswerText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  feedbackSnapshotBadges: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
   feedbackSnapshotText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
+    marginTop: spacing.md,
   },
   feedbackSummaryText: {
     color: colors.text,

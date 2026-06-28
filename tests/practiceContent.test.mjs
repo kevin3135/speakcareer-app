@@ -167,6 +167,35 @@ test('summarizes roleplay feedback scores for the coach step', async () => {
   assert.deepEqual(summary.nextFocusArea, { label: 'Vocabulary', value: 0 });
 });
 
+test('creates a concrete coach snapshot from the learner answer', async () => {
+  const { createFeedbackScoreSummary } = await import('../src/utils/feedbackScoreSummary.ts');
+  const { createFeedbackSnapshot } = await import('../src/utils/feedbackSnapshot.ts');
+
+  const summary = createFeedbackScoreSummary([
+    { label: 'Clarity', value: 78 },
+    { label: 'Confidence', value: 65 },
+    { label: 'Structure', value: 88 },
+    { label: 'Vocabulary', value: 62 },
+  ]);
+  const snapshot = createFeedbackSnapshot({
+    answer: `
+      In my previous role, I led the onboarding handoff for new clients and shared weekly updates
+      with the support team so everyone knew the next step before launch.
+    `,
+    improvements: ['Add one measurable result or business outcome.'],
+    summary,
+  });
+
+  assert.equal(snapshot.strongestLabel, 'Structure 88');
+  assert.equal(snapshot.nextFocusLabel, 'Vocabulary 62');
+  assert.ok(snapshot.answerPreview.startsWith('In my previous role'));
+  assert.ok(snapshot.answerPreview.endsWith('...'));
+  assert.equal(
+    snapshot.nextMoveText,
+    'Next move: Add one measurable result or business outcome.',
+  );
+});
+
 test('creates a simple first-quest completion handoff', async () => {
   const { createFirstQuestCompletionState } = await import('../src/utils/firstQuestCompletion.ts');
 
