@@ -11,6 +11,7 @@ import {
   XPBadge,
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
+import { guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type {
   DailyPracticeTarget,
@@ -32,6 +33,7 @@ import {
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
+import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
 
 type RoleplayScreenProps = {
@@ -103,6 +105,11 @@ export function RoleplayScreen({
     roleplayId: roleplay.id,
     sessions,
     starterAnswer: levelProfile.starterAnswer,
+  });
+  const firstQuestState = createRoleplayFirstQuestState({
+    guidedStart,
+    roleplayId: roleplay.id,
+    sessions,
   });
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
@@ -295,6 +302,23 @@ export function RoleplayScreen({
 
       {!feedbackResult ? (
         <Card tone="strong">
+          {firstQuestState ? (
+            <View style={styles.firstQuestCue}>
+              <View style={styles.firstQuestNumber}>
+                <Text style={styles.firstQuestNumberText}>1</Text>
+              </View>
+              <View style={styles.firstQuestCopy}>
+                <View style={styles.oneThingHeader}>
+                  <Text style={styles.firstQuestEyebrow}>{firstQuestState.eyebrow}</Text>
+                  <Badge label={firstQuestState.progressLabel} tone="accent" />
+                </View>
+                <Text style={styles.firstQuestTitle}>{firstQuestState.title}</Text>
+                <Text numberOfLines={2} style={styles.firstQuestText}>
+                  {firstQuestState.body}
+                </Text>
+              </View>
+            </View>
+          ) : null}
           <View style={styles.oneThingHeader}>
             <Text style={styles.cardKicker}>Question</Text>
             <Badge label="1 answer" tone="info" />
@@ -498,6 +522,55 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  firstQuestCue: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginBottom: spacing.md,
+    padding: spacing.md,
+  },
+  firstQuestNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderRadius: radius.pill,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  firstQuestNumberText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  firstQuestCopy: {
+    flex: 1,
+  },
+  firstQuestEyebrow: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  firstQuestTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  firstQuestText: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   promptText: {
     color: colors.ink,

@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: First Roleplay Arrival Cue
+
+Made one focused Roleplay polish: the first Job Interview now shows a compact `First quest` arrival cue before the question when there are no saved sessions yet. It reuses the existing guided-start data, shows `0/1 saved`, and keeps the instruction short so the first real practice feels like the next step after Foundation instead of a fresh choice screen.
+
+What went well:
+
+- This connects the Foundation handoff to the first interview without adding a new screen or navigation path.
+- The cue is only shown for the initial Job Interview state, so returning practice stays quieter.
+- The change reused existing `guidedStart`, `createRoleplayFirstQuestState`, `Badge`, `Card` and theme tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include a fresh phone-sized screenshot, so the first viewport should still be checked for vertical crowding.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-run Roleplay should feel like a quest handoff, not a library item.
+- Reuse existing guided-intro data before adding new copy.
+- Keep first-quest UI compact because the answer field still needs to appear quickly.
+
+Next suggested task:
+
+- Mobile-preview the first Job Interview screen and reduce any vertical crowding around the new first-quest cue, starter reminder and answer box.
+
 ## 2026-06-28: Persistent Foundation Resume
 
 Made one focused onboarding/usability improvement: the first Foundation lesson now saves its local progress, resumes from the last completed block, and unlocks the first Job Interview on Home as soon as Foundation is done even before the first saved roleplay. This fixes the first-run loop where the app could treat a finished or in-progress Foundation lesson like a fresh start.
