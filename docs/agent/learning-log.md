@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-29: Compact Saved Coach Target Strip
+
+Made one focused Roleplay completion polish: the saved coach target on the success screen is now a compact one-line strip instead of a taller panel with a separate badge row.
+
+Why it changed:
+
+- The saved-success screen should end with one win, one coach target and one clear next action.
+- The previous coach-target panel was useful, but it added height before the next lesson and primary continuation area.
+- A one-line strip keeps the improvement target visible without making the completion screen feel like another report.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No saved-session data, completion logic, storage, navigation or backend behavior changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the completion screen should still be checked at a narrow phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the saved-success screen and, if the CTA is still low, make the career path progress card more compact.
+
 ## 2026-06-29: Saved Coach Target Recap
 
 Made one focused practice-flow improvement: after a roleplay is saved, the success screen now shows the saved coach target in one compact panel so the learner leaves with one clear improvement to repeat next.

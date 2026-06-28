@@ -442,12 +442,11 @@ export function RoleplayScreen({
             {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
           </View>
           {savedCoachRecap ? (
-            <View style={styles.savedCoachBox}>
-              <View style={styles.oneThingHeader}>
-                <Text style={styles.savedCoachLabel}>Coach target</Text>
-                <Badge label={savedCoachRecap.badgeLabel} tone="secondary" />
-              </View>
-              <Text style={styles.savedCoachText}>{savedCoachRecap.text}</Text>
+            <View style={styles.savedCoachStrip}>
+              <Text numberOfLines={1} style={styles.savedCoachStripText}>
+                <Text style={styles.savedCoachStripLabel}>Coach target </Text>
+                {savedCoachRecap.badgeLabel}: {savedCoachRecap.text}
+              </Text>
             </View>
           ) : null}
           {!savedPathProgress ? (
@@ -1628,27 +1627,27 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineH3,
     marginTop: spacing.xs,
   },
-  savedCoachBox: {
+  savedCoachStrip: {
     backgroundColor: colors.white,
     borderColor: colors.successDark,
-    borderRadius: radius.lg,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    marginTop: spacing.lg,
-    padding: spacing.md,
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
-  savedCoachLabel: {
+  savedCoachStripLabel: {
     color: colors.successDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  savedCoachText: {
+  savedCoachStripText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
+    lineHeight: typography.lineSmall,
   },
   savedPathBox: {
     backgroundColor: colors.white,
