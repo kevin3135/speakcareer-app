@@ -6,10 +6,11 @@ import {
   Badge,
   Card,
   GradientHero,
+  ProgressBar,
   ScreenContainer,
   XPBadge,
 } from '../components/ui';
-import { practiceContent } from '../data/content';
+import { practiceContent, progressData } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type {
   DailyPracticeTarget,
@@ -25,6 +26,7 @@ import {
   createNextPracticeRecommendation,
   createPracticeCompletionSummary,
   createPracticeSavePrompt,
+  createSavedRoleplayMilestone,
   createSavedRoleplayHandoff,
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
@@ -47,6 +49,7 @@ type RoleplayScreenProps = {
 const FOLLOW_UP_BONUS_XP = 15;
 
 export function RoleplayScreen({
+  dailyTarget,
   onBack,
   onOpenProgress,
   onSaveSession,
@@ -85,6 +88,14 @@ export function RoleplayScreen({
       includedFollowUp: savedSession.includedFollowUp,
       roleplayTitle: savedSession.roleplayTitle,
       xpReward: savedSession.xpReward,
+    })
+    : null;
+  const savedMilestone = savedSession
+    ? createSavedRoleplayMilestone({
+      dailyTarget,
+      savedSession,
+      sessions,
+      summary: progressData.summary,
     })
     : null;
   const levelProfile = getStartingLevelProfile(startingLevelId);
@@ -241,6 +252,24 @@ export function RoleplayScreen({
             <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
             <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
           </View>
+          {savedMilestone ? (
+            <View style={styles.savedMilestoneBox}>
+              <Text style={styles.savedMilestoneLabel}>Habit progress</Text>
+              <View style={styles.savedMilestoneBadges}>
+                <Badge label={savedMilestone.todayValue} tone="info" />
+                <Badge label={savedMilestone.streakValue} tone="secondary" />
+              </View>
+              <Text style={styles.savedMilestoneTitle}>{savedMilestone.title}</Text>
+              <Text style={styles.savedMilestoneBody}>{savedMilestone.body}</Text>
+              <View style={styles.savedMilestoneProgress}>
+                <ProgressBar
+                  label={savedMilestone.progressLabel}
+                  tone={savedMilestone.progressPercent === 100 ? 'success' : 'secondary'}
+                  value={savedMilestone.progressPercent}
+                />
+              </View>
+            </View>
+          ) : null}
         </GradientHero>
 
         <AppButton label={savedHandoff.ctaLabel} onPress={continueToNext} />
@@ -705,5 +734,43 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineH3,
     marginTop: spacing.xs,
+  },
+  savedMilestoneBadges: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  savedMilestoneBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  savedMilestoneBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.successDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  savedMilestoneLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  savedMilestoneProgress: {
+    marginTop: spacing.md,
+  },
+  savedMilestoneTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
   },
 });

@@ -838,6 +838,7 @@ test('creates a rewarding roleplay completion summary', async () => {
     createPracticeCompletionMilestone,
     createPracticeCompletionSummary,
     createPracticeSavePrompt,
+    createSavedRoleplayMilestone,
     createSavedRoleplayHandoff,
   } = await import('../src/utils/practiceCompletion.ts');
 
@@ -910,6 +911,39 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(milestoneRemaining.todayValue, '1/3 done');
   assert.equal(milestoneRemaining.streakValue, '1 day');
   assert.ok(milestoneRemaining.body.includes('2 more short roleplays'));
+
+  const savedSession = {
+    id: 'presentation-practice-1',
+    roleplayId: 'presentation-practice',
+    roleplayTitle: 'Presentation Practice',
+    completedAt: '2026-06-28T10:00:00.000Z',
+    answerPreview: 'I would start with the main business update.',
+    wordCount: 18,
+    readinessLabel: 'Ready for feedback',
+    feedbackSummary: 'Clear opening with a useful next step.',
+    includedFollowUp: false,
+    xpReward: 55,
+  };
+  const savedMilestone = createSavedRoleplayMilestone({
+    dailyTarget: 2,
+    savedSession,
+    sessions: [savedSession],
+    summary: {
+      sessionsCompleted: 3,
+      minutesPracticed: 15,
+      currentStreakDays: 4,
+      confidenceScore: 72,
+      clarityScore: 70,
+      nextFocus: 'Add one measurable result.',
+    },
+  });
+
+  assert.equal(savedMilestone.title, 'One more sprint today');
+  assert.equal(savedMilestone.todayValue, '1/2 done');
+  assert.equal(savedMilestone.streakValue, '5 days');
+  assert.equal(savedMilestone.progressLabel, '1/2 roleplays today');
+  assert.equal(savedMilestone.progressPercent, 50);
+  assert.ok(savedMilestone.body.includes('complete today\'s target'));
 
   const nextAfterSales = createNextPracticeRecommendation('sales-call', practiceContent.roleplays);
   assert.equal(nextAfterSales.roleplayId, 'workplace-small-talk');

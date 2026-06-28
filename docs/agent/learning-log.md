@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Saved Roleplay Milestone Loop
+
+Made one focused practice-flow improvement: after saving a roleplay answer, the completion hero now shows a compact habit-progress card with today progress, streak, daily-target copy and a short progress bar. This gives the learner an immediate reason to continue while the save moment still feels rewarding.
+
+What went well:
+
+- This uses the existing local progress and completion helpers, so the change stayed small and aligned with the MVP's local-only loop.
+- The new `createSavedRoleplayMilestone` helper keeps the post-save progress math testable and avoids double-counting the just-saved session when parent state catches up.
+- The saved Roleplay state now surfaces streak and daily-target progress at the exact completion moment, which better supports the habit-forming path.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the saved completion hero should still be checked on a phone-sized viewport for height and spacing.
+- The helper needs one local `@ts-expect-error` comment because the Node test runner requires an explicit `.ts` extension on the runtime import, while Expo TypeScript does not.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The save moment is a strong place to reinforce streak and daily-target progress, not only the Home or Progress screens.
+- Keep completion rewards compact: next lesson and habit progress can live in the same saved-state hero as long as the primary CTA stays obvious.
+- When a utility is imported at runtime by Node-based tests, watch for TypeScript extension-resolution mismatches before widening project config.
+
+Next suggested task:
+
+- Mobile-preview the saved Roleplay completion state and, if it feels tall, tighten the next-lesson and habit-progress blocks into one denser reward stack.
+
 ## 2026-06-28: Simpler Progress Next Step
 
 Made one focused Progress/Wins simplification: the top next-step card now shows one `Do now` action instead of three numbered guide rows. The explanatory body is capped to two lines so the screen feels more like a coach telling the learner the next move, not a progress report.

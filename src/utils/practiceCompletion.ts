@@ -1,5 +1,12 @@
-import type { DailyPracticeTarget, RoleplayId, RoleplayScenario } from '../types';
-import type { LocalProgressStats } from './localProgress';
+import type {
+  DailyPracticeTarget,
+  PracticeSession,
+  ProgressSummary,
+  RoleplayId,
+  RoleplayScenario,
+} from '../types';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createLocalProgressStats, type LocalProgressStats } from './localProgress.ts';
 
 export type PracticeCompletionSummary = {
   title: string;
@@ -40,6 +47,11 @@ export type PracticeCompletionMilestone = {
   body: string;
   todayValue: string;
   streakValue: string;
+};
+
+export type SavedRoleplayMilestone = PracticeCompletionMilestone & {
+  progressLabel: string;
+  progressPercent: number;
 };
 
 type CreatePracticeCompletionSummaryInput = {
@@ -151,6 +163,13 @@ type CreatePracticeCompletionMilestoneInput = {
   >;
 };
 
+type CreateSavedRoleplayMilestoneInput = {
+  dailyTarget: DailyPracticeTarget;
+  savedSession: PracticeSession;
+  sessions: PracticeSession[];
+  summary: ProgressSummary;
+};
+
 export function createPracticeCompletionMilestone({
   dailyTarget,
   progress,
@@ -168,6 +187,29 @@ export function createPracticeCompletionMilestone({
         : `${progress.targetSessionsRemaining} more short roleplays will complete today\'s target.`,
     todayValue: `${progress.targetSessionsCompleted}/${dailyTarget} done`,
     streakValue: `${progress.currentStreakDays} ${progress.currentStreakDays === 1 ? 'day' : 'days'}`,
+  };
+}
+
+export function createSavedRoleplayMilestone({
+  dailyTarget,
+  savedSession,
+  sessions,
+  summary,
+}: CreateSavedRoleplayMilestoneInput): SavedRoleplayMilestone {
+  const previewSessions = sessions.some((session) => session.id === savedSession.id)
+    ? sessions
+    : [savedSession, ...sessions];
+  const localProgress = createLocalProgressStats(summary, previewSessions, dailyTarget);
+  const milestone = createPracticeCompletionMilestone({
+    dailyTarget,
+    progress: localProgress,
+  });
+  const roleplayLabel = dailyTarget === 1 ? 'roleplay' : 'roleplays';
+
+  return {
+    ...milestone,
+    progressLabel: `${localProgress.targetSessionsCompleted}/${dailyTarget} ${roleplayLabel} today`,
+    progressPercent: localProgress.targetCompletionPercent,
   };
 }
 
