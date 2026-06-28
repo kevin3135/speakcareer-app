@@ -1046,6 +1046,7 @@ test('creates a rewarding roleplay completion summary', async () => {
     createPracticeSavePrompt,
     createPracticeTargetPreview,
     createSavedCoachRecap,
+    createSavedLevelUpRecap,
     createSavedRoleplayMilestone,
     createSavedRoleplayHandoff,
     createSavedRoleplayPathProgress,
@@ -1267,6 +1268,16 @@ test('creates a rewarding roleplay completion summary', async () => {
 
   assert.equal(savedCoachRecap.badgeLabel, 'Coach target');
   assert.equal(savedCoachRecap.text, 'Add one concrete result before the final sentence.');
+
+  const savedLevelUpRecap = createSavedLevelUpRecap({
+    currentLevelLabel: 'Level 3',
+    previousLevelLabel: 'Level 2',
+    totalXpLabel: '185 XP total',
+  });
+
+  assert.equal(savedLevelUpRecap.badgeLabel, 'Level 3');
+  assert.equal(savedLevelUpRecap.text, 'From Level 2 to Level 3');
+  assert.equal(savedLevelUpRecap.totalXpLabel, '185 XP total');
 
   const fallbackCoachRecap = createSavedCoachRecap({
     feedbackSummary: 'Keep the structure and make the business result more specific.',

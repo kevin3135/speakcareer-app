@@ -88,6 +88,12 @@ export type SavedCoachRecap = {
   text: string;
 };
 
+export type SavedLevelUpRecap = {
+  badgeLabel: string;
+  text: string;
+  totalXpLabel: string;
+};
+
 type CreatePracticeCompletionSummaryInput = {
   roleplayTitle: string;
   xpReward: number;
@@ -254,6 +260,12 @@ type CreateSavedRoleplayPathProgressInput = {
   sessions: Pick<PracticeSession, 'id' | 'roleplayId'>[];
 };
 
+type CreateSavedLevelUpRecapInput = {
+  currentLevelLabel: string;
+  previousLevelLabel: string;
+  totalXpLabel: string;
+};
+
 export function createPracticeCompletionMilestone({
   dailyTarget,
   progress,
@@ -373,6 +385,18 @@ export function createSavedCoachRecap(
   return {
     badgeLabel: savedSession.nextFocusLabel?.trim() || 'Coach note',
     text: nextFocusText,
+  };
+}
+
+export function createSavedLevelUpRecap({
+  currentLevelLabel,
+  previousLevelLabel,
+  totalXpLabel,
+}: CreateSavedLevelUpRecapInput): SavedLevelUpRecap {
+  return {
+    badgeLabel: currentLevelLabel,
+    text: `From ${previousLevelLabel} to ${currentLevelLabel}`,
+    totalXpLabel,
   };
 }
 

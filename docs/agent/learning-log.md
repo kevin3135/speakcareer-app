@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: Compact Saved Level-Up Strip
+
+Made one focused Roleplay completion polish: the saved-success level-up state is now a compact one-line strip, and the new level plus total XP move into the existing badge row instead of using a taller standalone panel.
+
+Why it changed:
+
+- The saved-success screen should keep the primary continuation action visible near the win state.
+- The old level-up box repeated information across a title, badge row and body copy, which pushed the CTA lower without changing the learner's next action.
+- A compact strip keeps the level-up moment visible while preserving the fast, businesslike finish the MVP needs.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx`, `src/utils/practiceCompletion.ts` and `tests/practiceContent.test.mjs`.
+- The new helper keeps the level-up copy easy to reuse and test without changing saved-session, storage, navigation or backend behavior.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the compact saved-success stack should still be checked at `390x844`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion screens feel stronger when progress rewards reuse the same badge row instead of adding another full card.
+- If the learner already understands the win, use one short recap strip instead of a second explanatory panel.
+- Keep post-save attention on one clear next action and compress supporting progress signals around it.
+
+Next suggested task:
+
+- Make the fallback saved-success `Next stop` card as compact as the path-aware version so both completion branches keep the CTA equally close.
+
 ## 2026-06-29: Compact Saved Career Path Card
 
 Made one focused Roleplay completion polish: the saved-success career path card now shows the next unlocked roleplay as one compact line and uses tighter padding.

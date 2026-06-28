@@ -35,6 +35,7 @@ import {
   createPracticeSaveLockInPreview,
   createPracticeSavePrompt,
   createSavedCoachRecap,
+  createSavedLevelUpRecap,
   createPracticeTargetPreview,
   createSavedRoleplayMilestone,
   createSavedRoleplayHandoff,
@@ -130,6 +131,7 @@ export function RoleplayScreen({
     })
     : null;
   const savedCoachRecap = savedSession ? createSavedCoachRecap(savedSession) : null;
+  const savedLevelUpRecap = levelUpMoment ? createSavedLevelUpRecap(levelUpMoment) : null;
   const savedMilestone = savedSession
     ? createSavedRoleplayMilestone({
       dailyTarget,
@@ -439,6 +441,8 @@ export function RoleplayScreen({
             ) : (
               <Badge label="Streak updated" tone="accent" />
             )}
+            {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.badgeLabel} tone="accent" /> : null}
+            {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.totalXpLabel} tone="info" /> : null}
             {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
           </View>
           {savedCoachRecap ? (
@@ -446,6 +450,14 @@ export function RoleplayScreen({
               <Text numberOfLines={1} style={styles.savedCoachStripText}>
                 <Text style={styles.savedCoachStripLabel}>Coach target </Text>
                 {savedCoachRecap.badgeLabel}: {savedCoachRecap.text}
+              </Text>
+            </View>
+          ) : null}
+          {savedLevelUpRecap ? (
+            <View style={styles.levelUpStrip}>
+              <Text numberOfLines={1} style={styles.levelUpStripText}>
+                <Text style={styles.levelUpStripLabel}>Level up </Text>
+                {savedLevelUpRecap.text}
               </Text>
             </View>
           ) : null}
@@ -471,18 +483,6 @@ export function RoleplayScreen({
                   value={savedPathProgress.progressPercent}
                 />
               </View>
-            </View>
-          ) : null}
-          {levelUpMoment ? (
-            <View style={styles.levelUpBox}>
-              <Text style={styles.levelUpLabel}>Level up</Text>
-              <View style={styles.levelUpBadges}>
-                <Badge label={levelUpMoment.currentLevelLabel} tone="accent" />
-                <Badge label={levelUpMoment.totalXpLabel} tone="info" />
-              </View>
-              <Text style={styles.levelUpText}>
-                You moved from {levelUpMoment.previousLevelLabel} to {levelUpMoment.currentLevelLabel}.
-              </Text>
             </View>
           ) : null}
         </GradientHero>
@@ -1576,33 +1576,27 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  levelUpBadges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginTop: spacing.sm,
-  },
-  levelUpBox: {
+  levelUpStrip: {
     backgroundColor: colors.accentSoft,
     borderColor: colors.accent,
-    borderRadius: radius.lg,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
-  levelUpLabel: {
+  levelUpStripLabel: {
     color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  levelUpText: {
+  levelUpStripText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
+    lineHeight: typography.lineSmall,
   },
   savedNextLabel: {
     color: colors.infoDark,
