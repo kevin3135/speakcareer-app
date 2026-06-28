@@ -37,15 +37,18 @@ export function FoundationScreen({
   const activeStepIndex = Math.min(completedSteps, totalSteps - 1);
   const activePart = foundationStart.structure[activeStepIndex];
   const activePiece = sentencePieces[activeStepIndex];
+  const builderSlots = foundationStart.structure.map((part, index) => ({
+    isCurrent: !isComplete && index === activeStepIndex,
+    isDone: index < completedSteps,
+    part,
+    piece: sentencePieces[index],
+  }));
   const handoff = createFoundationHandoff({
     coachNote: levelProfile.coachMessage,
     nextQuestTitle: guidedStart.title,
     starterAnswer: levelProfile.starterAnswer,
   });
-  const builtSentence =
-    completedSteps > 0
-      ? sentencePieces.slice(0, completedSteps).join(' ')
-      : '';
+  const continueLabel = isComplete ? 'Continue to interview' : `Tap ${activePart} first`;
 
   function selectStructurePart(index: number) {
     if (index === completedSteps) {
@@ -80,6 +83,39 @@ export function FoundationScreen({
           <Text style={styles.stepTitle}>{isComplete ? 'Sentence ready' : `Tap: ${activePart}`}</Text>
         </View>
 
+        <View style={styles.sentenceRail}>
+          {builderSlots.map((slot) => (
+            <View
+              key={slot.part}
+              style={[
+                styles.sentenceSlot,
+                slot.isDone && styles.sentenceSlotDone,
+                slot.isCurrent && styles.sentenceSlotCurrent,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.sentenceSlotLabel,
+                  slot.isDone && styles.sentenceSlotLabelDone,
+                  slot.isCurrent && styles.sentenceSlotLabelCurrent,
+                ]}
+              >
+                {slot.part}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.sentenceSlotText,
+                  slot.isDone && styles.sentenceSlotTextDone,
+                  slot.isCurrent && styles.sentenceSlotTextCurrent,
+                ]}
+              >
+                {slot.isDone ? slot.piece : slot.isCurrent ? 'Tap now' : 'Next'}
+              </Text>
+            </View>
+          ))}
+        </View>
+
         {isComplete ? (
           <View style={styles.finishedBlock}>
             <Text style={styles.finishedLabel}>You built</Text>
@@ -106,12 +142,6 @@ export function FoundationScreen({
         </View>
       </Card>
 
-      {!isComplete && builtSentence ? (
-        <View style={styles.previewSentence}>
-          <Text style={styles.previewSentenceText}>{builtSentence}</Text>
-        </View>
-      ) : null}
-
       {isComplete ? (
         <Card tone="accent">
           <View style={styles.handoffHeader}>
@@ -135,7 +165,7 @@ export function FoundationScreen({
       <AppButton
         accessibilityHint={`Uses this sentence structure in ${guidedStart.title}`}
         disabled={!isComplete}
-        label={isComplete ? 'Continue to interview' : 'Tap the 3 blocks first'}
+        label={continueLabel}
         onPress={onStartCareerPractice}
       />
     </ScreenContainer>
@@ -173,6 +203,54 @@ const styles = StyleSheet.create({
     fontSize: typography.h1,
     fontWeight: '900',
     lineHeight: typography.lineH1,
+  },
+  sentenceRail: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  sentenceSlot: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minHeight: 70,
+    padding: spacing.sm,
+  },
+  sentenceSlotCurrent: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  sentenceSlotDone: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+  },
+  sentenceSlotLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  sentenceSlotLabelCurrent: {
+    color: colors.primaryDark,
+  },
+  sentenceSlotLabelDone: {
+    color: colors.secondaryDark,
+  },
+  sentenceSlotText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  sentenceSlotTextCurrent: {
+    color: colors.primaryDark,
+  },
+  sentenceSlotTextDone: {
+    color: colors.ink,
   },
   singleStepButton: {
     alignItems: 'center',
@@ -222,18 +300,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineH3,
     marginTop: spacing.xs,
-  },
-  previewSentence: {
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radius.lg,
-    padding: spacing.lg,
-  },
-  previewSentenceText: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
   },
   handoffHeader: {
     alignItems: 'center',

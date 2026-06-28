@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Foundation Sentence Rail
+
+Made one focused Foundation polish: Lesson 1 now shows a compact three-slot sentence rail for `I`, `action` and `result`. Completed parts fill in as the learner taps, the current part is highlighted, and the old separate preview block was removed so the lesson stays inside one clear card.
+
+Why it changed:
+
+- Foundation already used taps, but the learner needed a stronger visual sense of building the sentence.
+- The rail makes the lesson feel more game-like and guided without adding choices or another screen.
+- The disabled CTA now says exactly which block to tap next instead of the generic `Tap the 3 blocks first`.
+
+What went well:
+
+- The change stayed inside `FoundationScreen` and reused existing theme tokens.
+- The first lesson now has clearer progress while preserving one main action: tap the active block.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the three-slot rail should still be checked on narrow phone widths for truncation.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Foundation should feel like building, not reading.
+- Keep all first-lesson progress inside one card so the user does not scan multiple sections.
+- Disabled CTAs can still guide the next tap with concrete copy.
+
+Next suggested task:
+
+- Mobile-preview Foundation Step 1 at 390px and tune the rail text if long action phrases truncate awkwardly.
+
 ## 2026-06-28: Focused Practice Next Path
 
 Made one focused Practice improvement: the Practice tab now leads with one recommended next roleplay and keeps the rest of the library hidden behind a quiet `Show list` action. The off-path `Exam Speaking` card was removed so the screen stays aligned with the English career-conversation MVP.
