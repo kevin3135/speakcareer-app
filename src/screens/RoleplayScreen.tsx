@@ -557,19 +557,22 @@ export function RoleplayScreen({
               </View>
             </View>
           </View>
-          <Text style={styles.feedbackSummaryText}>{feedbackResult.feedback.summary}</Text>
+          {feedbackSnapshot ? null : (
+            <Text style={styles.feedbackSummaryText}>{feedbackResult.feedback.summary}</Text>
+          )}
           {feedbackSnapshot ? (
             <View style={styles.feedbackSnapshotBox}>
-              <Text style={styles.feedbackSnapshotLabel}>Quick read</Text>
-              <Text style={styles.feedbackSnapshotAnswerLabel}>Your answer</Text>
-              <Text numberOfLines={3} style={styles.feedbackSnapshotAnswerText}>
-                {feedbackSnapshot.answerPreview}
-              </Text>
-              <View style={styles.feedbackSnapshotBadges}>
-                <Badge label={`Best: ${feedbackSnapshot.strongestLabel}`} tone="secondary" />
-                <Badge label={`Next: ${feedbackSnapshot.nextFocusLabel}`} tone="accent" />
+              <View style={styles.feedbackSnapshotHeader}>
+                <Text style={styles.feedbackSnapshotLabel}>Next move</Text>
+                <Badge label={feedbackSnapshot.nextFocusLabel} tone="accent" />
               </View>
               <Text style={styles.feedbackSnapshotText}>{feedbackSnapshot.nextMoveText}</Text>
+              <View style={styles.feedbackSnapshotAnswerBox}>
+                <Text style={styles.feedbackSnapshotAnswerLabel}>You said</Text>
+                <Text numberOfLines={1} style={styles.feedbackSnapshotAnswerText}>
+                  {feedbackSnapshot.answerPreview}
+                </Text>
+              </View>
             </View>
           ) : null}
           <Pressable
@@ -1028,45 +1031,51 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   feedbackSnapshotBox: {
-    backgroundColor: colors.primarySoft,
-    borderColor: colors.primary,
+    backgroundColor: colors.surface,
+    borderColor: colors.accent,
     borderRadius: radius.lg,
-    borderWidth: 1,
+    borderWidth: 2,
     marginTop: spacing.lg,
     padding: spacing.md,
   },
+  feedbackSnapshotHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: spacing.sm,
+  },
   feedbackSnapshotLabel: {
-    color: colors.primaryDark,
+    color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  feedbackSnapshotAnswerBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.md,
+    marginTop: spacing.md,
+    padding: spacing.sm,
   },
   feedbackSnapshotAnswerLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
-    marginTop: spacing.sm,
   },
   feedbackSnapshotAnswerText: {
-    color: colors.ink,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '800',
-    lineHeight: typography.lineBody,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
-  },
-  feedbackSnapshotBadges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginTop: spacing.md,
   },
   feedbackSnapshotText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
     marginTop: spacing.md,
   },
   feedbackSummaryText: {

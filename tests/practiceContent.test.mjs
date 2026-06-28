@@ -192,7 +192,7 @@ test('creates a concrete coach snapshot from the learner answer', async () => {
   assert.ok(snapshot.answerPreview.endsWith('...'));
   assert.equal(
     snapshot.nextMoveText,
-    'Next move: Add one measurable result or business outcome.',
+    'Add one measurable result or business outcome.',
   );
 });
 

@@ -34,8 +34,8 @@ export function createFeedbackSnapshot({
     answerPreview,
     nextFocusLabel: `${summary.nextFocusArea.label} ${summary.nextFocusArea.value}`,
     nextMoveText: nextMove
-      ? `Next move: ${nextMove}`
-      : `Next move: Keep improving ${summary.nextFocusArea.label.toLowerCase()}.`,
+      ? nextMove
+      : `Keep improving ${summary.nextFocusArea.label.toLowerCase()}.`,
     strongestLabel: `${summary.strongestArea.label} ${summary.strongestArea.value}`,
   };
 }

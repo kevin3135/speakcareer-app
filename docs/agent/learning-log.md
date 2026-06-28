@@ -1,5 +1,31 @@
 # Agent Learning Log
 
+## 2026-06-28: Simpler Roleplay Feedback Focus
+
+Made one focused Roleplay feedback design improvement: after checking an answer, the first feedback card now leads with one clear `Next move` instead of showing the summary, best area, next area and answer preview as equal-weight text.
+
+Why it changed:
+
+- Kevin wants the practice flow to feel simpler and less confusing, especially while the user is actively playing.
+- The feedback snapshot was useful, but it still asked the learner to scan too many items before knowing what to do next.
+- A single coach instruction makes the app feel more guided and more game-like without adding a new feature.
+
+What went well:
+
+- The change stayed focused on the Roleplay feedback snapshot and its helper copy.
+- The summary still exists as fallback, but snapshot users now see one primary coaching action first.
+- The learner's original answer is reduced to a one-line proof point under the main instruction.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include live mobile screenshot QA, so the new one-line answer preview should still be checked in Expo on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Simplify the saved completion screen in the same spirit: one reward, one next lesson, one continue button.
+
 ## 2026-06-28: Actionable Roleplay Feedback Snapshot
 
 Made one focused AI feedback UI improvement: the Roleplay coach step now restates the learner's answer in a compact preview and highlights the single clearest next move beside the strongest and weakest score areas.
