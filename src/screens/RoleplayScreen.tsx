@@ -140,9 +140,7 @@ export function RoleplayScreen({
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
-  const isWarmupStarterLoaded = Boolean(
-    warmupCue?.autoApplyStarter && draftAnswer.trim() === warmupCue.starterAnswer.trim(),
-  );
+  const isAutoWarmupCue = Boolean(warmupCue?.autoApplyStarter);
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
   const feedbackScoreSummary = feedbackResult
     ? createFeedbackScoreSummary(feedbackResult.feedback.scores)
@@ -460,18 +458,20 @@ export function RoleplayScreen({
           </View>
           <Text style={styles.promptText}>{openingLine}</Text>
           {warmupCue ? (
-            <View style={styles.warmupCueBox}>
+            <View style={[styles.warmupCueBox, isAutoWarmupCue && styles.warmupCueBoxCompact]}>
               <View style={styles.oneThingHeader}>
                 <Text style={styles.warmupCueLabel}>{warmupCue.eyebrow}</Text>
                 <Badge label={warmupCue.badgeLabel} tone="secondary" />
               </View>
-              <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
-              {isWarmupStarterLoaded ? (
+              {isAutoWarmupCue ? null : (
+                <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
+              )}
+              {isAutoWarmupCue ? (
                 <Text style={styles.warmupCueLoadedNote}>
-                  Starter loaded into your draft. Edit it before you check.
+                  Starter is in your draft. Edit, then check.
                 </Text>
               ) : null}
-              <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>
+              {isAutoWarmupCue ? null : <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>}
               {!hasDraftAnswer ? (
                 <View style={styles.warmupCueAction}>
                   <AppButton
@@ -796,6 +796,11 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     marginBottom: spacing.md,
     padding: spacing.md,
+  },
+  warmupCueBoxCompact: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    padding: spacing.sm,
   },
   firstQuestNumber: {
     alignItems: 'center',

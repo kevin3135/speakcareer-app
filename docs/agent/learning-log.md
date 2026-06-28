@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Foundation Warmup Card
+
+Made one focused Roleplay handoff polish: when the Foundation starter answer is auto-loaded, the warmup card now becomes a compact confirmation row instead of repeating the full starter answer and coach note above the answer box.
+
+Why it changed:
+
+- The first Roleplay already starts with the starter answer in the draft, so repeating the same text above it added clutter.
+- Kevin wants the app to guide the learner without showing too many modules at once.
+- A compact loaded-state keeps the handoff reassuring while letting the answer box stay central.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- Progress mistake-bank warmups still show the full correction and note, because those are opt-in practice drills.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the compact warmup row should still be checked on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the first Foundation-to-Roleplay handoff on mobile and tighten the prompt/header area if the answer box is still too low on the screen.
+
 ## 2026-06-28: Auto-Loaded Foundation Starter Draft
 
 Made one focused onboarding-to-practice improvement: the first Foundation handoff into `Quest 1: Job Interview` now opens with the level-matched starter answer already loaded into the draft, and the warmup card explains that the learner can edit it before checking.
