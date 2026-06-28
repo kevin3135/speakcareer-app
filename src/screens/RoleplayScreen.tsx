@@ -31,6 +31,7 @@ import { createLevelProgress } from '../utils/levelProgress';
 import {
   createPracticeCompletionSummary,
   createPracticeSavePrompt,
+  createPracticeTargetPreview,
   createSavedRoleplayMilestone,
   createSavedRoleplayHandoff,
   createSavedRoleplayPathProgress,
@@ -157,6 +158,10 @@ export function RoleplayScreen({
       xpReward: totalXpReward,
     })
     : null;
+  const targetPreview = createPracticeTargetPreview({
+    completedSessions: sessions.length,
+    dailyTarget,
+  });
   const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
   const answerPulseStyle = {
     opacity: answerPulse.interpolate({
@@ -512,6 +517,20 @@ export function RoleplayScreen({
                 label={answerReadinessCue.progressLabel}
                 tone={answerReadinessCue.tone}
                 value={answerReadinessCue.progressPercent}
+              />
+            </View>
+          </View>
+          <View style={styles.dailyTargetPreviewBox}>
+            <View style={styles.oneThingHeader}>
+              <Text style={styles.dailyTargetPreviewLabel}>Today</Text>
+              <Badge label={targetPreview.badgeLabel} tone={targetPreview.tone} />
+            </View>
+            <Text style={styles.dailyTargetPreviewTitle}>{targetPreview.title}</Text>
+            <View style={styles.dailyTargetPreviewProgress}>
+              <ProgressBar
+                label={targetPreview.progressLabel}
+                tone={targetPreview.tone}
+                value={targetPreview.progressPercent}
               />
             </View>
           </View>
@@ -879,6 +898,31 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginRight: spacing.sm,
+  },
+  dailyTargetPreviewBox: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  dailyTargetPreviewLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  dailyTargetPreviewTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  dailyTargetPreviewProgress: {
+    marginTop: spacing.sm,
   },
   warmupCueBox: {
     backgroundColor: colors.secondarySoft,

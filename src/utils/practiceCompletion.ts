@@ -56,6 +56,14 @@ export type SavedRoleplayMilestone = PracticeCompletionMilestone & {
   progressPercent: number;
 };
 
+export type PracticeTargetPreview = {
+  badgeLabel: string;
+  progressLabel: string;
+  progressPercent: number;
+  title: string;
+  tone: 'info' | 'success';
+};
+
 export type SavedRoleplayPathProgress = {
   badgeLabel: string;
   isPathComplete: boolean;
@@ -180,6 +188,11 @@ type CreatePracticeCompletionMilestoneInput = {
   >;
 };
 
+type CreatePracticeTargetPreviewInput = {
+  dailyTarget: DailyPracticeTarget;
+  completedSessions: number;
+};
+
 type CreateSavedRoleplayMilestoneInput = {
   dailyTarget: DailyPracticeTarget;
   savedSession: PracticeSession;
@@ -210,6 +223,40 @@ export function createPracticeCompletionMilestone({
         : `${progress.targetSessionsRemaining} more short roleplays will complete today\'s target.`,
     todayValue: `${progress.targetSessionsCompleted}/${dailyTarget} done`,
     streakValue: `${progress.currentStreakDays} ${progress.currentStreakDays === 1 ? 'day' : 'days'}`,
+  };
+}
+
+export function createPracticeTargetPreview({
+  dailyTarget,
+  completedSessions,
+}: CreatePracticeTargetPreviewInput): PracticeTargetPreview {
+  const safeCompletedSessions = Math.max(0, completedSessions);
+  const currentCompleted = Math.min(safeCompletedSessions, dailyTarget);
+  const isTargetAlreadyComplete = currentCompleted >= dailyTarget;
+  const nextCompleted = isTargetAlreadyComplete ? dailyTarget : currentCompleted + 1;
+  const remainingAfterSave = Math.max(dailyTarget - nextCompleted, 0);
+  const roleplayLabel = dailyTarget === 1 ? 'roleplay' : 'roleplays';
+
+  if (isTargetAlreadyComplete) {
+    return {
+      badgeLabel: 'Bonus practice',
+      progressLabel: `${dailyTarget}/${dailyTarget} ${roleplayLabel} today`,
+      progressPercent: 100,
+      title: 'Daily target already complete',
+      tone: 'success',
+    };
+  }
+
+  return {
+    badgeLabel: `After save ${nextCompleted}/${dailyTarget}`,
+    progressLabel: `After save: ${nextCompleted}/${dailyTarget} ${roleplayLabel} today`,
+    progressPercent: Math.round((nextCompleted / dailyTarget) * 100),
+    title: remainingAfterSave === 0
+      ? 'This lesson completes today\'s target'
+      : remainingAfterSave === 1
+        ? 'One more sprint after this'
+        : `${remainingAfterSave} sprints after this`,
+    tone: remainingAfterSave === 0 ? 'success' : 'info',
   };
 }
 

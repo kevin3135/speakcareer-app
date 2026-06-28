@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-28: In-Session Daily Target Preview
+
+Made one focused practice-flow improvement: the active Roleplay answer step now shows a compact `Today` preview that tells the learner what today’s target will look like after saving the current lesson.
+
+Why it changed:
+
+- The habit-loop progress previously appeared after save, not while the learner was still writing.
+- Kevin wants the Roleplay step to feel connected to streaks and daily progress without turning it into a dashboard.
+- Previewing the post-save target state keeps `Check answer` and `Complete lesson` tied to a visible daily goal.
+
+What went well:
+
+- The change stayed focused in `src/utils/practiceCompletion.ts`, `src/screens/RoleplayScreen.tsx` and one test block in `tests/practiceContent.test.mjs`.
+- The new helper covers first-sprint, target-complete and extra-practice states, so the copy stays consistent across the loop.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new `Today` preview box should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the learner only earns progress after save, preview that post-save state inside the active lesson instead of waiting for the completion screen.
+- Keep habit-loop cues compact and close to the main answer action so they motivate without competing.
+- Handle target-already-complete states explicitly so extra practice feels intentional, not like a broken counter.
+
+Next suggested task:
+
+- Add a compact save-step badge that makes it even clearer `Complete lesson` is what locks in today’s target.
+
 ## 2026-06-28: Quieter Roleplay Starter Chip
 
 Made one focused Roleplay polish: the first-answer starter reminder is now a small optional chip instead of a full helper row with body text and a button.
