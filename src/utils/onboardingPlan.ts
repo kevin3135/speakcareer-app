@@ -18,10 +18,14 @@ export type OnboardingPlanPreviewInput = {
 };
 
 export type OnboardingPlanPreview = {
+  commitmentNote: string;
+  commitmentTitle: string;
+  ctaLabel: string;
   coachNote: string;
   dailyTargetLabel: string;
   dailyTargetNote: string;
   levelLabel: string;
+  nextQuestTitleShort: string;
   starterPrompt: string;
   steps: [OnboardingPlanStep, OnboardingPlanStep];
   title: string;
@@ -37,11 +41,17 @@ export function createOnboardingPlanPreview({
   levelLabel,
   starterPrompt,
 }: OnboardingPlanPreviewInput): OnboardingPlanPreview {
+  const nextQuestTitleShort = createShortQuestTitle(firstQuestTitle);
+
   return {
+    commitmentNote: createCommitmentNote(dailyTarget, nextQuestTitleShort),
+    commitmentTitle: `${firstLessonTitle} now. ${nextQuestTitleShort} next.`,
+    ctaLabel: `Start ${levelLabel} path`,
     coachNote,
     dailyTargetLabel: createDailyTargetLabel(dailyTarget),
     dailyTargetNote: createDailyTargetNote(dailyTarget),
     levelLabel,
+    nextQuestTitleShort,
     starterPrompt,
     steps: [
       {
@@ -73,4 +83,20 @@ function createDailyTargetNote(dailyTarget: DailyPracticeTarget) {
   }
 
   return 'Focused push. Best when you want extra interview reps today.';
+}
+
+function createShortQuestTitle(firstQuestTitle: string) {
+  return firstQuestTitle.replace(/^Quest \d+:\s*/, '');
+}
+
+function createCommitmentNote(dailyTarget: DailyPracticeTarget, nextQuestTitleShort: string) {
+  if (dailyTarget === 1) {
+    return `Finish the lesson, then save your first ${nextQuestTitleShort} answer today.`;
+  }
+
+  if (dailyTarget === 2) {
+    return `Finish the lesson, then aim for 2 saved roleplays today starting with ${nextQuestTitleShort}.`;
+  }
+
+  return `Finish the lesson, then push for 3 saved roleplays today starting with ${nextQuestTitleShort}.`;
 }

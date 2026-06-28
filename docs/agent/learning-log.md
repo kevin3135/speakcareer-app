@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-28: Onboarding Commitment Footer
+
+Made one focused onboarding improvement: once the learner selects a starting level, the footer now switches from a generic `Continue` prompt to a concrete first commitment with a level-matched CTA and day-one practice note.
+
+Why it changed:
+
+- The onboarding screen already previewed the path, but the final action still ended on a generic button and hint.
+- Kevin wants the MVP loop to feel guided and habit-forming, which means the last onboarding moment should say exactly what starts next.
+- Tying the CTA to the chosen level and daily target makes the first commitment feel more intentional without adding another onboarding step.
+
+What went well:
+
+- The change stayed focused in `src/utils/onboardingPlan.ts`, `src/screens/OnboardingScreen.tsx` and one onboarding test block.
+- The onboarding helper now generates reusable commitment copy, a shortened quest label and a level-matched CTA, so the screen does not hardcode `Job Interview` or `Continue`.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the longer footer note and CTA should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If onboarding already explains the path, the final CTA should restate the exact first commitment instead of falling back to generic copy.
+- Keep day-one motivation inside the existing onboarding screen before adding any new step or modal.
+- Reuse helper-generated quest labels in the UI instead of hardcoding scenario names in multiple places.
+
+Next suggested task:
+
+- On the first saved Job Interview completion state, show how many daily-target roleplays remain so the day-one habit loop stays visible after the first win.
+
 ## 2026-06-28: Tighter Progress Latest Win Card
 
 Made one focused Progress design improvement: when a saved session has a coach target, the `Latest win` card now leads with one `Next correction` panel and moves the saved answer into a quiet one-line context row.

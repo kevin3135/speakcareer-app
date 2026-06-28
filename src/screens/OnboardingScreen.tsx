@@ -150,7 +150,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             <View style={styles.planPathCopy}>
               <Text style={styles.planPathLabel}>Next path</Text>
               <Text numberOfLines={1} style={styles.planPathTitle}>
-                {planPreview.steps[0].title} then Job Interview
+                {planPreview.steps[0].title} then {planPreview.nextQuestTitleShort}
               </Text>
               <Text numberOfLines={1} style={styles.planPathDetail}>
                 {planPreview.steps[0].detail}
@@ -168,13 +168,22 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
       ) : null}
 
       <View style={styles.footer}>
-        <Text style={styles.foundationHint}>Next: {foundationStart.title}</Text>
+        <Text style={styles.foundationHint}>
+          {planPreview ? planPreview.commitmentTitle : `Next: ${foundationStart.title}`}
+        </Text>
         <ProgressBar value={levelAssessment.progressPercent} tone="accent" />
+        {planPreview ? (
+          <Text style={styles.foundationNote}>{planPreview.commitmentNote}</Text>
+        ) : null}
         <View style={styles.footerButton}>
           <AppButton
-            accessibilityHint="Continues to the first guided English foundation lesson"
+            accessibilityHint={
+              planPreview
+                ? `Starts the ${planPreview.levelLabel} English path with the first guided lesson`
+                : 'Continues to the first guided English foundation lesson'
+            }
             disabled={!selectedLevelId}
-            label="Continue"
+            label={planPreview?.ctaLabel ?? 'Continue'}
             onPress={() => {
               if (selectedLevelId) {
                 onContinue(selectedLevelId, selectedDailyTarget);
@@ -479,11 +488,19 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xxl,
   },
   foundationHint: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginBottom: spacing.md,
+    textAlign: 'center',
+  },
+  foundationNote: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '800',
-    marginBottom: spacing.md,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.md,
     textAlign: 'center',
   },
   footerButton: {
