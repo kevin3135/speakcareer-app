@@ -110,9 +110,29 @@ export function HomeScreen({
 
       {nextUnlock ? (
         <View style={styles.nextUnlock}>
-          <Text style={styles.nextUnlockLabel}>Unlocks next</Text>
-          <Text style={styles.nextUnlockTitle}>{nextUnlock.title}</Text>
-          <Badge label={nextUnlock.state === 'completed' ? 'Done' : 'Later'} tone="info" />
+          <View
+            style={[
+              styles.nextUnlockNode,
+              nextUnlock.state === 'completed' && styles.nextUnlockNodeComplete,
+            ]}
+          >
+            <Text
+              style={[
+                styles.nextUnlockNodeText,
+                nextUnlock.state === 'completed' && styles.nextUnlockNodeTextComplete,
+              ]}
+            >
+              {nextUnlock.state === 'completed' ? 'Done' : 'Next'}
+            </Text>
+          </View>
+          <View style={styles.nextUnlockCopy}>
+            <Text style={styles.nextUnlockLabel}>
+              {nextUnlock.state === 'completed' ? 'Completed' : 'Unlock next'}
+            </Text>
+            <Text numberOfLines={1} style={styles.nextUnlockTitle}>
+              {nextUnlock.title}
+            </Text>
+          </View>
         </View>
       ) : null}
     </ScreenContainer>
@@ -277,12 +297,12 @@ const styles = StyleSheet.create({
   },
   nextUnlock: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
+    backgroundColor: colors.lockedSoft,
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.md,
     padding: spacing.md,
   },
   missionCard: {
@@ -347,15 +367,41 @@ const styles = StyleSheet.create({
   nextUnlockLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
+  },
+  nextUnlockCopy: {
+    flex: 1,
+  },
+  nextUnlockNode: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.locked,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  nextUnlockNodeComplete: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  nextUnlockNodeText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  nextUnlockNodeTextComplete: {
+    color: colors.successDark,
   },
   nextUnlockTitle: {
     color: colors.primaryDark,
-    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    marginTop: spacing.xs,
   },
   pressed: {
     opacity: 0.9,

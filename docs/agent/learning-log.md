@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Quiet Home Next Unlock
+
+Made one focused Home simplification: the `Unlocks next` row is now a quiet preview strip with one small `Next` or `Done` node and one lesson title. The old secondary badge was removed so the row feels like future context, not another button or dashboard signal.
+
+What went well:
+
+- This keeps Home aligned with the app-led path: `START` first, habit progress second, next unlock quietly third.
+- The change stayed in one screen and reused existing theme colors, spacing, radius and typography tokens.
+- The next lesson remains visible, but there is less text and no competing badge.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so Home should still be checked visually at phone size.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The next unlock should reassure the learner, not ask for attention.
+- Keep locked/future Home content visually quieter than the active `START` card.
+- Avoid badges on secondary preview rows when the label and title are already enough.
+
+Next suggested task:
+
+- Mobile-preview the full Home first viewport now that status, `START`, mission and next unlock have all been simplified.
+
 ## 2026-06-28: First Interview Starter Reminder
 
 Made one focused practice-flow improvement: the first unsaved `Job Interview` answer card now shows a compact starter reminder with the learner's level-matched sample answer and a `Use starter` action. The reminder only appears before the learner has typed and disappears for returning interview sessions, so it supports the first answer without adding noise to the wider Roleplay flow.
