@@ -188,8 +188,19 @@ export function ProgressScreen({
               <Text style={styles.metaLine}>
                 {formatSessionDate(latestSession.completedAt)} - {latestSession.wordCount} words - +{latestSession.xpReward} XP
               </Text>
-              <Text style={styles.sessionPreview}>{latestSession.answerPreview}</Text>
-              <Text style={styles.sessionFeedback}>{latestSession.feedbackSummary}</Text>
+              <Text numberOfLines={2} style={styles.sessionPreview}>
+                {latestSession.answerPreview}
+              </Text>
+              <Text numberOfLines={2} style={styles.sessionFeedback}>
+                {latestSession.feedbackSummary}
+              </Text>
+              <View style={styles.cardAction}>
+                <AppButton
+                  label="Retry this scenario"
+                  onPress={() => onOpenRoleplay(latestSession.roleplayId)}
+                  variant="secondary"
+                />
+              </View>
             </Card>
           ) : null}
 

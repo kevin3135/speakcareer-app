@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Progress Latest Win Retry CTA
+
+Made one focused Progress polish: the `Latest win` card now caps the saved answer and coach feedback to two lines, then offers one clear `Retry this scenario` action. This turns a saved result into one-tap practice without adding another destination or more visual noise.
+
+What went well:
+
+- This follows the previous recommendation to connect Progress review back into practice.
+- The card now has less text pressure and one useful next action.
+- The change stayed inside one screen and reused the existing `AppButton`, `Card`, spacing, typography and color tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches, so the polish stayed on the design system.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the `Latest win` card should still be checked in the browser/phone preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress review is strongest when it points the learner back into practice.
+- Keep saved answer and feedback copy short when adding an action.
+- Use a secondary retry CTA so the top next-step card remains the primary guide.
+
+Next suggested task:
+
+- Mobile-preview Progress and check if `Latest win` plus `Retry this scenario` still fits comfortably below the next-step card.
+
 ## 2026-06-28: Compact Progress Correction Queue
 
 Made one focused Progress/Mistake Bank polish: the correction queue now caps its body and correction text to two lines, shows only the first two queued corrections, and summarizes the rest with a quiet count. The active correction still stays above, while the queue feels lighter on mobile.
