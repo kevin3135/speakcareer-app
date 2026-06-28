@@ -34,6 +34,7 @@ import {
   createPracticeCompletionSummary,
   createPracticeSaveLockInPreview,
   createPracticeSavePrompt,
+  createSavedCoachRecap,
   createPracticeTargetPreview,
   createSavedRoleplayMilestone,
   createSavedRoleplayHandoff,
@@ -128,6 +129,7 @@ export function RoleplayScreen({
       xpReward: savedSession.xpReward,
     })
     : null;
+  const savedCoachRecap = savedSession ? createSavedCoachRecap(savedSession) : null;
   const savedMilestone = savedSession
     ? createSavedRoleplayMilestone({
       dailyTarget,
@@ -439,6 +441,15 @@ export function RoleplayScreen({
             )}
             {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
           </View>
+          {savedCoachRecap ? (
+            <View style={styles.savedCoachBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.savedCoachLabel}>Coach target</Text>
+                <Badge label={savedCoachRecap.badgeLabel} tone="secondary" />
+              </View>
+              <Text style={styles.savedCoachText}>{savedCoachRecap.text}</Text>
+            </View>
+          ) : null}
           {!savedPathProgress ? (
             <View style={styles.savedNextStep}>
               <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
@@ -1616,6 +1627,28 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineH3,
     marginTop: spacing.xs,
+  },
+  savedCoachBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.successDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  savedCoachLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  savedCoachText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   savedPathBox: {
     backgroundColor: colors.white,

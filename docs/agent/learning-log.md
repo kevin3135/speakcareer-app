@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: Saved Coach Target Recap
+
+Made one focused practice-flow improvement: after a roleplay is saved, the success screen now shows the saved coach target in one compact panel so the learner leaves with one clear improvement to repeat next.
+
+Why it changed:
+
+- The save-success state already showed XP, streak and next lesson, but it did not restate the specific coaching target from the feedback.
+- The MVP loop should end with one memorable next action, not only a generic success state.
+- Repeating the saved coach target at the win moment makes the feedback feel more actionable without adding another screen or extra navigation.
+
+What went well:
+
+- The change stayed focused in `src/screens/RoleplayScreen.tsx`, `src/utils/practiceCompletion.ts` and `tests/practiceContent.test.mjs`.
+- It reuses existing `PracticeSession.nextFocusLabel`, `nextFocusText` and `feedbackSummary` data instead of adding new storage or state.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the saved-success card stack should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If feedback identifies one concrete next move, restate it at the exact point where the learner finishes and decides what to do next.
+- Success screens should balance motivation and instruction: one win signal, one next lesson, one coach target.
+- Reuse saved-session coaching fields before adding any new progress-memory model.
+
+Next suggested task:
+
+- Mobile-preview the saved success screen and tighten spacing only if the new coach target panel pushes the primary CTA too low.
+
 ## 2026-06-29: Quieter Home Mission Card
 
 Made one focused Home polish: the daily mission card is now a quieter progress strip that shows the current saved target and XP reward without the extra `Goal/Done` node.

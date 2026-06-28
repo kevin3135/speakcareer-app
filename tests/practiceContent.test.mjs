@@ -1045,6 +1045,7 @@ test('creates a rewarding roleplay completion summary', async () => {
     createPracticeSaveLockInPreview,
     createPracticeSavePrompt,
     createPracticeTargetPreview,
+    createSavedCoachRecap,
     createSavedRoleplayMilestone,
     createSavedRoleplayHandoff,
     createSavedRoleplayPathProgress,
@@ -1257,6 +1258,35 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(savedHandoff.nextTitle, 'Sales Call');
   assert.equal(savedHandoff.xpLabel, '+45 XP');
   assert.ok(savedHandoff.body.includes('streak'));
+
+  const savedCoachRecap = createSavedCoachRecap({
+    feedbackSummary: 'Clear opening with one useful next step.',
+    nextFocusLabel: 'Coach target',
+    nextFocusText: 'Add one concrete result before the final sentence.',
+  });
+
+  assert.equal(savedCoachRecap.badgeLabel, 'Coach target');
+  assert.equal(savedCoachRecap.text, 'Add one concrete result before the final sentence.');
+
+  const fallbackCoachRecap = createSavedCoachRecap({
+    feedbackSummary: 'Keep the structure and make the business result more specific.',
+    nextFocusLabel: '',
+    nextFocusText: '',
+  });
+
+  assert.equal(fallbackCoachRecap.badgeLabel, 'Coach note');
+  assert.equal(
+    fallbackCoachRecap.text,
+    'Keep the structure and make the business result more specific.',
+  );
+  assert.equal(
+    createSavedCoachRecap({
+      feedbackSummary: '   ',
+      nextFocusLabel: 'Coach target',
+      nextFocusText: '   ',
+    }),
+    null,
+  );
 
   const nextAfterSmallTalk = createNextPracticeRecommendation('workplace-small-talk', practiceContent.roleplays);
   assert.equal(nextAfterSmallTalk.roleplayId, 'job-interview');

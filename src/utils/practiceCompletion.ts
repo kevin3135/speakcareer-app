@@ -83,6 +83,11 @@ export type SavedRoleplayPathProgress = {
   title: string;
 };
 
+export type SavedCoachRecap = {
+  badgeLabel: string;
+  text: string;
+};
+
 type CreatePracticeCompletionSummaryInput = {
   roleplayTitle: string;
   xpReward: number;
@@ -353,6 +358,21 @@ export function createSavedRoleplayPathProgress({
     progressPercent: path.progressPercent,
     roleplayId: nextStep?.roleplayId ?? path.roleplayId,
     title: path.title,
+  };
+}
+
+export function createSavedCoachRecap(
+  savedSession: Pick<PracticeSession, 'feedbackSummary' | 'nextFocusLabel' | 'nextFocusText'>,
+): SavedCoachRecap | null {
+  const nextFocusText = savedSession.nextFocusText?.trim() || savedSession.feedbackSummary?.trim();
+
+  if (!nextFocusText) {
+    return null;
+  }
+
+  return {
+    badgeLabel: savedSession.nextFocusLabel?.trim() || 'Coach note',
+    text: nextFocusText,
   };
 }
 
