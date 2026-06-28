@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Cleaner Roleplay Completion Next Step
+
+Made one focused Roleplay completion simplification: when career-path progress is available, the saved screen no longer shows a separate `Next lesson` card before the `Career path` card.
+
+Why it changed:
+
+- The success state had started to repeat the same next lesson in two stacked cards.
+- Kevin wants the game flow to feel obvious and not text-heavy.
+- The `Career path` card already explains the next unlock and progress, so the extra card was visual clutter.
+
+What went well:
+
+- The change stayed inside `RoleplayScreen` and removed duplicate UI without changing product behavior.
+- The saved completion state is shorter and should keep the primary continue button closer on mobile.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the saved completion state still needs a phone-width visual check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion screens should not repeat the next lesson in multiple cards.
+- If the path card exists, it should own the next-step explanation.
+- Keep reward screens short enough that the next action stays visible.
+
+Next suggested task:
+
+- Mobile-preview the saved Roleplay completion screen and tighten the habit-progress card if it still pushes the CTA too low.
+
 ## 2026-06-28: Path-Aware Roleplay Completion
 
 Made one focused practice-flow improvement: after a roleplay is saved, the success state now shows career-path progress and recommends the next lesson from the actual unlocked sequence instead of simply moving to the next item in the library order.

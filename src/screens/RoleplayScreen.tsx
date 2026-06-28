@@ -343,10 +343,12 @@ export function RoleplayScreen({
             <Badge label="Streak updated" tone="accent" />
             {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
           </View>
-          <View style={styles.savedNextStep}>
-            <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
-            <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
-          </View>
+          {!savedPathProgress ? (
+            <View style={styles.savedNextStep}>
+              <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
+              <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
+            </View>
+          ) : null}
           {savedPathProgress ? (
             <View style={styles.savedPathBox}>
               <View style={styles.oneThingHeader}>
