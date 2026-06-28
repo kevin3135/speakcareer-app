@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Home Daily Mission
+
+Made one focused Home simplification: the daily mission card is now a compact goal strip instead of a text-heavy mini dashboard. It shows a small `Goal` or `Done` node, the short mission title, the XP reward and one progress bar. The extra body paragraph, target badge and meta footer were removed from the visible Home UI.
+
+What went well:
+
+- This keeps the big `START` card as the obvious first action while preserving the daily habit loop.
+- The change stayed in one screen and reused existing theme colors, spacing, radius, `XPBadge` and `ProgressBar`.
+- Removing repeated mission copy makes the first Home viewport easier to scan.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run still did not include fresh mobile screenshot QA, so the compact strip should be checked visually in the browser/Expo preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home can show progress, but it should never feel like a dashboard before the user starts.
+- Mission cards should be a habit cue, not another explanation card.
+- Keep secondary Home signals to one row plus one progress bar when possible.
+
+Next suggested task:
+
+- Use a mobile preview to check whether the Home first viewport now clearly shows status, `START`, the mission strip and the next unlock without feeling crowded.
+
 ## 2026-06-28: Simpler Home Start Card
 
 Made one focused Home design improvement: the animated start card now behaves more like a single obvious game action. It no longer shows a separate `Today` row, lesson meta line or CTA pill. Instead, the card centers the user on one animated `START` target, one lesson title, one short action hint and a small XP reward chip.

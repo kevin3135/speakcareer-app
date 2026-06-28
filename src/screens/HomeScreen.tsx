@@ -77,6 +77,13 @@ export function HomeScreen({
         tone="muted"
       >
         <View style={styles.missionHeader}>
+          <View style={[styles.missionNode, isMissionComplete && styles.missionNodeComplete]}>
+            <Text
+              style={[styles.missionNodeText, isMissionComplete && styles.missionNodeTextComplete]}
+            >
+              {isMissionComplete ? 'Done' : 'Goal'}
+            </Text>
+          </View>
           <View style={styles.missionCopy}>
             <Text
               style={[
@@ -84,28 +91,20 @@ export function HomeScreen({
                 isMissionComplete && styles.missionKickerComplete,
               ]}
             >
-              {isMissionComplete ? 'Mission complete' : 'Daily mission'}
+              {isMissionComplete ? 'Mission complete' : 'Today'}
             </Text>
-            <Text style={styles.missionTitle}>{missionCard.title}</Text>
+            <Text numberOfLines={1} style={styles.missionTitle}>
+              {missionCard.title}
+            </Text>
           </View>
-          <Badge
-            label={missionCard.targetLabel}
-            tone={isMissionComplete ? 'success' : 'secondary'}
-          />
+          <XPBadge label={missionCard.rewardLabel} />
         </View>
-        <Text style={styles.missionBody}>{missionCard.body}</Text>
         <View style={styles.missionProgress}>
           <ProgressBar
             label={missionCard.progressLabel}
             tone="success"
             value={missionCard.progressPercent}
           />
-        </View>
-        <View style={styles.missionFooter}>
-          <Text style={[styles.missionMeta, isMissionComplete && styles.missionMetaComplete]}>
-            {missionCard.meta}
-          </Text>
-          <XPBadge label={missionCard.rewardLabel} />
         </View>
       </Card>
 
@@ -286,14 +285,6 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     padding: spacing.md,
   },
-  missionBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
-  },
   missionCard: {
     padding: spacing.md,
   },
@@ -305,15 +296,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: spacing.md,
   },
-  missionFooter: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.md,
-  },
   missionHeader: {
     alignItems: 'center',
     flexDirection: 'row',
+    gap: spacing.md,
   },
   missionKicker: {
     color: colors.primary,
@@ -324,14 +310,28 @@ const styles = StyleSheet.create({
   missionKickerComplete: {
     color: colors.successDark,
   },
-  missionMeta: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
+  missionNode: {
+    alignItems: 'center',
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 46,
+    justifyContent: 'center',
+    width: 46,
   },
-  missionMetaComplete: {
-    color: colors.successDark,
+  missionNodeComplete: {
+    backgroundColor: colors.success,
+    borderColor: colors.successDark,
+  },
+  missionNodeText: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  missionNodeTextComplete: {
+    color: colors.white,
   },
   missionProgress: {
     marginTop: spacing.md,
