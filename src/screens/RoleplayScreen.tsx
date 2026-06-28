@@ -502,11 +502,11 @@ export function RoleplayScreen({
           </View>
           <View style={styles.answerReadinessBox}>
             <View style={styles.oneThingHeader}>
-              <Text style={styles.answerReadinessLabel}>Draft check</Text>
+              <Text numberOfLines={1} style={styles.answerReadinessTitle}>
+                {answerReadinessCue.title}
+              </Text>
               <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
             </View>
-            <Text style={styles.answerReadinessTitle}>{answerReadinessCue.title}</Text>
-            <Text style={styles.answerReadinessNote}>{answerReadinessCue.note}</Text>
             <View style={styles.answerReadinessProgress}>
               <ProgressBar
                 label={answerReadinessCue.progressLabel}
@@ -868,32 +868,20 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
-  },
-  answerReadinessLabel: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  answerReadinessNote: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
   },
   answerReadinessProgress: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
   answerReadinessTitle: {
     color: colors.ink,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
+    marginRight: spacing.sm,
   },
   warmupCueBox: {
     backgroundColor: colors.secondarySoft,

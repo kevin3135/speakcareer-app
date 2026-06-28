@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Roleplay Draft Status
+
+Made one focused Roleplay polish: the live draft-status under the answer box now shows one short status line, the word-count badge and progress, instead of a separate `Draft check` label plus extra explanatory text.
+
+Why it changed:
+
+- Kevin wants the game/practice moment to show one thing at a time so the learner is not confused.
+- The draft cue was useful, but it added too much text directly under the answer box.
+- A compact HUD-style status keeps `Check answer` as the clear next action while still guiding the learner.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No new features, data, dependencies, secrets or backend connections were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh phone screenshot QA, so the compact status should still be previewed in Expo on a narrow device.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the Roleplay answer step on a phone and, if needed, make the starter reminder and writing support even more secondary so the input stays the only obvious action.
+
 ## 2026-06-28: Live Draft Readiness Cue
 
 Made one focused practice-flow improvement: the Roleplay writing step now shows a live `Draft check` cue under the answer box so the learner can see word count, readiness status, and whether the answer is strong enough before pressing `Check answer`.
