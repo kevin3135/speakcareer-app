@@ -115,7 +115,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               <Text style={styles.targetLabel}>Daily rhythm</Text>
               <Text style={styles.targetTitle}>{planPreview.dailyTargetLabel}</Text>
             </View>
-            <Text style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
+            <Text numberOfLines={1} style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
             <View style={styles.segmentedControl}>
               {dailyTargetOptions.map((target) => {
                 const isActive = target === selectedDailyTarget;
@@ -135,10 +135,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                     ]}
                   >
                     <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
-                      {target}
-                    </Text>
-                    <Text style={[styles.segmentLabel, isActive && styles.segmentLabelActive]}>
-                      {target === 1 ? 'roleplay' : 'roleplays'}
+                      {target}/day
                     </Text>
                   </Pressable>
                 );
@@ -329,7 +326,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     flex: 1,
     justifyContent: 'center',
-    minHeight: 56,
+    minHeight: 44,
   },
   segmentActive: {
     backgroundColor: colors.primary,
@@ -340,20 +337,10 @@ const styles = StyleSheet.create({
   segmentValue: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.h3,
+    fontSize: typography.body,
     fontWeight: '900',
   },
   segmentValueActive: {
-    color: colors.white,
-  },
-  segmentLabel: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-    marginTop: spacing.xs,
-  },
-  segmentLabelActive: {
     color: colors.white,
   },
   planSteps: {

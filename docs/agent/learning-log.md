@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Onboarding Target Selector
+
+Made one focused onboarding layout polish: the daily-target selector now uses compact `1/day`, `2/day`, `3/day` labels and keeps the explanatory target note to one line.
+
+Why it changed:
+
+- The daily-target choice is useful, but onboarding should still feel fast and guided.
+- The previous selector used two-line labels and more vertical height, which risked making the first-run screen feel too tall.
+- The accessibility labels still spell out the full roleplay target, so the visual label can stay short.
+
+What went well:
+
+- The change stayed inside `OnboardingScreen` and reused existing theme tokens.
+- The daily rhythm card is shorter without removing the choice.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the compact selector should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding personalization should be compact: useful choices, short labels, no extra reading.
+- Keep full meaning in accessibility labels when visual labels need to stay small.
+- If a selector is secondary to the main level choice, make it visually lighter than the level cards.
+
+Next suggested task:
+
+- Mobile-preview onboarding after selecting a level and decide whether the plan preview steps should collapse into one "Next path" row.
+
 ## 2026-06-28: Onboarding Daily Target Selection
 
 Made one focused onboarding improvement: first-run users can now choose a daily roleplay target during onboarding, and that target is saved immediately before they enter the Foundation lesson.
