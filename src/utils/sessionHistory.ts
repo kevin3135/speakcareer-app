@@ -1,5 +1,9 @@
 import type { AnswerReview } from './answerReview';
 import type { AIFeedback, PracticeSession, RoleplayScenario } from '../types';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createFeedbackScoreSummary } from './feedbackScoreSummary.ts';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createFeedbackSnapshot } from './feedbackSnapshot.ts';
 
 type CreatePracticeSessionInput = {
   roleplay: RoleplayScenario;
@@ -30,6 +34,7 @@ export function createPracticeSession({
   const preview = sessionAnswer.length > 120
     ? `${sessionAnswer.slice(0, 117)}...`
     : sessionAnswer;
+  const coachingFocus = createSessionCoachingFocus(answer, feedback);
 
   return {
     id: `${roleplay.id}-${completedAt.getTime()}`,
@@ -40,8 +45,31 @@ export function createPracticeSession({
     wordCount: review.wordCount,
     readinessLabel: review.readinessLabel,
     feedbackSummary: includedFollowUp ? `${feedback.summary} Follow-up included.` : feedback.summary,
+    nextFocusLabel: coachingFocus.label,
+    nextFocusText: coachingFocus.text,
     includedFollowUp,
     xpReward,
+  };
+}
+
+function createSessionCoachingFocus(answer: string, feedback: AIFeedback) {
+  const snapshot = createFeedbackSnapshot({
+    answer,
+    improvements: feedback.improvements,
+    summary: createFeedbackScoreSummary(feedback.scores),
+  });
+  const fallbackText = feedback.improvements.find((item) => item.trim().length > 0) ?? feedback.summary;
+
+  if (!snapshot) {
+    return {
+      label: 'Coach target',
+      text: fallbackText,
+    };
+  }
+
+  return {
+    label: snapshot.nextFocusLabel,
+    text: snapshot.nextMoveText,
   };
 }
 

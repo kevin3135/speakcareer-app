@@ -49,6 +49,7 @@ export function ProgressScreen({
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
   const totalXp = mission.xpTotal;
   const latestSession = sessions[0];
+  const latestSessionFocusText = latestSession?.nextFocusText?.trim() ?? '';
   const isFirstSaveLocked = sessions.length === 0;
   const mistakesFixed = sessions.length > 0 ? Math.min(mistakeBank.length, sessions.length + 1) : 0;
   const nextStepGuide = createProgressNextStepGuide({
@@ -202,6 +203,18 @@ export function ProgressScreen({
               <Text numberOfLines={2} style={styles.sessionFeedback}>
                 {latestSession.feedbackSummary}
               </Text>
+              {latestSessionFocusText ? (
+                <View style={styles.latestFocusBox}>
+                  <View style={styles.rowBetween}>
+                    <Text style={styles.latestFocusLabel}>Carry this next</Text>
+                    <Badge
+                      label={latestSession.nextFocusLabel?.trim() || 'Coach target'}
+                      tone="accent"
+                    />
+                  </View>
+                  <Text style={styles.latestFocusText}>{latestSessionFocusText}</Text>
+                </View>
+              ) : null}
               <View style={styles.cardAction}>
                 <AppButton
                   label="Retry this scenario"
@@ -498,6 +511,28 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  latestFocusBox: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  latestFocusLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  latestFocusText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '800',
     lineHeight: typography.lineBody,
     marginTop: spacing.sm,
   },

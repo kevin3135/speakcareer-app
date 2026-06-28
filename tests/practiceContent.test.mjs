@@ -839,6 +839,9 @@ test('creates local practice sessions from reviewed answers', async () => {
   assert.ok(session.answerPreview.includes('Follow-up:'));
   assert.equal(session.xpReward, feedbackResult.xpReward);
   assert.ok(session.feedbackSummary.includes('Follow-up included.'));
+  assert.ok(session.nextFocusLabel);
+  assert.ok(session.nextFocusText);
+  assert.ok(session.nextFocusText.includes('Add') || session.nextFocusText.includes('Use'));
   assert.equal(session.completedAt, '2026-06-26T10:00:00.000Z');
   assert.equal(session.includedFollowUp, true);
 });
@@ -860,6 +863,8 @@ test('stores local practice sessions safely', async () => {
     wordCount: 20 + index,
     readinessLabel: 'Ready for feedback',
     feedbackSummary: 'Clear answer with useful detail.',
+    nextFocusLabel: 'Structure 68',
+    nextFocusText: 'Use a simple structure: context, action, result.',
     includedFollowUp: index === 0,
     xpReward: 40 + index,
   }));
@@ -877,6 +882,28 @@ test('stores local practice sessions safely', async () => {
   assert.equal((await readPracticeSessions(storage)).length, MAX_STORED_PRACTICE_SESSIONS);
   assert.equal((await readPracticeSessions(storage))[0].id, 'job-interview-0');
   assert.equal((await readPracticeSessions(storage))[0].includedFollowUp, true);
+  assert.equal((await readPracticeSessions(storage))[0].nextFocusLabel, 'Structure 68');
+  assert.equal(
+    (await readPracticeSessions(storage))[0].nextFocusText,
+    'Use a simple structure: context, action, result.',
+  );
+  assert.deepEqual(
+    normalizePracticeSessions([
+      {
+        id: 'legacy-session',
+        roleplayId: 'job-interview',
+        roleplayTitle: 'Job Interview',
+        completedAt: '2026-06-26T10:00:00.000Z',
+        answerPreview: 'Legacy answer preview',
+        wordCount: 22,
+        readinessLabel: 'Ready for feedback',
+        feedbackSummary: 'Legacy summary',
+        includedFollowUp: false,
+        xpReward: 30,
+      },
+    ])[0]?.nextFocusText,
+    '',
+  );
   assert.deepEqual(normalizePracticeSessions([{ id: 'missing-fields' }]), []);
   assert.deepEqual(
     await readPracticeSessions({

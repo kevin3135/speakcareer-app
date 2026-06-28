@@ -128,6 +128,8 @@ export type PracticeSession = {
   wordCount: number;
   readinessLabel: string;
   feedbackSummary: string;
+  nextFocusLabel?: string;
+  nextFocusText?: string;
   includedFollowUp: boolean;
   xpReward: number;
 };

@@ -52,6 +52,8 @@ function normalizePracticeSession(item: unknown): PracticeSession | null {
     feedbackSummary: asString(record.feedbackSummary),
     id: asString(record.id),
     includedFollowUp: asBoolean(record.includedFollowUp),
+    nextFocusLabel: asString(record.nextFocusLabel),
+    nextFocusText: asString(record.nextFocusText),
     readinessLabel: asString(record.readinessLabel),
     roleplayId: asString(record.roleplayId) as RoleplayId,
     roleplayTitle: asString(record.roleplayTitle),

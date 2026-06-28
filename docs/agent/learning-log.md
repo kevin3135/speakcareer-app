@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Progress Coaching Focus Carryover
+
+Made one focused Progress improvement: each newly saved roleplay session now stores its strongest next coaching target, and the Progress screen repeats that target inside the `Latest win` card.
+
+Why it changed:
+
+- The Roleplay coach step already showed one clear `Next move`, but that instruction disappeared once the learner left the session.
+- Kevin wants the English MVP loop to feel guided and habit-forming, which means the user should see the same correction again when deciding what to practice next.
+- Persisting one local coaching target keeps Progress useful as a follow-up coach without adding backend logic or another screen.
+
+What went well:
+
+- The change stayed focused in the local session model, storage normalization and the Progress latest-win UI.
+- Existing stored sessions remain compatible because the new coaching fields are optional and normalize safely when missing.
+- Added focused test coverage for saved coaching-focus persistence and legacy-session storage reads.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new `Carry this next` panel should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the app already gives one coaching instruction in-session, persist that instruction instead of generating a different one elsewhere.
+- Keep Progress focused on one repeated correction, not a broader feedback recap.
+- When extending local session data, preserve backward compatibility for older stored records.
+
+Next suggested task:
+
+- Add one compact path-status badge to the Progress next-step card so users can see whether they are resuming the guided path or doing an optional replay.
+
 ## 2026-06-28: Shorter Roleplay Save CTA
 
 Made one focused Roleplay save-step copy improvement: the primary save button now says `Complete lesson` instead of repeating XP inside the button label.
