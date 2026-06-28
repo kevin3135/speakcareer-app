@@ -30,6 +30,8 @@ import {
 import { readPracticedMistakeIds, savePracticedMistakeIds } from '../utils/mistakePracticeStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 import { readPracticeSessions, savePracticeSessions } from '../utils/practiceSessionStorage';
+import { createFoundationWarmupCue } from '../utils/roleplayWarmupCue';
+import { getStartingLevelProfile } from '../utils/startingLevel';
 import { readStartingLevel, saveStartingLevel } from '../utils/startingLevelStorage';
 
 export function AppNavigator() {
@@ -51,6 +53,7 @@ export function AppNavigator() {
   const shouldShowBottomNav =
     practiceSessions.length > 0 &&
     !['Foundation', 'Roleplay'].includes(activeScreen);
+  const startingLevelProfile = getStartingLevelProfile(startingLevelId);
 
   useEffect(() => {
     let isMounted = true;
@@ -171,7 +174,15 @@ export function AppNavigator() {
             initialCompletedSteps={foundationCompletedSteps}
             onBack={() => setActiveScreen('Home')}
             onProgressChange={updateFoundationProgress}
-            onStartCareerPractice={() => openRoleplay(guidedStart.roleplayId)}
+            onStartCareerPractice={() =>
+              openRoleplay(
+                guidedStart.roleplayId,
+                createFoundationWarmupCue({
+                  coachNote: startingLevelProfile.coachMessage,
+                  starterAnswer: startingLevelProfile.starterAnswer,
+                }),
+              )
+            }
             startingLevelId={startingLevelId}
           />
         ) : null}
@@ -180,7 +191,7 @@ export function AppNavigator() {
         ) : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
-            key={`${selectedRoleplay.id}:${roleplayWarmupCue?.mistakeId ?? 'default'}`}
+            key={`${selectedRoleplay.id}:${roleplayWarmupCue?.cueId ?? 'default'}`}
             dailyTarget={dailyTarget}
             onBack={() => setActiveScreen('Home')}
             onOpenProgress={() => setActiveScreen('Progress')}

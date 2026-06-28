@@ -105,7 +105,7 @@ export type MistakeItem = {
 };
 
 export type RoleplayWarmupCue = {
-  mistakeId: string;
+  cueId: string;
   eyebrow: string;
   badgeLabel: string;
   correction: string;

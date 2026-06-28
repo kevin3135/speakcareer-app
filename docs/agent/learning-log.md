@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Foundation Interview Starter Handoff
+
+Made one focused practice-flow improvement: finishing Foundation now opens the first Job Interview with a level-matched warm-up cue already attached. The Roleplay screen reuses the existing warm-up pattern to show the starter line and coach note from Lesson 1, so the first English answer feels easier to begin immediately after the handoff.
+
+What went well:
+
+- This stayed small by extending the existing warm-up cue model instead of adding a new screen or another onboarding step.
+- The handoff now carries the actual level-based starter answer and coach note the learner just practiced in Foundation.
+- The warm-up cue type is now generic enough to support both Progress corrections and Foundation handoffs cleanly.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the Foundation handoff cue should still be checked on a phone-sized viewport for height and emphasis.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When one guided step leads into another, pass the actual starter content forward instead of leaving it implicit.
+- Keep warm-up cues generic so the same UI can support multiple entry paths without new screen states.
+- Preserve the answer-first layout even when adding a stronger handoff cue.
+
+Next suggested task:
+
+- Show the same level-matched starter cue when Home opens the first Job Interview before the first saved interview, so the hint survives leaving Foundation.
+
 ## 2026-06-28: Collapsed Feedback Details
 
 Made one focused Roleplay feedback polish: the feedback card now keeps the overall score, summary, quick read and `Better English` rewrite visible, while the score bars and strengths/improvements lists are collapsed behind a quiet `Show details` row by default. This keeps the feedback useful without making the first view feel like a report.

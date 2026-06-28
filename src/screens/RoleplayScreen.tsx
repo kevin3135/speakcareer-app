@@ -383,8 +383,8 @@ export function RoleplayScreen({
               {!hasDraftAnswer ? (
                 <View style={styles.warmupCueAction}>
                   <AppButton
-                    accessibilityHint="Starts your answer with the saved correction"
-                    accessibilityLabel="Use warm-up line"
+                    accessibilityHint="Starts your answer with the suggested warm-up line"
+                    accessibilityLabel={warmupCue.ctaLabel}
                     label={warmupCue.ctaLabel}
                     onPress={useWarmupStarter}
                     size="small"

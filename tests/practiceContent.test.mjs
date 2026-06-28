@@ -474,6 +474,31 @@ test('shows a starter reminder only on the first Job Interview answer card', asy
   );
 });
 
+test('creates a foundation handoff cue for the first interview answer', async () => {
+  const { createFoundationWarmupCue } = await import('../src/utils/roleplayWarmupCue.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const confidentProfile = getStartingLevelProfile('confident');
+  const starterCue = createFoundationWarmupCue({
+    coachNote: starterProfile.coachMessage,
+    starterAnswer: starterProfile.starterAnswer,
+  });
+  const confidentCue = createFoundationWarmupCue({
+    coachNote: confidentProfile.coachMessage,
+    starterAnswer: confidentProfile.starterAnswer,
+  });
+
+  assert.equal(starterCue.cueId, 'foundation-starter');
+  assert.equal(starterCue.eyebrow, 'Foundation handoff');
+  assert.equal(starterCue.badgeLabel, 'From Lesson 1');
+  assert.equal(starterCue.ctaLabel, 'Use starter line');
+  assert.ok(starterCue.note.includes('Keep it simple'));
+  assert.ok(starterCue.starterAnswer.includes('The result was'));
+  assert.ok(confidentCue.note.includes('business result'));
+  assert.ok(confidentCue.starterAnswer.includes('As a result'));
+});
+
 test('provides mock feedback and mistake-bank data', () => {
   for (const roleplay of practiceContent.roleplays) {
     assert.ok(roleplay.feedback.summary.length > 20);
@@ -1082,6 +1107,7 @@ test('creates a reusable warm-up cue from a saved correction', async () => {
   const { createRoleplayWarmupCue } = await import('../src/utils/roleplayWarmupCue.ts');
   const cue = createRoleplayWarmupCue(progressMock.mistakeBank[0]);
 
+  assert.equal(cue.cueId, progressMock.mistakeBank[0].id);
   assert.equal(cue.eyebrow, 'Warm-up cue');
   assert.equal(cue.badgeLabel, 'From Progress');
   assert.equal(cue.ctaLabel, 'Use this line');
@@ -1640,7 +1666,7 @@ test('creates an actionable mistake practice drill', async () => {
   assert.ok(nextDrill.title.includes('Meeting Clarity'));
 
   const warmupCue = createRoleplayWarmupCue(interviewDrill.mistake);
-  assert.equal(warmupCue.mistakeId, interviewDrill.mistake.id);
+  assert.equal(warmupCue.cueId, interviewDrill.mistake.id);
   assert.equal(warmupCue.eyebrow, 'Warm-up cue');
   assert.equal(warmupCue.badgeLabel, 'From Progress');
   assert.equal(warmupCue.correction, interviewDrill.mistake.correction);
