@@ -156,20 +156,22 @@ export function ProgressScreen({
         </>
       ) : (
         <>
-          <View style={styles.statGrid}>
-            <Card style={styles.statCard}>
+          <Card style={styles.statStrip} tone="muted">
+            <View style={styles.statItem}>
               <Text style={styles.statValue}>{summary.minutesPracticed}</Text>
               <Text style={styles.statLabel}>Minutes</Text>
-            </Card>
-            <Card style={styles.statCard}>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
               <Text style={styles.statValue}>{localProgress.sessionsCompleted}</Text>
               <Text style={styles.statLabel}>Roleplays</Text>
-            </Card>
-            <Card style={styles.statCard}>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
               <Text style={styles.statValue}>{mistakesFixed}</Text>
               <Text style={styles.statLabel}>Fixes</Text>
-            </Card>
-          </View>
+            </View>
+          </Card>
 
           {latestSession ? (
             <Card>
@@ -297,18 +299,25 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  statGrid: {
+  statStrip: {
+    alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  statCard: {
-    flex: 1,
+    gap: spacing.md,
     padding: spacing.md,
   },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statDivider: {
+    alignSelf: 'stretch',
+    backgroundColor: colors.border,
+    width: 1,
+  },
   statValue: {
-    color: colors.primary,
+    color: colors.primaryDark,
     fontFamily: fonts.rounded,
-    fontSize: typography.h1,
+    fontSize: typography.h2,
     fontWeight: '900',
   },
   statLabel: {

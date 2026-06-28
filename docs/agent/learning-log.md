@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Progress Stats Strip
+
+Made one focused Progress/Wins design polish: the three separate stat cards for minutes, roleplays and fixes are now one compact muted stats strip. This keeps the numbers visible, but makes the page feel less like an analytics dashboard after the coach's next-step card.
+
+What went well:
+
+- This directly follows the prior recommendation to reduce Progress visual weight after the next-step card.
+- The change stayed inside one screen and reused existing `Card`, theme colors, spacing and typography tokens.
+- The learner still sees useful progress, but the stats now feel secondary to the next action.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the strip should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress stats should support motivation, not compete with the next practice action.
+- Use one compact stats surface when multiple small cards start feeling like a dashboard.
+- Keep detailed charts and review content lower on the page.
+
+Next suggested task:
+
+- Mobile-preview Progress after one saved session and, if it still feels heavy, make the weekly activity chart more compact or optional.
+
 ## 2026-06-28: Saved Roleplay Milestone Loop
 
 Made one focused practice-flow improvement: after saving a roleplay answer, the completion hero now shows a compact habit-progress card with today progress, streak, daily-target copy and a short progress bar. This gives the learner an immediate reason to continue while the save moment still feels rewarding.
