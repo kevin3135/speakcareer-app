@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-29: Compact Saved Career Path Card
+
+Made one focused Roleplay completion polish: the saved-success career path card now shows the next unlocked roleplay as one compact line and uses tighter padding.
+
+Why it changed:
+
+- The completion screen should keep the `Continue` action close after XP, streak and coach target.
+- The path card repeated the path title before the next step, which added height without changing the learner's next action.
+- A compact path card preserves progress feedback while keeping the win moment fast and scannable.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No career-path logic, saved-session data, storage, navigation or backend behavior changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the completion stack should still be checked at `390x844`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the saved-success screen and, if it still feels tall, make the level-up box a one-line strip too.
+
 ## 2026-06-29: Compact Saved Coach Target Strip
 
 Made one focused Roleplay completion polish: the saved coach target on the success screen is now a compact one-line strip instead of a taller panel with a separate badge row.

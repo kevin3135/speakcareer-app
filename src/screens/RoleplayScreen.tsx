@@ -461,8 +461,7 @@ export function RoleplayScreen({
                 <Text style={styles.savedPathLabel}>Career path</Text>
                 <Badge label={savedPathProgress.badgeLabel} tone="accent" />
               </View>
-              <Text style={styles.savedPathTitle}>{savedPathProgress.title}</Text>
-              <Text style={styles.savedPathNext}>
+              <Text numberOfLines={1} style={styles.savedPathNext}>
                 {savedPathProgress.nextLabel}: {savedPathProgress.nextTitle}
               </Text>
               <View style={styles.savedPathProgress}>
@@ -1655,7 +1654,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     marginTop: spacing.md,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
   savedPathLabel: {
     color: colors.successDark,
@@ -1664,21 +1663,14 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   savedPathNext: {
-    color: colors.text,
+    color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
   savedPathProgress: {
-    marginTop: spacing.md,
-  },
-  savedPathTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
     marginTop: spacing.sm,
   },
 });
