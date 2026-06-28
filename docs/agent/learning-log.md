@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Onboarding Path Preview
+
+Made one focused onboarding simplification: after a level is selected, the first-path preview now uses one compact `Next path` row instead of two separate lesson/quest cards.
+
+Why it changed:
+
+- Kevin wants the app to take charge and reduce early confusion.
+- The previous preview was useful but still asked the learner to scan multiple stacked cards before continuing.
+- One path row keeps the sequence clear: learn the sentence first, then use it in the Job Interview.
+
+What went well:
+
+- The change stayed inside `OnboardingScreen` and reused existing theme tokens.
+- The onboarding card is shorter without removing the level, daily rhythm or starter-answer context.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the one-line path title should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding previews should feel like a route sign, not a mini dashboard.
+- Keep one visible sequence and one starter example before Continue.
+- If path copy wraps awkwardly on mobile, shorten the title instead of adding another card.
+
+Next suggested task:
+
+- Mobile-preview the selected-level onboarding state and tighten the `Next path` row if the title wraps or competes with the Continue button.
+
 ## 2026-06-28: Compact Onboarding Target Selector
 
 Made one focused onboarding layout polish: the daily-target selector now uses compact `1/day`, `2/day`, `3/day` labels and keeps the explanatory target note to one line.

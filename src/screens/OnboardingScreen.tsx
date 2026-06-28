@@ -143,16 +143,19 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             </View>
           </View>
 
-          <View style={styles.planSteps}>
-            {planPreview.steps.map((step) => (
-              <View key={step.label} style={styles.planStep}>
-                <Text style={styles.planStepLabel}>{step.label}</Text>
-                <Text style={styles.planStepTitle}>{step.title}</Text>
-                <Text numberOfLines={2} style={styles.planStepDetail}>
-                  {step.detail}
-                </Text>
-              </View>
-            ))}
+          <View style={styles.planPath}>
+            <View style={styles.planPathBadge}>
+              <Text style={styles.planPathBadgeText}>1</Text>
+            </View>
+            <View style={styles.planPathCopy}>
+              <Text style={styles.planPathLabel}>Next path</Text>
+              <Text numberOfLines={1} style={styles.planPathTitle}>
+                {planPreview.steps[0].title} then Job Interview
+              </Text>
+              <Text numberOfLines={1} style={styles.planPathDetail}>
+                {planPreview.steps[0].detail}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.planStarter}>
@@ -343,24 +346,41 @@ const styles = StyleSheet.create({
   segmentValueActive: {
     color: colors.white,
   },
-  planSteps: {
-    gap: spacing.xs,
-    marginTop: spacing.md,
-  },
-  planStep: {
+  planPath: {
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
+    flexDirection: 'row',
+    marginTop: spacing.md,
     padding: spacing.sm,
   },
-  planStepLabel: {
+  planPathBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  planPathBadgeText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+  },
+  planPathCopy: {
+    flex: 1,
+    marginLeft: spacing.md,
+  },
+  planPathLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
   },
-  planStepTitle: {
+  planPathTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
@@ -368,7 +388,7 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
   },
-  planStepDetail: {
+  planPathDetail: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
