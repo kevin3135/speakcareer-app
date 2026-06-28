@@ -114,6 +114,7 @@ export function RoleplayScreen({
     roleplayId: roleplay.id,
     sessions,
   });
+  const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
@@ -350,19 +351,19 @@ export function RoleplayScreen({
 
       {!feedbackResult ? (
         <Card tone="strong">
-          {firstQuestState ? (
+          {visibleFirstQuestState ? (
             <View style={styles.firstQuestCue}>
               <View style={styles.firstQuestNumber}>
                 <Text style={styles.firstQuestNumberText}>1</Text>
               </View>
               <View style={styles.firstQuestCopy}>
                 <View style={styles.oneThingHeader}>
-                  <Text style={styles.firstQuestEyebrow}>{firstQuestState.eyebrow}</Text>
-                  <Badge label={firstQuestState.progressLabel} tone="accent" />
+                  <Text style={styles.firstQuestEyebrow}>{visibleFirstQuestState.eyebrow}</Text>
+                  <Badge label={visibleFirstQuestState.progressLabel} tone="accent" />
                 </View>
-                <Text style={styles.firstQuestTitle}>{firstQuestState.title}</Text>
+                <Text style={styles.firstQuestTitle}>{visibleFirstQuestState.title}</Text>
                 <Text numberOfLines={2} style={styles.firstQuestText}>
-                  {firstQuestState.body}
+                  {visibleFirstQuestState.body}
                 </Text>
               </View>
             </View>

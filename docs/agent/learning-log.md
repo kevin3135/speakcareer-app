@@ -1,5 +1,41 @@
 # Agent Learning Log
 
+## 2026-06-28: Single Roleplay Handoff Cue
+
+Made one focused Roleplay simplification: when a Foundation or Progress warm-up cue is present, the separate `First quest` banner is hidden. The learner now sees one guidance card before the question instead of two competing cues.
+
+What went well:
+
+- This directly reduces first-run visual crowding after preserving the Foundation starter cue through Home.
+- The change stayed inside `RoleplayScreen` and only affects cue visibility.
+- Warm-up cues remain the stronger context because they include the exact starter sentence or correction.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the Roleplay first viewport should still be checked in the local preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a specific warm-up cue exists, do not also show generic first-quest guidance.
+- Prioritize the card that tells the learner exactly what to do next.
+- One guidance cue before the answer box is the ceiling for first-run Roleplay.
+
+Next suggested task:
+
+- Mobile-preview the Home-to-first-interview screen and decide whether the warm-up cue itself should be shortened further.
+
 ## 2026-06-28: Home First Interview Starter Cue
 
 Made one focused handoff polish: when Home opens the first Job Interview after Foundation is complete and before any interview answer is saved, `AppNavigator` now automatically attaches the same level-matched Foundation warm-up cue. The starter survives leaving Foundation, while explicit warm-up cues from Progress still take priority.
