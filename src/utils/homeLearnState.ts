@@ -33,9 +33,11 @@ export type HomeLearnState = {
 
 type CreateHomeLearnStateInput = {
   foundationCtaLabel: string;
+  foundationCompletedSteps: number;
   foundationTitle: string;
   roleplays: HomeLearnRoleplay[];
   sessions: Pick<PracticeSession, 'roleplayId'>[];
+  totalFoundationSteps: number;
 };
 
 type RoleplayPath = {
@@ -54,15 +56,24 @@ type RoleplayPath = {
 
 export function createHomeLearnState({
   foundationCtaLabel,
+  foundationCompletedSteps,
   foundationTitle,
   roleplays,
   sessions,
+  totalFoundationSteps,
 }: CreateHomeLearnStateInput): HomeLearnState {
+  const safeFoundationCompletedSteps = Math.min(
+    Math.max(foundationCompletedSteps, 0),
+    totalFoundationSteps,
+  );
+  const hasStartedFoundation = safeFoundationCompletedSteps > 0;
+  const hasCompletedFoundation = safeFoundationCompletedSteps >= totalFoundationSteps;
   const hasSavedPractice = sessions.length > 0;
+  const hasUnlockedRoleplays = hasCompletedFoundation || hasSavedPractice;
   const roleplayPath = createRoleplayPath(roleplays, sessions);
 
   return {
-    hero: hasSavedPractice
+    hero: hasUnlockedRoleplays
       ? {
           body: roleplayPath.body,
           ctaLabel: roleplayPath.ctaLabel,
@@ -71,31 +82,41 @@ export function createHomeLearnState({
           title: roleplayPath.title,
         }
       : {
-          body: 'Tap three blocks: I, action, result. Then the interview unlocks.',
-          ctaLabel: 'Start step 1',
+          body: hasStartedFoundation
+            ? `Resume the sentence lesson at step ${safeFoundationCompletedSteps + 1} of ${totalFoundationSteps}. Then the interview unlocks.`
+            : 'Tap three blocks: I, action, result. Then the interview unlocks.',
+          ctaLabel: hasStartedFoundation ? 'Resume lesson' : 'Start step 1',
           eyebrow: 'Step 1',
           target: 'foundation',
           title: foundationTitle,
         },
     steps: [
       {
-        body: 'Learn the sentence shape that makes work English clear.',
-        ctaLabel: hasSavedPractice ? undefined : foundationCtaLabel,
-        meta: '2 min foundation',
-        state: hasSavedPractice ? 'completed' : 'current',
+        body: hasCompletedFoundation
+          ? 'Finished. The first interview is now unlocked on Home.'
+          : hasStartedFoundation
+            ? `Resume the final ${totalFoundationSteps - safeFoundationCompletedSteps} block${totalFoundationSteps - safeFoundationCompletedSteps === 1 ? '' : 's'} to unlock Job Interview.`
+            : 'Learn the sentence shape that makes work English clear.',
+        ctaLabel: hasCompletedFoundation ? undefined : hasStartedFoundation ? 'Resume lesson' : foundationCtaLabel,
+        meta: hasCompletedFoundation
+          ? 'Foundation complete'
+          : hasStartedFoundation
+            ? `${safeFoundationCompletedSteps}/${totalFoundationSteps} blocks done`
+            : '2 min foundation',
+        state: hasCompletedFoundation ? 'completed' : 'current',
         title: 'Clear sentence',
         xpLabel: '+20 XP',
       },
       ...roleplayPath.steps.map((step) => ({
         body: getRoleplayStepBody({
-          hasSavedPractice,
+          hasUnlockedRoleplays,
           state: step.state,
           title: step.title,
         }),
-        ctaLabel: hasSavedPractice && step.state === 'active' ? 'Open now' : undefined,
+        ctaLabel: hasUnlockedRoleplays && step.state === 'active' ? 'Open now' : undefined,
         meta: step.caption,
         roleplayId: step.roleplayId,
-        state: hasSavedPractice ? mapPracticeStepState(step.state) : 'locked',
+        state: hasUnlockedRoleplays ? mapPracticeStepState(step.state) : 'locked',
         title: step.title,
         xpLabel: step.xpLabel,
       })),
@@ -205,15 +226,15 @@ function mapPracticeStepState(state: RoleplayPathStepState): HomeLearnStepState 
 }
 
 function getRoleplayStepBody({
-  hasSavedPractice,
+  hasUnlockedRoleplays,
   state,
   title,
 }: {
-  hasSavedPractice: boolean;
+  hasUnlockedRoleplays: boolean;
   state: RoleplayPathStepState;
   title: string;
 }) {
-  if (!hasSavedPractice) {
+  if (!hasUnlockedRoleplays) {
     return 'Finish the foundation lesson first so the app keeps one clear next step.';
   }
 

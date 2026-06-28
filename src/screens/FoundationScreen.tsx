@@ -15,13 +15,21 @@ import { createFoundationHandoff } from '../utils/foundationHandoff';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type FoundationScreenProps = {
+  initialCompletedSteps: number;
   onBack: () => void;
+  onProgressChange: (completedSteps: number) => void;
   onStartCareerPractice: () => void;
   startingLevelId: StartingLevelId;
 };
 
-export function FoundationScreen({ onBack, onStartCareerPractice, startingLevelId }: FoundationScreenProps) {
-  const [completedSteps, setCompletedSteps] = useState(0);
+export function FoundationScreen({
+  initialCompletedSteps,
+  onBack,
+  onProgressChange,
+  onStartCareerPractice,
+  startingLevelId,
+}: FoundationScreenProps) {
+  const [completedSteps, setCompletedSteps] = useState(initialCompletedSteps);
   const totalSteps = foundationStart.structure.length;
   const isComplete = completedSteps >= totalSteps;
   const levelProfile = getStartingLevelProfile(startingLevelId);
@@ -41,7 +49,12 @@ export function FoundationScreen({ onBack, onStartCareerPractice, startingLevelI
 
   function selectStructurePart(index: number) {
     if (index === completedSteps) {
-      setCompletedSteps((steps) => Math.min(steps + 1, totalSteps));
+      setCompletedSteps((steps) => {
+        const nextSteps = Math.min(steps + 1, totalSteps);
+        onProgressChange(nextSteps);
+
+        return nextSteps;
+      });
     }
   }
 

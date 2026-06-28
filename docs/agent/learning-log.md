@@ -1,5 +1,40 @@
 # Agent Learning Log
 
+## 2026-06-28: Persistent Foundation Resume
+
+Made one focused onboarding/usability improvement: the first Foundation lesson now saves its local progress, resumes from the last completed block, and unlocks the first Job Interview on Home as soon as Foundation is done even before the first saved roleplay. This fixes the first-run loop where the app could treat a finished or in-progress Foundation lesson like a fresh start.
+
+What went well:
+
+- The change stayed local-only and reused the existing AsyncStorage pattern already used for onboarding, sessions, daily target and starting level.
+- `FoundationScreen`, `AppNavigator`, `HomeScreen`, `createHomeLearnState` and `createHomeDailyMissionCard` now agree on one source of truth for the first lesson state.
+- Home now gives better next-action guidance in two useful edge states: partial Foundation progress and completed Foundation with zero saved sessions.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the resumed Home copy and completed-Foundation first-roleplay state should still be checked on a phone-sized viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Persisting onboarding alone is not enough; the first Foundation lesson must also resume cleanly or the first-run loop feels broken.
+- Home coaching copy should change as soon as Foundation unlocks the first roleplay, even before any saved session exists.
+- Small local persistence helpers are a safe way to improve usability without adding architecture or integrations.
+
+Next suggested task:
+
+- Add a compact first-roleplay arrival cue on the unlocked Job Interview screen so the transition from Foundation into real practice feels even more continuous.
+
 ## 2026-06-28: Progress Latest Win Retry CTA
 
 Made one focused Progress polish: the `Latest win` card now caps the saved answer and coach feedback to two lines, then offers one clear `Retry this scenario` action. This turns a saved result into one-tap practice without adding another destination or more visual noise.

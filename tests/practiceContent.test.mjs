@@ -243,6 +243,47 @@ test('stores the selected starting level in local storage', async () => {
   );
 });
 
+test('stores foundation progress in local storage', async () => {
+  const {
+    FOUNDATION_PROGRESS_KEY,
+    FOUNDATION_TOTAL_STEPS,
+    parseFoundationProgressValue,
+    readFoundationProgress,
+    saveFoundationProgress,
+  } = await import('../src/utils/foundationProgressStorage.ts');
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  assert.equal(parseFoundationProgressValue(null), 0);
+  assert.equal(parseFoundationProgressValue('2'), 2);
+  assert.equal(parseFoundationProgressValue('9'), FOUNDATION_TOTAL_STEPS);
+  assert.equal(parseFoundationProgressValue('-3'), 0);
+  assert.equal(await readFoundationProgress(storage), 0);
+
+  await saveFoundationProgress(storage, 2);
+
+  assert.equal(values.get(FOUNDATION_PROGRESS_KEY), '2');
+  assert.equal(await readFoundationProgress(storage), 2);
+
+  await saveFoundationProgress(storage, 99);
+
+  assert.equal(values.get(FOUNDATION_PROGRESS_KEY), FOUNDATION_TOTAL_STEPS.toString());
+  assert.equal(
+    await readFoundationProgress({
+      getItem: async () => {
+        throw new Error('Storage unavailable');
+      },
+      setItem: async () => undefined,
+    }),
+    0,
+  );
+});
+
 test('creates a personalized onboarding first-path preview from the selected level', async () => {
   const { createOnboardingPlanPreview } = await import('../src/utils/onboardingPlan.ts');
   const { foundationStart, guidedStart, levelAssessment } = await import('../src/data/guidedIntro.ts');
@@ -1157,13 +1198,16 @@ test('creates a simple game-like Home quest path', async () => {
 
 test('keeps the Learn path focused on one current step', async () => {
   const { foundationStart } = await import('../src/data/guidedIntro.ts');
+  const { FOUNDATION_TOTAL_STEPS } = await import('../src/utils/foundationProgressStorage.ts');
   const { createHomeLearnState } = await import('../src/utils/homeLearnState.ts');
 
   const firstRunLearnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
+    foundationCompletedSteps: 0,
     foundationTitle: foundationStart.title,
     roleplays: practiceContent.roleplays,
     sessions: [],
+    totalFoundationSteps: FOUNDATION_TOTAL_STEPS,
   });
 
   assert.equal(firstRunLearnState.hero.target, 'foundation');
@@ -1175,11 +1219,45 @@ test('keeps the Learn path focused on one current step', async () => {
   assert.equal(firstRunLearnState.steps[1].state, 'locked');
   assert.ok(firstRunLearnState.steps[1].body.includes('foundation lesson'));
 
+  const resumedFoundationLearnState = createHomeLearnState({
+    foundationCtaLabel: foundationStart.ctaLabel,
+    foundationCompletedSteps: 2,
+    foundationTitle: foundationStart.title,
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+    totalFoundationSteps: FOUNDATION_TOTAL_STEPS,
+  });
+
+  assert.equal(resumedFoundationLearnState.hero.target, 'foundation');
+  assert.equal(resumedFoundationLearnState.hero.ctaLabel, 'Resume lesson');
+  assert.ok(resumedFoundationLearnState.hero.body.includes('step 3 of 3'));
+  assert.equal(resumedFoundationLearnState.steps[0].meta, '2/3 blocks done');
+  assert.ok(resumedFoundationLearnState.steps[0].body.includes('unlock Job Interview'));
+  assert.equal(resumedFoundationLearnState.steps[1].state, 'locked');
+
+  const postFoundationLearnState = createHomeLearnState({
+    foundationCtaLabel: foundationStart.ctaLabel,
+    foundationCompletedSteps: FOUNDATION_TOTAL_STEPS,
+    foundationTitle: foundationStart.title,
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+    totalFoundationSteps: FOUNDATION_TOTAL_STEPS,
+  });
+
+  assert.equal(postFoundationLearnState.hero.target, 'job-interview');
+  assert.equal(postFoundationLearnState.hero.title, 'Next: Job Interview');
+  assert.equal(postFoundationLearnState.steps[0].state, 'completed');
+  assert.equal(postFoundationLearnState.steps[1].state, 'current');
+  assert.ok(postFoundationLearnState.steps[0].body.includes('interview is now unlocked'));
+  assert.ok(postFoundationLearnState.steps[1].body.includes('app chose Job Interview'));
+
   const returningLearnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
+    foundationCompletedSteps: FOUNDATION_TOTAL_STEPS,
     foundationTitle: foundationStart.title,
     roleplays: practiceContent.roleplays,
     sessions: [{ roleplayId: 'job-interview' }],
+    totalFoundationSteps: FOUNDATION_TOTAL_STEPS,
   });
 
   assert.equal(returningLearnState.hero.target, 'meeting-practice');
@@ -1213,6 +1291,7 @@ test('creates one clear Home daily mission card', async () => {
   const firstRunMission = createHomeDailyMissionCard({
     dailyMission: createDailyMission(progressMock.summary, [], 1),
     dailyTarget: 1,
+    hasCompletedFoundation: false,
     localProgress: createLocalProgressStats(progressMock.summary, [], 1),
     sessions: [],
   });
@@ -1224,9 +1303,23 @@ test('creates one clear Home daily mission card', async () => {
   assert.ok(firstRunMission.body.includes('foundation'));
   assert.ok(firstRunMission.reason.includes('interview English'));
 
+  const postFoundationMission = createHomeDailyMissionCard({
+    dailyMission: createDailyMission(progressMock.summary, [], 1),
+    dailyTarget: 1,
+    hasCompletedFoundation: true,
+    localProgress: createLocalProgressStats(progressMock.summary, [], 1),
+    sessions: [],
+  });
+
+  assert.equal(postFoundationMission.title, 'Save your first practice answer');
+  assert.equal(postFoundationMission.targetLabel, '0/1 saved');
+  assert.ok(postFoundationMission.body.includes('Foundation is done'));
+  assert.ok(!postFoundationMission.body.includes('Finish the short foundation step'));
+
   const partialMission = createHomeDailyMissionCard({
     dailyMission: createDailyMission(progressMock.summary, [savedSession], 3),
     dailyTarget: 3,
+    hasCompletedFoundation: true,
     localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 3),
     sessions: [savedSession],
   });
@@ -1240,6 +1333,7 @@ test('creates one clear Home daily mission card', async () => {
   const completeMission = createHomeDailyMissionCard({
     dailyMission: createDailyMission(progressMock.summary, [savedSession], 1),
     dailyTarget: 1,
+    hasCompletedFoundation: true,
     localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 1),
     sessions: [savedSession],
   });

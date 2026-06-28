@@ -22,6 +22,11 @@ import type {
   StartingLevelId,
 } from '../types';
 import { readDailyTarget, saveDailyTarget } from '../utils/dailyTargetStorage';
+import {
+  FOUNDATION_TOTAL_STEPS,
+  readFoundationProgress,
+  saveFoundationProgress,
+} from '../utils/foundationProgressStorage';
 import { readPracticedMistakeIds, savePracticedMistakeIds } from '../utils/mistakePracticeStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 import { readPracticeSessions, savePracticeSessions } from '../utils/practiceSessionStorage';
@@ -36,6 +41,7 @@ export function AppNavigator() {
   const [practicedMistakeIds, setPracticedMistakeIds] = useState<string[]>([]);
   const [dailyTarget, setDailyTarget] = useState<DailyPracticeTarget>(1);
   const [startingLevelId, setStartingLevelId] = useState<StartingLevelId>('basic');
+  const [foundationCompletedSteps, setFoundationCompletedSteps] = useState(0);
   const [roleplayWarmupCue, setRoleplayWarmupCue] = useState<RoleplayWarmupCue | null>(null);
 
   const selectedRoleplay = useMemo(
@@ -55,6 +61,7 @@ export function AppNavigator() {
       readPracticeSessions(AsyncStorage),
       readPracticedMistakeIds(AsyncStorage),
       readStartingLevel(AsyncStorage),
+      readFoundationProgress(AsyncStorage, FOUNDATION_TOTAL_STEPS),
     ])
       .then(([
         isComplete,
@@ -62,6 +69,7 @@ export function AppNavigator() {
         storedPracticeSessions,
         storedPracticedMistakeIds,
         storedStartingLevel,
+        storedFoundationProgress,
       ]) => {
         if (isMounted) {
           setHasSeenOnboarding(isComplete);
@@ -69,6 +77,7 @@ export function AppNavigator() {
           setPracticeSessions(storedPracticeSessions);
           setPracticedMistakeIds(storedPracticedMistakeIds);
           setStartingLevelId(storedStartingLevel);
+          setFoundationCompletedSteps(storedFoundationProgress);
         }
       })
       .finally(() => {
@@ -122,8 +131,15 @@ export function AppNavigator() {
     setActiveScreen('Foundation');
     setHasSeenOnboarding(true);
     setStartingLevelId(selectedLevel);
+    setFoundationCompletedSteps(0);
     void saveOnboardingCompletion(AsyncStorage).catch(() => undefined);
     void saveStartingLevel(AsyncStorage, selectedLevel).catch(() => undefined);
+    void saveFoundationProgress(AsyncStorage, 0, FOUNDATION_TOTAL_STEPS).catch(() => undefined);
+  }
+
+  function updateFoundationProgress(completedSteps: number) {
+    setFoundationCompletedSteps(completedSteps);
+    void saveFoundationProgress(AsyncStorage, completedSteps, FOUNDATION_TOTAL_STEPS).catch(() => undefined);
   }
 
   if (isOnboardingLoading) {
@@ -144,6 +160,7 @@ export function AppNavigator() {
         {activeScreen === 'Home' ? (
           <HomeScreen
             dailyTarget={dailyTarget}
+            foundationCompletedSteps={foundationCompletedSteps}
             onOpenRoleplay={openRoleplay}
             onStartFoundation={() => setActiveScreen('Foundation')}
             sessions={practiceSessions}
@@ -151,7 +168,9 @@ export function AppNavigator() {
         ) : null}
         {activeScreen === 'Foundation' ? (
           <FoundationScreen
+            initialCompletedSteps={foundationCompletedSteps}
             onBack={() => setActiveScreen('Home')}
+            onProgressChange={updateFoundationProgress}
             onStartCareerPractice={() => openRoleplay(guidedStart.roleplayId)}
             startingLevelId={startingLevelId}
           />

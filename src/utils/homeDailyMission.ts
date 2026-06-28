@@ -5,6 +5,7 @@ import type { LocalProgressStats } from './localProgress';
 type HomeDailyMissionInput = {
   dailyMission: DailyMission;
   dailyTarget: DailyPracticeTarget;
+  hasCompletedFoundation: boolean;
   localProgress: LocalProgressStats;
   sessions: Pick<PracticeSession, 'id'>[];
 };
@@ -23,6 +24,7 @@ export type HomeDailyMissionCard = {
 export function createHomeDailyMissionCard({
   dailyMission,
   dailyTarget,
+  hasCompletedFoundation,
   localProgress,
   sessions,
 }: HomeDailyMissionInput): HomeDailyMissionCard {
@@ -32,7 +34,9 @@ export function createHomeDailyMissionCard({
 
   if (completed === 0) {
     return {
-      body: 'Finish the short foundation step, then save one guided answer to start your streak.',
+      body: hasCompletedFoundation
+        ? 'Foundation is done. Save one guided answer now to start your streak.'
+        : 'Finish the short foundation step, then save one guided answer to start your streak.',
       meta: '5-minute sprint',
       progressLabel: 'Mission progress',
       progressPercent: 0,

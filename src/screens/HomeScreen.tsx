@@ -13,6 +13,7 @@ import { practiceContent, progressData } from '../data/content';
 import { foundationStart } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
+import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
@@ -20,6 +21,7 @@ import { createLocalProgressStats } from '../utils/localProgress';
 
 type HomeScreenProps = {
   dailyTarget: DailyPracticeTarget;
+  foundationCompletedSteps: number;
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
   onStartFoundation: () => void;
   sessions: PracticeSession[];
@@ -27,23 +29,28 @@ type HomeScreenProps = {
 
 export function HomeScreen({
   dailyTarget,
+  foundationCompletedSteps,
   onOpenRoleplay,
   onStartFoundation,
   sessions,
 }: HomeScreenProps) {
+  const hasCompletedFoundation = foundationCompletedSteps >= FOUNDATION_TOTAL_STEPS;
   const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(progressData.summary, sessions, dailyTarget);
   const missionCard = createHomeDailyMissionCard({
     dailyMission: mission,
     dailyTarget,
+    hasCompletedFoundation,
     localProgress,
     sessions,
   });
   const learnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
+    foundationCompletedSteps,
     foundationTitle: foundationStart.title,
     roleplays: practiceContent.roleplays,
     sessions,
+    totalFoundationSteps: FOUNDATION_TOTAL_STEPS,
   });
   const activeLessonIndex = Math.max(
     0,
