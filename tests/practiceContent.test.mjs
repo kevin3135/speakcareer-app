@@ -973,7 +973,7 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(firstAnswerPrompt.eyebrow, 'Finish lesson');
   assert.equal(firstAnswerPrompt.title, 'Save this lesson');
   assert.equal(firstAnswerPrompt.xpLabel, '+55 XP');
-  assert.equal(firstAnswerPrompt.ctaLabel, 'Complete lesson (+55 XP)');
+  assert.equal(firstAnswerPrompt.ctaLabel, 'Complete lesson');
   assert.equal(firstAnswerPrompt.followUpLabel, 'Bonus turn optional');
   assert.ok(firstAnswerPrompt.body.includes('optional'));
 

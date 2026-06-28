@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Shorter Roleplay Save CTA
+
+Made one focused Roleplay save-step copy improvement: the primary save button now says `Complete lesson` instead of repeating XP inside the button label.
+
+Why it changed:
+
+- The save card already shows XP in a separate badge, so the button did not need to repeat it.
+- Shorter CTA text is easier to scan and less likely to wrap on mobile.
+- This supports Kevin's direction that the app should feel guided with one obvious next action.
+
+What went well:
+
+- The change stayed in `src/utils/practiceCompletion.ts` with one matching test update.
+- The visible reward remains through the XP badge while the main action is cleaner.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include live Expo/mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Use mobile preview to inspect the whole save step and only adjust spacing if the XP badge, button or bonus row wraps awkwardly.
+
 ## 2026-06-28: Quieter Roleplay Bonus Row
 
 Made one focused Roleplay save-step polish: the collapsed optional bonus-turn row is now quieter, shorter and more mobile-friendly.

@@ -88,7 +88,7 @@ export function createPracticeSavePrompt({
     body: includedFollowUp
       ? 'Save both turns to Progress and bank the full practice win.'
       : 'Save this answer now. The bonus turn stays optional.',
-    ctaLabel: `Complete lesson (+${safeXpReward} XP)`,
+    ctaLabel: 'Complete lesson',
     eyebrow: 'Finish lesson',
     followUpLabel: includedFollowUp ? 'Bonus turn added' : 'Bonus turn optional',
     title: 'Save this lesson',
