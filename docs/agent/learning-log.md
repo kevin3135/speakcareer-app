@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Progress Earlier Save History
+
+Made one focused Progress improvement: after the latest win card, the Progress screen now shows a compact `Recent saves` block with up to three earlier saved sessions, their XP, and the next coaching target to repeat.
+
+Why it changed:
+
+- The app already stores local practice sessions, but Progress only surfaced the newest one.
+- That made repeat practice feel disposable instead of cumulative.
+- A short earlier-save history makes the local practice loop feel more habit-forming without adding a new screen or more navigation.
+
+What went well:
+
+- The change stayed focused in `src/screens/ProgressScreen.tsx` with one small helper in `src/utils/progressRecentSessions.ts`.
+- The new history block reuses existing session fields, so no storage, backend or navigation changes were needed.
+- Focused coverage was added in `tests/practiceContent.test.mjs`.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new recent-save rows should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If local history already exists, surface it in a compact way before inventing a new progress feature.
+- Earlier saved sessions are more useful when they restate the next coaching target, not only the old answer text.
+- Keep Progress cumulative but quiet: one detailed latest win plus one compact earlier-save list is enough for now.
+
+Next suggested task:
+
+- Add one compact streak or target-lock badge to the Home start card so today’s habit goal is visible before opening a roleplay.
+
 ## 2026-06-28: Tighter Writing Support Phrase Chips
 
 Made one focused Roleplay polish: phrase chips inside the opened `Writing support` drawer now stay one line with safe sizing, so long professional starters do not make the helper feel heavy on mobile.

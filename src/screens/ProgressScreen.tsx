@@ -23,6 +23,7 @@ import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
+import { createProgressRecentSessions } from '../utils/progressRecentSessions';
 import { createRoleplayWarmupCue } from '../utils/roleplayWarmupCue';
 import { formatSessionDate } from '../utils/sessionHistory';
 
@@ -50,6 +51,7 @@ export function ProgressScreen({
   const totalXp = mission.xpTotal;
   const latestSession = sessions[0];
   const latestSessionFocusText = latestSession?.nextFocusText?.trim() ?? '';
+  const recentSessions = createProgressRecentSessions(sessions);
   const isFirstSaveLocked = sessions.length === 0;
   const mistakesFixed = sessions.length > 0 ? Math.min(mistakeBank.length, sessions.length + 1) : 0;
   const nextStepGuide = createProgressNextStepGuide({
@@ -232,6 +234,43 @@ export function ProgressScreen({
                   onPress={() => onOpenRoleplay(latestSession.roleplayId)}
                   variant="secondary"
                 />
+              </View>
+            </Card>
+          ) : null}
+
+          {recentSessions ? (
+            <Card tone="muted">
+              <View style={styles.rowBetween}>
+                <View style={styles.flexOne}>
+                  <Text style={styles.cardKicker}>{recentSessions.eyebrow}</Text>
+                  <Text style={styles.cardTitle}>{recentSessions.title}</Text>
+                </View>
+                <Badge label={recentSessions.countLabel} tone="info" />
+              </View>
+              <Text style={styles.cardBody}>{recentSessions.body}</Text>
+              <View style={styles.recentSessionsList}>
+                {recentSessions.items.map((session) => (
+                  <View key={session.id} style={styles.recentSessionItem}>
+                    <View style={styles.rowBetween}>
+                      <View style={styles.flexOne}>
+                        <Text numberOfLines={1} style={styles.recentSessionTitle}>
+                          {session.roleplayTitle}
+                        </Text>
+                        <Text style={styles.recentSessionMeta}>{session.metaLabel}</Text>
+                      </View>
+                      <XPBadge label={session.xpLabel} />
+                    </View>
+                    <View style={styles.recentSessionFocusBox}>
+                      <Text style={styles.recentSessionFocusLabel}>{session.nextFocusLabel}</Text>
+                      <Text numberOfLines={2} style={styles.recentSessionFocusText}>
+                        {session.nextFocusText}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+                {recentSessions.footerLabel ? (
+                  <Text style={styles.recentSessionsFooter}>{recentSessions.footerLabel}</Text>
+                ) : null}
               </View>
             </Card>
           ) : null}
@@ -566,6 +605,57 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  recentSessionsList: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  recentSessionItem: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  recentSessionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  recentSessionMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  recentSessionFocusBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.md,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  recentSessionFocusLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  recentSessionFocusText: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  recentSessionsFooter: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    textAlign: 'center',
   },
   unlockLabel: {
     color: colors.primaryDark,

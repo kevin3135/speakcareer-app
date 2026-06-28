@@ -1798,6 +1798,109 @@ test('creates a locked session history preview for first-time progress users', a
   assert.equal(emptyState.unlockLabel, 'First unlock: history, XP and daily target progress');
 });
 
+test('creates a compact earlier-save history for returning progress users', async () => {
+  const { createProgressRecentSessions } = await import('../src/utils/progressRecentSessions.ts');
+
+  assert.equal(createProgressRecentSessions([]), null);
+  assert.equal(
+    createProgressRecentSessions([
+      {
+        id: 'job-interview-1',
+        roleplayId: 'job-interview',
+        roleplayTitle: 'Job Interview',
+        completedAt: '2026-06-26T10:00:00.000Z',
+        answerPreview: 'I improved onboarding handoffs.',
+        wordCount: 36,
+        readinessLabel: 'Ready for feedback',
+        feedbackSummary: 'Clear answer with useful detail.',
+        xpReward: 50,
+      },
+    ]),
+    null,
+  );
+
+  const history = createProgressRecentSessions([
+    {
+      id: 'presentation-practice-3',
+      roleplayId: 'presentation-practice',
+      roleplayTitle: 'Presentation Practice',
+      completedAt: '2026-06-28T12:00:00.000Z',
+      answerPreview: 'I would connect the risk to the decision we need today.',
+      wordCount: 42,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Strong business framing.',
+      nextFocusLabel: 'Coach target',
+      nextFocusText: 'Add one measurable outcome in the close.',
+      includedFollowUp: true,
+      xpReward: 58,
+    },
+    {
+      id: 'meeting-practice-2',
+      roleplayId: 'meeting-practice',
+      roleplayTitle: 'Meeting Practice',
+      completedAt: '2026-06-27T09:00:00.000Z',
+      answerPreview: 'I shared the blocker and the next owner.',
+      wordCount: 31,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Clear update with a useful next step.',
+      nextFocusLabel: 'Structure 68',
+      nextFocusText: 'Name the owner earlier so the update sounds more direct.',
+      includedFollowUp: false,
+      xpReward: 44,
+    },
+    {
+      id: 'job-interview-1',
+      roleplayId: 'job-interview',
+      roleplayTitle: 'Job Interview',
+      completedAt: '2026-06-26T10:00:00.000Z',
+      answerPreview: 'I improved onboarding handoffs.',
+      wordCount: 36,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Clear answer with useful detail.',
+      nextFocusLabel: 'Vocabulary 62',
+      nextFocusText: 'Add one stronger action verb and one business result.',
+      includedFollowUp: true,
+      xpReward: 50,
+    },
+    {
+      id: 'sales-call-1',
+      roleplayId: 'sales-call',
+      roleplayTitle: 'Sales Call',
+      completedAt: '2026-06-25T08:00:00.000Z',
+      answerPreview: 'I would clarify the current cost of the problem.',
+      wordCount: 28,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Calm objection handling.',
+      xpReward: 40,
+    },
+    {
+      id: 'workplace-small-talk-1',
+      roleplayId: 'workplace-small-talk',
+      roleplayTitle: 'Workplace Small Talk',
+      completedAt: '2026-06-24T08:00:00.000Z',
+      answerPreview: 'Nice to meet you, I work with the customer team.',
+      wordCount: 24,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Friendly opening.',
+      xpReward: 36,
+    },
+  ]);
+
+  assert.equal(history.eyebrow, 'Recent saves');
+  assert.equal(history.title, 'Earlier wins still count');
+  assert.equal(history.countLabel, '3 earlier saves');
+  assert.ok(history.body.includes('coaching target'));
+  assert.equal(history.items.length, 3);
+  assert.equal(history.items[0].roleplayTitle, 'Meeting Practice');
+  assert.ok(history.items[0].metaLabel.includes('31 words'));
+  assert.equal(history.items[0].nextFocusLabel, 'Structure 68');
+  assert.equal(history.items[0].xpLabel, '+44 XP');
+  assert.ok(history.items[1].metaLabel.includes('36 words | Follow-up'));
+  assert.equal(history.items[2].nextFocusLabel, 'Coach target');
+  assert.equal(history.items[2].nextFocusText, 'Calm objection handling.');
+  assert.equal(history.footerLabel, '1 older save still stored locally');
+});
+
 test('creates a guided next step for progress states', async () => {
   const { createProgressNextStepGuide } = await import('../src/utils/progressNextStep.ts');
   const firstTimeGuide = createProgressNextStepGuide({
