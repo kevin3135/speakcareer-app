@@ -463,8 +463,10 @@ export function RoleplayScreen({
           ) : null}
           {!savedPathProgress ? (
             <View style={styles.savedNextStep}>
-              <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
-              <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
+              <Text numberOfLines={1} style={styles.savedNextText}>
+                <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}: </Text>
+                {savedHandoff.nextTitle}
+              </Text>
             </View>
           ) : null}
           {savedPathProgress ? (
@@ -1599,7 +1601,7 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
   },
   savedNextLabel: {
-    color: colors.infoDark,
+    color: colors.successDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
@@ -1609,16 +1611,15 @@ const styles = StyleSheet.create({
     borderColor: colors.successDark,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.lg,
-    padding: spacing.lg,
+    marginTop: spacing.md,
+    padding: spacing.sm,
   },
-  savedNextTitle: {
+  savedNextText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.h3,
+    fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineH3,
-    marginTop: spacing.xs,
+    lineHeight: typography.lineSmall,
   },
   savedCoachStrip: {
     backgroundColor: colors.white,

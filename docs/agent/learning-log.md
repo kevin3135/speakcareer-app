@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: Compact Saved Next Stop Card
+
+Made one focused Roleplay completion polish: the fallback saved-success `Next stop` card is now a compact one-line strip, matching the path-aware completion card.
+
+Why it changed:
+
+- The saved-success screen should keep the primary continuation action close in every completion branch.
+- The fallback `Next stop` card still used a large label and title stack.
+- A one-line strip keeps the next destination visible without adding another tall card.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No saved-session data, completion logic, storage, navigation or backend behavior changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the fallback completion branch should still be checked at `390x844`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep completion fallbacks visually consistent with the primary path-aware state.
+- When a completion screen already has XP, streak and coach-target signals, the next destination should be a strip, not a second large card.
+- Small height reductions compound on mobile and keep the learner's next action obvious.
+
+Next suggested task:
+
+- Mobile-preview both saved-success branches and decide whether the badge row needs wrapping limits on narrow screens.
+
 ## 2026-06-29: Compact Saved Level-Up Strip
 
 Made one focused Roleplay completion polish: the saved-success level-up state is now a compact one-line strip, and the new level plus total XP move into the existing badge row instead of using a taller standalone panel.
