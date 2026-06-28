@@ -76,6 +76,8 @@ export function HomeScreen({
 
       <AnimatedStartCard
         ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
+        habitLabel={isMissionComplete ? 'Today done' : 'Today goal'}
+        habitValue={missionCard.targetLabel}
         levelLabel={levelProgress.currentLevelLabel}
         levelProgressLabel={levelProgress.progressLabel}
         levelProgressPercent={levelProgress.progressPercent}
@@ -155,6 +157,8 @@ export function HomeScreen({
 
 function AnimatedStartCard({
   ctaLabel,
+  habitLabel,
+  habitValue,
   levelLabel,
   levelProgressLabel,
   levelProgressPercent,
@@ -165,6 +169,8 @@ function AnimatedStartCard({
   xpLabel,
 }: {
   ctaLabel: string;
+  habitLabel: string;
+  habitValue: string;
   levelLabel: string;
   levelProgressLabel: string;
   levelProgressPercent: number;
@@ -242,6 +248,12 @@ function AnimatedStartCard({
             <Badge label={xpLabel} tone="accent" />
           </View>
         </View>
+      </View>
+      <View style={styles.startHabitPill}>
+        <Text style={styles.startHabitLabel}>{habitLabel}</Text>
+        <Text numberOfLines={1} style={styles.startHabitValue}>
+          {habitValue}
+        </Text>
       </View>
       <View style={styles.startLevelBox}>
         <View style={styles.startLevelHeader}>
@@ -338,6 +350,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     marginTop: spacing.md,
+  },
+  startHabitLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  startHabitPill: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: colors.white,
+    borderColor: colors.secondarySoft,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+    maxWidth: '100%',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  startHabitValue: {
+    color: colors.ink,
+    flexShrink: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   startLevelBox: {
     backgroundColor: colors.successDark,

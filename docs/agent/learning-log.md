@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Home Start Habit Badge
+
+Made one focused Home polish: the main `START` card now shows a compact daily habit badge with the current target state, for example `Today goal` and `0/1 saved`.
+
+Why it changed:
+
+- Home should answer "why start now?" before the learner opens a roleplay.
+- The daily mission already existed below the start card, but the main action could use one tiny habit-loop cue.
+- A small badge keeps the page app-led without adding more buttons, tabs or explanation.
+
+What went well:
+
+- The change stayed inside `src/screens/HomeScreen.tsx`.
+- It reuses existing `missionCard.targetLabel` data and theme tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the new pill should still be checked at a narrow phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the Home start card and tighten the level-progress box if the first card feels too tall.
+
 ## 2026-06-28: Progress Earlier Save History
 
 Made one focused Progress improvement: after the latest win card, the Progress screen now shows a compact `Recent saves` block with up to three earlier saved sessions, their XP, and the next coaching target to repeat.
