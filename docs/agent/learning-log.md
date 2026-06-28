@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Path-Aware Progress Next Step
+
+Made one focused Progress improvement: the main next-step card now uses the same guided career path as Home, Practice and Roleplay instead of choosing the next roleplay from simple library order.
+
+Why it changed:
+
+- Progress still used a list-order next-step helper, so it could recommend the wrong lesson after someone practiced out of sequence.
+- The rest of the app already treats the English MVP as one guided path, and Progress should reinforce the same loop.
+- A path-aware next step makes the screen more useful as a coach, not just a history summary.
+
+What went well:
+
+- The change stayed focused in `src/utils/progressNextStep.ts` and reused `createPracticeCareerPath` instead of adding new state or another recommendation model.
+- Progress now returns learners to the earliest missing roleplay when they save an off-path session, and the completed-target state names the actual optional next sprint.
+- Added focused coverage for in-sequence, off-path and daily-target-complete progress states in `tests/practiceContent.test.mjs`.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run changed guidance logic only, so it did not include fresh Expo/mobile visual QA of the Progress screen copy length.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress recommendations should always reuse the same guided path model as other screens.
+- If a learner practices out of sequence, coach them back to the earliest missing lesson instead of continuing list order.
+- Prefer tightening loop consistency through shared helpers before adding another motivational UI surface.
+
+Next suggested task:
+
+- Add one compact path-status badge to the Progress next-step card so users can see whether they are resuming the guided path or replaying after completion.
+
 ## 2026-06-28: Compact Roleplay Habit Progress
 
 Made one focused Roleplay completion polish: the `Habit progress` card now uses a compact header with badges, tighter spacing and one-line title/body text.

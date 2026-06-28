@@ -1679,6 +1679,30 @@ test('creates a guided next step for progress states', async () => {
   assert.equal(returningGuide.title, '2 sprints left today');
   assert.ok(returningGuide.body.includes('Job Interview'));
   assert.ok(returningGuide.steps.some((step) => step.includes('Meeting Practice')));
+  assert.equal(returningGuide.ctaLabel, 'Start Meeting Practice');
+
+  const offPathGuide = createProgressNextStepGuide({
+    dailyTarget: 3,
+    roleplays: practiceContent.roleplays,
+    sessions: [
+      {
+        id: 'meeting-practice-1',
+        roleplayId: 'meeting-practice',
+        roleplayTitle: 'Meeting Practice',
+        completedAt: '2026-06-26T11:00:00.000Z',
+        answerPreview: 'I shared the project update and the next blocker.',
+        wordCount: 29,
+        readinessLabel: 'Ready for feedback',
+        feedbackSummary: 'Clear structure with one useful next step.',
+        xpReward: 44,
+      },
+    ],
+  });
+
+  assert.equal(offPathGuide.roleplayId, 'job-interview');
+  assert.equal(offPathGuide.ctaLabel, 'Start Job Interview');
+  assert.ok(offPathGuide.body.includes('Return to Job Interview'));
+  assert.ok(offPathGuide.steps.some((step) => step.includes('Return to Job Interview')));
 
   const completeGuide = createProgressNextStepGuide({
     dailyTarget: 1,
@@ -1687,8 +1711,9 @@ test('creates a guided next step for progress states', async () => {
   });
 
   assert.equal(completeGuide.title, 'Daily target complete');
-  assert.equal(completeGuide.ctaLabel, 'Start optional sprint');
+  assert.equal(completeGuide.ctaLabel, 'Start Meeting Practice');
   assert.ok(completeGuide.body.includes('1/1 target'));
+  assert.ok(completeGuide.steps.some((step) => step.includes('Meeting Practice')));
 });
 
 test('creates an actionable mistake practice drill', async () => {
