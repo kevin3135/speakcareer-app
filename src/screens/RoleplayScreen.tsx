@@ -22,6 +22,8 @@ import type {
   StartingLevelId,
 } from '../types';
 import { createAnswerReadinessCue } from '../utils/answerReadinessCue';
+import { createAnswerCoachContent } from '../utils/answerCoach';
+import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
@@ -40,7 +42,9 @@ import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/
 import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
+import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
+import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -87,11 +91,16 @@ export function RoleplayScreen({
   const [isFeedbackDetailsOpen, setIsFeedbackDetailsOpen] = useState(false);
   const [isFollowUpOpen, setIsFollowUpOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
+  const [isWritingSupportOpen, setIsWritingSupportOpen] = useState(false);
   const [levelUpMoment, setLevelUpMoment] = useState<LevelUpMoment | null>(null);
 
   const liveAnswerReview = summarizePracticeAnswer(draftAnswer);
   const answerReadinessCue = createAnswerReadinessCue(liveAnswerReview);
   const activeVariant = roleplay.promptVariants?.[0];
+  const answerCoach = createAnswerCoachContent({
+    persona: roleplay.aiPersona,
+    promptVariant: activeVariant,
+  });
   const openingLine = activeVariant?.openingLine ?? roleplay.openingLine;
   const baseXpReward = feedbackResult?.xpReward ?? roleplay.durationMinutes * 4;
   const followUpReview = followUpAnswer.trim().length > 0
@@ -131,6 +140,25 @@ export function RoleplayScreen({
     roleplayId: roleplay.id,
     sessions,
     starterAnswer: levelProfile.starterAnswer,
+  });
+  const suggestedPhrases = activeVariant?.suggestedPhrases?.length
+    ? activeVariant.suggestedPhrases
+    : roleplay.suggestedPhrases;
+  const phraseHelper = createRoleplayPhraseHelperState({
+    isOpen: isWritingSupportOpen,
+    phraseCount: suggestedPhrases.length,
+  });
+  const answerPlan = createAnswerPlanHelperState({
+    isOpen: isWritingSupportOpen,
+    steps: answerCoach.checklist,
+  });
+  const writingSupportQuickStart = starterReminder ? undefined : suggestedPhrases[0];
+  const writingSupport = createWritingSupportState({
+    isExpanded: isWritingSupportOpen,
+    isAnswerPlanOpen: isWritingSupportOpen,
+    phraseLabel: phraseHelper.summaryLabel,
+    planLabel: answerPlan.stepCountLabel,
+    quickStartPhrase: writingSupportQuickStart,
   });
   const firstQuestState = createRoleplayFirstQuestState({
     guidedStart,
@@ -322,6 +350,35 @@ export function RoleplayScreen({
     }
 
     setDraftAnswer(warmupCue.starterAnswer);
+    setAnswerReview(null);
+    setFeedbackResult(null);
+    setHasAppliedBetterEnglish(false);
+    setIsFeedbackDetailsOpen(false);
+    setLevelUpMoment(null);
+    answerInputRef.current?.focus();
+  }
+
+  function addWritingSupportText(text: string) {
+    const trimmedText = text.trim();
+
+    if (!trimmedText) {
+      return;
+    }
+
+    setDraftAnswer((currentAnswer) => {
+      const currentHasContent = currentAnswer.trim().length > 0;
+
+      if (!currentHasContent) {
+        return trimmedText;
+      }
+
+      if (currentAnswer.includes(trimmedText)) {
+        return currentAnswer;
+      }
+
+      const needsSpace = currentAnswer.endsWith(' ') || currentAnswer.endsWith('\n');
+      return `${currentAnswer}${needsSpace ? '' : ' '}${trimmedText}`;
+    });
     setAnswerReview(null);
     setFeedbackResult(null);
     setHasAppliedBetterEnglish(false);
@@ -527,6 +584,83 @@ export function RoleplayScreen({
               />
             </View>
           </View>
+          <Pressable
+            accessibilityHint="Shows or hides optional writing support before you check the answer"
+            accessibilityLabel={writingSupport.toggleAccessibilityLabel}
+            accessibilityRole="button"
+            onPress={() => setIsWritingSupportOpen((isOpen) => !isOpen)}
+            style={({ pressed }) => [styles.writingSupportToggle, pressed && styles.pressed]}
+          >
+            <View style={styles.oneThingHeader}>
+              <Text style={styles.writingSupportToggleLabel}>{writingSupport.title}</Text>
+              <Badge label={writingSupport.summaryLabel} tone="info" />
+            </View>
+            <View style={styles.writingSupportToggleMeta}>
+              <Text style={styles.writingSupportHelperText}>{writingSupport.helperText}</Text>
+              <Text style={styles.writingSupportToggleCta}>{writingSupport.toggleLabel}</Text>
+            </View>
+          </Pressable>
+          {isWritingSupportOpen ? (
+            <View style={styles.writingSupportBox}>
+              <Text style={styles.writingSupportCoachNote}>
+                {activeVariant?.coachingNote ?? answerCoach.instruction}
+              </Text>
+              {writingSupportQuickStart ? (
+                <View style={styles.writingSupportSection}>
+                  <View style={styles.oneThingHeader}>
+                    <Text style={styles.writingSupportSectionLabel}>
+                      {writingSupport.quickStartLabel}
+                    </Text>
+                    <AppButton
+                      accessibilityHint="Adds a short starter phrase to your answer"
+                      label="Use starter"
+                      onPress={() => addWritingSupportText(writingSupport.quickStartText)}
+                      size="small"
+                      variant="quiet"
+                    />
+                  </View>
+                  <Text style={styles.writingSupportSectionText}>
+                    {writingSupport.quickStartText}
+                  </Text>
+                </View>
+              ) : null}
+              <View style={styles.writingSupportSection}>
+                <View style={styles.oneThingHeader}>
+                  <Text style={styles.writingSupportSectionLabel}>{answerPlan.title}</Text>
+                  <Badge label={answerPlan.stepCountLabel} tone="secondary" />
+                </View>
+                {answerPlan.steps.map((step, index) => (
+                  <Text key={step} style={styles.writingSupportPlanItem}>
+                    {`${index + 1}. ${step}`}
+                  </Text>
+                ))}
+              </View>
+              <View style={styles.writingSupportSection}>
+                <View style={styles.oneThingHeader}>
+                  <Text style={styles.writingSupportSectionLabel}>Helpful phrases</Text>
+                  <Badge label={phraseHelper.summaryLabel} tone="accent" />
+                </View>
+                <Text style={styles.writingSupportSectionMeta}>{phraseHelper.helperText}</Text>
+                <View style={styles.writingSupportPhraseWrap}>
+                  {suggestedPhrases.slice(0, 3).map((phrase) => (
+                    <Pressable
+                      accessibilityHint="Adds this phrase to your answer draft"
+                      accessibilityLabel={`Use phrase ${phrase}`}
+                      accessibilityRole="button"
+                      key={phrase}
+                      onPress={() => addWritingSupportText(phrase)}
+                      style={({ pressed }) => [
+                        styles.writingSupportPhraseChip,
+                        pressed && styles.writingSupportPhraseChipPressed,
+                      ]}
+                    >
+                      <Text style={styles.writingSupportPhraseText}>{phrase}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
+            </View>
+          ) : null}
           {starterReminder && !warmupCue && !hasDraftAnswer ? (
             <Pressable
               accessibilityHint="Adds a simple starter answer to the answer box"
@@ -908,6 +1042,108 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginRight: spacing.sm,
+  },
+  writingSupportToggle: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  writingSupportToggleLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  writingSupportToggleMeta: {
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.sm,
+  },
+  writingSupportHelperText: {
+    color: colors.text,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginRight: spacing.md,
+  },
+  writingSupportToggleCta: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  writingSupportBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.md,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  writingSupportCoachNote: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  writingSupportSection: {
+    gap: spacing.sm,
+  },
+  writingSupportSectionLabel: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  writingSupportSectionMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  writingSupportSectionText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  writingSupportPlanItem: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  writingSupportPhraseWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  writingSupportPhraseChip: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    maxWidth: '100%',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  writingSupportPhraseChipPressed: {
+    backgroundColor: colors.infoSoft,
+    borderColor: colors.info,
+  },
+  writingSupportPhraseText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   dailyTargetPreviewBox: {
     backgroundColor: colors.surfaceMuted,

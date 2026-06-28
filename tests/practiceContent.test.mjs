@@ -1775,6 +1775,16 @@ test('creates a combined writing support helper state', async () => {
   assert.equal(openSupport.toggleLabel, 'Hide');
   assert.equal(openSupport.toggleAccessibilityLabel, 'Hide writing support');
   assert.ok(openSupport.helperText.includes('Use only what helps'));
+
+  const noStarterSupport = createWritingSupportState({
+    isExpanded: false,
+    isAnswerPlanOpen: false,
+    phraseLabel: '3 phrases',
+    planLabel: '3-step plan',
+  });
+
+  assert.equal(noStarterSupport.summaryLabel, '3 phrases + 3-step plan');
+  assert.equal(noStarterSupport.quickStartText, 'Start with your own strongest first sentence.');
 });
 
 test('creates a locked session history preview for first-time progress users', async () => {

@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Roleplay Writing Support Drawer
+
+Made one focused Roleplay improvement: the answer step now has one compact `Writing support` drawer that quietly combines a coach note, a short answer plan, and tap-to-insert helpful phrases without pushing the main answer box out of focus.
+
+Why it changed:
+
+- The Roleplay answer step had become cleaner, but it no longer exposed the local phrase and structure support already available in the app.
+- Kevin wants the English MVP to feel guided and habit-forming, which means help should be nearby when the learner gets stuck, but secondary to the main writing action.
+- One collapsed drawer keeps the draft box central while still giving the learner a quick way to borrow a phrase or restart with structure.
+
+What went well:
+
+- The change stayed focused in [`C:\Dev\speakcareer-app\src\screens\RoleplayScreen.tsx`](C:\Dev\speakcareer-app\src\screens\RoleplayScreen.tsx), [`C:\Dev\speakcareer-app\src\utils\writingSupportHelper.ts`](C:\Dev\speakcareer-app\src\utils\writingSupportHelper.ts) and one focused test block in [`C:\Dev\speakcareer-app\tests\practiceContent.test.mjs`](C:\Dev\speakcareer-app\tests\practiceContent.test.mjs).
+- Existing local roleplay data and helper utilities were reused, so no new content model, backend logic or storage was added.
+- The first Job Interview still avoids duplicate starter guidance because the larger starter-answer chip stays separate from the new compact drawer.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the drawer height and phrase-chip wrapping should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If optional writing help exists, keep it in one collapsed drawer instead of scattering multiple helper modules around the answer step.
+- Phrase insertion should help the learner start faster without replacing ownership of the final answer.
+- Avoid duplicating the stronger first-quest starter-answer support inside the general writing-support drawer.
+
+Next suggested task:
+
+- Add a compact practice-angle switcher on Roleplay so users can choose different prompts inside the same scenario before writing.
+
 ## 2026-06-28: Shorter Roleplay Prompt Header
 
 Made one focused Roleplay answer-step polish: the question area now uses one small `Coach asks` label instead of a full `Question` header row with a `1 answer` badge.

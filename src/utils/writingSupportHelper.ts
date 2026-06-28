@@ -24,6 +24,9 @@ export function createWritingSupportState({
   quickStartPhrase,
 }: WritingSupportInput): WritingSupportState {
   const hasQuickStartPhrase = Boolean(quickStartPhrase?.trim());
+  const summaryLabel = isExpanded || !hasQuickStartPhrase
+    ? `${phraseLabel} + ${planLabel}`
+    : `1 starter + ${planLabel}`;
 
   return {
     helperText:
@@ -34,9 +37,7 @@ export function createWritingSupportState({
     quickStartText: hasQuickStartPhrase
       ? quickStartPhrase!.trim()
       : 'Start with your own strongest first sentence.',
-    summaryLabel: isExpanded
-      ? `${phraseLabel} + ${planLabel}`
-      : `1 starter + ${planLabel}`,
+    summaryLabel,
     title: 'Writing support',
     toggleAccessibilityLabel: isExpanded ? 'Hide writing support' : 'Show writing support',
     toggleLabel: isExpanded ? 'Hide' : 'More',
