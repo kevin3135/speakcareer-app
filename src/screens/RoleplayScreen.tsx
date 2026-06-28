@@ -71,6 +71,7 @@ export function RoleplayScreen({
   const [savedSession, setSavedSession] = useState<PracticeSession | null>(null);
   const [followUpAnswer, setFollowUpAnswer] = useState('');
   const [hasAppliedBetterEnglish, setHasAppliedBetterEnglish] = useState(false);
+  const [isFeedbackDetailsOpen, setIsFeedbackDetailsOpen] = useState(false);
   const [isFollowUpOpen, setIsFollowUpOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
 
@@ -184,6 +185,7 @@ export function RoleplayScreen({
     setAnswerReview(review);
     setFeedbackResult(nextFeedback);
     setFollowUpAnswer('');
+    setIsFeedbackDetailsOpen(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
   }
@@ -193,6 +195,7 @@ export function RoleplayScreen({
     setAnswerReview(null);
     setFollowUpAnswer('');
     setHasAppliedBetterEnglish(false);
+    setIsFeedbackDetailsOpen(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
     answerInputRef.current?.focus();
@@ -208,6 +211,7 @@ export function RoleplayScreen({
     setAnswerReview(null);
     setFollowUpAnswer('');
     setHasAppliedBetterEnglish(true);
+    setIsFeedbackDetailsOpen(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
   }
@@ -249,6 +253,7 @@ export function RoleplayScreen({
     setAnswerReview(null);
     setFeedbackResult(null);
     setHasAppliedBetterEnglish(false);
+    setIsFeedbackDetailsOpen(false);
     answerInputRef.current?.focus();
   }
 
@@ -261,6 +266,7 @@ export function RoleplayScreen({
     setAnswerReview(null);
     setFeedbackResult(null);
     setHasAppliedBetterEnglish(false);
+    setIsFeedbackDetailsOpen(false);
     answerInputRef.current?.focus();
   }
 
@@ -405,6 +411,7 @@ export function RoleplayScreen({
                 setAnswerReview(null);
                 setFeedbackResult(null);
                 setHasAppliedBetterEnglish(false);
+                setIsFeedbackDetailsOpen(false);
               }}
               onFocus={() => setIsAnswerFocused(true)}
               placeholder={levelProfile.answerPlaceholder}
@@ -472,31 +479,47 @@ export function RoleplayScreen({
               </Text>
             </View>
           ) : null}
-          <View style={styles.feedbackScores}>
-            {feedbackResult.feedback.scores.map((score) => (
-              <View key={score.label} style={styles.feedbackScoreRow}>
-                <ProgressBar label={score.label} tone="primary" value={score.value} />
+          <Pressable
+            accessibilityHint="Shows or hides score bars and detailed coach notes"
+            accessibilityLabel={isFeedbackDetailsOpen ? 'Hide coach details' : 'Show coach details'}
+            accessibilityRole="button"
+            onPress={() => setIsFeedbackDetailsOpen((isOpen) => !isOpen)}
+            style={({ pressed }) => [styles.feedbackDetailsToggle, pressed && styles.pressed]}
+          >
+            <Text style={styles.feedbackDetailsToggleLabel}>
+              {isFeedbackDetailsOpen ? 'Hide details' : 'Show details'}
+            </Text>
+            <Text style={styles.feedbackDetailsToggleMeta}>Scores and notes</Text>
+          </Pressable>
+          {isFeedbackDetailsOpen ? (
+            <>
+              <View style={styles.feedbackScores}>
+                {feedbackResult.feedback.scores.map((score) => (
+                  <View key={score.label} style={styles.feedbackScoreRow}>
+                    <ProgressBar label={score.label} tone="primary" value={score.value} />
+                  </View>
+                ))}
               </View>
-            ))}
-          </View>
-          <View style={styles.feedbackChecklist}>
-            <View style={styles.feedbackChecklistBox}>
-              <Text style={styles.feedbackChecklistTitle}>Working well</Text>
-              {feedbackResult.feedback.strengths.map((strength) => (
-                <Text key={strength} style={styles.feedbackChecklistItem}>
-                  - {strength}
-                </Text>
-              ))}
-            </View>
-            <View style={styles.feedbackChecklistBox}>
-              <Text style={styles.feedbackChecklistTitle}>Improve next</Text>
-              {feedbackResult.feedback.improvements.map((improvement) => (
-                <Text key={improvement} style={styles.feedbackChecklistItem}>
-                  - {improvement}
-                </Text>
-              ))}
-            </View>
-          </View>
+              <View style={styles.feedbackChecklist}>
+                <View style={styles.feedbackChecklistBox}>
+                  <Text style={styles.feedbackChecklistTitle}>Working well</Text>
+                  {feedbackResult.feedback.strengths.map((strength) => (
+                    <Text key={strength} style={styles.feedbackChecklistItem}>
+                      - {strength}
+                    </Text>
+                  ))}
+                </View>
+                <View style={styles.feedbackChecklistBox}>
+                  <Text style={styles.feedbackChecklistTitle}>Improve next</Text>
+                  {feedbackResult.feedback.improvements.map((improvement) => (
+                    <Text key={improvement} style={styles.feedbackChecklistItem}>
+                      - {improvement}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            </>
+          ) : null}
           <View style={styles.betterEnglishBox}>
             <Text style={styles.betterEnglishLabel}>Better English</Text>
             <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
@@ -846,6 +869,30 @@ const styles = StyleSheet.create({
   },
   feedbackActionItem: {
     flex: 1,
+  },
+  feedbackDetailsToggle: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  feedbackDetailsToggleLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  feedbackDetailsToggleMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
   },
   feedbackHeroCopy: {
     flex: 1,
