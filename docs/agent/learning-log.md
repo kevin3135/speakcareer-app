@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Roleplay Level-Up Moment
+
+Made one focused completion polish: the saved Roleplay success state now detects when the newly saved session crosses an XP level boundary and shows one compact `Level up` reward card with the new level and total XP.
+
+Why it changed:
+
+- The completion screen already saved XP and streak progress, but crossing a level should feel like a small game-like reward.
+- This keeps the user inside the guided loop without adding another button, screen or feature.
+- The reward uses the same local XP model as Home, so level language stays consistent.
+
+What went well:
+
+- The change stayed focused inside `RoleplayScreen` and reused `createDailyMission` plus `createLevelProgress`.
+- The level-up card only appears when a real level boundary is crossed, so normal saves stay simple.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the saved-answer completion screen should still be checked with and without a level-up state.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion rewards should be conditional and compact, not another permanent card on every save.
+- Reuse the same XP and level helpers across Home and Roleplay so the gamification model stays coherent.
+- Keep the reward close to the existing success hero rather than adding another navigation step.
+
+Next suggested task:
+
+- Mobile-preview the saved-answer completion state with and without level-up, then tune vertical spacing if the CTA sits too low.
+
 ## 2026-06-28: Home Level Progress Rail
 
 Made one focused habit-loop improvement on Home: the main `Do this now` start card now includes a compact level-progress rail that shows the learner's current level, XP progress inside the level, total XP, and how many XP remain until the next level.

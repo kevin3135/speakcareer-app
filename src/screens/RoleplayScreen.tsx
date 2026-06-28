@@ -24,6 +24,8 @@ import type {
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
+import { createDailyMission } from '../utils/gamification';
+import { createLevelProgress } from '../utils/levelProgress';
 import {
   createNextPracticeRecommendation,
   createPracticeCompletionSummary,
@@ -51,6 +53,12 @@ type RoleplayScreenProps = {
 
 const FOLLOW_UP_BONUS_XP = 15;
 
+type LevelUpMoment = {
+  currentLevelLabel: string;
+  previousLevelLabel: string;
+  totalXpLabel: string;
+};
+
 export function RoleplayScreen({
   dailyTarget,
   onBack,
@@ -74,6 +82,7 @@ export function RoleplayScreen({
   const [isFeedbackDetailsOpen, setIsFeedbackDetailsOpen] = useState(false);
   const [isFollowUpOpen, setIsFollowUpOpen] = useState(false);
   const [isAnswerFocused, setIsAnswerFocused] = useState(false);
+  const [levelUpMoment, setLevelUpMoment] = useState<LevelUpMoment | null>(null);
 
   const activeVariant = roleplay.promptVariants?.[0];
   const openingLine = activeVariant?.openingLine ?? roleplay.openingLine;
@@ -189,6 +198,7 @@ export function RoleplayScreen({
     setIsFeedbackDetailsOpen(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
+    setLevelUpMoment(null);
   }
 
   function retryAnswer() {
@@ -199,6 +209,7 @@ export function RoleplayScreen({
     setIsFeedbackDetailsOpen(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
+    setLevelUpMoment(null);
     answerInputRef.current?.focus();
   }
 
@@ -215,6 +226,7 @@ export function RoleplayScreen({
     setIsFeedbackDetailsOpen(false);
     setIsFollowUpOpen(false);
     setSavedSession(null);
+    setLevelUpMoment(null);
   }
 
   function saveSession() {
@@ -232,8 +244,26 @@ export function RoleplayScreen({
       xpReward: totalXpReward,
     });
 
+    setLevelUpMoment(createSavedLevelUpMoment(session));
     setSavedSession(session);
     onSaveSession(session);
+  }
+
+  function createSavedLevelUpMoment(session: PracticeSession): LevelUpMoment | null {
+    const previousMission = createDailyMission(progressData.summary, sessions, dailyTarget);
+    const nextMission = createDailyMission(progressData.summary, [session, ...sessions], dailyTarget);
+    const previousLevel = createLevelProgress(previousMission.xpTotal);
+    const nextLevel = createLevelProgress(nextMission.xpTotal);
+
+    if (previousLevel.currentLevelLabel === nextLevel.currentLevelLabel) {
+      return null;
+    }
+
+    return {
+      currentLevelLabel: nextLevel.currentLevelLabel,
+      previousLevelLabel: previousLevel.currentLevelLabel,
+      totalXpLabel: nextLevel.totalXpLabel,
+    };
   }
 
   function continueToNext() {
@@ -255,6 +285,7 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setHasAppliedBetterEnglish(false);
     setIsFeedbackDetailsOpen(false);
+    setLevelUpMoment(null);
     answerInputRef.current?.focus();
   }
 
@@ -268,6 +299,7 @@ export function RoleplayScreen({
     setFeedbackResult(null);
     setHasAppliedBetterEnglish(false);
     setIsFeedbackDetailsOpen(false);
+    setLevelUpMoment(null);
     answerInputRef.current?.focus();
   }
 
@@ -308,6 +340,18 @@ export function RoleplayScreen({
             <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
             <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
           </View>
+          {levelUpMoment ? (
+            <View style={styles.levelUpBox}>
+              <Text style={styles.levelUpLabel}>Level up</Text>
+              <View style={styles.levelUpBadges}>
+                <Badge label={levelUpMoment.currentLevelLabel} tone="accent" />
+                <Badge label={levelUpMoment.totalXpLabel} tone="info" />
+              </View>
+              <Text style={styles.levelUpText}>
+                You moved from {levelUpMoment.previousLevelLabel} to {levelUpMoment.currentLevelLabel}.
+              </Text>
+            </View>
+          ) : null}
           {savedMilestone ? (
             <View style={styles.savedMilestoneBox}>
               <Text style={styles.savedMilestoneLabel}>Habit progress</Text>
@@ -413,6 +457,7 @@ export function RoleplayScreen({
                 setFeedbackResult(null);
                 setHasAppliedBetterEnglish(false);
                 setIsFeedbackDetailsOpen(false);
+                setLevelUpMoment(null);
               }}
               onFocus={() => setIsAnswerFocused(true)}
               placeholder={levelProfile.answerPlaceholder}
@@ -1040,6 +1085,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
+  },
+  levelUpBadges: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  levelUpBox: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  levelUpLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  levelUpText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   savedNextLabel: {
     color: colors.infoDark,
