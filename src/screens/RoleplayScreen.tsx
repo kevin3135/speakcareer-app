@@ -719,26 +719,19 @@ export function RoleplayScreen({
                 ) : null}
               </View>
             ) : (
-              <View style={styles.followUpSummaryRow}>
-                <View style={styles.followUpSummaryCopy}>
-                  <View style={styles.oneThingHeader}>
-                    <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
-                    <Badge label={`+${FOLLOW_UP_BONUS_XP} XP`} tone="secondary" />
-                  </View>
-                  <Text numberOfLines={1} style={styles.followUpSummaryText}>
-                    {followUpPrompt.coachingNote}
-                  </Text>
-                </View>
-                <View style={styles.followUpSummaryButton}>
-                  <AppButton
-                    accessibilityHint="Starts the optional follow-up with an editable starter sentence"
-                    label="Try bonus"
-                    onPress={startFollowUpWithStarter}
-                    size="small"
-                    variant="quiet"
-                  />
-                </View>
-              </View>
+              <Pressable
+                accessibilityHint="Starts the optional follow-up with an editable starter sentence"
+                accessibilityLabel="Try optional bonus turn"
+                accessibilityRole="button"
+                onPress={startFollowUpWithStarter}
+                style={({ pressed }) => [
+                  styles.followUpBonusChip,
+                  pressed && styles.followUpBonusChipPressed,
+                ]}
+              >
+                <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
+                <Text style={styles.followUpBonusCta}>{`Try +${FOLLOW_UP_BONUS_XP} XP`}</Text>
+              </Pressable>
             )
           ) : null}
         </Card>
@@ -1208,37 +1201,34 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.sm,
   },
-  followUpSummaryButton: {
-    minWidth: 104,
+  followUpBonusChip: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
-  followUpSummaryCopy: {
-    flex: 1,
-    minWidth: 0,
+  followUpBonusChipPressed: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  followUpBonusCta: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   followUpSummaryLabel: {
     color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-  },
-  followUpSummaryRow: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-    marginTop: spacing.lg,
-    padding: spacing.md,
-  },
-  followUpSummaryText: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
   },
   followUpStatusBox: {
     backgroundColor: colors.surfaceMuted,

@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Quieter Roleplay Bonus Chip
+
+Made one focused Roleplay save-step polish: the collapsed optional bonus turn is now a small chip instead of a wide helper row with body copy and a separate button.
+
+Why it changed:
+
+- The save step should have one obvious main action: `Complete lesson`.
+- The optional bonus turn is useful, but it should feel like a secondary choice, not another required task.
+- A compact chip keeps the healthy game loop visible without adding more text to the save moment.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- The expanded bonus flow still works when the learner chooses it.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the chip spacing should still be checked on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Preview the full Roleplay flow on a phone and tighten whichever optional helper still competes most with the primary CTA.
+
 ## 2026-06-28: In-Session Daily Target Preview
 
 Made one focused practice-flow improvement: the active Roleplay answer step now shows a compact `Today` preview that tells the learner what today’s target will look like after saving the current lesson.
