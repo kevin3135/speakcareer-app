@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Path-Aware Roleplay Completion
+
+Made one focused practice-flow improvement: after a roleplay is saved, the success state now shows career-path progress and recommends the next lesson from the actual unlocked sequence instead of simply moving to the next item in the library order.
+
+Why it changed:
+
+- The saved screen already showed XP, streak and habit progress, but it did not show how the lesson advanced the overall English career path.
+- If a learner practiced out of sequence, the old completion CTA could point to a different roleplay than the guided path, which weakened the app-led loop.
+- A compact path-progress block makes the next action feel earned and keeps the MVP closer to a businesslike streak-and-level practice system.
+
+What went well:
+
+- The change stayed focused inside `RoleplayScreen` and `practiceCompletion` helpers, reusing the existing `createPracticeCareerPath` model instead of adding new state.
+- The saved completion CTA is now path-aware, so the success screen and guided roleplay sequence stay aligned even after off-path practice.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The completion helper now has focused coverage for in-progress and fully completed path states.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the saved completion hero should still be checked on a phone-sized viewport for vertical length.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion states should confirm progress in the broader career path, not only the single saved answer.
+- Reuse the existing path helper when choosing the next recommended roleplay so guidance stays consistent across screens.
+- When adding motivational UI, keep it inside the current flow instead of creating another screen or navigation step.
+
+Next suggested task:
+
+- Mobile-preview the saved roleplay completion state and tighten spacing if the new path-progress block pushes the CTA too low.
+
 ## 2026-06-28: Compact Onboarding Path Preview
 
 Made one focused onboarding simplification: after a level is selected, the first-path preview now uses one compact `Next path` row instead of two separate lesson/quest cards.

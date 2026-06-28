@@ -7,6 +7,8 @@ import type {
 } from '../types';
 // @ts-expect-error Node test imports require the explicit .ts extension here.
 import { createLocalProgressStats, type LocalProgressStats } from './localProgress.ts';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createPracticeCareerPath } from './practiceCareerPath.ts';
 
 export type PracticeCompletionSummary = {
   title: string;
@@ -52,6 +54,17 @@ export type PracticeCompletionMilestone = {
 export type SavedRoleplayMilestone = PracticeCompletionMilestone & {
   progressLabel: string;
   progressPercent: number;
+};
+
+export type SavedRoleplayPathProgress = {
+  badgeLabel: string;
+  isPathComplete: boolean;
+  nextLabel: string;
+  nextTitle: string;
+  progressLabel: string;
+  progressPercent: number;
+  roleplayId: RoleplayId;
+  title: string;
 };
 
 type CreatePracticeCompletionSummaryInput = {
@@ -122,17 +135,19 @@ export function createNextPracticeRecommendation(
 }
 
 type CreateSavedRoleplayHandoffInput = {
-  nextPracticeRecommendation: Pick<NextPracticeRecommendation, 'title'> | null;
+  isPathComplete?: boolean;
+  nextPracticeTitle: string | null;
   xpReward: number;
 };
 
 export function createSavedRoleplayHandoff({
-  nextPracticeRecommendation,
+  isPathComplete = false,
+  nextPracticeTitle,
   xpReward,
 }: CreateSavedRoleplayHandoffInput): SavedRoleplayHandoff {
   const safeXpReward = Math.max(0, xpReward);
 
-  if (!nextPracticeRecommendation) {
+  if (!nextPracticeTitle) {
     return {
       body: 'Your answer is saved. Review Progress now, or come back later for another short English sprint.',
       ctaLabel: 'Open Progress',
@@ -145,11 +160,13 @@ export function createSavedRoleplayHandoff({
   }
 
   return {
-    body: 'Your answer is saved. Keep the streak moving with one more guided workplace conversation.',
-    ctaLabel: `Start ${nextPracticeRecommendation.title}`,
+    body: isPathComplete
+      ? `Your answer is saved. You cleared the full career path. Replay ${nextPracticeTitle} to keep the streak professional and sharp.`
+      : 'Your answer is saved. Keep the streak moving with one more guided workplace conversation.',
+    ctaLabel: `${isPathComplete ? 'Replay' : 'Start'} ${nextPracticeTitle}`,
     ctaTarget: 'roleplay',
     nextLabel: 'Next lesson',
-    nextTitle: nextPracticeRecommendation.title,
+    nextTitle: nextPracticeTitle,
     title: 'Saved',
     xpLabel: `+${safeXpReward} XP`,
   };
@@ -168,6 +185,12 @@ type CreateSavedRoleplayMilestoneInput = {
   savedSession: PracticeSession;
   sessions: PracticeSession[];
   summary: ProgressSummary;
+};
+
+type CreateSavedRoleplayPathProgressInput = {
+  roleplays: Pick<RoleplayScenario, 'category' | 'durationMinutes' | 'id' | 'targetLevel' | 'title'>[];
+  savedSession: Pick<PracticeSession, 'id' | 'roleplayId'>;
+  sessions: Pick<PracticeSession, 'id' | 'roleplayId'>[];
 };
 
 export function createPracticeCompletionMilestone({
@@ -210,6 +233,36 @@ export function createSavedRoleplayMilestone({
     ...milestone,
     progressLabel: `${localProgress.targetSessionsCompleted}/${dailyTarget} ${roleplayLabel} today`,
     progressPercent: localProgress.targetCompletionPercent,
+  };
+}
+
+export function createSavedRoleplayPathProgress({
+  roleplays,
+  savedSession,
+  sessions,
+}: CreateSavedRoleplayPathProgressInput): SavedRoleplayPathProgress | null {
+  if (roleplays.length === 0) {
+    return null;
+  }
+
+  const previewSessions = sessions.some((session) => session.id === savedSession.id)
+    ? sessions
+    : [savedSession, ...sessions];
+  const path = createPracticeCareerPath({
+    roleplays,
+    sessions: previewSessions,
+  });
+  const nextStep = path.steps.find((step) => step.state === 'active') ?? path.steps[0];
+
+  return {
+    badgeLabel: path.meta,
+    isPathComplete: path.progressPercent === 100,
+    nextLabel: path.progressPercent === 100 ? 'Replay ready' : 'Unlocked next',
+    nextTitle: nextStep?.title ?? path.title,
+    progressLabel: path.progressLabel,
+    progressPercent: path.progressPercent,
+    roleplayId: nextStep?.roleplayId ?? path.roleplayId,
+    title: path.title,
   };
 }
 

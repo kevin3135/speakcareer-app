@@ -27,11 +27,11 @@ import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import {
-  createNextPracticeRecommendation,
   createPracticeCompletionSummary,
   createPracticeSavePrompt,
   createSavedRoleplayMilestone,
   createSavedRoleplayHandoff,
+  createSavedRoleplayPathProgress,
 } from '../utils/practiceCompletion';
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
@@ -87,14 +87,21 @@ export function RoleplayScreen({
   const activeVariant = roleplay.promptVariants?.[0];
   const openingLine = activeVariant?.openingLine ?? roleplay.openingLine;
   const baseXpReward = feedbackResult?.xpReward ?? roleplay.durationMinutes * 4;
-  const nextRecommendation = createNextPracticeRecommendation(roleplay.id, practiceContent.roleplays);
   const followUpReview = followUpAnswer.trim().length > 0
     ? summarizePracticeAnswer(followUpAnswer)
     : null;
   const includedFollowUp = Boolean(followUpReview?.isReadyForFeedback);
   const totalXpReward = baseXpReward + (includedFollowUp ? FOLLOW_UP_BONUS_XP : 0);
+  const savedPathProgress = savedSession
+    ? createSavedRoleplayPathProgress({
+      roleplays: practiceContent.roleplays,
+      savedSession,
+      sessions,
+    })
+    : null;
   const savedHandoff = createSavedRoleplayHandoff({
-    nextPracticeRecommendation: nextRecommendation,
+    isPathComplete: savedPathProgress?.isPathComplete,
+    nextPracticeTitle: savedPathProgress?.nextTitle ?? null,
     xpReward: savedSession?.xpReward ?? totalXpReward,
   });
   const savedSummary = savedSession
@@ -267,8 +274,8 @@ export function RoleplayScreen({
   }
 
   function continueToNext() {
-    if (nextRecommendation) {
-      onSelectRoleplay(nextRecommendation.roleplayId);
+    if (savedPathProgress) {
+      onSelectRoleplay(savedPathProgress.roleplayId);
       return;
     }
 
@@ -340,6 +347,25 @@ export function RoleplayScreen({
             <Text style={styles.savedNextLabel}>{savedHandoff.nextLabel}</Text>
             <Text style={styles.savedNextTitle}>{savedHandoff.nextTitle}</Text>
           </View>
+          {savedPathProgress ? (
+            <View style={styles.savedPathBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.savedPathLabel}>Career path</Text>
+                <Badge label={savedPathProgress.badgeLabel} tone="accent" />
+              </View>
+              <Text style={styles.savedPathTitle}>{savedPathProgress.title}</Text>
+              <Text style={styles.savedPathNext}>
+                {savedPathProgress.nextLabel}: {savedPathProgress.nextTitle}
+              </Text>
+              <View style={styles.savedPathProgress}>
+                <ProgressBar
+                  label={savedPathProgress.progressLabel}
+                  tone={savedPathProgress.isPathComplete ? 'success' : 'accent'}
+                  value={savedPathProgress.progressPercent}
+                />
+              </View>
+            </View>
+          ) : null}
           {levelUpMoment ? (
             <View style={styles.levelUpBox}>
               <Text style={styles.levelUpLabel}>Level up</Text>
@@ -1173,5 +1199,37 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
+  },
+  savedPathBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.successDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  savedPathLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  savedPathNext: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  savedPathProgress: {
+    marginTop: spacing.md,
+  },
+  savedPathTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
 });
