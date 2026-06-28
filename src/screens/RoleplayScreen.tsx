@@ -656,7 +656,7 @@ export function RoleplayScreen({
                         pressed && styles.writingSupportPhraseChipPressed,
                       ]}
                     >
-                      <Text style={styles.writingSupportPhraseText}>{phrase}</Text>
+                      <Text numberOfLines={1} style={styles.writingSupportPhraseText}>{phrase}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -1128,10 +1128,12 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   writingSupportPhraseChip: {
+    alignSelf: 'flex-start',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: radius.pill,
     borderWidth: 1,
+    minWidth: 0,
     maxWidth: '100%',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -1146,6 +1148,7 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
+    maxWidth: '100%',
   },
   dailyTargetPreviewBox: {
     backgroundColor: colors.surfaceMuted,

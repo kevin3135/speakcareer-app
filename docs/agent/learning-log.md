@@ -1,5 +1,30 @@
 # Agent Learning Log
 
+## 2026-06-28: Tighter Writing Support Phrase Chips
+
+Made one focused Roleplay polish: phrase chips inside the opened `Writing support` drawer now stay one line with safe sizing, so long professional starters do not make the helper feel heavy on mobile.
+
+Why it changed:
+
+- The drawer can include longer workplace phrases.
+- Multi-line chips can make the answer step look busy after the learner asks for help.
+- One-line chips keep support scannable while the main job stays clear: write one answer and tap `Check answer`.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- It did not change phrase insertion logic, roleplay data, storage or backend behavior.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile screenshot QA, so the opened drawer should still be checked visually on a narrow phone.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Next best design task:
+
+- Mobile-preview the opened writing support drawer and decide whether the answer plan section should be shortened further.
+
 ## 2026-06-28: Quieter Writing Support Toggle
 
 Made one focused Roleplay polish: the collapsed `Writing support` drawer now shows only a short label and `More`, while the helper copy and support badge appear only after the learner opens it.
