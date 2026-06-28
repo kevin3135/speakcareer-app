@@ -41,7 +41,7 @@ export function FoundationScreen({
     isCurrent: !isComplete && index === activeStepIndex,
     isDone: index < completedSteps,
     part,
-    piece: sentencePieces[index],
+    statusLabel: index < completedSteps ? 'Done' : !isComplete && index === activeStepIndex ? 'Tap' : 'Next',
   }));
   const handoff = createFoundationHandoff({
     coachNote: levelProfile.coachMessage,
@@ -110,7 +110,7 @@ export function FoundationScreen({
                   slot.isCurrent && styles.sentenceSlotTextCurrent,
                 ]}
               >
-                {slot.isDone ? slot.piece : slot.isCurrent ? 'Tap now' : 'Next'}
+                {slot.statusLabel}
               </Text>
             </View>
           ))}
@@ -210,12 +210,13 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
   },
   sentenceSlot: {
+    alignItems: 'center',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: radius.md,
     borderWidth: 1,
     flex: 1,
-    minHeight: 70,
+    minHeight: 58,
     padding: spacing.sm,
   },
   sentenceSlotCurrent: {
@@ -245,6 +246,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+    textAlign: 'center',
   },
   sentenceSlotTextCurrent: {
     color: colors.primaryDark,

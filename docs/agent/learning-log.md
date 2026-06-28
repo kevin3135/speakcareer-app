@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-28: Compact Foundation Rail Labels
+
+Made one focused Foundation rail polish: the three-slot sentence rail now uses short status labels (`Done`, `Tap`, `Next`) instead of placing long sentence fragments inside narrow mobile slots.
+
+Why it changed:
+
+- The previous rail made progress clearer, but long action/result phrases could truncate awkwardly on phone widths.
+- The large tap card already shows the active sentence piece, so the rail can stay focused on progress state.
+- Short labels make the lesson feel cleaner and easier to understand at a glance.
+
+What went well:
+
+- The change stayed inside `FoundationScreen` and only adjusted rail copy/layout.
+- The rail is shorter, centered and less likely to overflow on mobile.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A raw hex scan across `src/screens` and `src/components` returned no matches.
+
+What went wrong:
+
+- This run still did not include a live 390px screenshot, so the rail should be visually checked in Expo/web.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep narrow progress rails for state, not long content.
+- Put the full learning sentence in the large active area where it has room.
+- Mobile-first lesson UI should prefer short labels over truncated copy.
+
+Next suggested task:
+
+- Mobile-preview Foundation Step 1 and decide whether the main tap card can become slightly more animated or reward-like after each tap.
+
 ## 2026-06-28: Foundation Sentence Rail
 
 Made one focused Foundation polish: Lesson 1 now shows a compact three-slot sentence rail for `I`, `action` and `result`. Completed parts fill in as the learner taps, the current part is highlighted, and the old separate preview block was removed so the lesson stays inside one clear card.
