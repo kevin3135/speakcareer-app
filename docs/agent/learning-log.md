@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Progress Action Hierarchy
+
+Made one focused design polish: the Progress screen now shows the next-step action card before the level runway card.
+
+Why it changed:
+
+- The Progress card now opens the recommended roleplay directly, so it should be the first card after the hero.
+- The level runway is useful motivation, but it should support the next action instead of competing with it.
+- This makes Wins feel more app-led: see progress, then immediately continue the guided practice loop.
+
+What changed:
+
+- Moved the `Next step` card above the `Level runway` card in `ProgressScreen`.
+- Kept the level runway, XP progress, daily target bar and existing CTA logic unchanged.
+- Kept the change visual-only: no storage, data shape or navigation architecture changes.
+
+What went well:
+
+- The change stayed inside `ProgressScreen` and this log.
+- No new screens, APIs, auth, payments, analytics, backend work or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA in the browser preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- On Progress, the first card after the hero should answer `what do I do now?`
+- XP and level runway cards should sit below the action card as motivation, not above it as the primary destination.
+
+Next suggested task:
+
+- Do mobile screenshot QA on Progress and, if needed, make the level runway copy shorter so the first two cards fit more comfortably.
+
 ## 2026-06-29: Progress Next-Step CTA
 
 Made one focused UX polish: the Progress next-step card now opens the recommended roleplay directly instead of sending the learner back to Learn first.

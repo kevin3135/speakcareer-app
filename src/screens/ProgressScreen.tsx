@@ -110,28 +110,6 @@ export function ProgressScreen({
         </View>
       </GradientHero>
 
-      <Card tone="muted">
-        <View style={styles.rowBetween}>
-          <View style={styles.flexOne}>
-            <Text style={styles.cardKicker}>Level runway</Text>
-            <Text style={styles.cardTitle}>{levelRunway.title}</Text>
-          </View>
-          <LevelBadge label={levelRunway.badgeLabel} />
-        </View>
-        <Text style={styles.cardBody}>{levelRunway.body}</Text>
-        <View style={styles.levelRunwayMeta}>
-          <Text style={styles.levelRunwayMetaLabel}>{levelRunway.targetLabel}</Text>
-          <Text style={styles.levelRunwayMetaValue}>{levelRunway.totalXpLabel}</Text>
-        </View>
-        <View style={styles.progressWrap}>
-          <ProgressBar
-            label={levelRunway.progressLabel}
-            tone="purple"
-            value={levelRunway.progressPercent}
-          />
-        </View>
-      </Card>
-
       <Card tone="strong">
         <View style={styles.rowBetween}>
           <View style={styles.flexOne}>
@@ -161,6 +139,28 @@ export function ProgressScreen({
             accessibilityHint="Open the recommended next roleplay from your progress card"
             label={nextStepGuide.ctaLabel}
             onPress={() => onOpenRoleplay(nextStepGuide.roleplayId)}
+          />
+        </View>
+      </Card>
+
+      <Card tone="muted">
+        <View style={styles.rowBetween}>
+          <View style={styles.flexOne}>
+            <Text style={styles.cardKicker}>Level runway</Text>
+            <Text style={styles.cardTitle}>{levelRunway.title}</Text>
+          </View>
+          <LevelBadge label={levelRunway.badgeLabel} />
+        </View>
+        <Text style={styles.cardBody}>{levelRunway.body}</Text>
+        <View style={styles.levelRunwayMeta}>
+          <Text style={styles.levelRunwayMetaLabel}>{levelRunway.targetLabel}</Text>
+          <Text style={styles.levelRunwayMetaValue}>{levelRunway.totalXpLabel}</Text>
+        </View>
+        <View style={styles.progressWrap}>
+          <ProgressBar
+            label={levelRunway.progressLabel}
+            tone="purple"
+            value={levelRunway.progressPercent}
           />
         </View>
       </Card>
