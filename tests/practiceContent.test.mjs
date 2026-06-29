@@ -2868,6 +2868,48 @@ test('creates level progress labels from total XP', async () => {
   });
 });
 
+test('creates a level runway for the Progress screen', async () => {
+  const { createLevelProgress } = await import('../src/utils/levelProgress.ts');
+  const { createProgressLevelRunway } = await import('../src/utils/progressLevelRunway.ts');
+
+  const firstSprintRunway = createProgressLevelRunway({
+    dailyTarget: 2,
+    levelProgress: createLevelProgress(218),
+    targetSessionsCompleted: 0,
+    targetSessionsRemaining: 2,
+  });
+
+  assert.equal(firstSprintRunway.badgeLabel, 'Level 2');
+  assert.equal(firstSprintRunway.title, '142 XP to Level 3');
+  assert.equal(firstSprintRunway.progressLabel, '38/180 XP');
+  assert.equal(firstSprintRunway.progressPercent, 21);
+  assert.equal(firstSprintRunway.targetLabel, '0/2 today');
+  assert.equal(firstSprintRunway.totalXpLabel, '218 total XP');
+  assert.ok(firstSprintRunway.body.includes('keep the streak active'));
+
+  const finishingRunway = createProgressLevelRunway({
+    dailyTarget: 3,
+    levelProgress: createLevelProgress(275),
+    targetSessionsCompleted: 2,
+    targetSessionsRemaining: 1,
+  });
+
+  assert.equal(finishingRunway.badgeLabel, 'Level 2');
+  assert.equal(finishingRunway.targetLabel, '2/3 today');
+  assert.ok(finishingRunway.body.includes('completes the target'));
+
+  const bonusRunway = createProgressLevelRunway({
+    dailyTarget: 1,
+    levelProgress: createLevelProgress(365),
+    targetSessionsCompleted: 1,
+    targetSessionsRemaining: 0,
+  });
+
+  assert.equal(bonusRunway.badgeLabel, 'Level 3');
+  assert.equal(bonusRunway.targetLabel, '1/1 today');
+  assert.ok(bonusRunway.body.includes('extra saved answer'));
+});
+
 test('creates a guided practice career path for first-time users', async () => {
   const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
   const path = createPracticeCareerPath({

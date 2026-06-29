@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Progress Level Runway
+
+Made one focused progress improvement: the Progress screen now shows a dedicated level runway card so the learner can see the current level, XP progress to the next level and how today’s target keeps that bar moving.
+
+Why it changed:
+
+- The app already tracked streaks, XP and levels, but the Progress screen did not turn that into one obvious level target.
+- A visible next-level runway makes the English MVP feel more habit-forming without adding game-like complexity.
+- This keeps motivation professional: one level bar, one today label and one reason to keep practicing.
+
+What changed:
+
+- Added `src/utils/progressLevelRunway.ts` to generate concise Progress-screen copy from the existing level and daily-target data.
+- Updated `src/screens/ProgressScreen.tsx` to show a new `Level runway` card under the hero with the current level badge, total XP, today status and a purple level bar.
+- Added focused coverage in `tests/practiceContent.test.mjs` for first-sprint, finishing-sprint and bonus-practice runway states.
+
+What went well:
+
+- The improvement reused the existing `createLevelProgress` and local progress data instead of introducing new storage or progression rules.
+- The new card fits inside the current Progress flow and reinforces the daily target with a clearer next-level payoff.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new level runway card should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress works better when XP and levels point to one concrete next action instead of staying as passive totals.
+- Keep motivation cues businesslike: visible progress, short copy and no extra game mechanics.
+
+Next suggested task:
+
+- Make the top Progress next-step card open the recommended roleplay directly instead of only sending the learner back to Learn.
+
 ## 2026-06-29: Onboarding Start CTA Spacing
 
 Made one focused night design polish: the onboarding footer now keeps the primary `Start ... path` CTA closer to the selected plan.

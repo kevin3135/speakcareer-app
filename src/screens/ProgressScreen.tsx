@@ -6,6 +6,7 @@ import {
   Badge,
   Card,
   GradientHero,
+  LevelBadge,
   ProgressBar,
   ScreenContainer,
   SectionHeader,
@@ -17,9 +18,11 @@ import { practiceContent, progressData } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayWarmupCue } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
+import { createProgressLevelRunway } from '../utils/progressLevelRunway';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
@@ -51,6 +54,13 @@ export function ProgressScreen({
   const mission = createDailyMission(summary, sessions, dailyTarget);
   const localProgress = createLocalProgressStats(summary, sessions, dailyTarget);
   const totalXp = mission.xpTotal;
+  const levelProgress = createLevelProgress(localProgress.totalCareerXp);
+  const levelRunway = createProgressLevelRunway({
+    dailyTarget,
+    levelProgress,
+    targetSessionsCompleted: localProgress.targetSessionsCompleted,
+    targetSessionsRemaining: localProgress.targetSessionsRemaining,
+  });
   const latestSession = sessions[0];
   const latestSessionFocusText = latestSession?.nextFocusText?.trim() ?? '';
   const recentSessions = createProgressRecentSessions(sessions);
@@ -101,6 +111,28 @@ export function ProgressScreen({
           <Badge label={`${mistakesFixed} mistakes fixed`} tone="secondary" />
         </View>
       </GradientHero>
+
+      <Card tone="muted">
+        <View style={styles.rowBetween}>
+          <View style={styles.flexOne}>
+            <Text style={styles.cardKicker}>Level runway</Text>
+            <Text style={styles.cardTitle}>{levelRunway.title}</Text>
+          </View>
+          <LevelBadge label={levelRunway.badgeLabel} />
+        </View>
+        <Text style={styles.cardBody}>{levelRunway.body}</Text>
+        <View style={styles.levelRunwayMeta}>
+          <Text style={styles.levelRunwayMetaLabel}>{levelRunway.targetLabel}</Text>
+          <Text style={styles.levelRunwayMetaValue}>{levelRunway.totalXpLabel}</Text>
+        </View>
+        <View style={styles.progressWrap}>
+          <ProgressBar
+            label={levelRunway.progressLabel}
+            tone="purple"
+            value={levelRunway.progressPercent}
+          />
+        </View>
+      </Card>
 
       <Card tone="strong">
         <View style={styles.rowBetween}>
@@ -498,6 +530,26 @@ const styles = StyleSheet.create({
   },
   progressWrap: {
     marginTop: spacing.lg,
+  },
+  levelRunwayMeta: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+  },
+  levelRunwayMetaLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  levelRunwayMetaValue: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    marginLeft: spacing.md,
+    textAlign: 'right',
   },
   guideSteps: {
     gap: spacing.sm,
