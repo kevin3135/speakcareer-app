@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Mistake Bank Progressive Disclosure
+
+Made one focused Progress polish: the Mistake Bank now keeps queued mistakes hidden by default behind a compact `See all mistakes` control, so the active correction remains the clear task.
+
+Why it changed:
+
+- The visual roadmap called for hiding long mistake-bank lists behind `See all mistakes`.
+- Progress already had one active correction, but the queued bank still previewed another mistake and competed for attention.
+- The screen should feel like one next coaching win, not a full report.
+
+What went well:
+
+- The change stayed inside `src/screens/ProgressScreen.tsx`.
+- No new data, APIs, payments, auth, backend logic or dependencies were added.
+- The existing full mistake list is still available when the user opens it.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress should show one active correction first; queued mistakes are secondary.
+- `See all mistakes` is clearer than showing one extra queued mistake by default.
+- Keep mistake-bank detail available, but never let it compete with the current practice task.
+
+Next suggested task:
+
+- Preview Progress on mobile after a saved session and tune the active correction card if it still feels too dense.
+
 ## 2026-06-29: App Button Depth Polish
 
 Made one focused shared UI polish: primary, danger and secondary `AppButton` states now have slightly more tactile depth using existing theme colors and shadow tokens.

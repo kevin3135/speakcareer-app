@@ -74,8 +74,8 @@ export function ProgressScreen({
   const mistakePracticeStatus = mistakeDrill
     ? createMistakePracticeStatus(isTopMistakePracticed)
     : null;
-  const visibleMistakeQueueItems = mistakeQueue
-    ? mistakeQueue.items.slice(0, isMistakeQueueOpen ? mistakeQueue.items.length : 1)
+  const visibleMistakeQueueItems = mistakeQueue && isMistakeQueueOpen
+    ? mistakeQueue.items
     : [];
   const hiddenMistakeQueueCount = mistakeQueue
     ? Math.max(0, mistakeQueue.items.length - visibleMistakeQueueItems.length)
@@ -374,6 +374,13 @@ export function ProgressScreen({
               <Text numberOfLines={2} style={styles.cardBody}>{mistakeQueue.body}</Text>
               {mistakeQueue.items.length > 0 ? (
                 <View style={styles.queueList}>
+                  {hiddenMistakeQueueCount > 0 ? (
+                    <View style={styles.queueCollapsedCue}>
+                      <Text style={styles.queueMoreLabel}>
+                        {hiddenMistakeQueueCount} saved for later
+                      </Text>
+                    </View>
+                  ) : null}
                   {visibleMistakeQueueItems.map((mistake) => (
                     <View key={mistake.id} style={styles.queueItem}>
                       <View style={styles.rowBetween}>
@@ -391,18 +398,13 @@ export function ProgressScreen({
                       </Text>
                     </View>
                   ))}
-                  {hiddenMistakeQueueCount > 0 ? (
-                    <Text style={styles.queueMoreLabel}>
-                      {hiddenMistakeQueueCount} saved for later
-                    </Text>
-                  ) : null}
-                  {mistakeQueue.items.length > 1 ? (
+                  {mistakeQueue.items.length > 0 ? (
                     <View style={styles.queueToggleAction}>
                       <AppButton
                         accessibilityHint={isMistakeQueueOpen
                           ? 'Hide the extra queued mistakes'
                           : 'Show the full queued mistake bank'}
-                        label={isMistakeQueueOpen ? 'Hide list' : `Show all ${mistakeQueue.items.length}`}
+                        label={isMistakeQueueOpen ? 'Hide list' : 'See all mistakes'}
                         onPress={() => setIsMistakeQueueOpen((isOpen) => !isOpen)}
                         size="small"
                         variant="quiet"
@@ -715,6 +717,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     borderWidth: 1,
     padding: spacing.md,
+  },
+  queueCollapsedCue: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   queueList: {
     gap: spacing.sm,
