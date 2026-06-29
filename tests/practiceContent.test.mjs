@@ -557,7 +557,7 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.ok(starterPreview.sessionNote.includes('enough to start the habit'));
   assert.equal(starterPreview.ctaLabel, 'Start A1-A2 path');
   assert.equal(starterPreview.commitmentTitle, 'Learn one clear sentence now. Job Interview next.');
-  assert.ok(starterPreview.commitmentNote.includes('save your first Job Interview answer today'));
+  assert.equal(starterPreview.commitmentNote, 'Lesson now. First Job Interview save today.');
 
   assert.equal(confidentPreview.levelLabel, 'B2');
   assert.ok(confidentPreview.steps[0].detail.includes('business result'));
@@ -568,7 +568,7 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.ok(confidentPreview.dailyTargetNote.includes('extra interview reps'));
   assert.ok(confidentPreview.sessionNote.includes('two more short roleplays later today'));
   assert.equal(confidentPreview.ctaLabel, 'Start B2 path');
-  assert.ok(confidentPreview.commitmentNote.includes('3 saved roleplays today'));
+  assert.equal(confidentPreview.commitmentNote, 'Lesson now. 3 saves today, starting with Job Interview.');
 });
 
 test('stores the daily practice target in local storage', async () => {

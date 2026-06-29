@@ -119,14 +119,14 @@ function createShortQuestTitle(firstQuestTitle: string) {
 
 function createCommitmentNote(dailyTarget: DailyPracticeTarget, nextQuestTitleShort: string) {
   if (dailyTarget === 1) {
-    return `Finish the lesson, then save your first ${nextQuestTitleShort} answer today.`;
+    return `Lesson now. First ${nextQuestTitleShort} save today.`;
   }
 
   if (dailyTarget === 2) {
-    return `Finish the lesson, then aim for 2 saved roleplays today starting with ${nextQuestTitleShort}.`;
+    return `Lesson now. 2 saves today, starting with ${nextQuestTitleShort}.`;
   }
 
-  return `Finish the lesson, then push for 3 saved roleplays today starting with ${nextQuestTitleShort}.`;
+  return `Lesson now. 3 saves today, starting with ${nextQuestTitleShort}.`;
 }
 
 function createSessionNote(dailyTarget: DailyPracticeTarget, nextQuestTitleShort: string) {

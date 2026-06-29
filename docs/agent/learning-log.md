@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Onboarding Start CTA Spacing
+
+Made one focused night design polish: the onboarding footer now keeps the primary `Start ... path` CTA closer to the selected plan.
+
+Why it changed:
+
+- The starter preview is useful, but the footer should still make the next action feel immediate.
+- The previous commitment note used sentence-length copy that competed with the CTA after choosing a daily target.
+- Shorter footer copy supports the onboarding rule: one selected level, one obvious start button.
+
+What changed:
+
+- Shortened onboarding commitment notes to compact action cues such as `Lesson now. First Job Interview save today.`
+- Limited the selected-plan footer note to one line.
+- Reduced vertical spacing above the onboarding footer and between the note and primary CTA.
+- Updated the onboarding plan preview test expectations for the shorter copy.
+
+What went well:
+
+- The change stayed inside onboarding copy, onboarding footer styling, one existing test and this log.
+- No storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA in the browser preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding footer copy should stay shorter than the button label area it supports.
+- Keep the start CTA visually close to the plan preview after a level is selected.
+
+Next suggested task:
+
+- Do a narrow mobile screenshot QA pass on onboarding and decide whether the selected plan card itself can lose one secondary section later.
+
 ## 2026-06-29: Onboarding Starter Preview Spacing
 
 Made one focused night design polish: the onboarding first-interview starter preview is now more compact on mobile.

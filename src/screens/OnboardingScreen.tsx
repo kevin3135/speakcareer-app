@@ -213,7 +213,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
         </Text>
         <ProgressBar value={levelAssessment.progressPercent} tone="accent" />
         {planPreview ? (
-          <Text style={styles.foundationNote}>{planPreview.commitmentNote}</Text>
+          <Text numberOfLines={1} style={styles.foundationNote}>{planPreview.commitmentNote}</Text>
         ) : null}
         <View style={styles.footerButton}>
           <AppButton
@@ -655,7 +655,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 'auto',
-    paddingTop: spacing.xxl,
+    paddingTop: spacing.lg,
   },
   foundationHint: {
     color: colors.primaryDark,
@@ -670,10 +670,10 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     textAlign: 'center',
   },
   footerButton: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
   },
 });
