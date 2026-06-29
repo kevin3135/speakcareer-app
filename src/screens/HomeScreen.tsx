@@ -11,7 +11,7 @@ import {
 import { practiceContent, progressData } from '../data/content';
 import { foundationStart } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
-import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
 import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeCoachFocusText } from '../utils/homeCoachFocus';
@@ -19,9 +19,11 @@ import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
+import { summarizePracticeAnswer } from '../utils/answerReview';
 
 type HomeScreenProps = {
   dailyTarget: DailyPracticeTarget;
+  draft: RoleplayDraft | null;
   foundationCompletedSteps: number;
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
   onStartFoundation: () => void;
@@ -30,6 +32,7 @@ type HomeScreenProps = {
 
 export function HomeScreen({
   dailyTarget,
+  draft,
   foundationCompletedSteps,
   onOpenRoleplay,
   onStartFoundation,
@@ -59,16 +62,34 @@ export function HomeScreen({
     learnState.steps.findIndex((lesson) => lesson.state === 'current'),
   );
   const activeLesson = learnState.steps[activeLessonIndex] ?? learnState.steps[0];
+  const resumeRoleplay = draft
+    ? practiceContent.roleplays.find((roleplay) => roleplay.id === draft.roleplayId) ?? null
+    : null;
+  const resumeWordCount = draft ? summarizePracticeAnswer(draft.draftAnswer).wordCount : 0;
   const activeRoleplayId = activeLesson.roleplayId;
-  const startActiveLesson = activeRoleplayId
-    ? () => onOpenRoleplay(activeRoleplayId)
-    : onStartFoundation;
+  const startActiveLesson = resumeRoleplay
+    ? () => onOpenRoleplay(resumeRoleplay.id)
+    : activeRoleplayId
+      ? () => onOpenRoleplay(activeRoleplayId)
+      : onStartFoundation;
   const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
   const isMissionComplete = missionCard.progressPercent >= 100;
   const completedPathSteps = learnState.steps.filter((lesson) => lesson.state === 'completed').length;
   const totalPathSteps = Math.max(learnState.steps.length, 1);
   const pathStatusLabel = `${completedPathSteps}/${totalPathSteps} cleared`;
+  const startCardCtaLabel = resumeRoleplay
+    ? 'Finish your saved answer'
+    : activeLesson.ctaLabel ?? learnState.hero.ctaLabel;
+  const startCardHabitLabel = resumeRoleplay ? 'Saved on this device' : isMissionComplete ? 'Today done' : 'Today goal';
+  const startCardHabitValue = resumeRoleplay
+    ? `${resumeWordCount} ${resumeWordCount === 1 ? 'word' : 'words'} ready to finish`
+    : missionCard.targetLabel;
+  const startCardPathLabel = resumeRoleplay ? 'Resume now' : pathStatusLabel;
+  const startCardTitle = resumeRoleplay ? `Resume ${resumeRoleplay.title}` : activeLesson.title;
+  const startCardXpLabel = resumeRoleplay
+    ? `+${resumeRoleplay.durationMinutes * 4} XP`
+    : activeLesson.xpLabel;
   const latestSession = sessions[0];
   const latestCoachFocusText =
     createHomeCoachFocusText(latestSession?.nextFocusText) ??
@@ -89,16 +110,16 @@ export function HomeScreen({
 
       <View style={styles.lessonMap}>
         <AnimatedStartCard
-          ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
-          habitLabel={isMissionComplete ? 'Today done' : 'Today goal'}
-          habitValue={missionCard.targetLabel}
+          ctaLabel={startCardCtaLabel}
+          habitLabel={startCardHabitLabel}
+          habitValue={startCardHabitValue}
           levelLabel={levelProgress.currentLevelLabel}
           levelProgressLabel={levelProgress.progressLabel}
           levelProgressPercent={levelProgress.progressPercent}
           onPress={startActiveLesson}
-          pathLabel={pathStatusLabel}
-          title={activeLesson.title}
-          xpLabel={activeLesson.xpLabel}
+          pathLabel={startCardPathLabel}
+          title={startCardTitle}
+          xpLabel={startCardXpLabel}
         />
 
         <View style={styles.mapTrail}>

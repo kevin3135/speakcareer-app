@@ -16,6 +16,7 @@ import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type {
   DailyPracticeTarget,
   PracticeSession,
+  RoleplayDraft,
   RoleplayId,
   RoleplayScenario,
   RoleplayWarmupCue,
@@ -53,11 +54,14 @@ import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
   dailyTarget: DailyPracticeTarget;
-  roleplay: RoleplayScenario;
   onBack: () => void;
+  onClearDraft: () => void;
+  onDraftChange: (draft: RoleplayDraft | null) => void;
   onOpenProgress: () => void;
-  onSelectRoleplay: (roleplayId: RoleplayId) => void;
   onSaveSession: (session: PracticeSession) => void;
+  onSelectRoleplay: (roleplayId: RoleplayId) => void;
+  roleplay: RoleplayScenario;
+  savedDraft?: RoleplayDraft | null;
   sessions: PracticeSession[];
   startingLevelId: StartingLevelId;
   warmupCue?: RoleplayWarmupCue | null;
@@ -74,10 +78,13 @@ type LevelUpMoment = {
 export function RoleplayScreen({
   dailyTarget,
   onBack,
+  onClearDraft,
+  onDraftChange,
   onOpenProgress,
   onSaveSession,
-  roleplay,
   onSelectRoleplay,
+  roleplay,
+  savedDraft,
   sessions,
   startingLevelId,
   warmupCue,
@@ -87,7 +94,7 @@ export function RoleplayScreen({
   const [answerPulse] = useState(() => new Animated.Value(0));
   const [rewardPulse] = useState(() => new Animated.Value(0));
   const [draftAnswer, setDraftAnswer] = useState(
-    () => (warmupCue?.autoApplyStarter ? warmupCue.starterAnswer : ''),
+    () => savedDraft?.draftAnswer ?? (warmupCue?.autoApplyStarter ? warmupCue.starterAnswer : ''),
   );
   const [answerReview, setAnswerReview] = useState<AnswerReview | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<RuleBasedFeedbackResult | null>(null);
@@ -177,6 +184,7 @@ export function RoleplayScreen({
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
   const isAutoWarmupCue = Boolean(warmupCue?.autoApplyStarter);
+  const hasRestoredDraft = Boolean(savedDraft?.draftAnswer) && !isAutoWarmupCue;
   const foundationWarmupPanel = isAutoWarmupCue && warmupCue
     ? createFoundationWarmupPanel({
       note: warmupCue.note,
@@ -306,6 +314,25 @@ export function RoleplayScreen({
     followUpInputRef.current?.focus();
   }, [isFollowUpOpen]);
 
+  useEffect(() => {
+    if (savedSession) {
+      return;
+    }
+
+    const trimmedDraft = draftAnswer.trim();
+
+    if (!trimmedDraft) {
+      onClearDraft();
+      return;
+    }
+
+    onDraftChange({
+      draftAnswer: trimmedDraft,
+      roleplayId: roleplay.id,
+      updatedAt: new Date().toISOString(),
+    });
+  }, [draftAnswer, onClearDraft, onDraftChange, roleplay.id, savedSession]);
+
   function reviewAnswer() {
     const review = summarizePracticeAnswer(draftAnswer);
     const nextFeedback = createRuleBasedFeedback(roleplay, draftAnswer, review, activeVariant);
@@ -364,6 +391,7 @@ export function RoleplayScreen({
 
     setLevelUpMoment(createSavedLevelUpMoment(session));
     setSavedSession(session);
+    onClearDraft();
     onSaveSession(session);
   }
 
@@ -447,6 +475,19 @@ export function RoleplayScreen({
     setHasAppliedBetterEnglish(false);
     setIsFeedbackDetailsOpen(false);
     setLevelUpMoment(null);
+    answerInputRef.current?.focus();
+  }
+
+  function startFreshAnswer() {
+    setDraftAnswer('');
+    setAnswerReview(null);
+    setFeedbackResult(null);
+    setFollowUpAnswer('');
+    setHasAppliedBetterEnglish(false);
+    setIsFeedbackDetailsOpen(false);
+    setIsFollowUpOpen(false);
+    setLevelUpMoment(null);
+    onClearDraft();
     answerInputRef.current?.focus();
   }
 
@@ -610,6 +651,23 @@ export function RoleplayScreen({
                   {': '}
                 </Text>
                 {warmupCue.note}
+              </Text>
+            </View>
+          ) : null}
+          {hasRestoredDraft ? (
+            <View style={styles.restoredDraftBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.restoredDraftLabel}>Draft restored</Text>
+                <AppButton
+                  accessibilityHint="Clears the saved draft and starts a fresh answer"
+                  label="Start fresh"
+                  onPress={startFreshAnswer}
+                  size="small"
+                  variant="quiet"
+                />
+              </View>
+              <Text style={styles.restoredDraftText}>
+                Your unfinished answer is back on this device. Finish it or rewrite it before you check.
               </Text>
             </View>
           ) : null}
@@ -1170,6 +1228,27 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  restoredDraftBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  restoredDraftLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  restoredDraftText: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
   },
   pressed: {
     opacity: 0.84,

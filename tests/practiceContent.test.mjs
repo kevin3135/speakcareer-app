@@ -393,6 +393,74 @@ test('stores the selected starting level in local storage', async () => {
   );
 });
 
+test('stores one unfinished roleplay draft in local storage', async () => {
+  const {
+    ROLEPLAY_DRAFT_KEY,
+    clearRoleplayDraft,
+    normalizeRoleplayDraft,
+    readRoleplayDraft,
+    saveRoleplayDraft,
+  } = await import('../src/utils/roleplayDraftStorage.ts');
+  const values = new Map();
+  const storage = {
+    getItem: async (key) => values.get(key) ?? null,
+    removeItem: async (key) => {
+      values.delete(key);
+    },
+    setItem: async (key, value) => {
+      values.set(key, value);
+    },
+  };
+
+  assert.equal(normalizeRoleplayDraft(null), null);
+  assert.equal(
+    normalizeRoleplayDraft({
+      draftAnswer: '   ',
+      roleplayId: 'job-interview',
+      updatedAt: '2026-06-29T05:00:00.000Z',
+    }),
+    null,
+  );
+  assert.deepEqual(
+    normalizeRoleplayDraft({
+      draftAnswer: ' I led the kickoff and shared the next step. ',
+      roleplayId: 'meeting-practice',
+      updatedAt: '2026-06-29T05:00:00.000Z',
+    }),
+    {
+      draftAnswer: 'I led the kickoff and shared the next step.',
+      roleplayId: 'meeting-practice',
+      updatedAt: '2026-06-29T05:00:00.000Z',
+    },
+  );
+  assert.equal(await readRoleplayDraft(storage), null);
+
+  await saveRoleplayDraft(storage, {
+    draftAnswer: ' I led the kickoff and shared the next step. ',
+    roleplayId: 'meeting-practice',
+    updatedAt: '2026-06-29T05:00:00.000Z',
+  });
+
+  assert.equal(
+    values.get(ROLEPLAY_DRAFT_KEY),
+    JSON.stringify({
+      draftAnswer: 'I led the kickoff and shared the next step.',
+      roleplayId: 'meeting-practice',
+      updatedAt: '2026-06-29T05:00:00.000Z',
+    }),
+  );
+  assert.deepEqual(await readRoleplayDraft(storage), {
+    draftAnswer: 'I led the kickoff and shared the next step.',
+    roleplayId: 'meeting-practice',
+    updatedAt: '2026-06-29T05:00:00.000Z',
+  });
+
+  await clearRoleplayDraft(storage);
+
+  assert.equal(values.has(ROLEPLAY_DRAFT_KEY), false);
+  assert.equal(await readRoleplayDraft(storage), null);
+});
+
 test('stores foundation progress in local storage', async () => {
   const {
     FOUNDATION_PROGRESS_KEY,

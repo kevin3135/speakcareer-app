@@ -115,6 +115,12 @@ export type RoleplayWarmupCue = {
   autoApplyStarter?: boolean;
 };
 
+export type RoleplayDraft = {
+  draftAnswer: string;
+  roleplayId: RoleplayId;
+  updatedAt: string;
+};
+
 export type ProgressData = {
   summary: ProgressSummary;
   mistakeBank: MistakeItem[];

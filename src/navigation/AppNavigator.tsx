@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { BottomNav } from '../components/BottomNav';
@@ -16,6 +16,7 @@ import { colors } from '../styles/theme';
 import type {
   DailyPracticeTarget,
   MainScreen,
+  RoleplayDraft,
   PracticeSession,
   RoleplayId,
   RoleplayWarmupCue,
@@ -30,6 +31,11 @@ import {
 import { readPracticedMistakeIds, savePracticedMistakeIds } from '../utils/mistakePracticeStorage';
 import { readOnboardingCompletion, saveOnboardingCompletion } from '../utils/onboardingStorage';
 import { readPracticeSessions, savePracticeSessions } from '../utils/practiceSessionStorage';
+import {
+  clearRoleplayDraft,
+  readRoleplayDraft,
+  saveRoleplayDraft,
+} from '../utils/roleplayDraftStorage';
 import { createFoundationWarmupCue } from '../utils/roleplayWarmupCue';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { readStartingLevel, saveStartingLevel } from '../utils/startingLevelStorage';
@@ -44,6 +50,7 @@ export function AppNavigator() {
   const [dailyTarget, setDailyTarget] = useState<DailyPracticeTarget>(1);
   const [startingLevelId, setStartingLevelId] = useState<StartingLevelId>('basic');
   const [foundationCompletedSteps, setFoundationCompletedSteps] = useState(0);
+  const [roleplayDraft, setRoleplayDraft] = useState<RoleplayDraft | null>(null);
   const [roleplayWarmupCue, setRoleplayWarmupCue] = useState<RoleplayWarmupCue | null>(null);
 
   const selectedRoleplay = useMemo(
@@ -65,6 +72,7 @@ export function AppNavigator() {
       readPracticedMistakeIds(AsyncStorage),
       readStartingLevel(AsyncStorage),
       readFoundationProgress(AsyncStorage, FOUNDATION_TOTAL_STEPS),
+      readRoleplayDraft(AsyncStorage),
     ])
       .then(([
         isComplete,
@@ -73,6 +81,7 @@ export function AppNavigator() {
         storedPracticedMistakeIds,
         storedStartingLevel,
         storedFoundationProgress,
+        storedRoleplayDraft,
       ]) => {
         if (isMounted) {
           setHasSeenOnboarding(isComplete);
@@ -81,6 +90,7 @@ export function AppNavigator() {
           setPracticedMistakeIds(storedPracticedMistakeIds);
           setStartingLevelId(storedStartingLevel);
           setFoundationCompletedSteps(storedFoundationProgress);
+          setRoleplayDraft(storedRoleplayDraft);
         }
       })
       .finally(() => {
@@ -128,6 +138,16 @@ export function AppNavigator() {
     void saveDailyTarget(AsyncStorage, target).catch(() => undefined);
   }
 
+  const updateRoleplayDraft = useCallback((draft: RoleplayDraft | null) => {
+    setRoleplayDraft(draft);
+    void saveRoleplayDraft(AsyncStorage, draft).catch(() => undefined);
+  }, []);
+
+  const clearSavedRoleplayDraft = useCallback(() => {
+    setRoleplayDraft(null);
+    void clearRoleplayDraft(AsyncStorage).catch(() => undefined);
+  }, []);
+
   function markMistakePracticed(mistakeId: string) {
     setPracticedMistakeIds((currentIds) => {
       if (currentIds.includes(mistakeId)) {
@@ -156,6 +176,8 @@ export function AppNavigator() {
     void saveDailyTarget(AsyncStorage, selectedDailyTarget).catch(() => undefined);
     void saveStartingLevel(AsyncStorage, selectedLevel).catch(() => undefined);
     void saveFoundationProgress(AsyncStorage, 0, FOUNDATION_TOTAL_STEPS).catch(() => undefined);
+    void clearRoleplayDraft(AsyncStorage).catch(() => undefined);
+    setRoleplayDraft(null);
   }
 
   function updateFoundationProgress(completedSteps: number) {
@@ -181,6 +203,7 @@ export function AppNavigator() {
         {activeScreen === 'Home' ? (
           <HomeScreen
             dailyTarget={dailyTarget}
+            draft={roleplayDraft}
             foundationCompletedSteps={foundationCompletedSteps}
             onOpenRoleplay={openRoleplay}
             onStartFoundation={() => setActiveScreen('Foundation')}
@@ -212,10 +235,13 @@ export function AppNavigator() {
             key={`${selectedRoleplay.id}:${roleplayWarmupCue?.cueId ?? 'default'}`}
             dailyTarget={dailyTarget}
             onBack={() => setActiveScreen('Home')}
+            onClearDraft={clearSavedRoleplayDraft}
+            onDraftChange={updateRoleplayDraft}
             onOpenProgress={() => setActiveScreen('Progress')}
             onSaveSession={savePracticeSession}
             onSelectRoleplay={openRoleplay}
             roleplay={selectedRoleplay}
+            savedDraft={roleplayDraft?.roleplayId === selectedRoleplay.id ? roleplayDraft : null}
             sessions={practiceSessions}
             startingLevelId={startingLevelId}
             warmupCue={roleplayWarmupCue}

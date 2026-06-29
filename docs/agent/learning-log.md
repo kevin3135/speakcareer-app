@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-06-29: Resume Unfinished Roleplay Drafts
+
+Made one focused MVP-usability improvement: the app now saves one unfinished roleplay answer locally and restores it after app exits or back-navigation, with a resume-first handoff on Home and a `Draft restored` cue inside Roleplay.
+
+Why it changed:
+
+- An interrupted practice session could lose momentum because unfinished work disappeared.
+- The English MVP should feel dependable for short daily practice, especially on mobile.
+- Resuming one unfinished answer is higher value than adding more content because it protects the existing habit loop.
+
+What changed:
+
+- Added `src/utils/roleplayDraftStorage.ts` plus a shared `RoleplayDraft` type for one local unsaved answer.
+- Updated `src/navigation/AppNavigator.tsx` to load, save and clear the local draft with AsyncStorage.
+- Updated `src/screens/HomeScreen.tsx` so the main Learn CTA becomes `Resume ...` when a saved draft exists.
+- Updated `src/screens/RoleplayScreen.tsx` to restore the draft into the answer box, keep it synced locally and offer `Start fresh`.
+- Added focused coverage in `tests/practiceContent.test.mjs` for draft normalization, save, restore and clear behavior.
+
+What went well:
+
+- The feature stayed small and reused the existing roleplay/home flow instead of adding a new screen.
+- The main CTA still stays singular on Home: the app chooses resume when unfinished work exists.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the Home resume card and Roleplay restore cue should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- For a daily practice product, protecting unfinished progress can be more valuable than adding another new lesson or card.
+- Resume states should override browsing states so the app keeps one obvious next action.
+
+Next suggested task:
+
+- Do a narrow mobile QA pass on Home and Roleplay, then tighten the resume cue spacing if it pushes the answer box too far down.
+
 ## 2026-06-29: Profile Privacy Copy
 
 Made one focused night design polish: the Profile privacy card now reads like a learner-facing device preview instead of a technical MVP integration note.
