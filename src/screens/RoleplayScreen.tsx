@@ -29,6 +29,7 @@ import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerRevie
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
 import { createFeedbackMomentumRecap } from '../utils/feedbackMomentum';
+import { createFirstQuestFeedbackState } from '../utils/firstQuestFeedback';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
@@ -181,6 +182,12 @@ export function RoleplayScreen({
     roleplayId: roleplay.id,
     sessions,
   });
+  const firstQuestFeedback = firstQuestState
+    ? createFirstQuestFeedbackState({
+      answerReview,
+      feedbackResult,
+    })
+    : null;
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
@@ -866,6 +873,26 @@ export function RoleplayScreen({
               </View>
             </View>
           </View>
+          {firstQuestFeedback && firstQuestState ? (
+            <View style={styles.firstQuestFeedbackBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.firstQuestFeedbackLabel}>Quest 1 coach</Text>
+                <Badge
+                  label={firstQuestFeedback.xpLabel ?? 'Quest 1'}
+                  tone={firstQuestFeedback.xpLabel ? 'accent' : 'info'}
+                />
+              </View>
+              <Text style={styles.firstQuestFeedbackTitle}>{firstQuestFeedback.title}</Text>
+              <Text style={styles.firstQuestFeedbackBody}>{firstQuestFeedback.body}</Text>
+              {firstQuestFeedback.rewrite && firstQuestFeedback.rewriteLabel ? (
+                <View style={styles.firstQuestRewriteBox}>
+                  <Text style={styles.firstQuestRewriteLabel}>{firstQuestFeedback.rewriteLabel}</Text>
+                  <Text style={styles.firstQuestRewriteText}>{firstQuestFeedback.rewrite}</Text>
+                </View>
+              ) : null}
+              <Text style={styles.firstQuestUnlockHint}>{firstQuestState.unlockLabel}</Text>
+            </View>
+          ) : null}
           {feedbackSnapshot ? null : (
             <Text style={styles.feedbackSummaryText}>{feedbackResult.feedback.summary}</Text>
           )}
@@ -1587,6 +1614,65 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.h1,
     fontWeight: '900',
+  },
+  firstQuestFeedbackBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  firstQuestFeedbackBox: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  firstQuestFeedbackLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  firstQuestFeedbackTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  firstQuestRewriteBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  firstQuestRewriteLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  firstQuestRewriteText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  firstQuestUnlockHint: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.md,
   },
   feedbackSnapshotBox: {
     backgroundColor: colors.surface,

@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Quest 1 Coach Review Card
+
+Made one focused AI feedback improvement: the first Job Interview review step now shows a compact `Quest 1 coach` card with a simpler readiness message, a short model answer and an unlock reminder before save.
+
+Why it changed:
+
+- The first review step carries the most cognitive load because the learner has not unlocked Home and Progress yet.
+- The generic feedback card already had useful detail, but it did not clearly frame what the first review means inside the guided app loop.
+- A quest-specific coach card keeps the feedback professional and concrete: what improved, what to say next and why saving matters.
+
+What changed:
+
+- Wired the existing `createFirstQuestFeedbackState` helper into `src/screens/RoleplayScreen.tsx`.
+- Added a compact `Quest 1 coach` box inside the review card for the first unsaved Job Interview only.
+- The new box now shows the simplified title/body, a short `Better English` example when the answer is ready and the `Unlock Home and Progress` reminder before the save step.
+
+What went well:
+
+- The change reused an existing helper that already had focused test coverage instead of adding new review logic.
+- The improvement stayed inside one screen and preserved the current check, feedback and save flow.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the new Quest 1 coach box should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first review step should explain the guided loop outcome, not only show generic feedback.
+- When the repo already contains an unused product helper, prefer wiring it into the UI before inventing a parallel pattern.
+
+Next suggested task:
+
+- Make the Step 3 save prompt repeat the first-quest unlock outcome in one short line so saving feels like the final guided action.
+
 ## 2026-06-29: Progress Action Hierarchy
 
 Made one focused design polish: the Progress screen now shows the next-step action card before the level runway card.
