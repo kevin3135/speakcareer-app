@@ -519,54 +519,33 @@ export function RoleplayScreen({
 
       {!feedbackResult ? (
         <Card tone="strong">
-          {visibleFirstQuestState ? (
-            <View style={styles.firstQuestCue}>
-              <View style={styles.firstQuestNumber}>
-                <Text style={styles.firstQuestNumberText}>1</Text>
-              </View>
-              <View style={styles.firstQuestCopy}>
-                <View style={styles.oneThingHeader}>
-                  <Text style={styles.firstQuestEyebrow}>{visibleFirstQuestState.eyebrow}</Text>
-                  <Badge label={visibleFirstQuestState.progressLabel} tone="accent" />
-                </View>
-                <Text style={styles.firstQuestTitle}>{visibleFirstQuestState.title}</Text>
-                <Text numberOfLines={2} style={styles.firstQuestText}>
-                  {visibleFirstQuestState.body}
-                </Text>
-              </View>
+          <View style={styles.practiceStepStrip}>
+            <Text style={styles.practiceStepLabel}>Step 1</Text>
+            <View style={styles.practiceStepTrack}>
+              <View style={styles.practiceStepFill} />
+            </View>
+            <Text style={styles.practiceStepMeta}>
+              {visibleFirstQuestState?.progressLabel ?? 'Answer'}
+            </Text>
+          </View>
+          <View style={styles.coachPromptBubble}>
+            <View style={styles.coachPromptBadge}>
+              <Text style={styles.coachPromptBadgeText}>SC</Text>
+            </View>
+            <View style={styles.coachPromptCopy}>
+              <Text style={styles.promptLabel}>Coach asks</Text>
+              <Text style={styles.promptText}>{openingLine}</Text>
+            </View>
+          </View>
+          {isAutoWarmupCue && warmupCue ? (
+            <View style={styles.starterLoadedStrip}>
+              <Text numberOfLines={1} style={styles.starterLoadedText}>
+                Starter loaded. Edit, then check.
+              </Text>
+              <Badge label={warmupCue.badgeLabel} tone="secondary" />
             </View>
           ) : null}
-          <Text style={styles.promptLabel}>Coach asks</Text>
-          <Text style={styles.promptText}>{openingLine}</Text>
-          {warmupCue ? (
-            <View style={[styles.warmupCueBox, isAutoWarmupCue && styles.warmupCueBoxCompact]}>
-              <View style={styles.oneThingHeader}>
-                <Text style={styles.warmupCueLabel}>{warmupCue.eyebrow}</Text>
-                <Badge label={warmupCue.badgeLabel} tone="secondary" />
-              </View>
-              {isAutoWarmupCue ? null : (
-                <Text style={styles.warmupCueText}>{warmupCue.correction}</Text>
-              )}
-              {isAutoWarmupCue ? (
-                <Text style={styles.warmupCueLoadedNote}>
-                  Starter is in your draft. Edit, then check.
-                </Text>
-              ) : null}
-              {isAutoWarmupCue ? null : <Text style={styles.warmupCueNote}>{warmupCue.note}</Text>}
-              {!hasDraftAnswer ? (
-                <View style={styles.warmupCueAction}>
-                  <AppButton
-                    accessibilityHint="Starts your answer with the suggested warm-up line"
-                    accessibilityLabel={warmupCue.ctaLabel}
-                    label={warmupCue.ctaLabel}
-                    onPress={useWarmupStarter}
-                    size="small"
-                    variant="quiet"
-                  />
-                </View>
-              ) : null}
-            </View>
-          ) : null}
+          <Text style={styles.answerSectionLabel}>Your answer</Text>
           <View style={styles.answerInputShell}>
             {shouldPulseAnswer ? (
               <Animated.View
@@ -597,19 +576,17 @@ export function RoleplayScreen({
             />
           </View>
           <View style={styles.answerReadinessBox}>
-            <View style={styles.oneThingHeader}>
-              <Text numberOfLines={1} style={styles.answerReadinessTitle}>
-                {answerReadinessCue.title}
-              </Text>
-              <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
-            </View>
-            <View style={styles.answerReadinessProgress}>
-              <ProgressBar
-                label={answerReadinessCue.progressLabel}
-                tone={answerReadinessCue.tone}
-                value={answerReadinessCue.progressPercent}
-              />
-            </View>
+            <Text numberOfLines={1} style={styles.answerReadinessTitle}>
+              {answerReadinessCue.title}
+            </Text>
+            <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
+          </View>
+          <View style={styles.answerAction}>
+            <AppButton
+              disabled={draftAnswer.trim().length === 0}
+              label="Check"
+              onPress={reviewAnswer}
+            />
           </View>
           <Pressable
             accessibilityHint="Shows or hides optional writing support before you check the answer"
@@ -619,18 +596,50 @@ export function RoleplayScreen({
             style={({ pressed }) => [styles.writingSupportToggle, pressed && styles.pressed]}
           >
             <View style={styles.oneThingHeader}>
-              <Text style={styles.writingSupportToggleLabel}>{writingSupport.title}</Text>
-              <Text style={styles.writingSupportToggleCta}>{writingSupport.toggleLabel}</Text>
+              <Text style={styles.writingSupportToggleLabel}>Need help?</Text>
+              <Text style={styles.writingSupportToggleCta}>
+                {isWritingSupportOpen ? 'Hide' : 'Open'}
+              </Text>
             </View>
-            {isWritingSupportOpen ? (
-              <View style={styles.writingSupportToggleMeta}>
-                <Text style={styles.writingSupportHelperText}>{writingSupport.helperText}</Text>
-                <Badge label={writingSupport.summaryLabel} tone="info" />
-              </View>
-            ) : null}
           </Pressable>
           {isWritingSupportOpen ? (
             <View style={styles.writingSupportBox}>
+              {warmupCue && !isAutoWarmupCue ? (
+                <View style={styles.writingSupportSection}>
+                  <View style={styles.oneThingHeader}>
+                    <Text style={styles.writingSupportSectionLabel}>{warmupCue.eyebrow}</Text>
+                    {!hasDraftAnswer ? (
+                      <AppButton
+                        accessibilityHint="Starts your answer with the suggested warm-up line"
+                        accessibilityLabel={warmupCue.ctaLabel}
+                        label={warmupCue.ctaLabel}
+                        onPress={useWarmupStarter}
+                        size="small"
+                        variant="quiet"
+                      />
+                    ) : (
+                      <Badge label={warmupCue.badgeLabel} tone="secondary" />
+                    )}
+                  </View>
+                  <Text style={styles.writingSupportSectionText}>{warmupCue.correction}</Text>
+                  <Text style={styles.writingSupportSectionMeta}>{warmupCue.note}</Text>
+                </View>
+              ) : null}
+              {starterReminder && !warmupCue && !hasDraftAnswer ? (
+                <View style={styles.writingSupportSection}>
+                  <View style={styles.oneThingHeader}>
+                    <Text style={styles.writingSupportSectionLabel}>{starterReminder.eyebrow}</Text>
+                    <AppButton
+                      accessibilityHint="Adds a simple starter answer to the answer box"
+                      accessibilityLabel="Use starter answer"
+                      label={starterReminder.ctaLabel}
+                      onPress={useStarterAnswer}
+                      size="small"
+                      variant="quiet"
+                    />
+                  </View>
+                </View>
+              ) : null}
               <Text style={styles.writingSupportCoachNote}>
                 {activeVariant?.coachingNote ?? answerCoach.instruction}
               </Text>
@@ -690,31 +699,9 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
-          {starterReminder && !warmupCue && !hasDraftAnswer ? (
-            <Pressable
-              accessibilityHint="Adds a simple starter answer to the answer box"
-              accessibilityLabel="Use starter answer"
-              accessibilityRole="button"
-              onPress={useStarterAnswer}
-              style={({ pressed }) => [
-                styles.starterReminderChip,
-                pressed && styles.starterReminderChipPressed,
-              ]}
-            >
-              <Text style={styles.starterReminderLabel}>{starterReminder.eyebrow}</Text>
-              <Text style={styles.starterReminderCta}>{starterReminder.ctaLabel}</Text>
-            </Pressable>
-          ) : null}
-          <View style={styles.answerAction}>
-            <AppButton
-              disabled={draftAnswer.trim().length === 0}
-              label="Check answer"
-              onPress={reviewAnswer}
-            />
-          </View>
           <View style={styles.dailyTargetPreviewBox}>
             <View style={styles.oneThingHeader}>
-              <Text style={styles.dailyTargetPreviewLabel}>After save</Text>
+              <Text style={styles.dailyTargetPreviewLabel}>Daily goal</Text>
               <Badge label={targetPreview.badgeLabel} tone={targetPreview.tone} />
             </View>
             <View style={styles.dailyTargetPreviewProgress}>
@@ -981,59 +968,89 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  firstQuestCue: {
+  practiceStepStrip: {
     alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  practiceStepLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  practiceStepTrack: {
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: radius.pill,
+    flex: 1,
+    height: 8,
+    overflow: 'hidden',
+  },
+  practiceStepFill: {
+    backgroundColor: colors.primary,
+    borderRadius: radius.pill,
+    height: 8,
+    width: '34%',
+  },
+  practiceStepMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  coachPromptBubble: {
+    backgroundColor: colors.coachSoft,
+    borderColor: colors.coach,
     borderRadius: radius.xl,
     borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.md,
-    marginBottom: spacing.md,
     padding: spacing.md,
   },
-  warmupCueBoxCompact: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
+  coachPromptBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.coach,
+    borderRadius: radius.pill,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
+  },
+  coachPromptBadgeText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  coachPromptCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  answerSectionLabel: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.md,
+  },
+  starterLoadedStrip: {
+    alignItems: 'center',
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.sm,
     padding: spacing.sm,
   },
-  firstQuestNumber: {
-    alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderRadius: radius.pill,
-    height: 44,
-    justifyContent: 'center',
-    width: 44,
-  },
-  firstQuestNumberText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.h3,
-    fontWeight: '900',
-  },
-  firstQuestCopy: {
+  starterLoadedText: {
+    color: colors.secondaryDark,
     flex: 1,
-  },
-  firstQuestEyebrow: {
-    color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-  },
-  firstQuestTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
-  },
-  firstQuestText: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
+    marginRight: spacing.sm,
   },
   promptText: {
     color: colors.ink,
@@ -1062,7 +1079,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     lineHeight: typography.lineBody,
-    minHeight: 132,
+    minHeight: 120,
     padding: spacing.md,
   },
   answerInputActive: {
@@ -1070,7 +1087,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   answerInputShell: {
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     position: 'relative',
   },
   answerPulseRing: {
@@ -1088,15 +1105,15 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   answerReadinessBox: {
+    alignItems: 'center',
     backgroundColor: colors.surfaceElevated,
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: spacing.sm,
     padding: spacing.sm,
-  },
-  answerReadinessProgress: {
-    marginTop: spacing.sm,
   },
   answerReadinessTitle: {
     color: colors.ink,
@@ -1112,28 +1129,14 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.sm,
+    marginTop: spacing.md,
     padding: spacing.sm,
   },
   writingSupportToggleLabel: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  writingSupportToggleMeta: {
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.sm,
-  },
-  writingSupportHelperText: {
-    color: colors.text,
-    flex: 1,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginRight: spacing.md,
+    fontWeight: '900',
   },
   writingSupportToggleCta: {
     color: colors.primaryDark,
@@ -1228,75 +1231,6 @@ const styles = StyleSheet.create({
   },
   dailyTargetPreviewProgress: {
     marginTop: spacing.sm,
-  },
-  warmupCueBox: {
-    backgroundColor: colors.secondarySoft,
-    borderColor: colors.secondary,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
-  },
-  warmupCueLabel: {
-    color: colors.secondaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  warmupCueAction: {
-    marginTop: spacing.md,
-  },
-  warmupCueText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
-  },
-  warmupCueLoadedNote: {
-    color: colors.secondaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
-  },
-  warmupCueNote: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
-  },
-  starterReminderChip: {
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.xs,
-    marginTop: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  starterReminderChipPressed: {
-    backgroundColor: colors.primarySoft,
-    borderColor: colors.primary,
-  },
-  starterReminderCta: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  starterReminderLabel: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,

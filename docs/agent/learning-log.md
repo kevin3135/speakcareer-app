@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-29: Simplified Roleplay Active Step
+
+Made one focused Roleplay UX simplification: the active practice state now shows a small step progress strip, one coach prompt bubble, the answer box, and one primary `Check` action before optional support.
+
+Why it changed:
+
+- The Roleplay screen was improved, but the active step still showed too many helpful elements before the user answered.
+- During practice the user should see one job at a time: read the coach prompt, answer, then check.
+- Optional starters, writing support and daily goal context should not compete with the main action.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- The old first-quest explanation was reduced to a compact progress strip.
+- Warm-up and starter actions now live inside collapsed `Need help?` support unless a starter was already auto-loaded.
+- The main CTA is now the shorter `Check` label.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The in-app browser preview connection timed out during this run, so visual QA should still be checked manually at `http://localhost:8091/`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Active practice should keep help below the main CTA or behind one collapsed row.
+- Roleplay should feel like `coach asks -> user answers -> check`, not like a setup form.
+- The answer box should appear before any optional planning or phrase support.
+
+Next suggested task:
+
+- Manually preview the Roleplay screen on a narrow mobile viewport and tune spacing if the `Check` CTA sits too low.
+
 ## 2026-06-29: Visual Home Coach Cue
 
 Made one focused Home polish: the coach tip is now a compact visual cue with a round `SC` coach badge and one short `Next: ...` instruction.
