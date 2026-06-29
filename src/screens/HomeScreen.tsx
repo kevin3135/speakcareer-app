@@ -15,6 +15,7 @@ import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
 import { createDailyMission } from '../utils/gamification';
+import { createHomeCoachFocusText } from '../utils/homeCoachFocus';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
 import { createLevelProgress } from '../utils/levelProgress';
@@ -67,7 +68,9 @@ export function HomeScreen({
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
   const isMissionComplete = missionCard.progressPercent >= 100;
   const latestSession = sessions[0];
-  const latestCoachFocusText = latestSession?.nextFocusText?.trim() || latestSession?.feedbackSummary?.trim();
+  const latestCoachFocusText =
+    createHomeCoachFocusText(latestSession?.nextFocusText) ??
+    createHomeCoachFocusText(latestSession?.feedbackSummary);
   const latestCoachFocus = latestCoachFocusText
     ? {
         label: latestSession?.nextFocusLabel?.trim() || 'Coach focus',

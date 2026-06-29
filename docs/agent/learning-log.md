@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: Short Home Coach Focus
+
+Made one focused Home polish: the coach focus strip now turns long saved feedback into one short, actionable line before showing it on Learn/Home.
+
+Why it changed:
+
+- The latest Home preview still showed a long coach sentence with ellipsis.
+- Learn/Home should keep the user focused on the next action, not a mini feedback report.
+- A short `Next: ...` instruction keeps the coach useful without adding reading effort.
+
+What went well:
+
+- The change stayed focused on Home display copy through `src/utils/homeCoachFocus.ts` and `src/screens/HomeScreen.tsx`.
+- Saved-session data, feedback generation, storage, navigation and backend behavior did not change.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The in-app browser reload QA timed out after the checks, so this run did not capture a fresh visual screenshot.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home should summarize coaching as one action, even when older saved sessions only have a long feedback summary.
+- If a line needs `numberOfLines={1}`, make the source copy short enough that truncation is the exception.
+- Small copy reducers are useful design-system tools when app-led screens reuse detailed practice data.
+
+Next suggested task:
+
+- Reconnect the in-app browser preview and visually confirm the compact Home coach strip at `390x844`.
+
 ## 2026-06-29: Compact Saved Next Stop Card
 
 Made one focused Roleplay completion polish: the fallback saved-success `Next stop` card is now a compact one-line strip, matching the path-aware completion card.
