@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Practice Resume Coach Cue
+
+Made one focused night design polish: the Practice resume card now shows a short coach cue for the saved draft instead of a generic readiness label and long explanation.
+
+Why it changed:
+
+- Practice already prioritizes saved drafts, but the card needed a clearer "what to fix next" cue before opening the roleplay.
+- A short coach cue makes the resume state feel guided, not like a library item with status text.
+- The copy stays action-first: open the draft, improve one thing, check it and save.
+
+What changed:
+
+- Replaced the saved-draft focus text with concise coach cues such as `Coach cue: add one result or next step.`
+- Shortened the saved-draft description so it points to checking and saving XP without a long paragraph.
+- Updated the existing Practice library state test for the new resume copy.
+
+What went well:
+
+- The change stayed inside the Practice library state utility, one existing test and this log.
+- No storage, navigation, screen layout, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 74 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Resume cards should tell the learner exactly what to improve next, not only that a draft exists.
+- Keep Practice resume copy short enough that the recommended card still feels tappable.
+
+Next suggested task:
+
+- Visually QA the Practice saved-draft hero on a narrow viewport and tighten the hero subtitle if it still feels text-heavy.
+
 ## 2026-06-29: Practice Resume Handoff
 
 Made one focused practice-flow improvement: the Practice tab now promotes an unfinished saved roleplay answer as the primary recommended action instead of showing a generic next library card.

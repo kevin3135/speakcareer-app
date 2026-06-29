@@ -2979,8 +2979,8 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.recommendedCard.roleplayId, 'meeting-practice');
   assert.equal(resumeState.recommendedCard.categoryLabel, 'Resume');
   assert.equal(resumeState.recommendedCard.ctaLabel, 'Finish now');
-  assert.ok(resumeState.recommendedCard.focus.includes('Good start'));
-  assert.ok(resumeState.recommendedCard.description.includes('Finish and save it before switching practice.'));
+  assert.equal(resumeState.recommendedCard.focus, 'Coach cue: add one result or next step.');
+  assert.ok(resumeState.recommendedCard.description.includes('Check it, save XP'));
   assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
 });
 

@@ -128,14 +128,13 @@ function createSavedDraftCard(
   draft: RoleplayDraft,
 ): PracticeLibraryCard {
   const review = summarizePracticeAnswer(draft.draftAnswer);
-  const wordLabel = `${review.wordCount} ${review.wordCount === 1 ? 'word' : 'words'} saved`;
 
   return {
     ...createBaseCard(roleplay),
     categoryLabel: 'Resume',
     ctaLabel: 'Finish now',
     description: createSavedDraftDescription(review),
-    focus: `${review.readinessLabel} | ${wordLabel}`,
+    focus: createSavedDraftFocus(review),
   };
 }
 
@@ -170,13 +169,31 @@ function createSavedDraftSubtitle(roleplayTitle: string, wordCount: number) {
 }
 
 function createSavedDraftDescription(review: ReturnType<typeof summarizePracticeAnswer>) {
+  const wordLabel = `${review.wordCount} ${review.wordCount === 1 ? 'word' : 'words'} saved`;
+
   if (review.wordCount === 0) {
-    return 'You saved this roleplay on this device. Start the answer here before browsing the rest of the library.';
+    return 'Open this draft and write one first line before browsing.';
   }
 
   if (!review.isReadyForFeedback) {
-    return `${review.wordCount} words are already saved. ${review.reviewNote} Then check the answer.`;
+    return `${wordLabel}. Add detail, then check.`;
   }
 
-  return `${review.wordCount} words are already saved. ${review.reviewNote} Finish and save it before switching practice.`;
+  return `${wordLabel}. Check it, save XP, then unlock the next step.`;
+}
+
+function createSavedDraftFocus(review: ReturnType<typeof summarizePracticeAnswer>) {
+  if (review.wordCount === 0) {
+    return 'Coach cue: write one clear work action.';
+  }
+
+  if (!review.isReadyForFeedback) {
+    return 'Coach cue: add one concrete work example.';
+  }
+
+  if (review.readinessLabel === 'Good start') {
+    return 'Coach cue: add one result or next step.';
+  }
+
+  return 'Coach cue: review clarity, then save.';
 }
