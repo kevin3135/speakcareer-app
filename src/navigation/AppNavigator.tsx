@@ -224,6 +224,7 @@ export function AppNavigator() {
         {activeScreen === 'Progress' ? (
           <ProgressScreen
             dailyTarget={dailyTarget}
+            onBackToLearn={() => setActiveScreen('Home')}
             onMarkMistakePracticed={markMistakePracticed}
             onOpenRoleplay={openRoleplay}
             practicedMistakeIds={practicedMistakeIds}

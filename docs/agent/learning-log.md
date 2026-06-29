@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Wins Learn Handoff
+
+Made one focused night design polish: the top action on Wins now routes back to the guided Learn path instead of launching a roleplay directly.
+
+Why it changed:
+
+- Wins should feel like a reward/support area, not a second starting point.
+- Learn is the main product surface and should stay responsible for choosing the next step.
+- The user can still retry saved scenarios and practice mistakes from Wins, but the first recommended action now returns to the app-led path.
+
+What changed:
+
+- Added an `onBackToLearn` handoff from `AppNavigator` to `ProgressScreen`.
+- Changed the primary next-step button in Wins to `Back to Learn`.
+- Kept all existing roleplay retry and mistake-practice actions intact.
+
+What went well:
+
+- The implementation touched only `src/navigation/AppNavigator.tsx`, `src/screens/ProgressScreen.tsx` and this log.
+- No screens, APIs, auth, payments, analytics, backend work or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Secondary areas should usually hand the learner back to Learn instead of becoming parallel launch points.
+- Wins can keep retry/fix actions, but its main job is to confirm progress and guide back to the path.
+
+Next suggested task:
+
+- Use mobile screenshot QA to confirm the Wins first viewport still feels like a reward area and not a dashboard.
+
 ## 2026-06-29: Simplified App Flow
 
 Made one focused UX-flow improvement: the bottom navigation now makes `Learn` feel like the primary route while `Wins` and `Me` stay quieter secondary areas.
