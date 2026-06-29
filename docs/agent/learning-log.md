@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Foundation Starter Preview
+
+Made one focused practice-flow improvement: the first Job Interview screen now shows the Lesson 1 starter as an explicit warmup panel instead of only silently preloading the answer box.
+
+Why it changed:
+
+- The starter line was already auto-applied after Lesson 1, but the handoff was too easy to miss once the interview screen opened.
+- The English MVP should make the first answer feel easier to begin without adding another step.
+- A compact preview keeps the lesson-to-roleplay connection visible and tells the learner to edit the line for their real work.
+
+What changed:
+
+- Added `src/utils/foundationWarmupPanel.ts` to keep the first-interview warmup copy simple and reusable.
+- Replaced the old `Starter loaded. Edit, then check.` strip in `src/screens/RoleplayScreen.tsx` with a richer Lesson 1 warmup panel.
+- The new panel shows the loaded starter answer, the coach note, and clear edit guidance before the answer box.
+- Added a focused assertion in `tests/practiceContent.test.mjs` for the warmup panel copy and level-matched starter text.
+
+What went well:
+
+- The change stayed inside the existing Lesson 1 to Quest 1 path with no new storage, navigation, dependencies, APIs or backend work.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The UI now makes the first interview answer feel more intentional while preserving the same simple flow.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new warmup panel spacing should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a starter answer is auto-applied, show the source and edit guidance instead of relying on the text box alone.
+- Foundation-to-Roleplay transitions work better when the learner can see both the loaded line and the reason it helps.
+
+Next suggested task:
+
+- Add a small `Reload starter` action to the Lesson 1 warmup panel so beginners can restore the model line after editing.
+
 ## 2026-06-29: Premium Preview Polish
 
 Made one focused night design polish: the shared Premium preview card now feels more like a polished future-upgrade preview and less like a static payment block.

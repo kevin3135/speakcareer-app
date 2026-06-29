@@ -694,6 +694,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createFoundationWarmupCue,
     createRoleplayWarmupCue,
   } = await import('../src/utils/roleplayWarmupCue.ts');
+  const { createFoundationWarmupPanel } = await import('../src/utils/foundationWarmupPanel.ts');
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 
   const starterProfile = getStartingLevelProfile('starter');
@@ -714,8 +715,21 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.equal(starterCue.autoApplyStarter, true);
   assert.ok(starterCue.note.includes('Keep it simple'));
   assert.ok(starterCue.starterAnswer.includes('The result was'));
+  const starterPanel = createFoundationWarmupPanel({
+    note: starterCue.note,
+    starterAnswer: starterCue.starterAnswer,
+  });
+  assert.equal(starterPanel.title, 'Lesson 1 starter is ready');
+  assert.equal(starterPanel.starterLabel, 'Loaded starter');
+  assert.ok(starterPanel.body.includes('Edit this first line'));
+  assert.ok(starterPanel.starterAnswer.includes('The result was'));
   assert.ok(confidentCue.note.includes('business result'));
   assert.ok(confidentCue.starterAnswer.includes('As a result'));
+  const confidentPanel = createFoundationWarmupPanel({
+    note: confidentCue.note,
+    starterAnswer: confidentCue.starterAnswer,
+  });
+  assert.ok(confidentPanel.starterAnswer.includes('As a result'));
 
   const progressCue = createRoleplayWarmupCue({
     category: 'Grammar',

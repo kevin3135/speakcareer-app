@@ -45,6 +45,7 @@ import {
 import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/ruleBasedFeedback';
 import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
+import { createFoundationWarmupPanel } from '../utils/foundationWarmupPanel';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
@@ -176,6 +177,12 @@ export function RoleplayScreen({
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
   const isAutoWarmupCue = Boolean(warmupCue?.autoApplyStarter);
+  const foundationWarmupPanel = isAutoWarmupCue && warmupCue
+    ? createFoundationWarmupPanel({
+      note: warmupCue.note,
+      starterAnswer: warmupCue.starterAnswer,
+    })
+    : null;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
   const feedbackScoreSummary = feedbackResult
     ? createFeedbackScoreSummary(feedbackResult.feedback.scores)
@@ -581,12 +588,29 @@ export function RoleplayScreen({
               <Text style={styles.promptText}>{openingLine}</Text>
             </View>
           </View>
-          {isAutoWarmupCue && warmupCue ? (
-            <View style={styles.starterLoadedStrip}>
-              <Text numberOfLines={1} style={styles.starterLoadedText}>
-                Starter loaded. Edit, then check.
+          {foundationWarmupPanel && warmupCue ? (
+            <View style={styles.foundationWarmupBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.foundationWarmupLabel}>{warmupCue.eyebrow}</Text>
+                <Badge label={warmupCue.badgeLabel} tone="secondary" />
+              </View>
+              <Text style={styles.foundationWarmupTitle}>{foundationWarmupPanel.title}</Text>
+              <Text style={styles.foundationWarmupBody}>{foundationWarmupPanel.body}</Text>
+              <View style={styles.foundationWarmupStarterBox}>
+                <Text style={styles.foundationWarmupStarterLabel}>
+                  {foundationWarmupPanel.starterLabel}
+                </Text>
+                <Text style={styles.foundationWarmupStarterText}>
+                  {foundationWarmupPanel.starterAnswer}
+                </Text>
+              </View>
+              <Text style={styles.foundationWarmupNote}>
+                <Text style={styles.foundationWarmupNoteLabel}>
+                  {foundationWarmupPanel.coachLabel}
+                  {': '}
+                </Text>
+                {warmupCue.note}
               </Text>
-              <Badge label={warmupCue.badgeLabel} tone="secondary" />
             </View>
           ) : null}
           <Text style={styles.answerSectionLabel}>Your answer</Text>
@@ -1072,25 +1096,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: spacing.md,
   },
-  starterLoadedStrip: {
-    alignItems: 'center',
-    backgroundColor: colors.secondarySoft,
-    borderColor: colors.secondary,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.sm,
-    padding: spacing.sm,
-  },
-  starterLoadedText: {
-    color: colors.secondaryDark,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    marginRight: spacing.sm,
-  },
   promptText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
@@ -1101,6 +1106,67 @@ const styles = StyleSheet.create({
   },
   promptLabel: {
     color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  foundationWarmupBox: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  foundationWarmupLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  foundationWarmupTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  foundationWarmupBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  foundationWarmupStarterBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.sm,
+  },
+  foundationWarmupStarterLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  foundationWarmupStarterText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  foundationWarmupNote: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  foundationWarmupNoteLabel: {
+    color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
