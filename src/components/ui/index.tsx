@@ -562,21 +562,27 @@ export function PremiumCard({
 }) {
   return (
     <Card tone="dark">
-      <Text style={styles.premiumKicker}>Premium preview</Text>
+      <View style={styles.premiumHeader}>
+        <Text style={styles.premiumKicker}>Premium preview</Text>
+        <Badge label="Coming later" tone="accent" />
+      </View>
       <Text style={styles.premiumTitle}>{title}</Text>
       <Text style={styles.premiumSubtitle}>{subtitle}</Text>
       <View style={styles.premiumBenefits}>
         {benefits.map((benefit) => (
-          <Text key={benefit} style={styles.premiumBenefit}>- {benefit}</Text>
+          <View key={benefit} style={styles.premiumBenefitRow}>
+            <View style={styles.premiumBenefitMark} />
+            <Text style={styles.premiumBenefit}>{benefit}</Text>
+          </View>
         ))}
       </View>
       <View style={styles.pricingRow}>
         <View style={styles.priceBox}>
-          <Text style={styles.priceLabel}>Monthly</Text>
+          <Text style={styles.priceLabel}>Monthly preview</Text>
           <Text style={styles.priceValue}>Mock $12</Text>
         </View>
         <View style={styles.priceBox}>
-          <Text style={styles.priceLabel}>Yearly</Text>
+          <Text style={styles.priceLabel}>Yearly preview</Text>
           <Text style={styles.priceValue}>Mock $89</Text>
         </View>
       </View>
@@ -585,7 +591,7 @@ export function PremiumCard({
           <AppButton label="View benefits" onPress={onPress} variant="secondary" />
         </View>
       ) : null}
-      <Text style={styles.premiumNote}>Preview only. No payment is connected.</Text>
+      <Text style={styles.premiumNote}>No payment is connected in this MVP.</Text>
     </Card>
   );
 }
@@ -1249,6 +1255,12 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
+  premiumHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
   premiumTitle: {
     color: colors.white,
     fontFamily: fonts.rounded,
@@ -1268,8 +1280,26 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     marginTop: spacing.lg,
   },
+  premiumBenefitRow: {
+    alignItems: 'flex-start',
+    backgroundColor: colors.scrim,
+    borderColor: colors.primaryDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    padding: spacing.md,
+  },
+  premiumBenefitMark: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.pill,
+    height: 10,
+    marginTop: spacing.xs,
+    width: 10,
+  },
   premiumBenefit: {
     color: colors.white,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '800',

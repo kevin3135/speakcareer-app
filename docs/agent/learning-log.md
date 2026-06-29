@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Premium Preview Polish
+
+Made one focused night design polish: the shared Premium preview card now feels more like a polished future-upgrade preview and less like a static payment block.
+
+Why it changed:
+
+- The Premium mock section had the lowest CTA strength score in the design scoreboard.
+- In the MVP it should look premium while clearly staying non-transactional.
+- Better visual framing helps Profile feel more finished without adding payments or new navigation.
+
+What changed:
+
+- Added a `Coming later` badge to the Premium card header.
+- Turned premium benefits into stronger framed rows with a small accent marker.
+- Changed pricing labels to `Monthly preview` and `Yearly preview`.
+- Reworded the safety note to `No payment is connected in this MVP.`
+
+What went well:
+
+- The implementation stayed inside the shared `PremiumCard` styles in `src/components/ui/index.tsx`.
+- No APIs, auth, payments, analytics, backend work, storage changes or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Premium preview should always read as future value, not an active payment surface.
+- Use badges and framed benefit rows to make future features feel polished without connecting monetization.
+
+Next suggested task:
+
+- Preview Profile/Me on mobile and check whether the Premium card now feels premium without pulling attention away from Learn.
+
 ## 2026-06-29: Profile Learn Handoff
 
 Made one focused night design polish: the Me/Profile hero now includes a clear `Back to Learn` action so settings feels secondary to the guided learning path.
