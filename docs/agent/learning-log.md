@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Practice Resume Hero
+
+Made one focused night design polish: the Practice saved-draft hero subtitle is now much shorter and easier to scan on mobile.
+
+Why it changed:
+
+- The previous saved-draft hero subtitle was a long sentence above a card that already explains the resume action.
+- Practice should feel app-led and quick, especially when the user already has unfinished work.
+- A concise hero line keeps the saved draft visible without turning the first viewport into a text block.
+
+What changed:
+
+- Shortened the saved-draft hero subtitle to `Saved 17 words for Meeting Practice. Finish it first.`
+- Added a focused assertion to the existing Practice library state test so the hero copy stays compact.
+
+What went well:
+
+- The change stayed inside the Practice library state utility, one existing test and this log.
+- No screen layout, storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed after one expectation fix.
+
+What went wrong:
+
+- The first test run failed because the new subtitle assertion expected `16 words`, while the fixture correctly counts `17 words`; the test expectation was corrected and the suite passed.
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 74 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Saved-draft hero copy should be short because the recommended card carries the detailed cue.
+- Prefer one direct instruction in hero subtitles on mobile.
+
+Next suggested task:
+
+- Visually QA the Practice saved-draft screen and, if it still feels text-heavy, shorten the surrounding Practice header and Full library helper copy.
+
 ## 2026-06-29: Practice Resume Coach Cue
 
 Made one focused night design polish: the Practice resume card now shows a short coach cue for the saved draft instead of a generic readiness label and long explanation.

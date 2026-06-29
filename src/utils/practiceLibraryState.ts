@@ -165,7 +165,7 @@ function createCtaLabel(state: 'done' | 'active' | 'locked') {
 function createSavedDraftSubtitle(roleplayTitle: string, wordCount: number) {
   const wordLabel = `${wordCount} ${wordCount === 1 ? 'word' : 'words'}`;
 
-  return `Your saved ${roleplayTitle} answer is waiting with ${wordLabel}. Finish it before switching to another conversation.`;
+  return `Saved ${wordLabel} for ${roleplayTitle}. Finish it first.`;
 }
 
 function createSavedDraftDescription(review: ReturnType<typeof summarizePracticeAnswer>) {

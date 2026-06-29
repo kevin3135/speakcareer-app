@@ -2976,6 +2976,7 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.isResumeMode, true);
   assert.equal(resumeState.meta, 'Saved draft');
   assert.equal(resumeState.title, `Resume ${meetingRoleplay.title}`);
+  assert.equal(resumeState.subtitle, `Saved 17 words for ${meetingRoleplay.title}. Finish it first.`);
   assert.equal(resumeState.recommendedCard.roleplayId, 'meeting-practice');
   assert.equal(resumeState.recommendedCard.categoryLabel, 'Resume');
   assert.equal(resumeState.recommendedCard.ctaLabel, 'Finish now');
