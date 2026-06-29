@@ -737,25 +737,33 @@ const styles = StyleSheet.create({
   },
   buttonPrimary: {
     backgroundColor: colors.primary,
+    borderBottomColor: colors.primaryDark,
+    borderBottomWidth: 4,
     ...shadows.button,
   },
   buttonSecondary: {
     backgroundColor: colors.surface,
+    borderBottomColor: colors.borderStrong,
+    borderBottomWidth: 3,
     borderColor: colors.borderStrong,
     borderWidth: 1,
+    ...shadows.soft,
   },
   buttonQuiet: {
     backgroundColor: colors.surfaceMuted,
   },
   buttonDanger: {
     backgroundColor: colors.danger,
+    borderBottomColor: colors.dangerDark,
+    borderBottomWidth: 4,
+    ...shadows.button,
   },
   buttonDisabled: {
     opacity: 0.45,
   },
   buttonPressed: {
     opacity: 0.84,
-    transform: [{ scale: 0.99 }],
+    transform: [{ translateY: 2 }, { scale: 0.99 }],
   },
   buttonLabel: {
     fontFamily: fonts.rounded,

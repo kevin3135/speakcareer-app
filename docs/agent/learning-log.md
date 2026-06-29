@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: App Button Depth Polish
+
+Made one focused shared UI polish: primary, danger and secondary `AppButton` states now have slightly more tactile depth using existing theme colors and shadow tokens.
+
+Why it changed:
+
+- The design audit called buttons functional but not yet rewarding or premium enough.
+- Primary CTAs should feel easy to tap and a little more game-like without becoming childish.
+- A shared component change improves Home, Roleplay, Feedback, Progress and Profile without adding product scope.
+
+What went well:
+
+- The change stayed inside `src/components/ui/index.tsx`.
+- No new props, dependencies, APIs, auth, payments or backend logic were added.
+- The button labels, accessibility behavior and app flows stayed unchanged.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 3
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Small shared component polish can improve the whole app without adding new decisions.
+- Keep primary buttons tactile, but leave secondary and quiet actions visually calmer.
+- Preview the primary CTA on Home and Roleplay next to ensure the added depth feels premium, not heavy.
+
+Next suggested task:
+
+- Capture a fresh mobile preview and tune any button spacing if the added depth makes compact cards feel crowded.
+
 ## 2026-06-29: Simplified Roleplay Active Step
 
 Made one focused Roleplay UX simplification: the active practice state now shows a small step progress strip, one coach prompt bubble, the answer box, and one primary `Check` action before optional support.
