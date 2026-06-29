@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Restored Draft Cue
+
+Made one focused practice-flow improvement: the Roleplay screen now gives a concrete saved-draft coach cue when a learner reopens an unfinished answer.
+
+Why it changed:
+
+- Practice already explained what to improve next for a saved draft, but the reopened Roleplay screen still used a generic restored message.
+- The English MVP loop is stronger when the learner sees the next action exactly where they finish the draft.
+- A short saved-draft cue makes resuming feel guided instead of like returning to a plain text box.
+
+What changed:
+
+- Added `src/utils/roleplayResumeCue.ts` to generate short restored-draft guidance from the live answer review state.
+- Updated `src/screens/RoleplayScreen.tsx` so restored drafts now show word-count context plus a concrete next-action cue, and the answer section label changes to `Finish your answer`.
+- Added focused coverage in `tests/practiceContent.test.mjs` for empty, too-short, good-start and ready-to-check restored draft states.
+
+What went well:
+
+- The improvement stayed inside the existing local draft loop and reused the current answer-review thresholds instead of adding more state.
+- Practice and Roleplay now feel more aligned around the saved-draft resume path.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the restored-draft strip should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Saved-draft guidance should stay consistent across Practice entry and Roleplay resume states.
+- When a user resumes unfinished work, the exact next action should appear beside the resumed content, not only in the library.
+
+Next suggested task:
+
+- Make the Home resume start card show the same concrete coach cue as Practice and Roleplay so every saved-draft entry point matches.
+
 ## 2026-06-29: Practice Resume Hero
 
 Made one focused night design polish: the Practice saved-draft hero subtitle is now much shorter and easier to scan on mobile.

@@ -2985,6 +2985,62 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
 });
 
+test('creates a concrete restored-draft cue for the roleplay resume state', async () => {
+  const { createRoleplayResumeCue } = await import('../src/utils/roleplayResumeCue.ts');
+
+  assert.deepEqual(
+    createRoleplayResumeCue({
+      isReadyForFeedback: false,
+      readinessLabel: 'No answer yet',
+      reviewNote: 'Write a first response before reviewing feedback.',
+      wordCount: 0,
+    }),
+    {
+      badgeLabel: '0 words',
+      body: 'Saved draft: write your first response now.',
+    },
+  );
+
+  assert.deepEqual(
+    createRoleplayResumeCue({
+      isReadyForFeedback: false,
+      readinessLabel: 'Needs more detail',
+      reviewNote: 'Add one concrete action or example from work.',
+      wordCount: 9,
+    }),
+    {
+      badgeLabel: '9 words',
+      body: 'Saved draft: add one concrete action or work example, then check.',
+    },
+  );
+
+  assert.deepEqual(
+    createRoleplayResumeCue({
+      isReadyForFeedback: true,
+      readinessLabel: 'Good start',
+      reviewNote: 'Add a result, decision or next step to make the answer stronger.',
+      wordCount: 17,
+    }),
+    {
+      badgeLabel: '17 words',
+      body: 'Saved draft: add one result or next step, or check now.',
+    },
+  );
+
+  assert.deepEqual(
+    createRoleplayResumeCue({
+      isReadyForFeedback: true,
+      readinessLabel: 'Ready for feedback',
+      reviewNote: 'Strong length for a short professional answer. Now review clarity and structure.',
+      wordCount: 41,
+    }),
+    {
+      badgeLabel: '41 words',
+      body: 'Saved draft: ready to check, save XP and unlock the next step.',
+    },
+  );
+});
+
 test('formats the five-minute focus timer', async () => {
   const {
     createFocusTimerControls,

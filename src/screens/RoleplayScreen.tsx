@@ -49,6 +49,7 @@ import { getStartingLevelProfile } from '../utils/startingLevel';
 import { createFoundationWarmupPanel } from '../utils/foundationWarmupPanel';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
+import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
 import { createWritingSupportState } from '../utils/writingSupportHelper';
 
@@ -185,6 +186,7 @@ export function RoleplayScreen({
   const hasDraftAnswer = draftAnswer.trim().length > 0;
   const isAutoWarmupCue = Boolean(warmupCue?.autoApplyStarter);
   const hasRestoredDraft = Boolean(savedDraft?.draftAnswer) && !isAutoWarmupCue;
+  const restoredDraftCue = hasRestoredDraft ? createRoleplayResumeCue(liveAnswerReview) : null;
   const foundationWarmupPanel = isAutoWarmupCue && warmupCue
     ? createFoundationWarmupPanel({
       note: warmupCue.note,
@@ -656,9 +658,9 @@ export function RoleplayScreen({
           ) : null}
           {hasRestoredDraft ? (
             <View style={styles.restoredDraftBox}>
-              <Badge label="Saved draft" tone="success" />
-              <Text numberOfLines={1} style={styles.restoredDraftText}>
-                Restored here. Edit, then check.
+              <Badge label={restoredDraftCue?.badgeLabel ?? 'Saved draft'} tone="success" />
+              <Text numberOfLines={2} style={styles.restoredDraftText}>
+                {restoredDraftCue?.body ?? 'Saved draft: edit, then check.'}
               </Text>
               <AppButton
                 accessibilityHint="Clears the saved draft and starts a fresh answer"
@@ -670,7 +672,9 @@ export function RoleplayScreen({
               />
             </View>
           ) : null}
-          <Text style={styles.answerSectionLabel}>Your answer</Text>
+          <Text style={styles.answerSectionLabel}>
+            {hasRestoredDraft ? 'Finish your answer' : 'Your answer'}
+          </Text>
           <View style={styles.answerInputShell}>
             {shouldPulseAnswer ? (
               <Animated.View
