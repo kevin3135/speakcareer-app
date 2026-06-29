@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Quest 1 Review Save Cue
+
+Made one focused Quest 1 copy polish: the review coach card now says `Save is next.` while the save card keeps the concrete unlock outcome.
+
+Why it changed:
+
+- The review card and save card both referenced unlocking Home and Progress, which could feel repetitive on a narrow phone screen.
+- The review step should confirm the answer is ready, then point to the next action.
+- The save step should carry the reward outcome because Save is the final guided action.
+
+What changed:
+
+- Added a short `firstQuestReviewHint` for the Quest 1 review card.
+- Replaced the review-card unlock line with `Save is next.`
+- Kept the save-card `Final step` unlock hint, Save button, XP, storage and navigation unchanged.
+
+What went well:
+
+- The change stayed inside `RoleplayScreen` and this log.
+- No new screens, APIs, auth, payments, analytics, backend work or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In the first-quest review flow, keep outcome language on the save card and keep the review card focused on readiness.
+- Use short handoff cues between cards instead of repeating the same unlock phrase.
+
+Next suggested task:
+
+- Mobile QA the Quest 1 review flow and, if the save card still feels busy, collapse the lock-in preview rows under the `Final step` hint.
+
 ## 2026-06-29: Quest 1 Save Unlock Hint
 
 Made one focused first-quest polish: the Step 3 save card now repeats the unlock outcome in one compact line before the learner taps Save.

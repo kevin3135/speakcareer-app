@@ -191,6 +191,7 @@ export function RoleplayScreen({
   const firstQuestSaveHint = firstQuestState
     ? `Save to ${firstQuestState.unlockLabel.replace('Unlock ', 'unlock ')}.`
     : null;
+  const firstQuestReviewHint = firstQuestSaveHint ? 'Save is next.' : null;
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
@@ -893,7 +894,9 @@ export function RoleplayScreen({
                   <Text style={styles.firstQuestRewriteText}>{firstQuestFeedback.rewrite}</Text>
                 </View>
               ) : null}
-              <Text style={styles.firstQuestUnlockHint}>{firstQuestState.unlockLabel}</Text>
+              {firstQuestReviewHint ? (
+                <Text style={styles.firstQuestUnlockHint}>{firstQuestReviewHint}</Text>
+              ) : null}
             </View>
           ) : null}
           {feedbackSnapshot ? null : (
