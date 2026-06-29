@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Brand System Polish
+
+Made one focused design-system polish: shared typography, radius, shadow and UI primitive styles now feel more like a consistent Career Arcade brand without changing screen logic.
+
+Why it changed:
+
+- The app had cleaner screens, but the shared brand language still felt a bit generic.
+- Headings, CTAs, cards, badges and lesson nodes should share the same friendly, premium, tappable feel.
+- This keeps future screen polish easier because the base components now carry more of the visual identity.
+
+What changed:
+
+- Increased the headline/body typography scale slightly while keeping readable line heights.
+- Rounded the shared large radii so cards and CTAs feel softer and more consumer-grade.
+- Strengthened soft, medium, button and lesson-node shadows through theme tokens.
+- Gave shared cards more breathing room, buttons stronger tactile depth, badges a stable readable height, and completed lesson nodes their own success state.
+
+What went well:
+
+- The change stayed in shared theme/UI files only.
+- No screen logic, APIs, auth, payments, backend work or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA, so mobile visual spacing should still be checked by eye.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep Career Arcade visual language in the primitives first: rounded confident type, tactile CTAs, premium cards and stateful lesson nodes.
+- Avoid one-off screen styling when a shared token or component style can carry the brand.
+
+Next suggested task:
+
+- Do a quick mobile screenshot QA pass on Home, Roleplay and Completion to catch any spacing changes from the larger shared typography/cards.
+
 ## 2026-06-29: Completion Reward Moment
 
 Made one focused reward polish: the saved Roleplay completion state now has a compact reward moment card with a subtle pulse, stronger XP placement, streak/progress badges, and a clearer next-unlocked label.

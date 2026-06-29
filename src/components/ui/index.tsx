@@ -292,7 +292,14 @@ export function LessonCard({
         pressed && styles.buttonPressed,
       ]}
     >
-      <View style={[styles.lessonNode, isCurrent && styles.lessonNodeCurrent, isLocked && styles.lessonNodeLocked]}>
+      <View
+        style={[
+          styles.lessonNode,
+          isCurrent && styles.lessonNodeCurrent,
+          state === 'completed' && styles.lessonNodeCompleted,
+          isLocked && styles.lessonNodeLocked,
+        ]}
+      >
         <Text style={[styles.lessonNodeText, isLocked && styles.lessonNodeTextLocked]}>
           {String(index).padStart(2, '0')}
         </Text>
@@ -723,28 +730,28 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    borderRadius: radius.lg,
+    borderRadius: radius.xl,
     justifyContent: 'center',
-    minHeight: 56,
+    minHeight: 58,
     paddingHorizontal: spacing.xl,
     paddingVertical: spacing.md,
   },
   buttonSmall: {
-    borderRadius: radius.md,
-    minHeight: 42,
+    borderRadius: radius.lg,
+    minHeight: 44,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
   },
   buttonPrimary: {
     backgroundColor: colors.primary,
     borderBottomColor: colors.primaryDark,
-    borderBottomWidth: 4,
+    borderBottomWidth: 5,
     ...shadows.button,
   },
   buttonSecondary: {
     backgroundColor: colors.surface,
     borderBottomColor: colors.borderStrong,
-    borderBottomWidth: 3,
+    borderBottomWidth: 4,
     borderColor: colors.borderStrong,
     borderWidth: 1,
     ...shadows.soft,
@@ -755,7 +762,7 @@ const styles = StyleSheet.create({
   buttonDanger: {
     backgroundColor: colors.danger,
     borderBottomColor: colors.dangerDark,
-    borderBottomWidth: 4,
+    borderBottomWidth: 5,
     ...shadows.button,
   },
   buttonDisabled: {
@@ -783,9 +790,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: radius.lg,
+    borderRadius: radius.xl,
     borderWidth: 1,
-    padding: spacing.lg,
+    padding: spacing.xl,
     ...shadows.soft,
   },
   cardMuted: {
@@ -808,6 +815,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     borderWidth: 1,
     justifyContent: 'center',
+    minHeight: 30,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
   },
@@ -815,6 +823,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   progressRow: {
     alignItems: 'center',
@@ -851,7 +860,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.xl,
     borderWidth: 1,
     flexDirection: 'row',
-    padding: spacing.lg,
+    padding: spacing.xl,
     ...shadows.soft,
   },
   lessonCardCurrent: {
@@ -869,19 +878,29 @@ const styles = StyleSheet.create({
   lessonNode: {
     alignItems: 'center',
     backgroundColor: colors.primary,
+    borderBottomColor: colors.primaryDark,
+    borderBottomWidth: 5,
     borderRadius: radius.pill,
     height: 62,
     justifyContent: 'center',
     marginRight: spacing.lg,
     width: 62,
+    ...shadows.node,
   },
   lessonNodeCurrent: {
     backgroundColor: colors.primary,
     borderColor: colors.white,
     borderWidth: 4,
   },
+  lessonNodeCompleted: {
+    backgroundColor: colors.success,
+    borderBottomColor: colors.successDark,
+  },
   lessonNodeLocked: {
     backgroundColor: colors.locked,
+    borderBottomWidth: 0,
+    elevation: 0,
+    shadowOpacity: 0,
   },
   lessonNodeText: {
     color: colors.white,
