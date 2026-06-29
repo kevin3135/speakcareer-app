@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Profile Learn Handoff
+
+Made one focused night design polish: the Me/Profile hero now includes a clear `Back to Learn` action so settings feels secondary to the guided learning path.
+
+Why it changed:
+
+- Profile/Me had useful learner settings, but it could still feel like a quiet dead end.
+- Learn should stay the main product surface that decides the next useful step.
+- A small hero-level handoff keeps Me useful without making it compete with the practice loop.
+
+What changed:
+
+- Added an `onBackToLearn` handoff from `AppNavigator` to `ProfileScreen`.
+- Added a `Back to Learn` button inside the Profile hero.
+- Kept daily target, language plan, premium preview and local privacy note unchanged.
+
+What went well:
+
+- The implementation touched only `src/navigation/AppNavigator.tsx`, `src/screens/ProfileScreen.tsx` and this log.
+- No APIs, auth, payments, analytics, backend work, storage changes or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Me should behave like a settings support area and always make it easy to return to Learn.
+- Keep Profile copy learner-facing and avoid technical integration language.
+
+Next suggested task:
+
+- Do a quick mobile screenshot QA pass on Me to confirm the hero CTA fits cleanly above the daily target card.
+
 ## 2026-06-29: Foundation Quest Unlock Cue
 
 Made one focused practice-flow improvement: Lesson 1 completion now shows a compact `What happens next` cue so the learner sees the immediate interview launch and the first unlock after saving.

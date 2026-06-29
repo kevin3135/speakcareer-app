@@ -232,7 +232,11 @@ export function AppNavigator() {
           />
         ) : null}
         {activeScreen === 'Profile' ? (
-          <ProfileScreen dailyTarget={dailyTarget} onChangeDailyTarget={changeDailyTarget} />
+          <ProfileScreen
+            dailyTarget={dailyTarget}
+            onBackToLearn={() => setActiveScreen('Home')}
+            onChangeDailyTarget={changeDailyTarget}
+          />
         ) : null}
       </View>
       {shouldShowBottomNav ? (

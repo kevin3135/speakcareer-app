@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import {
+  AppButton,
   Badge,
   Card,
   GradientHero,
@@ -14,12 +15,17 @@ import type { DailyPracticeTarget } from '../types';
 
 type ProfileScreenProps = {
   dailyTarget: DailyPracticeTarget;
+  onBackToLearn: () => void;
   onChangeDailyTarget: (target: DailyPracticeTarget) => void;
 };
 
 const dailyTargetOptions: DailyPracticeTarget[] = [1, 2, 3];
 
-export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScreenProps) {
+export function ProfileScreen({
+  dailyTarget,
+  onBackToLearn,
+  onChangeDailyTarget,
+}: ProfileScreenProps) {
   return (
     <ScreenContainer
       overline="Me"
@@ -31,7 +37,16 @@ export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScree
         subtitle="Practice job interviews, meetings and professional conversations with AI."
         title="Confident professional English"
         tone="purple"
-      />
+      >
+        <View style={styles.heroAction}>
+          <AppButton
+            accessibilityHint="Return to the guided Learn path"
+            label="Back to Learn"
+            onPress={onBackToLearn}
+            variant="secondary"
+          />
+        </View>
+      </GradientHero>
 
       <Card>
         <Text style={styles.cardKicker}>Daily target</Text>
@@ -103,6 +118,9 @@ export function ProfileScreen({ dailyTarget, onChangeDailyTarget }: ProfileScree
 }
 
 const styles = StyleSheet.create({
+  heroAction: {
+    marginTop: spacing.md,
+  },
   cardKicker: {
     color: colors.primary,
     fontFamily: fonts.rounded,
