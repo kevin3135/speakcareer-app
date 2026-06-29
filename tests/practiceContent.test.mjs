@@ -553,6 +553,62 @@ test('personalizes the first lesson and answer starter by starting level', async
   assert.equal(getStartingLevelProfile(null).foundationExample, basicProfile.foundationExample);
 });
 
+test('builds the first foundation sentence step by step', async () => {
+  const { foundationStart } = await import('../src/data/guidedIntro.ts');
+  const { createFoundationSentenceBuilderState } = await import('../src/utils/foundationSentenceBuilder.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const startState = createFoundationSentenceBuilderState({
+    completedSteps: 0,
+    exampleParts: starterProfile.foundationExampleParts,
+    structure: foundationStart.structure,
+  });
+  const midState = createFoundationSentenceBuilderState({
+    completedSteps: 2,
+    exampleParts: starterProfile.foundationExampleParts,
+    structure: foundationStart.structure,
+  });
+  const completeState = createFoundationSentenceBuilderState({
+    completedSteps: 9,
+    exampleParts: starterProfile.foundationExampleParts,
+    structure: foundationStart.structure,
+  });
+
+  assert.equal(startState.activePart, 'I');
+  assert.equal(startState.activePiece, 'I');
+  assert.equal(startState.progressLabel, '0/3 parts built');
+  assert.equal(startState.previewText, '[I] [action] [result]');
+  assert.equal(startState.helperLabel, 'Next: I');
+  assert.equal(startState.helperText, 'Tap to add: "I"');
+  assert.deepEqual(
+    startState.previewSegments.map((segment) => segment.state),
+    ['current', 'locked', 'locked'],
+  );
+
+  assert.equal(midState.activePart, 'result');
+  assert.equal(midState.activePiece, 'and sent it on time.');
+  assert.equal(midState.progressPercent, 67);
+  assert.equal(midState.previewText, 'I organized the weekly report [result]');
+  assert.equal(midState.helperLabel, 'Next: result');
+  assert.equal(midState.helperText, 'Tap to add: "and sent it on time."');
+  assert.deepEqual(
+    midState.previewSegments.map((segment) => segment.text),
+    ['I', 'organized the weekly report', 'result'],
+  );
+
+  assert.equal(completeState.activePart, null);
+  assert.equal(completeState.activePiece, null);
+  assert.equal(completeState.isComplete, true);
+  assert.equal(completeState.progressLabel, '3/3 parts built');
+  assert.equal(completeState.previewText, starterProfile.foundationExample);
+  assert.equal(completeState.helperLabel, 'Sentence ready');
+  assert.equal(
+    completeState.helperText,
+    'Use this exact shape in your first career answer.',
+  );
+});
+
 test('creates a level-matched foundation handoff before the first interview', async () => {
   const { guidedStart } = await import('../src/data/guidedIntro.ts');
   const { createFoundationHandoff } = await import('../src/utils/foundationHandoff.ts');

@@ -12,6 +12,7 @@ import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { StartingLevelId } from '../types';
 import { createFoundationHandoff } from '../utils/foundationHandoff';
+import { createFoundationSentenceBuilderState } from '../utils/foundationSentenceBuilder';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type FoundationScreenProps = {
@@ -30,19 +31,16 @@ export function FoundationScreen({
   startingLevelId,
 }: FoundationScreenProps) {
   const [completedSteps, setCompletedSteps] = useState(initialCompletedSteps);
-  const totalSteps = foundationStart.structure.length;
-  const isComplete = completedSteps >= totalSteps;
   const levelProfile = getStartingLevelProfile(startingLevelId);
-  const sentencePieces = levelProfile.foundationExampleParts;
-  const activeStepIndex = Math.min(completedSteps, totalSteps - 1);
-  const activePart = foundationStart.structure[activeStepIndex];
-  const activePiece = sentencePieces[activeStepIndex];
-  const builderSlots = foundationStart.structure.map((part, index) => ({
-    isCurrent: !isComplete && index === activeStepIndex,
-    isDone: index < completedSteps,
-    part,
-    statusLabel: index < completedSteps ? 'Done' : !isComplete && index === activeStepIndex ? 'Tap' : 'Next',
-  }));
+  const builderState = createFoundationSentenceBuilderState({
+    completedSteps,
+    exampleParts: levelProfile.foundationExampleParts,
+    structure: foundationStart.structure,
+  });
+  const totalSteps = builderState.totalSteps;
+  const isComplete = builderState.isComplete;
+  const activePart = builderState.activePart;
+  const activePiece = builderState.activePiece;
   const handoff = createFoundationHandoff({
     coachNote: levelProfile.coachMessage,
     nextQuestTitle: guidedStart.title,
@@ -84,7 +82,7 @@ export function FoundationScreen({
         </View>
 
         <View style={styles.sentenceRail}>
-          {builderSlots.map((slot) => (
+          {builderState.slots.map((slot) => (
             <View
               key={slot.part}
               style={[
@@ -116,17 +114,55 @@ export function FoundationScreen({
           ))}
         </View>
 
+        <View style={[styles.previewBox, isComplete && styles.previewBoxComplete]}>
+          <View style={styles.previewHeader}>
+            <Text style={[styles.previewLabel, isComplete && styles.previewLabelComplete]}>
+              Sentence build
+            </Text>
+            <Badge
+              label={builderState.progressLabel}
+              tone={isComplete ? 'success' : 'info'}
+            />
+          </View>
+          <View style={styles.previewSentenceWrap}>
+            {builderState.previewSegments.map((segment, index) => (
+              <View
+                key={`${segment.text}-${index}`}
+                style={[
+                  styles.previewToken,
+                  segment.state === 'done' && styles.previewTokenDone,
+                  segment.state === 'current' && styles.previewTokenCurrent,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.previewTokenText,
+                    segment.state === 'done' && styles.previewTokenTextDone,
+                    segment.state === 'current' && styles.previewTokenTextCurrent,
+                  ]}
+                >
+                  {segment.state === 'done' ? segment.text : `[${segment.text}]`}
+                </Text>
+              </View>
+            ))}
+          </View>
+          <Text style={styles.previewHint}>
+            <Text style={styles.previewHintLabel}>{builderState.helperLabel}. </Text>
+            {builderState.helperText}
+          </Text>
+        </View>
+
         {isComplete ? (
           <View style={styles.finishedBlock}>
-            <Text style={styles.finishedLabel}>You built</Text>
-            <Text style={styles.finishedSentence}>{levelProfile.foundationExample}</Text>
+            <Text style={styles.finishedLabel}>Built and ready</Text>
+            <Text style={styles.finishedSentence}>Use this same shape in Job Interview next.</Text>
           </View>
         ) : (
           <Pressable
             accessibilityHint="Adds this part to the example sentence"
             accessibilityLabel={`Add ${activePart}`}
             accessibilityRole="button"
-            onPress={() => selectStructurePart(activeStepIndex)}
+            onPress={() => selectStructurePart(completedSteps)}
             style={({ pressed }) => [
               styles.singleStepButton,
               pressed && styles.structureBlockPressed,
@@ -138,7 +174,7 @@ export function FoundationScreen({
         )}
 
         <View style={styles.progressCard}>
-          <ProgressBar value={(completedSteps / totalSteps) * 100} tone="secondary" />
+          <ProgressBar value={builderState.progressPercent} tone="secondary" />
         </View>
       </Card>
 
@@ -208,6 +244,80 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     marginTop: spacing.lg,
+  },
+  previewBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  previewBoxComplete: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  previewHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  previewLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  previewLabelComplete: {
+    color: colors.successDark,
+  },
+  previewSentenceWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  previewToken: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  previewTokenCurrent: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  previewTokenDone: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+  },
+  previewTokenText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+  },
+  previewTokenTextCurrent: {
+    color: colors.primaryDark,
+  },
+  previewTokenTextDone: {
+    color: colors.ink,
+  },
+  previewHint: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.md,
+  },
+  previewHintLabel: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   sentenceSlot: {
     alignItems: 'center',

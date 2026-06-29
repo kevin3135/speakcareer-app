@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Foundation Live Sentence Build
+
+Made one focused English MVP improvement: Foundation Step 1 now shows a live sentence build preview, so the learner sees the example sentence assemble part by part as they tap `I`, `action`, and `result`.
+
+Why it changed:
+
+- The first lesson was already tap-based, but the sentence itself still did not visibly build as progress happened.
+- The English MVP should make the first win concrete before sending the learner into Job Interview practice.
+- A live build preview makes Lesson 1 feel more like a real micro-lesson without adding any backend, auth or navigation scope.
+
+What went well:
+
+- The logic stayed simple by moving the builder state into `src/utils/foundationSentenceBuilder.ts`.
+- `src/screens/FoundationScreen.tsx` now reuses that helper for the rail, progress and live preview instead of duplicating step logic in the screen.
+- A focused test now covers start, mid-build and complete lesson states in `tests/practiceContent.test.mjs`.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new token-wrap layout should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Foundation gets more useful when progress is visible inside the sentence, not only in the step rail.
+- Keep the first lesson focused on one interaction pattern: tap, reveal, continue.
+- The next small task should strengthen the Lesson 1 to Quest 1 handoff without adding another screen.
+
+Next suggested task:
+
+- Add a compact unlock cue above the `Continue to interview` button so Quest 1 feels like the clear next required step.
+
 ## 2026-06-29: Roleplay Active Step Simplification
 
 Made one focused Roleplay active-practice simplification: the `Check` CTA now appears directly after the answer box, the readiness cue is visually quieter, and the daily-goal preview no longer sits inside the active answer card.
