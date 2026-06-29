@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Coach Bubble Identity
+
+Made one focused night design polish: the shared CoachBubble now has a warmer Career Coach identity with a framed `SC` avatar, premium bubble surface and compact `Guide` badge.
+
+Why it changed:
+
+- The design audit called out the coach identity as still too weak.
+- Onboarding and coaching moments should feel like one helpful AI coach, not generic text blocks.
+- A stronger shared CoachBubble improves multiple guided moments without changing screen logic.
+
+What changed:
+
+- Changed the default coach label from `AI coach` to `Career coach`.
+- Added a nested framed avatar core for the `SC` badge.
+- Added a compact `Guide` badge beside the coach label.
+- Polished the bubble surface with shared theme colors, radius and shadows.
+
+What went well:
+
+- The implementation stayed inside the shared UI component file and this log.
+- No screens, APIs, auth, payments, analytics, backend work, storage changes or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Shared coach moments should use consistent Career Coach language and visual identity.
+- Prefer improving the shared coach primitive before adding one-off coach styles to individual screens.
+
+Next suggested task:
+
+- Preview Onboarding and Foundation on mobile to confirm the richer coach bubble still fits cleanly above the primary action.
+
 ## 2026-06-29: Foundation Starter Preview
 
 Made one focused practice-flow improvement: the first Job Interview screen now shows the Lesson 1 starter as an explicit warmup panel instead of only silently preloading the answer box.

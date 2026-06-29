@@ -353,14 +353,19 @@ export function DailyQuestCard({
   );
 }
 
-export function CoachBubble({ label = 'AI coach', message }: { label?: string; message: string }) {
+export function CoachBubble({ label = 'Career coach', message }: { label?: string; message: string }) {
   return (
     <View style={styles.coachRow}>
       <View style={styles.coachAvatar}>
-        <Text style={styles.coachAvatarText}>SC</Text>
+        <View style={styles.coachAvatarCore}>
+          <Text style={styles.coachAvatarText}>SC</Text>
+        </View>
       </View>
       <View style={styles.coachBubble}>
-        <Text style={styles.coachLabel}>{label}</Text>
+        <View style={styles.coachLabelRow}>
+          <Text style={styles.coachLabel}>{label}</Text>
+          <Badge label="Guide" tone="secondary" />
+        </View>
         <Text style={styles.coachMessage}>{message}</Text>
       </View>
     </View>
@@ -1006,30 +1011,51 @@ const styles = StyleSheet.create({
   },
   coachAvatar: {
     alignItems: 'center',
-    backgroundColor: colors.coach,
-    borderRadius: radius.lg,
+    backgroundColor: colors.coachSoft,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.pill,
+    borderWidth: 1,
     height: 54,
     justifyContent: 'center',
     marginRight: spacing.md,
     width: 54,
     ...shadows.soft,
   },
+  coachAvatarCore: {
+    alignItems: 'center',
+    backgroundColor: colors.coach,
+    borderColor: colors.white,
+    borderRadius: radius.pill,
+    borderWidth: 2,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
   coachAvatarText: {
     color: colors.white,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '900',
   },
   coachBubble: {
-    backgroundColor: colors.coachSoft,
+    backgroundColor: colors.surfaceElevated,
     borderColor: colors.primaryGlow,
     borderRadius: radius.lg,
     borderWidth: 1,
     flex: 1,
+    overflow: 'hidden',
     padding: spacing.lg,
+    ...shadows.soft,
+  },
+  coachLabelRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
   },
   coachLabel: {
-    color: colors.primaryDark,
+    color: colors.coach,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
