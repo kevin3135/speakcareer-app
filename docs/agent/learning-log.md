@@ -1,5 +1,44 @@
 # Agent Learning Log
 
+## 2026-06-29: Completion Reward Moment
+
+Made one focused reward polish: the saved Roleplay completion state now has a compact reward moment card with a subtle pulse, stronger XP placement, streak/progress badges, and a clearer next-unlocked label.
+
+Why it changed:
+
+- The completion screen already showed XP, streak and progress, but the win felt static.
+- A small professional reward beat helps the learner feel career momentum without adding a new reward system.
+- The Continue button should stay the main action after the reward is understood.
+
+What went well:
+
+- The change stayed inside the existing completion UI in `src/screens/RoleplayScreen.tsx`.
+- The animation uses React Native `Animated` only, with no new dependencies, sounds, APIs, auth, payments or backend work.
+- The reward copy stays short and professional: one compact reward phrase, then next step.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- The working tree already had unrelated Foundation sentence-builder changes; they were left uncommitted.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Completion rewards should feel like career momentum, not entertainment for its own sake.
+- Keep the post-save hierarchy: XP first, streak/progress second, next unlocked third, Continue strongest.
+
+Next suggested task:
+
+- Preview the completion reward on a narrow mobile viewport and tune vertical spacing around Continue if needed.
+
 ## 2026-06-29: Foundation Live Sentence Build
 
 Made one focused English MVP improvement: Foundation Step 1 now shows a live sentence build preview, so the learner sees the example sentence assemble part by part as they tap `I`, `action`, and `result`.
