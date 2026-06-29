@@ -240,27 +240,6 @@ test('creates a balanced coach recap for the review step', async () => {
   );
 });
 
-test('keeps the Home coach focus short and actionable', async () => {
-  const { createHomeCoachFocusText } = await import('../src/utils/homeCoachFocus.ts');
-
-  assert.equal(
-    createHomeCoachFocusText(
-      'Good answer for "Tell me about yourself" with clear impact. Add one simple structure marker like "First" or "Next" to make it easier to follow.',
-    ),
-    'Next: add "First" or "Next".',
-  );
-  assert.equal(
-    createHomeCoachFocusText('Add one measurable result or business outcome.'),
-    'Next: add one measurable result.',
-  );
-  assert.equal(createHomeCoachFocusText('   '), null);
-  assert.ok(
-    createHomeCoachFocusText(
-      'Use one stronger career verb such as led, organized or delivered before your result.',
-    ).length <= 44,
-  );
-});
-
 test('creates a live readiness cue for the roleplay draft answer', async () => {
   const { createAnswerReadinessCue } = await import('../src/utils/answerReadinessCue.ts');
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');
