@@ -1,6 +1,8 @@
-import type { PracticeSession, RoleplayId, RoleplayScenario } from '../types';
+import type { PracticeSession, RoleplayDraft, RoleplayId, RoleplayScenario } from '../types';
 // @ts-expect-error Node test imports require the explicit .ts extension here.
 import { createPracticeCareerPath } from './practiceCareerPath.ts';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { summarizePracticeAnswer } from './answerReview.ts';
 
 type PracticeLibraryRoleplay = Pick<
   RoleplayScenario,
@@ -23,6 +25,7 @@ export type PracticeLibraryCard = {
 export type PracticeLibraryState = {
   browseCards: PracticeLibraryCard[];
   browseLabel: string;
+  isResumeMode: boolean;
   meta: string;
   progressLabel: string;
   progressPercent: number;
@@ -32,11 +35,13 @@ export type PracticeLibraryState = {
 };
 
 type CreatePracticeLibraryStateInput = {
+  draft?: RoleplayDraft | null;
   roleplays: PracticeLibraryRoleplay[];
   sessions: Pick<PracticeSession, 'roleplayId'>[];
 };
 
 export function createPracticeLibraryState({
+  draft,
   roleplays,
   sessions,
 }: CreatePracticeLibraryStateInput): PracticeLibraryState {
@@ -45,22 +50,32 @@ export function createPracticeLibraryState({
     roleplays.map((roleplay) => [roleplay.id, createBaseCard(roleplay)]),
   );
   const activeStep = path.steps.find((step) => step.state === 'active') ?? path.steps[0];
-  const recommendedCard = activeStep
+  const savedDraftRoleplay = draft
+    ? roleplays.find((roleplay) => roleplay.id === draft.roleplayId) ?? null
+    : null;
+  const recommendedCard = savedDraftRoleplay && draft
+    ? createSavedDraftCard(savedDraftRoleplay, draft)
+    : activeStep
     ? createMappedCard(activeStep.roleplayId, cardMap, activeStep.state)
     : createFallbackCard();
   const browseCards = path.steps
     .filter((step) => step.roleplayId !== recommendedCard.roleplayId)
     .map((step) => createMappedCard(step.roleplayId, cardMap, step.state));
+  const draftReview = draft ? summarizePracticeAnswer(draft.draftAnswer) : null;
+  const isResumeMode = Boolean(savedDraftRoleplay && draftReview);
 
   return {
     browseCards,
     browseLabel: browseCards.length === 1 ? '1 more roleplay' : `${browseCards.length} more roleplays`,
-    meta: path.meta,
+    isResumeMode,
+    meta: isResumeMode ? 'Saved draft' : path.meta,
     progressLabel: path.progressLabel,
     progressPercent: path.progressPercent,
     recommendedCard,
-    subtitle: path.body,
-    title: path.title,
+    subtitle: isResumeMode && savedDraftRoleplay && draftReview
+      ? createSavedDraftSubtitle(savedDraftRoleplay.title, draftReview.wordCount)
+      : path.body,
+    title: isResumeMode && savedDraftRoleplay ? `Resume ${savedDraftRoleplay.title}` : path.title,
   };
 }
 
@@ -108,6 +123,22 @@ function createFallbackCard(roleplayId: RoleplayId = 'job-interview'): PracticeL
   };
 }
 
+function createSavedDraftCard(
+  roleplay: PracticeLibraryRoleplay,
+  draft: RoleplayDraft,
+): PracticeLibraryCard {
+  const review = summarizePracticeAnswer(draft.draftAnswer);
+  const wordLabel = `${review.wordCount} ${review.wordCount === 1 ? 'word' : 'words'} saved`;
+
+  return {
+    ...createBaseCard(roleplay),
+    categoryLabel: 'Resume',
+    ctaLabel: 'Finish now',
+    description: createSavedDraftDescription(review),
+    focus: `${review.readinessLabel} | ${wordLabel}`,
+  };
+}
+
 function createCategoryLabel(state: 'done' | 'active' | 'locked') {
   if (state === 'active') {
     return 'Next';
@@ -130,4 +161,22 @@ function createCtaLabel(state: 'done' | 'active' | 'locked') {
   }
 
   return 'Open anyway';
+}
+
+function createSavedDraftSubtitle(roleplayTitle: string, wordCount: number) {
+  const wordLabel = `${wordCount} ${wordCount === 1 ? 'word' : 'words'}`;
+
+  return `Your saved ${roleplayTitle} answer is waiting with ${wordLabel}. Finish it before switching to another conversation.`;
+}
+
+function createSavedDraftDescription(review: ReturnType<typeof summarizePracticeAnswer>) {
+  if (review.wordCount === 0) {
+    return 'You saved this roleplay on this device. Start the answer here before browsing the rest of the library.';
+  }
+
+  if (!review.isReadyForFeedback) {
+    return `${review.wordCount} words are already saved. ${review.reviewNote} Then check the answer.`;
+  }
+
+  return `${review.wordCount} words are already saved. ${review.reviewNote} Finish and save it before switching practice.`;
 }

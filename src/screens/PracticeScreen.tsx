@@ -13,17 +13,19 @@ import {
 } from '../components/ui';
 import { practiceContent } from '../data/content';
 import { colors, fonts, spacing, typography } from '../theme';
-import type { PracticeSession, RoleplayId } from '../types';
+import type { PracticeSession, RoleplayDraft, RoleplayId } from '../types';
 import { createPracticeLibraryState } from '../utils/practiceLibraryState';
 
 type PracticeScreenProps = {
+  draft: RoleplayDraft | null;
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
   sessions: PracticeSession[];
 };
 
-export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps) {
+export function PracticeScreen({ draft, onOpenRoleplay, sessions }: PracticeScreenProps) {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const libraryState = createPracticeLibraryState({
+    draft,
     roleplays: practiceContent.roleplays,
     sessions,
   });
@@ -31,11 +33,13 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
   return (
     <ScreenContainer
       overline="Practice library"
-      subtitle="One recommended conversation first. Open the full library only when you want a different focus."
+      subtitle={libraryState.isResumeMode
+        ? 'Finish the saved answer first. The rest of the library stays available when you want a different focus.'
+        : 'One recommended conversation first. Open the full library only when you want a different focus.'}
       title="Practice path"
     >
       <GradientHero
-        overline="Recommended next"
+        overline={libraryState.isResumeMode ? 'Saved draft' : 'Recommended next'}
         subtitle={libraryState.subtitle}
         title={libraryState.title}
         tone="primary"
@@ -54,7 +58,9 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
       </GradientHero>
 
       <SectionHeader
-        subtitle="Stay in sequence when you want the clearest next action."
+        subtitle={libraryState.isResumeMode
+          ? 'Return to the unfinished answer now so the app keeps one clear next step.'
+          : 'Stay in sequence when you want the clearest next action.'}
         title="Do this now"
       />
 
@@ -82,7 +88,9 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
             variant="quiet"
           />
         ) : undefined}
-        subtitle="Use this only when you want to break sequence and practice another work situation."
+        subtitle={libraryState.isResumeMode
+          ? 'Open this only if you want to leave the saved answer for later and practice a different work situation.'
+          : 'Use this only when you want to break sequence and practice another work situation.'}
         title="Full library"
       />
 
@@ -107,7 +115,9 @@ export function PracticeScreen({ onOpenRoleplay, sessions }: PracticeScreenProps
             <Text style={styles.libraryKicker}>Hidden by default</Text>
             <Text style={styles.libraryTitle}>{libraryState.browseLabel}</Text>
             <Text style={styles.libraryBody}>
-              Keep the next action simple first. Open the rest when you want a different career conversation.
+              {libraryState.isResumeMode
+                ? 'Finish the saved answer first. Open the rest only when you want a different career conversation.'
+                : 'Keep the next action simple first. Open the rest when you want a different career conversation.'}
             </Text>
           </Card>
         )

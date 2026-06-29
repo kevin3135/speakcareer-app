@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Practice Resume Handoff
+
+Made one focused practice-flow improvement: the Practice tab now promotes an unfinished saved roleplay answer as the primary recommended action instead of showing a generic next library card.
+
+Why it changed:
+
+- Home could already resume a saved draft, but Practice still acted like there was no unfinished work.
+- The English MVP should keep one clear next action across tabs so the daily loop feels dependable.
+- Finishing an in-progress answer is higher value than browsing another scenario because it protects momentum the learner already created.
+
+What changed:
+
+- Updated `src/utils/practiceLibraryState.ts` so a local draft switches Practice into a resume mode with saved-draft hero copy and a `Resume` recommended card.
+- Updated `src/screens/PracticeScreen.tsx` so the page copy and hidden-library guidance reinforce finishing the saved answer first.
+- Passed the saved draft into Practice from `src/navigation/AppNavigator.tsx`.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the saved-draft Practice state.
+
+What went well:
+
+- The improvement stayed small and reused the existing draft storage instead of adding new persistence or navigation.
+- Home and Practice now agree on the same unfinished-work priority, which keeps the habit loop more coherent.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the saved-draft Practice hero should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 74 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the app can resume unfinished work in one place, every other learning entry point should reflect the same priority.
+- Practice browsing should stay secondary whenever there is already saved learner momentum to complete.
+
+Next suggested task:
+
+- Make the Practice resume card show a one-line coach focus pulled from the saved draft readiness state so the learner knows what to fix before opening it.
+
 ## 2026-06-29: Roleplay Optional Help
 
 Made one focused night design polish: the optional writing-support toggle in Roleplay is now a small secondary pill instead of a full-width card-like row.

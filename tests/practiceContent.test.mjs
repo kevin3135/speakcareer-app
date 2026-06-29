@@ -2930,6 +2930,8 @@ test('loops the practice career path after all core roleplays are complete', asy
 
 test('keeps the Practice tab focused on one recommended roleplay first', async () => {
   const { createPracticeLibraryState } = await import('../src/utils/practiceLibraryState.ts');
+  const meetingRoleplay = practiceContent.roleplays.find((roleplay) => roleplay.id === 'meeting-practice');
+  assert.ok(meetingRoleplay);
 
   const firstRunState = createPracticeLibraryState({
     roleplays: practiceContent.roleplays,
@@ -2960,6 +2962,26 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').categoryLabel, 'Completed');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').ctaLabel, 'Practice again');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'sales-call').categoryLabel, 'Later');
+
+  const resumeState = createPracticeLibraryState({
+    draft: {
+      draftAnswer: 'I led the handoff, aligned the blocker, and shared the next step with the team by Friday.',
+      roleplayId: 'meeting-practice',
+      updatedAt: '2026-06-29T08:00:00.000Z',
+    },
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+  });
+
+  assert.equal(resumeState.isResumeMode, true);
+  assert.equal(resumeState.meta, 'Saved draft');
+  assert.equal(resumeState.title, `Resume ${meetingRoleplay.title}`);
+  assert.equal(resumeState.recommendedCard.roleplayId, 'meeting-practice');
+  assert.equal(resumeState.recommendedCard.categoryLabel, 'Resume');
+  assert.equal(resumeState.recommendedCard.ctaLabel, 'Finish now');
+  assert.ok(resumeState.recommendedCard.focus.includes('Good start'));
+  assert.ok(resumeState.recommendedCard.description.includes('Finish and save it before switching practice.'));
+  assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
 });
 
 test('formats the five-minute focus timer', async () => {

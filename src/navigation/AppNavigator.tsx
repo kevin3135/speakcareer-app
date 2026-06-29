@@ -228,7 +228,7 @@ export function AppNavigator() {
           />
         ) : null}
         {activeScreen === 'Practice' ? (
-          <PracticeScreen onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
+          <PracticeScreen draft={roleplayDraft} onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
         ) : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
