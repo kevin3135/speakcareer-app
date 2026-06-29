@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: First Save App Unlock Handoff
+
+Made one focused completion-state polish: the first saved practice now shows a compact `App unlocked` strip inside the reward moment.
+
+Why it changed:
+
+- The save CTA and recap are now clearer, but the transition after saving could still feel like a generic completion screen.
+- The first saved answer is the moment where Learn and Wins become meaningful.
+- A short unlock handoff makes the app-led path clearer without adding another choice.
+
+What changed:
+
+- Added a first-save-only `App unlocked` strip to `src/screens/RoleplayScreen.tsx`.
+- The strip uses existing success tokens, a small `GO` badge and one short line: `Learn and Wins are ready.`
+- Kept saved-session logic, XP, streak, path progress, storage and navigation unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- It improves the reward moment without adding new systems, animations, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the first saved completion screen and then decide whether the next unlocked lesson strip needs a subtle motion polish.
+
 ## 2026-06-29: Quest Save Recap Density
 
 Made one focused save-card design polish: the Quest save recap now takes less vertical and visual space, so the save CTA stays dominant.

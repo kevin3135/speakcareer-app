@@ -153,6 +153,17 @@ export function RoleplayScreen({
       summary: progressData.summary,
     })
     : null;
+  const savedSessionCountAfterSave = savedSession
+    ? sessions.some((session) => session.id === savedSession.id)
+      ? sessions.length
+      : sessions.length + 1
+    : sessions.length;
+  const appUnlockedHandoff = savedSession && savedSessionCountAfterSave === 1
+    ? {
+      body: 'Learn and Wins are ready.',
+      title: 'App unlocked',
+    }
+    : null;
   const levelProfile = getStartingLevelProfile(startingLevelId);
   const starterReminder = createRoleplayStarterReminder({
     roleplayId: roleplay.id,
@@ -564,6 +575,21 @@ export function RoleplayScreen({
               {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
             </View>
           </Animated.View>
+          {appUnlockedHandoff ? (
+            <View style={styles.appUnlockedStrip}>
+              <View style={styles.appUnlockedBadge}>
+                <Text style={styles.appUnlockedBadgeText}>GO</Text>
+              </View>
+              <View style={styles.appUnlockedCopy}>
+                <Text numberOfLines={1} style={styles.appUnlockedLabel}>
+                  {appUnlockedHandoff.title}
+                </Text>
+                <Text numberOfLines={1} style={styles.appUnlockedText}>
+                  {appUnlockedHandoff.body}
+                </Text>
+              </View>
+            </View>
+          ) : null}
           {savedCoachRecap ? (
             <View style={styles.savedCoachStrip}>
               <Text numberOfLines={1} style={styles.savedCoachStripText}>
@@ -1985,6 +2011,51 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.sm,
+  },
+  appUnlockedStrip: {
+    alignItems: 'center',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  appUnlockedBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.success,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  appUnlockedBadgeText: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  appUnlockedCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  appUnlockedLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  appUnlockedText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
   },
   levelUpStrip: {
     backgroundColor: colors.accentSoft,
