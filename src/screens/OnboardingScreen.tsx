@@ -189,7 +189,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
 
           <View style={styles.planStarter}>
             <Text style={styles.planStarterLabel}>First interview starter</Text>
-            <Text style={styles.planStarterText}>
+            <Text numberOfLines={2} style={styles.planStarterText}>
               {planPreview.starterAnswer}
             </Text>
             <View style={styles.planStarterEditBox}>
@@ -198,7 +198,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                 {planPreview.starterEditSteps.map((step, index) => (
                   <View key={`${index + 1}-${step}`} style={styles.planStarterEditStep}>
                     <Text style={styles.planStarterEditStepNumber}>{index + 1}</Text>
-                    <Text style={styles.planStarterEditStepText}>{step}</Text>
+                    <Text numberOfLines={1} style={styles.planStarterEditStepText}>{step}</Text>
                   </View>
                 ))}
               </View>
@@ -472,7 +472,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     borderWidth: 1,
     marginTop: spacing.sm,
-    padding: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   planStarterEditLabel: {
     color: colors.primaryDark,
@@ -481,28 +482,36 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   planStarterEditList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.xs,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   planStarterEditStep: {
     alignItems: 'center',
     backgroundColor: colors.surface,
-    borderRadius: radius.md,
+    borderRadius: radius.pill,
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
+    maxWidth: '100%',
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
   },
   planStarterEditStepNumber: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.pill,
     color: colors.primaryDark,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
-    width: 12,
+    height: 18,
+    lineHeight: 18,
+    textAlign: 'center',
+    width: 18,
   },
   planStarterEditStepText: {
     color: colors.ink,
-    flex: 1,
+    flexShrink: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',

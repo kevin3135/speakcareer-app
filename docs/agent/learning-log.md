@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Onboarding Starter Preview Spacing
+
+Made one focused night design polish: the onboarding first-interview starter preview is now more compact on mobile.
+
+Why it changed:
+
+- The onboarding preview now shows real starter-answer content, which is useful but taller than the older placeholder preview.
+- New users should still reach the primary `Start ... path` action without the preview feeling like another long lesson.
+- The starter guidance should feel like a quick confidence cue, not a second onboarding decision.
+
+What changed:
+
+- Limited the starter answer preview to two lines inside the existing onboarding plan card.
+- Changed the three `Make it yours` edit rows into compact wrapped chips with numbered dots.
+- Kept the same starter answer data, edit steps, daily target controls, CTA and onboarding flow unchanged.
+
+What went well:
+
+- The change stayed inside `OnboardingScreen` styling/rendering and this log.
+- No storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA in the browser preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding can preview real learner content, but that preview must stay compact so the primary start CTA remains the clear next step.
+- When starter guidance appears before the first lesson, prefer chips or short cues over stacked mini-cards.
+
+Next suggested task:
+
+- Do a narrow mobile screenshot QA pass on onboarding and only tune vertical spacing if the `Start ... path` button still sits too low after selecting a level.
+
 ## 2026-06-29: Onboarding Starter Answer Preview
 
 Made one focused onboarding improvement: the onboarding first-path preview now shows the real first interview starter answer and the same `Make it yours` edit steps the learner will see later in the guided flow.
