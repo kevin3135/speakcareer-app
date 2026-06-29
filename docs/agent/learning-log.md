@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Draft Cue
+
+Made one focused night design polish: the restored-draft cue in Roleplay is now a compact status row instead of a larger explanation block above the answer box.
+
+Why it changed:
+
+- The latest resume feature protects unfinished answers, but its cue could take too much attention during active practice.
+- Roleplay should keep one dominant task: answer the coach and tap `Check`.
+- A shorter saved-draft cue reassures the learner without pushing the input lower.
+
+What changed:
+
+- Replaced the `Draft restored` text block with a `Saved draft` badge, one short instruction and a small quiet `Fresh` reset action.
+- Switched the cue styling to a success-toned compact row using existing theme tokens.
+- Kept the existing clear-draft behavior and accessibility label intact.
+
+What went well:
+
+- The change stayed inside the active Roleplay practice state and this log.
+- No storage behavior, navigation, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 74 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Resume and restore states should behave like quiet status cues, not full instruction cards.
+- Keep the Roleplay first viewport anchored around coach prompt, answer field and `Check`.
+
+Next suggested task:
+
+- Do a narrow mobile QA pass on the Roleplay first viewport and tune the answer-card spacing if the optional help toggle appears too high.
+
 ## 2026-06-29: Resume Unfinished Roleplay Drafts
 
 Made one focused MVP-usability improvement: the app now saves one unfinished roleplay answer locally and restores it after app exits or back-navigation, with a resume-first handoff on Home and a `Draft restored` cue inside Roleplay.

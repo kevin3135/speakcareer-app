@@ -656,19 +656,18 @@ export function RoleplayScreen({
           ) : null}
           {hasRestoredDraft ? (
             <View style={styles.restoredDraftBox}>
-              <View style={styles.oneThingHeader}>
-                <Text style={styles.restoredDraftLabel}>Draft restored</Text>
-                <AppButton
-                  accessibilityHint="Clears the saved draft and starts a fresh answer"
-                  label="Start fresh"
-                  onPress={startFreshAnswer}
-                  size="small"
-                  variant="quiet"
-                />
-              </View>
-              <Text style={styles.restoredDraftText}>
-                Your unfinished answer is back on this device. Finish it or rewrite it before you check.
+              <Badge label="Saved draft" tone="success" />
+              <Text numberOfLines={1} style={styles.restoredDraftText}>
+                Restored here. Edit, then check.
               </Text>
+              <AppButton
+                accessibilityHint="Clears the saved draft and starts a fresh answer"
+                accessibilityLabel="Start fresh"
+                label="Fresh"
+                onPress={startFreshAnswer}
+                size="small"
+                variant="quiet"
+              />
             </View>
           ) : null}
           <Text style={styles.answerSectionLabel}>Your answer</Text>
@@ -1230,25 +1229,25 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   restoredDraftBox: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.borderStrong,
-    borderRadius: radius.lg,
+    alignItems: 'center',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.xl,
     borderWidth: 1,
-    gap: spacing.sm,
+    flexDirection: 'row',
+    gap: spacing.xs,
     marginTop: spacing.sm,
-    padding: spacing.sm,
-  },
-  restoredDraftLabel: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   restoredDraftText: {
-    color: colors.text,
+    color: colors.successDark,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    fontWeight: '800',
     lineHeight: typography.lineSmall,
+    minWidth: 0,
   },
   pressed: {
     opacity: 0.84,
