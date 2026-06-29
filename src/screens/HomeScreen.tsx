@@ -3,7 +3,6 @@ import { Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-nativ
 
 import {
   Badge,
-  Card,
   ProgressBar,
   ScreenContainer,
   StreakBadge,
@@ -67,6 +66,9 @@ export function HomeScreen({
   const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
   const isMissionComplete = missionCard.progressPercent >= 100;
+  const completedPathSteps = learnState.steps.filter((lesson) => lesson.state === 'completed').length;
+  const totalPathSteps = Math.max(learnState.steps.length, 1);
+  const pathStatusLabel = `${completedPathSteps}/${totalPathSteps} cleared`;
   const latestSession = sessions[0];
   const latestCoachFocusText =
     createHomeCoachFocusText(latestSession?.nextFocusText) ??
@@ -85,17 +87,81 @@ export function HomeScreen({
         <XPBadge label={`${mission.xpTotal} XP`} />
       </View>
 
-      <AnimatedStartCard
-        ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
-        habitLabel={isMissionComplete ? 'Today done' : 'Today goal'}
-        habitValue={missionCard.targetLabel}
-        levelLabel={levelProgress.currentLevelLabel}
-        levelProgressLabel={levelProgress.progressLabel}
-        levelProgressPercent={levelProgress.progressPercent}
-        onPress={startActiveLesson}
-        title={activeLesson.title}
-        xpLabel={activeLesson.xpLabel}
-      />
+      <View style={styles.lessonMap}>
+        <AnimatedStartCard
+          ctaLabel={activeLesson.ctaLabel ?? learnState.hero.ctaLabel}
+          habitLabel={isMissionComplete ? 'Today done' : 'Today goal'}
+          habitValue={missionCard.targetLabel}
+          levelLabel={levelProgress.currentLevelLabel}
+          levelProgressLabel={levelProgress.progressLabel}
+          levelProgressPercent={levelProgress.progressPercent}
+          onPress={startActiveLesson}
+          pathLabel={pathStatusLabel}
+          title={activeLesson.title}
+          xpLabel={activeLesson.xpLabel}
+        />
+
+        <View style={styles.mapTrail}>
+          <View style={styles.mapRail} />
+          <View style={[styles.mapStep, isMissionComplete && styles.mapStepComplete]}>
+            <View style={[styles.mapNode, isMissionComplete && styles.mapNodeComplete]}>
+              <Text style={[styles.mapNodeText, isMissionComplete && styles.mapNodeTextComplete]}>
+                {isMissionComplete ? 'Done' : 'Goal'}
+              </Text>
+            </View>
+            <View style={styles.mapStepCopy}>
+              <View style={styles.mapStepHeader}>
+                <Text style={styles.mapStepKicker}>
+                  {isMissionComplete ? 'Mission complete' : 'Daily goal'}
+                </Text>
+                <Badge label={missionCard.rewardLabel} tone="accent" />
+              </View>
+              <Text numberOfLines={1} style={styles.mapStepTitle}>
+                {missionCard.targetLabel}
+              </Text>
+              <View style={styles.mapStepProgress}>
+                <ProgressBar tone="success" value={missionCard.progressPercent} />
+              </View>
+            </View>
+          </View>
+
+          {nextUnlock ? (
+            <View
+              style={[
+                styles.mapStep,
+                styles.mapStepLocked,
+                nextUnlock.state === 'completed' && styles.mapStepComplete,
+              ]}
+            >
+              <View
+                style={[
+                  styles.mapNode,
+                  styles.mapNodeLocked,
+                  nextUnlock.state === 'completed' && styles.mapNodeComplete,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.mapNodeText,
+                    styles.mapNodeTextLocked,
+                    nextUnlock.state === 'completed' && styles.mapNodeTextComplete,
+                  ]}
+                >
+                  {nextUnlock.state === 'completed' ? 'Done' : 'Next'}
+                </Text>
+              </View>
+              <View style={styles.mapStepCopy}>
+                <Text style={styles.mapStepKicker}>
+                  {nextUnlock.state === 'completed' ? 'Completed' : 'Unlock next'}
+                </Text>
+                <Text numberOfLines={1} style={styles.mapStepTitle}>
+                  {nextUnlock.title}
+                </Text>
+              </View>
+            </View>
+          ) : null}
+        </View>
+      </View>
 
       {latestCoachFocus ? (
         <View style={styles.coachFocusStrip}>
@@ -111,62 +177,6 @@ export function HomeScreen({
         </View>
       ) : null}
 
-      <Card
-        style={[styles.missionCard, isMissionComplete && styles.missionCardComplete]}
-        tone="muted"
-      >
-        <View style={styles.missionHeader}>
-          <View style={styles.missionCopy}>
-            <Text
-              style={[
-                styles.missionKicker,
-                isMissionComplete && styles.missionKickerComplete,
-              ]}
-            >
-              {isMissionComplete ? 'Mission complete' : 'Today'}
-            </Text>
-            <Text numberOfLines={1} style={styles.missionTarget}>
-              {missionCard.targetLabel}
-            </Text>
-          </View>
-          <XPBadge label={missionCard.rewardLabel} />
-        </View>
-        <View style={styles.missionProgress}>
-          <ProgressBar
-            label={missionCard.progressLabel}
-            tone="success"
-            value={missionCard.progressPercent}
-          />
-        </View>
-      </Card>
-
-      {nextUnlock ? (
-        <View style={styles.nextUnlock}>
-          <View
-            style={[
-              styles.nextUnlockNode,
-              nextUnlock.state === 'completed' && styles.nextUnlockNodeComplete,
-            ]}
-          >
-            <Text
-              style={[
-                styles.nextUnlockNodeText,
-                nextUnlock.state === 'completed' && styles.nextUnlockNodeTextComplete,
-              ]}
-            >
-              {nextUnlock.state === 'completed' ? 'Done' : 'Next'}
-            </Text>
-          </View>
-          <View style={styles.nextUnlockCopy}>
-            <Text style={styles.nextUnlockLabel}>
-              {nextUnlock.state === 'completed' ? 'Completed' : 'Unlock next'}
-            </Text>
-            <Text numberOfLines={1} style={styles.nextUnlockTitle}>
-              {nextUnlock.title}
-            </Text>
-          </View>
-        </View>
-      ) : null}
     </ScreenContainer>
   );
 }
@@ -179,6 +189,7 @@ function AnimatedStartCard({
   levelProgressLabel,
   levelProgressPercent,
   onPress,
+  pathLabel,
   title,
   xpLabel,
 }: {
@@ -189,6 +200,7 @@ function AnimatedStartCard({
   levelProgressLabel: string;
   levelProgressPercent: number;
   onPress: () => void;
+  pathLabel: string;
   title: string;
   xpLabel: string;
 }) {
@@ -251,7 +263,10 @@ function AnimatedStartCard({
         </View>
 
         <View style={styles.startCopy}>
-          <Text style={styles.startKicker}>Do this now</Text>
+          <View style={styles.startKickerRow}>
+            <Text style={styles.startKicker}>Do this now</Text>
+            <Badge label={pathLabel} tone="secondary" />
+          </View>
           <Text style={styles.startTitle}>{title}</Text>
           <View style={styles.startRewardRow}>
             <Text numberOfLines={1} style={styles.startHint}>
@@ -335,6 +350,98 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
+  lessonMap: {
+    gap: spacing.md,
+  },
+  mapNode: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 52,
+    justifyContent: 'center',
+    width: 52,
+  },
+  mapNodeComplete: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  mapNodeLocked: {
+    backgroundColor: colors.lockedSoft,
+    borderColor: colors.locked,
+  },
+  mapNodeText: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  mapNodeTextComplete: {
+    color: colors.successDark,
+  },
+  mapNodeTextLocked: {
+    color: colors.textMuted,
+  },
+  mapRail: {
+    backgroundColor: colors.borderStrong,
+    borderRadius: radius.pill,
+    bottom: spacing.xl,
+    left: 32,
+    position: 'absolute',
+    top: -spacing.md,
+    width: 4,
+  },
+  mapStep: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.md,
+    padding: spacing.md,
+    ...shadows.soft,
+  },
+  mapStepComplete: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  mapStepCopy: {
+    flex: 1,
+  },
+  mapStepHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  mapStepKicker: {
+    color: colors.textMuted,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  mapStepLocked: {
+    backgroundColor: colors.lockedSoft,
+  },
+  mapStepProgress: {
+    marginTop: spacing.sm,
+  },
+  mapStepTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  mapTrail: {
+    gap: spacing.md,
+    paddingLeft: spacing.sm,
+    position: 'relative',
+  },
   startCard: {
     backgroundColor: colors.success,
     borderColor: colors.successDark,
@@ -350,6 +457,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  startKickerRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
   },
   startMainRow: {
     alignItems: 'center',
@@ -430,7 +544,7 @@ const styles = StyleSheet.create({
   },
   startLevelBox: {
     backgroundColor: colors.successDark,
-    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderColor: colors.success,
     borderRadius: radius.lg,
     borderWidth: 1,
     marginTop: spacing.md,
@@ -456,8 +570,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   startLevelPill: {
-    backgroundColor: 'rgba(255, 255, 255, 0.14)',
-    borderColor: 'rgba(255, 255, 255, 0.22)',
+    backgroundColor: colors.success,
+    borderColor: colors.secondarySoft,
     borderRadius: radius.pill,
     borderWidth: 1,
     paddingHorizontal: spacing.md,
@@ -470,96 +584,11 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   startLevelTrack: {
-    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    backgroundColor: colors.success,
     borderRadius: radius.pill,
     height: 8,
     marginTop: spacing.sm,
     overflow: 'hidden',
-  },
-  nextUnlock: {
-    alignItems: 'center',
-    backgroundColor: colors.lockedSoft,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-  },
-  missionCard: {
-    padding: spacing.md,
-  },
-  missionCardComplete: {
-    backgroundColor: colors.successSoft,
-    borderColor: colors.success,
-  },
-  missionCopy: {
-    flex: 1,
-    paddingRight: spacing.md,
-  },
-  missionHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  missionKicker: {
-    color: colors.primary,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  missionKickerComplete: {
-    color: colors.successDark,
-  },
-  missionProgress: {
-    marginTop: spacing.sm,
-  },
-  missionTarget: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
-  },
-  nextUnlockLabel: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  nextUnlockCopy: {
-    flex: 1,
-  },
-  nextUnlockNode: {
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.locked,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    height: 42,
-    justifyContent: 'center',
-    width: 42,
-  },
-  nextUnlockNodeComplete: {
-    backgroundColor: colors.successSoft,
-    borderColor: colors.success,
-  },
-  nextUnlockNodeText: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  nextUnlockNodeTextComplete: {
-    color: colors.successDark,
-  },
-  nextUnlockTitle: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    marginTop: spacing.xs,
   },
   pressed: {
     opacity: 0.9,

@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-06-29: Premium Home Lesson Map
+
+Made one focused Home redesign: the Learn screen now reads as a compact career path with one large active START node, a daily-goal checkpoint and one locked next node.
+
+Why it changed:
+
+- Home was simple, but the lesson flow still felt like separate cards instead of a guided map.
+- The user should immediately understand: start the current quest, make daily progress, unlock the next career-English step.
+- A vertical path rail makes the habit loop visible without adding new choices or product features.
+
+What went well:
+
+- The change stayed inside `src/screens/HomeScreen.tsx`.
+- The old separate mission card and next-unlock card became map nodes under the active lesson.
+- Home now uses theme tokens only in this screen; the previous raw `rgba(...)` Home colors were replaced.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- A fresh in-app browser preview at `390x844` showed the active card, checkpoint, locked node and compact coach cue fitting cleanly above the bottom nav.
+
+What went wrong:
+
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+- The map still uses text labels instead of icons, so a later button/icon pass can make the nodes feel more polished.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home feels more game-like when progress and locked content sit on the same visual rail as the active START action.
+- Keep the active card as the only pressable hero; next nodes should tease progress without becoming choices.
+- Compact map nodes work better than stacking full cards for daily goal and unlock states.
+
+Next suggested task:
+
+- Add icon support to the map nodes through the shared UI system so `Goal` and `Next` can become clearer symbols without adding text.
+
 ## 2026-06-29: Short Home Coach Focus
 
 Made one focused Home polish: the coach focus strip now turns long saved feedback into one short, actionable line before showing it on Learn/Home.
