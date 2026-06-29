@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Warmup Edit Plan
+
+Made one focused night design polish: the Roleplay foundation warmup edit-plan rows are now more compact so the answer box can appear sooner.
+
+Why it changed:
+
+- The level-matched starter edit plan is useful, but three boxed rows add vertical weight before the learner reaches the answer input.
+- Roleplay should keep the first viewport focused on coach prompt, starter guidance and the answer field.
+- Compact numbered dots preserve the guidance while making it feel like a quick checklist instead of another card.
+
+What changed:
+
+- Restyled the Roleplay warmup edit plan with smaller label type, tighter spacing and compact numbered dots.
+- Removed the filled row backgrounds from each edit step.
+- Kept the existing starter edit copy, handoff logic, Foundation screen and tests unchanged.
+
+What went well:
+
+- The change stayed inside `RoleplayScreen` styling and this log.
+- No content, storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Starter edit guidance should feel like a lightweight checklist in Roleplay, not a second task card.
+- Keep the answer box high whenever warmup guidance appears above it.
+
+Next suggested task:
+
+- Do a narrow mobile QA pass on the first Job Interview handoff and trim the warmup body copy if the answer input still appears too low.
+
 ## 2026-06-29: Level-Matched Starter Edit Plan
 
 Made one focused onboarding-to-practice improvement: Foundation and the first Job Interview handoff now show a level-matched "make it yours" edit plan beside the starter answer.
