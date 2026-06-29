@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: Quest Save Recap Density
+
+Made one focused save-card design polish: the Quest save recap now takes less vertical and visual space, so the save CTA stays dominant.
+
+Why it changed:
+
+- The first Quest 1 save card now has a clearer unlock recap and CTA, but the recap rows still felt a little heavy on mobile.
+- The save moment should support one action: save the answer and unlock the next app area.
+- Dense recap rows can make the final action feel like another report instead of a quick win.
+
+What changed:
+
+- Tightened the save recap card spacing and padding in `src/screens/RoleplayScreen.tsx`.
+- Made recap row labels smaller and capped recap values to one line.
+- Kept save logic, XP, unlock data, navigation, storage and follow-up behavior unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and reused existing theme tokens.
+- The primary save button remains the only main action in the card.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the first save card and then add a tiny `app unlocked` handoff on the saved-completion screen if the transition still feels abrupt.
+
 ## 2026-06-29: Quest 1 Save Action Hierarchy
 
 Made one focused first-quest practice-flow improvement: the Step 3 save card now uses one compact unlock recap and a clearer `Save and unlock Home` CTA for the first Job Interview save.

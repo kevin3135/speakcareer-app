@@ -1025,7 +1025,7 @@ export function RoleplayScreen({
               {firstQuestSaveRecap.items.map((item) => (
                 <View key={item.label} style={styles.saveLockInRow}>
                   <Text style={styles.saveLockInItemLabel}>{item.label}</Text>
-                  <Text style={styles.saveLockInItemValue}>{item.value}</Text>
+                  <Text numberOfLines={1} style={styles.saveLockInItemValue}>{item.value}</Text>
                 </View>
               ))}
             </View>
@@ -1035,7 +1035,7 @@ export function RoleplayScreen({
               {saveLockInPreview.items.map((item) => (
                 <View key={item.label} style={styles.saveLockInRow}>
                   <Text style={styles.saveLockInItemLabel}>{item.label}</Text>
-                  <Text style={styles.saveLockInItemValue}>{item.value}</Text>
+                  <Text numberOfLines={1} style={styles.saveLockInItemValue}>{item.value}</Text>
                 </View>
               ))}
             </View>
@@ -1798,14 +1798,15 @@ const styles = StyleSheet.create({
     borderColor: colors.accent,
     borderRadius: radius.lg,
     borderWidth: 1,
-    gap: spacing.sm,
-    marginTop: spacing.md,
-    padding: spacing.md,
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   saveLockInItemLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
   saveLockInItemValue: {
@@ -1815,7 +1816,7 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    marginLeft: spacing.md,
+    marginLeft: spacing.sm,
     textAlign: 'right',
   },
   saveLockInLabel: {
@@ -1827,6 +1828,7 @@ const styles = StyleSheet.create({
   saveLockInRow: {
     alignItems: 'center',
     flexDirection: 'row',
+    minHeight: 24,
   },
   followUpInput: {
     backgroundColor: colors.white,
