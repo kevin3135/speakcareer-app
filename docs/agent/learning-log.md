@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Save Hierarchy
+
+Made one focused Roleplay polish: the optional bonus-turn chip is now visually quieter, so the primary `Save` action stays the clear required next step after feedback.
+
+Why it changed:
+
+- The bonus-turn preview became more useful, but it still needed to stay secondary to saving the answer.
+- The post-feedback step should preserve one obvious primary action: save the practice win.
+- Optional bonus practice should feel helpful and available, not like a competing CTA.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No storage, feedback, AI, audio, backend, auth or payment behavior changed.
+- The bonus focus and XP preview remain visible, but the styling now uses quieter surfaces and borders.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Required save actions should stay visually stronger than optional bonus practice.
+- Optional actions can show value, but muted styling keeps the path simple.
+- The post-feedback card should be checked on mobile for CTA hierarchy before adding more reward UI.
+
+Next suggested task:
+
+- Preview the save card at `390x844` and trim any body copy if the primary save action sits too low.
+
 ## 2026-06-29: Roleplay Bonus Turn Preview
 
 Made one focused Roleplay polish: the collapsed optional bonus-turn chip now previews the follow-up focus, such as `Next: Add impact`, next to the `+15 XP` reward.

@@ -1532,8 +1532,8 @@ const styles = StyleSheet.create({
   },
   followUpBonusChip: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.accent,
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
@@ -1544,8 +1544,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   followUpBonusChipPressed: {
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
+    backgroundColor: colors.surfaceStrong,
+    borderColor: colors.borderStrong,
   },
   followUpBonusCopy: {
     flex: 1,
@@ -1559,7 +1559,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   followUpBonusFocus: {
-    color: colors.ink,
+    color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
@@ -1568,21 +1568,23 @@ const styles = StyleSheet.create({
   },
   followUpBonusReward: {
     alignItems: 'center',
-    backgroundColor: colors.accentSoft,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderWidth: 1,
     borderRadius: radius.md,
     justifyContent: 'center',
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
   },
   followUpBonusAction: {
-    color: colors.accentDark,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
     marginTop: spacing.xxs,
   },
   followUpSummaryLabel: {
-    color: colors.accentDark,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
