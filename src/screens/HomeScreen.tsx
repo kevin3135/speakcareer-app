@@ -164,13 +164,12 @@ export function HomeScreen({
       </View>
 
       {latestCoachFocus ? (
-        <View style={styles.coachFocusStrip}>
-          <View style={styles.coachFocusBadge}>
-            <Text style={styles.coachFocusBadgeText}>Coach</Text>
+        <View style={styles.coachCue}>
+          <View style={styles.coachCueBadge}>
+            <Text style={styles.coachCueBadgeText}>SC</Text>
           </View>
-          <View style={styles.coachFocusCopy}>
-            <Text style={styles.coachFocusLabel}>{latestCoachFocus.label}</Text>
-            <Text numberOfLines={1} style={styles.coachFocusText}>
+          <View style={styles.coachCueCopy}>
+            <Text numberOfLines={1} style={styles.coachCueText}>
               {latestCoachFocus.text}
             </Text>
           </View>
@@ -305,45 +304,43 @@ function AnimatedStartCard({
 }
 
 const styles = StyleSheet.create({
-  coachFocusBadge: {
+  coachCue: {
+    alignItems: 'center',
+    backgroundColor: colors.coachSoft,
+    borderColor: colors.coach,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    ...shadows.soft,
+  },
+  coachCueBadge: {
     alignItems: 'center',
     backgroundColor: colors.coach,
+    borderColor: colors.primaryGlow,
     borderRadius: radius.pill,
-    height: 42,
+    borderWidth: 1,
+    height: 38,
     justifyContent: 'center',
-    width: 58,
+    width: 38,
   },
-  coachFocusBadgeText: {
+  coachCueBadgeText: {
     color: colors.white,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
   },
-  coachFocusCopy: {
+  coachCueCopy: {
     flex: 1,
   },
-  coachFocusLabel: {
-    color: colors.coach,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  coachFocusStrip: {
-    alignItems: 'center',
-    backgroundColor: colors.coachSoft,
-    borderColor: colors.primaryGlow,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-  },
-  coachFocusText: {
+  coachCueText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-    marginTop: spacing.xs,
+    lineHeight: typography.lineSmall,
   },
   statusRow: {
     flexDirection: 'row',

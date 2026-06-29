@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Visual Home Coach Cue
+
+Made one focused Home polish: the coach tip is now a compact visual cue with a round `SC` coach badge and one short `Next: ...` instruction.
+
+Why it changed:
+
+- The coach tip was short, but still looked like another text strip.
+- Learn/Home should keep the active START card dominant while still giving one useful AI-coach nudge.
+- A one-row cue feels more like a friendly coach instruction and less like a report.
+
+What went well:
+
+- The visual change stayed inside `src/screens/HomeScreen.tsx`.
+- The copy helper in `src/utils/homeCoachFocus.ts` now avoids more long/ellipsis cases for colon tips and stronger-verb tips.
+- Saved-session data, feedback generation, storage, navigation, APIs and backend behavior did not change.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA because unrelated working-tree changes appeared during the run and I kept the commit narrowly scoped.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Home coach guidance should be one visual cue, not a second mini-card.
+- A round `SC` badge gives the AI coach more presence without adding a mascot or extra screen.
+- Keep the primary START card visually stronger than any coaching tip.
+
+Next suggested task:
+
+- Add icon support to the Home map nodes so `Goal` and `Next` can become clearer without extra text.
+
 ## 2026-06-29: Balanced Coach Recap
 
 Made one focused AI feedback UI improvement: the Roleplay review card now shows a compact `Coach recap` with one `Working well` score, one `Improve next` score, and one short coaching line before the detailed breakdown.

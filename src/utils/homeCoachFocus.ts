@@ -16,6 +16,12 @@ export function createHomeCoachFocusText(focusText?: string | null) {
     return quotedAction;
   }
 
+  const compactAction = createCompactAction(actionSentence);
+
+  if (compactAction) {
+    return compactAction;
+  }
+
   const simplifiedAction = simplifyAction(actionSentence);
   const prefixedAction = addNextPrefix(simplifiedAction);
 
@@ -40,6 +46,22 @@ function createQuotedAction(sentence: string) {
   }
 
   return ensurePeriod(`Next: ${action} ${quotedPhrase}`);
+}
+
+function createCompactAction(sentence: string) {
+  const cleaned = sentence.trim().replace(/[.!?]+$/, '');
+
+  if (/^use one stronger career verb/i.test(cleaned)) {
+    return 'Next: use a stronger career verb.';
+  }
+
+  const colonIndex = cleaned.indexOf(':');
+
+  if (colonIndex > 0 && colonIndex <= MAX_HOME_COACH_FOCUS_LENGTH - 8) {
+    return ensurePeriod(addNextPrefix(cleaned.slice(0, colonIndex)));
+  }
+
+  return null;
 }
 
 function simplifyAction(sentence: string) {
