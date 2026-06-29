@@ -379,9 +379,17 @@ export function ProgressScreen({
                 <View style={styles.queueList}>
                   {hiddenMistakeQueueCount > 0 ? (
                     <View style={styles.queueCollapsedCue}>
-                      <Text style={styles.queueMoreLabel}>
-                        {hiddenMistakeQueueCount} saved for later
-                      </Text>
+                      <View style={styles.queueCollapsedIcon}>
+                        <Text style={styles.queueCollapsedIconText}>Q</Text>
+                      </View>
+                      <View style={styles.flexOne}>
+                        <Text style={styles.queueMoreLabel}>
+                          {hiddenMistakeQueueCount} saved for later
+                        </Text>
+                        <Text numberOfLines={1} style={styles.queueMoreHint}>
+                          Open only when you want the full queue.
+                        </Text>
+                      </View>
                     </View>
                   ) : null}
                   {visibleMistakeQueueItems.map((mistake) => (
@@ -722,23 +730,46 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   queueCollapsedCue: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
+    alignItems: 'center',
+    backgroundColor: colors.correctionSoft,
+    borderColor: colors.correction,
+    borderRadius: radius.lg,
     borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
+  },
+  queueCollapsedIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.correction,
+    borderRadius: radius.pill,
+    height: 34,
+    justifyContent: 'center',
+    width: 34,
+  },
+  queueCollapsedIconText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
   },
   queueList: {
     gap: spacing.sm,
     marginTop: spacing.md,
   },
   queueMoreLabel: {
-    color: colors.textMuted,
+    color: colors.correction,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-    textAlign: 'center',
+  },
+  queueMoreHint: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   queueToggleAction: {
     alignSelf: 'center',

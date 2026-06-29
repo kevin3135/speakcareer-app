@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Wins Mistake Queue Polish
+
+Made one focused night design polish: the collapsed mistake queue in Wins now looks like an intentional saved-for-later cue instead of a plain text strip.
+
+Why it changed:
+
+- Wins should show one correction first and keep the full mistake list secondary.
+- The queue was already collapsed, but the hidden-state cue did not feel visual or app-led enough.
+- A compact correction-colored cue makes it clearer that extra mistakes are saved safely without competing with the active fix.
+
+What changed:
+
+- Reworked the collapsed mistake queue cue into a small correction card with a `Q` badge.
+- Added one short hint: `Open only when you want the full queue.`
+- Kept the existing `See all mistakes` toggle and all mistake-practice behavior intact.
+
+What went well:
+
+- The implementation stayed inside `src/screens/ProgressScreen.tsx` plus this log.
+- No navigation, APIs, auth, payments, analytics, backend work or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Mistake Bank should reinforce one active correction first, with saved mistakes visually quiet until opened.
+- Use correction color roles for hidden mistake-bank cues instead of generic grey strips.
+
+Next suggested task:
+
+- Capture a narrow mobile screenshot of Wins to verify the mistake queue cue does not push the active correction too far down.
+
 ## 2026-06-29: Wins Learn Handoff
 
 Made one focused night design polish: the top action on Wins now routes back to the guided Learn path instead of launching a roleplay directly.
