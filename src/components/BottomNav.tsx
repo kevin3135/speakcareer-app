@@ -24,6 +24,7 @@ export function BottomNav({ activeScreen, onChange }: BottomNavProps) {
     <View style={styles.shell}>
       <View style={styles.container}>
         {tabs.map((tab) => {
+          const isLearnTab = tab.screen === 'Home';
           const isActive =
             tab.screen === activeScreen ||
             (tab.screen === 'Home' && ['Foundation', 'Practice', 'Roleplay'].includes(activeScreen));
@@ -38,12 +39,31 @@ export function BottomNav({ activeScreen, onChange }: BottomNavProps) {
               onPress={() => onChange(tab.screen)}
               style={({ pressed }) => [
                 styles.tab,
-                isActive && styles.activeTab,
+                isLearnTab && styles.learnTab,
+                isLearnTab && !isActive && styles.learnTabIdle,
+                isActive && !isLearnTab && styles.activeSecondaryTab,
+                isActive && isLearnTab && styles.activeLearnTab,
                 pressed && styles.pressed,
               ]}
             >
-              <View style={[styles.dot, isActive && styles.activeDot]} />
-              <Text style={[styles.label, isActive && styles.activeLabel]}>{tab.label}</Text>
+              <View
+                style={[
+                  styles.dot,
+                  isLearnTab && styles.learnDot,
+                  isActive && !isLearnTab && styles.activeSecondaryDot,
+                  isActive && isLearnTab && styles.activeLearnDot,
+                ]}
+              />
+              <Text
+                style={[
+                  styles.label,
+                  isLearnTab && styles.learnLabel,
+                  isActive && !isLearnTab && styles.activeSecondaryLabel,
+                  isActive && isLearnTab && styles.activeLearnLabel,
+                ]}
+              >
+                {tab.label}
+              </Text>
             </Pressable>
           );
         })}
@@ -76,8 +96,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.xs,
   },
-  activeTab: {
+  learnTab: {
+    flex: 1.42,
+  },
+  learnTabIdle: {
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.primaryGlow,
+    borderWidth: 1,
+  },
+  activeLearnTab: {
     backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+    borderWidth: 1,
+  },
+  activeSecondaryTab: {
+    backgroundColor: colors.surfaceMuted,
   },
   pressed: {
     opacity: 0.82,
@@ -89,8 +122,16 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
     width: 20,
   },
-  activeDot: {
+  learnDot: {
+    backgroundColor: colors.primaryGlow,
+    width: 28,
+  },
+  activeLearnDot: {
     backgroundColor: colors.primary,
+    width: 34,
+  },
+  activeSecondaryDot: {
+    backgroundColor: colors.borderStrong,
   },
   label: {
     color: colors.textMuted,
@@ -98,7 +139,13 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
-  activeLabel: {
+  learnLabel: {
     color: colors.primaryDark,
+  },
+  activeLearnLabel: {
+    color: colors.primaryDark,
+  },
+  activeSecondaryLabel: {
+    color: colors.text,
   },
 });

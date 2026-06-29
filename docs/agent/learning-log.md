@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-06-29: Simplified App Flow
+
+Made one focused UX-flow improvement: the bottom navigation now makes `Learn` feel like the primary route while `Wins` and `Me` stay quieter secondary areas.
+
+Audit notes:
+
+- `AppNavigator` already hides bottom navigation during Foundation and Roleplay, so focused flows are protected.
+- `HomeScreen` is clearly the main product surface with one active learning step.
+- `ProgressScreen` and `ProfileScreen` are useful, but the bottom nav made all destinations feel equally important.
+- The smallest high-value fix was to polish `BottomNav` instead of changing navigation architecture.
+
+What changed:
+
+- `Learn` is now a wider, softly framed primary tab.
+- Active `Learn` gets the strongest nav state.
+- Active `Wins` and `Me` use quieter secondary styling so they do not compete with the learning path.
+- No tab was removed and no routing logic changed.
+
+What went well:
+
+- The implementation stayed inside `src/components/BottomNav.tsx`.
+- No screens, APIs, auth, payments, analytics, backend work or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep Learn visually dominant in any global navigation.
+- Treat Wins and Me as support spaces, not equal starting points.
+
+Next suggested task:
+
+- Add a small `Back to Learn` CTA near the top of Wins/Me if browser QA still shows users may linger there.
+
 ## 2026-06-29: Brand System Polish
 
 Made one focused design-system polish: shared typography, radius, shadow and UI primitive styles now feel more like a consistent Career Arcade brand without changing screen logic.
