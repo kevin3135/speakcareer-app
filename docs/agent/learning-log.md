@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Bonus Turn Preview
+
+Made one focused Roleplay polish: the collapsed optional bonus-turn chip now previews the follow-up focus, such as `Next: Add impact`, next to the `+15 XP` reward.
+
+Why it changed:
+
+- The previous chip made the bonus feel like generic XP instead of a useful next practice step.
+- Learners should know why an optional follow-up matters before opening it.
+- The primary save action still stays stronger; the bonus turn remains clearly optional.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- No real audio, AI, backend, payment, auth or storage behavior changed.
+- The chip now uses existing follow-up prompt data and theme tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional practice should explain the learning value, not only the XP value.
+- Keep bonus actions below the required save action so they do not create a second primary path.
+- Short `Next: ...` language works well for coaching previews.
+
+Next suggested task:
+
+- Preview the post-feedback save card on mobile and make the save-versus-bonus hierarchy even clearer if needed.
+
 ## 2026-06-29: Onboarding First Session Loop
 
 Made one focused onboarding improvement: the selected starting-level plan now shows a compact `Your first practice loop` preview with the first lesson, the first Job Interview step, and the coach-review/save step.

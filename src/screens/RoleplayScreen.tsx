@@ -911,7 +911,7 @@ export function RoleplayScreen({
               </View>
             ) : (
               <Pressable
-                accessibilityHint="Starts the optional follow-up with an editable starter sentence"
+                accessibilityHint={`Starts the optional follow-up focused on ${followUpPrompt.focusLabel.toLowerCase()}`}
                 accessibilityLabel="Try optional bonus turn"
                 accessibilityRole="button"
                 onPress={startFollowUpWithStarter}
@@ -920,8 +920,16 @@ export function RoleplayScreen({
                   pressed && styles.followUpBonusChipPressed,
                 ]}
               >
-                <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
-                <Text style={styles.followUpBonusCta}>{`Try +${FOLLOW_UP_BONUS_XP} XP`}</Text>
+                <View style={styles.followUpBonusCopy}>
+                  <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
+                  <Text numberOfLines={1} style={styles.followUpBonusFocus}>
+                    Next: {followUpPrompt.focusLabel}
+                  </Text>
+                </View>
+                <View style={styles.followUpBonusReward}>
+                  <Text style={styles.followUpBonusCta}>{`+${FOLLOW_UP_BONUS_XP} XP`}</Text>
+                  <Text style={styles.followUpBonusAction}>Try</Text>
+                </View>
               </Pressable>
             )
           ) : null}
@@ -1524,26 +1532,54 @@ const styles = StyleSheet.create({
   },
   followUpBonusChip: {
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    backgroundColor: colors.surfaceElevated,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
+    backgroundColor: colors.surface,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: spacing.xs,
+    justifyContent: 'space-between',
     marginTop: spacing.md,
+    minWidth: 0,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.sm,
   },
   followUpBonusChipPressed: {
     backgroundColor: colors.accentSoft,
     borderColor: colors.accent,
+  },
+  followUpBonusCopy: {
+    flex: 1,
+    minWidth: 0,
+    paddingRight: spacing.md,
   },
   followUpBonusCta: {
     color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  followUpBonusFocus: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  followUpBonusReward: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.md,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  followUpBonusAction: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.xxs,
   },
   followUpSummaryLabel: {
     color: colors.accentDark,
