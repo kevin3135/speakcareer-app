@@ -1282,6 +1282,7 @@ test('creates a lesson-complete summary from saved sessions', async () => {
 
 test('creates a rewarding roleplay completion summary', async () => {
   const {
+    createFirstQuestSaveRecap,
     createNextPracticeRecommendation,
     createPracticeCompletionMilestone,
     createPracticeCompletionSummary,
@@ -1326,6 +1327,21 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.deepEqual(firstAnswerLockIn.items, [
     { label: 'Progress', value: 'Save this answer to Progress' },
     { label: 'Today', value: 'Reaches 1/2 today' },
+    { label: 'XP', value: 'Bank +55 XP' },
+  ]);
+
+  const firstQuestRecap = createFirstQuestSaveRecap({
+    progressLabel: 'After save: 1/1 roleplay today',
+    progressTitle: 'This lesson completes today\'s target',
+    unlockLabel: 'Unlock Home and Progress',
+    xpReward: 55,
+  });
+
+  assert.equal(firstQuestRecap.ctaLabel, 'Save and unlock Home');
+  assert.equal(firstQuestRecap.eyebrow, 'Unlocks');
+  assert.deepEqual(firstQuestRecap.items, [
+    { label: 'App', value: 'Home and Progress' },
+    { label: 'Today', value: 'Completes 1/1 today' },
     { label: 'XP', value: 'Bank +55 XP' },
   ]);
 

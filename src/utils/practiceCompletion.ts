@@ -35,6 +35,15 @@ export type PracticeSaveLockInPreview = {
   }[];
 };
 
+export type FirstQuestSaveRecap = {
+  ctaLabel: string;
+  eyebrow: string;
+  items: {
+    label: string;
+    value: string;
+  }[];
+};
+
 export type NextPracticeRecommendation = {
   roleplayId: RoleplayId;
   title: string;
@@ -112,6 +121,13 @@ type CreatePracticeSaveLockInPreviewInput = {
   xpReward: number;
 };
 
+type CreateFirstQuestSaveRecapInput = {
+  progressLabel: string;
+  progressTitle: string;
+  unlockLabel: string;
+  xpReward: number;
+};
+
 export function createPracticeSavePrompt({
   includedFollowUp,
   xpReward,
@@ -149,6 +165,35 @@ export function createPracticeSaveLockInPreview({
       {
         label: 'Today',
         value: todayValue,
+      },
+      {
+        label: 'XP',
+        value: `Bank +${safeXpReward} XP`,
+      },
+    ],
+  };
+}
+
+export function createFirstQuestSaveRecap({
+  progressLabel,
+  progressTitle,
+  unlockLabel,
+  xpReward,
+}: CreateFirstQuestSaveRecapInput): FirstQuestSaveRecap {
+  const safeXpReward = Math.max(0, xpReward);
+  const unlockValue = unlockLabel.replace(/^Unlock\s+/i, '');
+
+  return {
+    ctaLabel: 'Save and unlock Home',
+    eyebrow: 'Unlocks',
+    items: [
+      {
+        label: 'App',
+        value: unlockValue,
+      },
+      {
+        label: 'Today',
+        value: createTodayLockInValue(progressLabel, progressTitle),
       },
       {
         label: 'XP',

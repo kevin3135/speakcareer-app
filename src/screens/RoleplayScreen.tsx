@@ -35,6 +35,7 @@ import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import {
   createPracticeCompletionSummary,
+  createFirstQuestSaveRecap,
   createPracticeSaveLockInPreview,
   createPracticeSavePrompt,
   createSavedCoachRecap,
@@ -188,10 +189,7 @@ export function RoleplayScreen({
       feedbackResult,
     })
     : null;
-  const firstQuestSaveHint = firstQuestState
-    ? `Save to ${firstQuestState.unlockLabel.replace('Unlock ', 'unlock ')}.`
-    : null;
-  const firstQuestReviewHint = firstQuestSaveHint ? 'Save is next.' : null;
+  const firstQuestReviewHint = firstQuestState ? 'Save is next.' : null;
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
@@ -240,6 +238,14 @@ export function RoleplayScreen({
       includedFollowUp,
       progressLabel: targetPreview.progressLabel,
       progressTitle: targetPreview.title,
+      xpReward: totalXpReward,
+    })
+    : null;
+  const firstQuestSaveRecap = firstQuestState && answerReview?.isReadyForFeedback
+    ? createFirstQuestSaveRecap({
+      progressLabel: targetPreview.progressLabel,
+      progressTitle: targetPreview.title,
+      unlockLabel: firstQuestState.unlockLabel,
       xpReward: totalXpReward,
     })
     : null;
@@ -1013,15 +1019,17 @@ export function RoleplayScreen({
           </View>
           <Text style={styles.cardTitle}>{savePrompt.title}</Text>
           <Text style={styles.followUpBody}>{savePrompt.body}</Text>
-          {firstQuestSaveHint ? (
-            <View style={styles.firstQuestSaveHint}>
-              <Text style={styles.firstQuestSaveHintLabel}>Final step</Text>
-              <Text numberOfLines={1} style={styles.firstQuestSaveHintText}>
-                {firstQuestSaveHint}
-              </Text>
+          {firstQuestSaveRecap ? (
+            <View style={styles.saveLockInBox}>
+              <Text style={styles.saveLockInLabel}>{firstQuestSaveRecap.eyebrow}</Text>
+              {firstQuestSaveRecap.items.map((item) => (
+                <View key={item.label} style={styles.saveLockInRow}>
+                  <Text style={styles.saveLockInItemLabel}>{item.label}</Text>
+                  <Text style={styles.saveLockInItemValue}>{item.value}</Text>
+                </View>
+              ))}
             </View>
-          ) : null}
-          {saveLockInPreview ? (
+          ) : saveLockInPreview ? (
             <View style={styles.saveLockInBox}>
               <Text style={styles.saveLockInLabel}>{saveLockInPreview.eyebrow}</Text>
               {saveLockInPreview.items.map((item) => (
@@ -1034,7 +1042,10 @@ export function RoleplayScreen({
           ) : null}
           <View style={styles.feedbackActions}>
             <View style={styles.feedbackActionItem}>
-              <AppButton label={savePrompt.ctaLabel} onPress={saveSession} />
+              <AppButton
+                label={firstQuestSaveRecap?.ctaLabel ?? savePrompt.ctaLabel}
+                onPress={saveSession}
+              />
             </View>
           </View>
           {followUpPrompt ? (
@@ -1687,32 +1698,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.md,
-  },
-  firstQuestSaveHint: {
-    alignItems: 'center',
-    backgroundColor: colors.successSoft,
-    borderColor: colors.success,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.sm,
-    marginTop: spacing.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  firstQuestSaveHintLabel: {
-    color: colors.successDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  firstQuestSaveHintText: {
-    color: colors.ink,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    lineHeight: typography.lineSmall,
   },
   feedbackSnapshotBox: {
     backgroundColor: colors.surface,

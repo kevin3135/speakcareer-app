@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Quest 1 Save Action Hierarchy
+
+Made one focused first-quest practice-flow improvement: the Step 3 save card now uses one compact unlock recap and a clearer `Save and unlock Home` CTA for the first Job Interview save.
+
+Why it changed:
+
+- The first save card is the key unlock moment for the English MVP, but it still used a generic `Complete lesson` button.
+- The separate `Final step` hint and lock-in preview repeated the same unlock idea on a narrow phone screen.
+- The first save should feel clear and rewarding with one obvious action, not one more dense review card.
+
+What changed:
+
+- Added `createFirstQuestSaveRecap` in `src/utils/practiceCompletion.ts` to build a shorter Quest 1 save recap from the existing unlock, today-progress and XP data.
+- Updated `src/screens/RoleplayScreen.tsx` so the first ready-to-save Job Interview now shows one `Unlocks` recap box instead of the older duplicate final-step hint.
+- Changed the first-quest save button label to `Save and unlock Home` while keeping the generic save CTA for all later roleplays.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new Quest 1 save recap helper.
+
+What went well:
+
+- The improvement stayed inside one helper, one screen and one existing test file.
+- It reused existing first-quest and progress data instead of adding new storage, screens or progression rules.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the updated save card should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first save action should name the unlock directly instead of using the same generic CTA as later roleplays.
+- When the save card already summarizes unlocks, avoid a second hint box that repeats the same message.
+
+Next suggested task:
+
+- Make the first saved completion screen show one short `app unlocked` handoff so the move into Home and Progress feels as guided as the review and save steps.
+
 ## 2026-06-29: Quest 1 Review Save Cue
 
 Made one focused Quest 1 copy polish: the review coach card now says `Save is next.` while the save card keeps the concrete unlock outcome.
