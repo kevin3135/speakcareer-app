@@ -196,6 +196,50 @@ test('creates a concrete coach snapshot from the learner answer', async () => {
   );
 });
 
+test('creates a balanced coach recap for the review step', async () => {
+  const { createFeedbackMomentumRecap } = await import('../src/utils/feedbackMomentum.ts');
+
+  const recap = createFeedbackMomentumRecap({
+    improvements: [' Add one measurable result or business outcome. '],
+    summary: {
+      overallScore: 73,
+      strongestArea: { label: 'Structure', value: 88 },
+      nextFocusArea: { label: 'Vocabulary', value: 62 },
+    },
+  });
+
+  assert.equal(recap.strongestLabel, 'Working well');
+  assert.equal(recap.strongestValue, 'Structure 88');
+  assert.equal(recap.nextFocusLabel, 'Improve next');
+  assert.equal(recap.nextFocusValue, 'Vocabulary 62');
+  assert.equal(
+    recap.coachLine,
+    'Keep your structure. Add one measurable result or business outcome.',
+  );
+
+  const fallbackRecap = createFeedbackMomentumRecap({
+    improvements: ['   '],
+    summary: {
+      overallScore: 72,
+      strongestArea: { label: 'Clarity', value: 84 },
+      nextFocusArea: { label: 'Confidence', value: 61 },
+    },
+  });
+
+  assert.equal(fallbackRecap.coachLine, 'Keep your message clear. Improve confidence next.');
+  assert.equal(
+    createFeedbackMomentumRecap({
+      improvements: [],
+      summary: {
+        overallScore: 0,
+        strongestArea: null,
+        nextFocusArea: null,
+      },
+    }),
+    null,
+  );
+});
+
 test('keeps the Home coach focus short and actionable', async () => {
   const { createHomeCoachFocusText } = await import('../src/utils/homeCoachFocus.ts');
 

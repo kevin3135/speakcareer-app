@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-06-29: Balanced Coach Recap
+
+Made one focused AI feedback UI improvement: the Roleplay review card now shows a compact `Coach recap` with one `Working well` score, one `Improve next` score, and one short coaching line before the detailed breakdown.
+
+Why it changed:
+
+- The review step already showed a next move, but it did not balance that instruction with one clear positive signal.
+- The MVP loop should feel useful and motivating: the learner needs to know what to keep as well as what to fix.
+- A compact keep/next recap makes the feedback easier to scan before the optional details and save step.
+
+What went well:
+
+- The change stayed focused in [`/C:/Dev/speakcareer-app/src/screens/RoleplayScreen.tsx`](/C:/Dev/speakcareer-app/src/screens/RoleplayScreen.tsx), [`/C:/Dev/speakcareer-app/src/utils/feedbackMomentum.ts`](/C:/Dev/speakcareer-app/src/utils/feedbackMomentum.ts), and [`/C:/Dev/speakcareer-app/tests/practiceContent.test.mjs`](/C:/Dev/speakcareer-app/tests/practiceContent.test.mjs).
+- The new helper keeps the coaching recap deterministic and easy to extend without touching storage, navigation, or feedback generation.
+- `npm.cmd run typecheck`, `npm.cmd run lint`, and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new recap row should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Feedback feels stronger when one positive signal and one improvement signal sit together before the detailed notes.
+- Keep the review step focused on one short coaching sentence before asking the learner to read full score breakdowns.
+- Reuse score-summary helpers for motivational UI before adding any new progress system.
+
+Next suggested task:
+
+- Make the collapsed bonus-turn chip preview the follow-up focus so the extra practice turn feels more concrete.
+
 ## 2026-06-29: Premium Home Lesson Map
 
 Made one focused Home redesign: the Learn screen now reads as a compact career path with one large active START node, a daily-goal checkpoint and one locked next node.

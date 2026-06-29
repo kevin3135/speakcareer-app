@@ -27,6 +27,7 @@ import { createAnswerPlanHelperState } from '../utils/answerPlanHelper';
 import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerReview';
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
+import { createFeedbackMomentumRecap } from '../utils/feedbackMomentum';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
@@ -181,6 +182,12 @@ export function RoleplayScreen({
   const feedbackSnapshot = feedbackResult && feedbackScoreSummary
     ? createFeedbackSnapshot({
       answer: draftAnswer,
+      improvements: feedbackResult.feedback.improvements,
+      summary: feedbackScoreSummary,
+    })
+    : null;
+  const feedbackMomentum = feedbackResult && feedbackScoreSummary
+    ? createFeedbackMomentumRecap({
       improvements: feedbackResult.feedback.improvements,
       summary: feedbackScoreSummary,
     })
@@ -746,10 +753,34 @@ export function RoleplayScreen({
           {feedbackSnapshot ? (
             <View style={styles.feedbackSnapshotBox}>
               <View style={styles.feedbackSnapshotHeader}>
-                <Text style={styles.feedbackSnapshotLabel}>Next move</Text>
-                <Badge label={feedbackSnapshot.nextFocusLabel} tone="accent" />
+                <Text style={styles.feedbackSnapshotLabel}>Coach recap</Text>
+                {feedbackMomentum ? null : (
+                  <Badge label={feedbackSnapshot.nextFocusLabel} tone="accent" />
+                )}
               </View>
-              <Text style={styles.feedbackSnapshotText}>{feedbackSnapshot.nextMoveText}</Text>
+              {feedbackMomentum ? (
+                <View style={styles.feedbackMomentumRow}>
+                  <View style={styles.feedbackMomentumCard}>
+                    <Text style={styles.feedbackMomentumLabel}>
+                      {feedbackMomentum.strongestLabel}
+                    </Text>
+                    <Text numberOfLines={1} style={styles.feedbackMomentumValue}>
+                      {feedbackMomentum.strongestValue}
+                    </Text>
+                  </View>
+                  <View style={[styles.feedbackMomentumCard, styles.feedbackMomentumCardAccent]}>
+                    <Text style={styles.feedbackMomentumLabel}>
+                      {feedbackMomentum.nextFocusLabel}
+                    </Text>
+                    <Text numberOfLines={1} style={styles.feedbackMomentumValue}>
+                      {feedbackMomentum.nextFocusValue}
+                    </Text>
+                  </View>
+                </View>
+              ) : null}
+              <Text style={styles.feedbackSnapshotText}>
+                {feedbackMomentum?.coachLine ?? feedbackSnapshot.nextMoveText}
+              </Text>
               <View style={styles.feedbackSnapshotAnswerBox}>
                 <Text style={styles.feedbackSnapshotAnswerLabel}>You said</Text>
                 <Text numberOfLines={1} style={styles.feedbackSnapshotAnswerText}>
@@ -1403,6 +1434,38 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  feedbackMomentumRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  feedbackMomentumCard: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    padding: spacing.sm,
+  },
+  feedbackMomentumCardAccent: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  feedbackMomentumLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  feedbackMomentumValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   feedbackSnapshotAnswerBox: {
     backgroundColor: colors.surfaceMuted,
