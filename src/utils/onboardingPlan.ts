@@ -26,6 +26,10 @@ export type OnboardingPlanPreview = {
   dailyTargetNote: string;
   levelLabel: string;
   nextQuestTitleShort: string;
+  sessionBadgeLabel: string;
+  sessionNote: string;
+  sessionSteps: [OnboardingPlanStep, OnboardingPlanStep, OnboardingPlanStep];
+  sessionTitle: string;
   starterPrompt: string;
   steps: [OnboardingPlanStep, OnboardingPlanStep];
   title: string;
@@ -52,6 +56,26 @@ export function createOnboardingPlanPreview({
     dailyTargetNote: createDailyTargetNote(dailyTarget),
     levelLabel,
     nextQuestTitleShort,
+    sessionBadgeLabel: 'First 5 min',
+    sessionNote: createSessionNote(dailyTarget, nextQuestTitleShort),
+    sessionSteps: [
+      {
+        detail: firstLessonDetail,
+        label: '1',
+        title: firstLessonTitle,
+      },
+      {
+        detail: firstQuestSubtitle,
+        label: '2',
+        title: nextQuestTitleShort,
+      },
+      {
+        detail: 'Get one clearer rewrite, one next focus, and save the win for XP.',
+        label: '3',
+        title: 'Coach review',
+      },
+    ],
+    sessionTitle: 'Your first practice loop',
     starterPrompt,
     steps: [
       {
@@ -99,4 +123,16 @@ function createCommitmentNote(dailyTarget: DailyPracticeTarget, nextQuestTitleSh
   }
 
   return `Finish the lesson, then push for 3 saved roleplays today starting with ${nextQuestTitleShort}.`;
+}
+
+function createSessionNote(dailyTarget: DailyPracticeTarget, nextQuestTitleShort: string) {
+  if (dailyTarget === 1) {
+    return `Finish one ${nextQuestTitleShort} save today. That is enough to start the habit.`;
+  }
+
+  if (dailyTarget === 2) {
+    return `Save your first ${nextQuestTitleShort} answer now, then come back for one more roleplay later today.`;
+  }
+
+  return `Save your first ${nextQuestTitleShort} answer now, then keep going with two more short roleplays later today.`;
 }

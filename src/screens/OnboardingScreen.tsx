@@ -158,6 +158,34 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             </View>
           </View>
 
+          <View style={styles.sessionLoopCard}>
+            <View style={styles.sessionLoopHeader}>
+              <Text style={styles.sessionLoopLabel}>{planPreview.sessionTitle}</Text>
+              <Badge label={planPreview.sessionBadgeLabel} tone="info" />
+            </View>
+            <View style={styles.sessionLoopList}>
+              {planPreview.sessionSteps.map((step, index) => {
+                const isLastStep = index === planPreview.sessionSteps.length - 1;
+
+                return (
+                  <View key={step.label} style={styles.sessionLoopRow}>
+                    <View style={styles.sessionLoopRail}>
+                      <View style={styles.sessionLoopBadge}>
+                        <Text style={styles.sessionLoopBadgeText}>{step.label}</Text>
+                      </View>
+                      {!isLastStep ? <View style={styles.sessionLoopLine} /> : null}
+                    </View>
+                    <View style={styles.sessionLoopCopy}>
+                      <Text style={styles.sessionLoopTitle}>{step.title}</Text>
+                      <Text style={styles.sessionLoopDetail}>{step.detail}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+            <Text style={styles.sessionLoopNote}>{planPreview.sessionNote}</Text>
+          </View>
+
           <View style={styles.planStarter}>
             <Text style={styles.planStarterLabel}>First answer starter</Text>
             <Text numberOfLines={2} style={styles.planStarterText}>
@@ -425,6 +453,85 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  sessionLoopBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radius.pill,
+    height: 28,
+    justifyContent: 'center',
+    width: 28,
+  },
+  sessionLoopBadgeText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  sessionLoopCard: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  sessionLoopCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  sessionLoopDetail: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  sessionLoopHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  sessionLoopLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  sessionLoopLine: {
+    backgroundColor: colors.borderStrong,
+    borderRadius: radius.pill,
+    flex: 1,
+    marginVertical: spacing.xs,
+    width: 2,
+  },
+  sessionLoopList: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  sessionLoopNote: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  sessionLoopRail: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    width: 28,
+  },
+  sessionLoopRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  sessionLoopTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
   },
   optionCard: {
     alignItems: 'center',

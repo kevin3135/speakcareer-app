@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Onboarding First Session Loop
+
+Made one focused onboarding improvement: the selected starting-level plan now shows a compact `Your first practice loop` preview with the first lesson, the first Job Interview step, and the coach-review/save step.
+
+Why it changed:
+
+- The onboarding screen already captured level and daily target, but it still did not show the actual first-use loop clearly enough.
+- New users should understand the product in under a minute: learn one pattern, answer one work prompt, get feedback, save progress.
+- A small first-session preview strengthens the English MVP without adding backend scope or new navigation paths.
+
+What went well:
+
+- The change stayed focused in `src/screens/OnboardingScreen.tsx`, `src/utils/onboardingPlan.ts`, and `tests/practiceContent.test.mjs`.
+- Existing onboarding plan data was extended instead of adding another screen or a more complex state model.
+- The new copy keeps the flow professional and habit-oriented without becoming childish.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new onboarding loop card should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding gets stronger when the first five-minute loop is explicit instead of implied.
+- Keep onboarding focused on one clear path rather than adding more choice or more copy blocks.
+- Habit framing works better when the first saved answer is presented as the win, with extra roleplays clearly secondary.
+
+Next suggested task:
+
+- Improve the Roleplay bonus-turn chip so it previews the follow-up focus before the learner opens the extra turn.
+
 ## 2026-06-29: Mistake Bank Progressive Disclosure
 
 Made one focused Progress polish: the Mistake Bank now keeps queued mistakes hidden by default behind a compact `See all mistakes` control, so the active correction remains the clear task.

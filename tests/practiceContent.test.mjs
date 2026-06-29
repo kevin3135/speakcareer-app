@@ -476,6 +476,14 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(starterPreview.dailyTargetLabel, '1 roleplay a day');
   assert.ok(starterPreview.dailyTargetNote.includes('steady five-minute'));
   assert.equal(starterPreview.nextQuestTitleShort, 'Job Interview');
+  assert.equal(starterPreview.sessionTitle, 'Your first practice loop');
+  assert.equal(starterPreview.sessionBadgeLabel, 'First 5 min');
+  assert.deepEqual(
+    starterPreview.sessionSteps.map((step) => step.title),
+    ['Learn one clear sentence', 'Job Interview', 'Coach review'],
+  );
+  assert.ok(starterPreview.sessionSteps[2].detail.includes('save the win for XP'));
+  assert.ok(starterPreview.sessionNote.includes('enough to start the habit'));
   assert.equal(starterPreview.ctaLabel, 'Start A1-A2 path');
   assert.equal(starterPreview.commitmentTitle, 'Learn one clear sentence now. Job Interview next.');
   assert.ok(starterPreview.commitmentNote.includes('save your first Job Interview answer today'));
@@ -486,6 +494,7 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.ok(confidentPreview.starterPrompt.includes('In my current role'));
   assert.equal(confidentPreview.dailyTargetLabel, '3 roleplays a day');
   assert.ok(confidentPreview.dailyTargetNote.includes('extra interview reps'));
+  assert.ok(confidentPreview.sessionNote.includes('two more short roleplays later today'));
   assert.equal(confidentPreview.ctaLabel, 'Start B2 path');
   assert.ok(confidentPreview.commitmentNote.includes('3 saved roleplays today'));
 });
