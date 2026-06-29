@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Saved Draft Cue Copy
+
+Made one focused night design polish: the shared saved-draft cue copy is shorter and more action-focused across Home and Roleplay.
+
+Why it changed:
+
+- Home shows the cue in a one-line habit pill, so the old `Saved draft:` prefix could make the useful part truncate.
+- Roleplay already has a saved-draft badge and Home has saved-draft context, so repeating the status in the body was unnecessary.
+- Shorter cue text keeps the resume flow clear without adding another visual element.
+
+What changed:
+
+- Shortened `createRoleplayResumeCue` messages from status-prefixed sentences to direct actions.
+- Examples now read like `Add one result or next step.` and `Ready to check. Save XP next.`
+- Updated the existing restored-draft cue test expectations.
+
+What went well:
+
+- The change stayed inside one shared cue utility, one existing test and this log.
+- No screen layout, storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Do not repeat state labels in cue bodies when a badge already carries the state.
+- Shared copy should be short enough for Home's one-line layout first, then still clear in Roleplay.
+
+Next suggested task:
+
+- Visually QA the Home and Roleplay saved-draft cue on a narrow viewport and adjust layout only if the shorter copy still clips.
+
 ## 2026-06-29: Home Resume Cue
 
 Made one focused night design polish: the Home start card now shows the same concrete saved-draft cue used by Roleplay when a learner has unfinished work.

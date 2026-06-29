@@ -11,26 +11,26 @@ export function createRoleplayResumeCue(review: AnswerReview): RoleplayResumeCue
   if (review.wordCount === 0) {
     return {
       badgeLabel,
-      body: 'Saved draft: write your first response now.',
+      body: 'Write your first response now.',
     };
   }
 
   if (!review.isReadyForFeedback) {
     return {
       badgeLabel,
-      body: 'Saved draft: add one concrete action or work example, then check.',
+      body: 'Add one work example, then check.',
     };
   }
 
   if (review.readinessLabel === 'Good start') {
     return {
       badgeLabel,
-      body: 'Saved draft: add one result or next step, or check now.',
+      body: 'Add one result or next step.',
     };
   }
 
   return {
     badgeLabel,
-    body: 'Saved draft: ready to check, save XP and unlock the next step.',
+    body: 'Ready to check. Save XP next.',
   };
 }

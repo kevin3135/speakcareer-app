@@ -2997,7 +2997,7 @@ test('creates a concrete restored-draft cue for the roleplay resume state', asyn
     }),
     {
       badgeLabel: '0 words',
-      body: 'Saved draft: write your first response now.',
+      body: 'Write your first response now.',
     },
   );
 
@@ -3010,7 +3010,7 @@ test('creates a concrete restored-draft cue for the roleplay resume state', asyn
     }),
     {
       badgeLabel: '9 words',
-      body: 'Saved draft: add one concrete action or work example, then check.',
+      body: 'Add one work example, then check.',
     },
   );
 
@@ -3023,7 +3023,7 @@ test('creates a concrete restored-draft cue for the roleplay resume state', asyn
     }),
     {
       badgeLabel: '17 words',
-      body: 'Saved draft: add one result or next step, or check now.',
+      body: 'Add one result or next step.',
     },
   );
 
@@ -3036,7 +3036,7 @@ test('creates a concrete restored-draft cue for the roleplay resume state', asyn
     }),
     {
       badgeLabel: '41 words',
-      body: 'Saved draft: ready to check, save XP and unlock the next step.',
+      body: 'Ready to check. Save XP next.',
     },
   );
 });
