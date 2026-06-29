@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Active Step Simplification
+
+Made one focused Roleplay active-practice simplification: the `Check` CTA now appears directly after the answer box, the readiness cue is visually quieter, and the daily-goal preview no longer sits inside the active answer card.
+
+Why it changed:
+
+- The active Roleplay step already had a coach prompt and answer box, but the learner still saw status and progress context before the main action.
+- During practice the flow should read: coach asks, user answers, app checks.
+- Daily goal context is useful after saving, but it does not help the current answer action.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx`.
+- Back button, progress strip, coach prompt, answer input, collapsed help and mock/local behavior stayed intact.
+- No real audio, AI, backend, auth, payments, storage or app-store setup changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In active Roleplay, the primary CTA should come immediately after the answer box.
+- Status and progress cues should be softer than the answer/check loop.
+- Keep daily-goal or save-progress context for post-check/post-save states, not the answer step.
+
+Next suggested task:
+
+- Preview the active Roleplay first viewport on mobile and tune vertical spacing if `Check` still sits too low.
+
 ## 2026-06-29: Roleplay Save Hierarchy
 
 Made one focused Roleplay polish: the optional bonus-turn chip is now visually quieter, so the primary `Save` action stays the clear required next step after feedback.

@@ -575,18 +575,18 @@ export function RoleplayScreen({
               value={draftAnswer}
             />
           </View>
-          <View style={styles.answerReadinessBox}>
-            <Text numberOfLines={1} style={styles.answerReadinessTitle}>
-              {answerReadinessCue.title}
-            </Text>
-            <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
-          </View>
           <View style={styles.answerAction}>
             <AppButton
               disabled={draftAnswer.trim().length === 0}
               label="Check"
               onPress={reviewAnswer}
             />
+          </View>
+          <View style={styles.answerReadinessBox}>
+            <Text numberOfLines={1} style={styles.answerReadinessTitle}>
+              {answerReadinessCue.title}
+            </Text>
+            <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
           </View>
           <Pressable
             accessibilityHint="Shows or hides optional writing support before you check the answer"
@@ -699,19 +699,6 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
-          <View style={styles.dailyTargetPreviewBox}>
-            <View style={styles.oneThingHeader}>
-              <Text style={styles.dailyTargetPreviewLabel}>Daily goal</Text>
-              <Badge label={targetPreview.badgeLabel} tone={targetPreview.tone} />
-            </View>
-            <View style={styles.dailyTargetPreviewProgress}>
-              <ProgressBar
-                label={targetPreview.progressLabel}
-                tone={targetPreview.tone}
-                value={targetPreview.progressPercent}
-              />
-            </View>
-          </View>
         </Card>
       ) : null}
 
@@ -1114,22 +1101,21 @@ const styles = StyleSheet.create({
   },
   answerReadinessBox: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceElevated,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    borderWidth: 1,
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.pill,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: spacing.sm,
-    padding: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
   answerReadinessTitle: {
-    color: colors.ink,
+    color: colors.textMuted,
     flex: 1,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineBody,
+    lineHeight: typography.lineSmall,
     marginRight: spacing.sm,
   },
   writingSupportToggle: {
@@ -1222,23 +1208,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     maxWidth: '100%',
-  },
-  dailyTargetPreviewBox: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.sm,
-    padding: spacing.sm,
-  },
-  dailyTargetPreviewLabel: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  dailyTargetPreviewProgress: {
-    marginTop: spacing.sm,
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,
