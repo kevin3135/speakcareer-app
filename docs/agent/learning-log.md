@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Optional Help
+
+Made one focused night design polish: the optional writing-support toggle in Roleplay is now a small secondary pill instead of a full-width card-like row.
+
+Why it changed:
+
+- The Roleplay first viewport should stay anchored on coach prompt, answer field and `Check`.
+- The previous help toggle looked like another decision point right after the primary action.
+- A compact pill keeps help available without competing with the active practice task.
+
+What changed:
+
+- Renamed the visible helper trigger from `Need help?` to `Optional help`.
+- Restyled the toggle as a compact pill with a subtle open state.
+- Kept all writing support content, behavior and accessibility wiring unchanged.
+
+What went well:
+
+- The change stayed inside `RoleplayScreen` and this log.
+- No storage, navigation, data, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 74 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional controls in active practice should read like small escape hatches, not full actions.
+- Keep the only large CTA in Roleplay as `Check` until feedback appears.
+
+Next suggested task:
+
+- Do a visual QA pass on Roleplay and consider moving answer readiness into the input shell if the first viewport still feels busy.
+
 ## 2026-06-29: Roleplay Draft Cue
 
 Made one focused night design polish: the restored-draft cue in Roleplay is now a compact status row instead of a larger explanation block above the answer box.

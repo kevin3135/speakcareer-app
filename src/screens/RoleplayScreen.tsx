@@ -718,10 +718,14 @@ export function RoleplayScreen({
             accessibilityLabel={writingSupport.toggleAccessibilityLabel}
             accessibilityRole="button"
             onPress={() => setIsWritingSupportOpen((isOpen) => !isOpen)}
-            style={({ pressed }) => [styles.writingSupportToggle, pressed && styles.pressed]}
+            style={({ pressed }) => [
+              styles.writingSupportToggle,
+              isWritingSupportOpen && styles.writingSupportToggleOpen,
+              pressed && styles.pressed,
+            ]}
           >
-            <View style={styles.oneThingHeader}>
-              <Text style={styles.writingSupportToggleLabel}>Need help?</Text>
+            <View style={styles.writingSupportToggleInner}>
+              <Text style={styles.writingSupportToggleLabel}>Optional help</Text>
               <Text style={styles.writingSupportToggleCta}>
                 {isWritingSupportOpen ? 'Hide' : 'Open'}
               </Text>
@@ -1307,23 +1311,34 @@ const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   writingSupportToggle: {
-    backgroundColor: colors.surfaceMuted,
+    alignSelf: 'flex-start',
+    backgroundColor: colors.white,
     borderColor: colors.border,
-    borderRadius: radius.lg,
+    borderRadius: radius.pill,
     borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.sm,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  writingSupportToggleOpen: {
+    backgroundColor: colors.infoSoft,
+    borderColor: colors.info,
+  },
+  writingSupportToggleInner: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
   writingSupportToggleLabel: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
   writingSupportToggleCta: {
     color: colors.primaryDark,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
   writingSupportBox: {
