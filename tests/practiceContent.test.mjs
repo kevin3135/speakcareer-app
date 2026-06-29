@@ -612,12 +612,22 @@ test('personalizes the first lesson and answer starter by starting level', async
   assert.deepEqual(starterProfile.foundationExampleParts, ['I', 'organized the weekly report', 'and sent it on time.']);
   assert.ok(starterProfile.answerPlaceholder.includes('I worked on'));
   assert.ok(starterProfile.starterAnswer.includes('The result was'));
+  assert.deepEqual(starterProfile.starterEditSteps, [
+    'Keep "I" first.',
+    'Swap in your real task.',
+    'End with one clear result.',
+  ]);
 
   assert.deepEqual(basicProfile.foundationExampleParts, ['I', 'helped the team finish', 'the project on time.']);
   assert.ok(basicProfile.answerPlaceholder.includes('Currently, I'));
 
   assert.deepEqual(confidentProfile.foundationExampleParts, ['I', 'led the project update', 'and reduced delays for the team.']);
   assert.ok(confidentProfile.answerPlaceholder.includes('In my current role'));
+  assert.deepEqual(confidentProfile.starterEditSteps, [
+    'Lead with your real ownership.',
+    'Name one business action.',
+    'Finish with the business result.',
+  ]);
   assert.equal(getStartingLevelProfile(null).foundationExample, basicProfile.foundationExample);
 });
 
@@ -688,11 +698,13 @@ test('creates a level-matched foundation handoff before the first interview', as
     coachNote: starterProfile.coachMessage,
     nextQuestTitle: guidedStart.title,
     starterAnswer: starterProfile.starterAnswer,
+    starterEditSteps: starterProfile.starterEditSteps,
   });
   const confidentHandoff = createFoundationHandoff({
     coachNote: confidentProfile.coachMessage,
     nextQuestTitle: guidedStart.title,
     starterAnswer: confidentProfile.starterAnswer,
+    starterEditSteps: confidentProfile.starterEditSteps,
   });
 
   assert.equal(starterHandoff.eyebrow, 'Next step');
@@ -707,6 +719,8 @@ test('creates a level-matched foundation handoff before the first interview', as
   assert.equal(starterHandoff.pathSteps[1].title, 'Unlock Learn + Wins');
   assert.ok(starterHandoff.pathSteps[1].detail.includes('XP'));
   assert.equal(starterHandoff.starterLabel, 'Starter answer');
+  assert.equal(starterHandoff.editPlanLabel, 'Make it yours');
+  assert.deepEqual(starterHandoff.editPlanSteps, starterProfile.starterEditSteps);
   assert.ok(starterHandoff.body.includes('first interview answer'));
   assert.ok(starterHandoff.coachNote.includes('Keep it simple'));
   assert.ok(starterHandoff.starterAnswer.includes('The result was'));
@@ -784,16 +798,20 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.ok(starterCue.note.includes('Keep it simple'));
   assert.ok(starterCue.starterAnswer.includes('The result was'));
   const starterPanel = createFoundationWarmupPanel({
+    editPlanSteps: starterProfile.starterEditSteps,
     note: starterCue.note,
     starterAnswer: starterCue.starterAnswer,
   });
   assert.equal(starterPanel.title, 'Lesson 1 starter is ready');
   assert.equal(starterPanel.starterLabel, 'Loaded starter');
+  assert.equal(starterPanel.editPlanLabel, 'Make it yours');
+  assert.deepEqual(starterPanel.editPlanSteps, starterProfile.starterEditSteps);
   assert.ok(starterPanel.body.includes('Edit this first line'));
   assert.ok(starterPanel.starterAnswer.includes('The result was'));
   assert.ok(confidentCue.note.includes('business result'));
   assert.ok(confidentCue.starterAnswer.includes('As a result'));
   const confidentPanel = createFoundationWarmupPanel({
+    editPlanSteps: confidentProfile.starterEditSteps,
     note: confidentCue.note,
     starterAnswer: confidentCue.starterAnswer,
   });

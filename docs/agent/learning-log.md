@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Level-Matched Starter Edit Plan
+
+Made one focused onboarding-to-practice improvement: Foundation and the first Job Interview handoff now show a level-matched "make it yours" edit plan beside the starter answer.
+
+Why it changed:
+
+- The app already carried a starter answer from onboarding into Foundation and Roleplay, but the learner still had to guess what to personalize.
+- The first English career answer feels easier when the app points to exactly which parts to swap with real work experience.
+- This keeps the English MVP guided and professional without adding another screen, more storage or backend logic.
+
+What changed:
+
+- Added `starterEditSteps` to the local starting-level profiles in `src/utils/startingLevel.ts`.
+- Updated `src/utils/foundationHandoff.ts` and `src/utils/foundationWarmupPanel.ts` to return a shared `Make it yours` plan for starter-answer handoffs.
+- Updated `src/screens/FoundationScreen.tsx` and `src/screens/RoleplayScreen.tsx` to render the three-step edit plan under the starter answer.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new level-specific edit steps in both Foundation and Roleplay handoff helpers.
+
+What went well:
+
+- The change stayed inside existing local onboarding, Foundation and Roleplay handoff surfaces.
+- The new guidance is level-matched for starter, basic and confident users, so the first answer feels more concrete without changing navigation.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the new edit-plan rows should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When the app provides a starter answer, it should also say exactly what to personalize inside that starter.
+- Reuse the same handoff guidance between Foundation completion and the first Job Interview so the first practice loop feels continuous.
+
+Next suggested task:
+
+- Do a narrow mobile QA pass on Foundation and the first Job Interview handoff, then compress the new edit-plan rows if they push the answer box too far down.
+
 ## 2026-06-29: Saved Draft Cue Copy
 
 Made one focused night design polish: the shared saved-draft cue copy is shorter and more action-focused across Home and Roleplay.

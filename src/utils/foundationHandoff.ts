@@ -2,11 +2,14 @@ export type FoundationHandoffInput = {
   coachNote: string;
   nextQuestTitle: string;
   starterAnswer: string;
+  starterEditSteps: [string, string, string];
 };
 
 export type FoundationHandoff = {
   body: string;
   coachNote: string;
+  editPlanLabel: string;
+  editPlanSteps: [string, string, string];
   eyebrow: string;
   pathLabel: string;
   pathSteps: {
@@ -23,6 +26,7 @@ export function createFoundationHandoff({
   coachNote,
   nextQuestTitle,
   starterAnswer,
+  starterEditSteps,
 }: FoundationHandoffInput): FoundationHandoff {
   const nextQuestTitleShort = nextQuestTitle.includes(': ')
     ? nextQuestTitle.split(': ').slice(1).join(': ')
@@ -31,6 +35,8 @@ export function createFoundationHandoff({
   return {
     body: 'Use the same clear shape in your first interview answer.',
     coachNote,
+    editPlanLabel: 'Make it yours',
+    editPlanSteps: starterEditSteps,
     eyebrow: 'Next step',
     pathLabel: 'What happens next',
     pathSteps: [

@@ -45,6 +45,7 @@ export function FoundationScreen({
     coachNote: levelProfile.coachMessage,
     nextQuestTitle: guidedStart.title,
     starterAnswer: levelProfile.starterAnswer,
+    starterEditSteps: levelProfile.starterEditSteps,
   });
   const continueLabel = isComplete ? 'Continue to interview' : `Tap ${activePart} first`;
 
@@ -205,6 +206,17 @@ export function FoundationScreen({
             <Text numberOfLines={2} style={styles.handoffExampleText}>
               {handoff.starterAnswer}
             </Text>
+          </View>
+          <View style={styles.handoffEditBox}>
+            <Text style={styles.handoffEditLabel}>{handoff.editPlanLabel}</Text>
+            <View style={styles.handoffEditList}>
+              {handoff.editPlanSteps.map((step, index) => (
+                <View key={`${index + 1}-${step}`} style={styles.handoffEditStep}>
+                  <Text style={styles.handoffEditStepNumber}>{index + 1}</Text>
+                  <Text style={styles.handoffEditStepText}>{step}</Text>
+                </View>
+              ))}
+            </View>
           </View>
           <Text numberOfLines={2} style={styles.handoffCoachNote}>
             {handoff.coachNote}
@@ -519,6 +531,48 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
+  },
+  handoffEditBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  handoffEditLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  handoffEditList: {
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  handoffEditStep: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.md,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  handoffEditStepNumber: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    width: 12,
+  },
+  handoffEditStepText: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
   },
   handoffCoachNote: {
     color: colors.textMuted,

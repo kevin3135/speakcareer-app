@@ -7,6 +7,7 @@ export type StartingLevelProfile = {
   foundationExampleParts: [string, string, string];
   foundationRule: string;
   starterAnswer: string;
+  starterEditSteps: [string, string, string];
 };
 
 const STARTING_LEVEL_PROFILES: Record<StartingLevelId, StartingLevelProfile> = {
@@ -18,6 +19,11 @@ const STARTING_LEVEL_PROFILES: Record<StartingLevelId, StartingLevelProfile> = {
     foundationRule: 'Keep it simple: say I, one action, and one clear result.',
     starterAnswer:
       'I worked on customer support tasks, and I helped the team reply faster. The result was happier customers.',
+    starterEditSteps: [
+      'Keep "I" first.',
+      'Swap in your real task.',
+      'End with one clear result.',
+    ],
   },
   basic: {
     answerPlaceholder: 'Start with: Currently, I... One result I am proud of is...',
@@ -27,6 +33,11 @@ const STARTING_LEVEL_PROFILES: Record<StartingLevelId, StartingLevelProfile> = {
     foundationRule: 'Say who did it, what happened, and why it mattered.',
     starterAnswer:
       'Currently, I help my team solve customer problems faster. One result I am proud of is improving the handoff process.',
+    starterEditSteps: [
+      'Start with your current role.',
+      'Name one real improvement.',
+      'Finish with the result you are proud of.',
+    ],
   },
   confident: {
     answerPlaceholder: 'Start with: In my current role, I lead... As a result...',
@@ -36,6 +47,11 @@ const STARTING_LEVEL_PROFILES: Record<StartingLevelId, StartingLevelProfile> = {
     foundationRule: 'Lead with your action, then show the business result.',
     starterAnswer:
       'In my current role, I lead customer issue reviews and turn them into clear team actions. As a result, we solve problems faster and keep stakeholders informed.',
+    starterEditSteps: [
+      'Lead with your real ownership.',
+      'Name one business action.',
+      'Finish with the business result.',
+    ],
   },
 };
 

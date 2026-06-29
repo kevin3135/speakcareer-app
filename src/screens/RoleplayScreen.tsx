@@ -189,6 +189,7 @@ export function RoleplayScreen({
   const restoredDraftCue = hasRestoredDraft ? createRoleplayResumeCue(liveAnswerReview) : null;
   const foundationWarmupPanel = isAutoWarmupCue && warmupCue
     ? createFoundationWarmupPanel({
+      editPlanSteps: levelProfile.starterEditSteps,
       note: warmupCue.note,
       starterAnswer: warmupCue.starterAnswer,
     })
@@ -646,6 +647,17 @@ export function RoleplayScreen({
                 <Text style={styles.foundationWarmupStarterText}>
                   {foundationWarmupPanel.starterAnswer}
                 </Text>
+              </View>
+              <View style={styles.foundationWarmupEditBox}>
+                <Text style={styles.foundationWarmupEditLabel}>{foundationWarmupPanel.editPlanLabel}</Text>
+                <View style={styles.foundationWarmupEditList}>
+                  {foundationWarmupPanel.editPlanSteps.map((step, index) => (
+                    <View key={`${index + 1}-${step}`} style={styles.foundationWarmupEditStep}>
+                      <Text style={styles.foundationWarmupEditStepNumber}>{index + 1}</Text>
+                      <Text style={styles.foundationWarmupEditStepText}>{step}</Text>
+                    </View>
+                  ))}
+                </View>
               </View>
               <Text style={styles.foundationWarmupNote}>
                 <Text style={styles.foundationWarmupNoteLabel}>
@@ -1223,6 +1235,47 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  foundationWarmupEditBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.sm,
+  },
+  foundationWarmupEditLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  foundationWarmupEditList: {
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  foundationWarmupEditStep: {
+    alignItems: 'center',
+    backgroundColor: colors.secondarySoft,
+    borderRadius: radius.md,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  foundationWarmupEditStepNumber: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    width: 12,
+  },
+  foundationWarmupEditStepText: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
   },
   foundationWarmupNote: {
     color: colors.textMuted,
