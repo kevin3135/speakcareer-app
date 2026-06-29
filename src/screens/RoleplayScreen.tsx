@@ -12,7 +12,7 @@ import {
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
 import { guidedStart } from '../data/guidedIntro';
-import { colors, fonts, radius, spacing, typography } from '../theme';
+import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type {
   DailyPracticeTarget,
   PracticeSession,
@@ -84,6 +84,7 @@ export function RoleplayScreen({
   const answerInputRef = useRef<TextInput>(null);
   const followUpInputRef = useRef<TextInput>(null);
   const [answerPulse] = useState(() => new Animated.Value(0));
+  const [rewardPulse] = useState(() => new Animated.Value(0));
   const [draftAnswer, setDraftAnswer] = useState(
     () => (warmupCue?.autoApplyStarter ? warmupCue.starterAnswer : ''),
   );
@@ -228,6 +229,16 @@ export function RoleplayScreen({
       },
     ],
   };
+  const rewardPulseStyle = {
+    transform: [
+      {
+        scale: rewardPulse.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 1.035],
+        }),
+      },
+    ],
+  };
 
   useEffect(() => {
     if (!shouldPulseAnswer) {
@@ -254,6 +265,31 @@ export function RoleplayScreen({
 
     return () => pulse.stop();
   }, [answerPulse, shouldPulseAnswer]);
+
+  useEffect(() => {
+    if (!savedSession) {
+      rewardPulse.stopAnimation(() => rewardPulse.setValue(0));
+      return;
+    }
+
+    rewardPulse.setValue(0);
+    const pulse = Animated.sequence([
+      Animated.timing(rewardPulse, {
+        duration: 260,
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+      Animated.timing(rewardPulse, {
+        duration: 320,
+        toValue: 0,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    pulse.start();
+
+    return () => pulse.stop();
+  }, [rewardPulse, savedSession]);
 
   useEffect(() => {
     if (!isFollowUpOpen) {
@@ -435,23 +471,31 @@ export function RoleplayScreen({
           title={savedHandoff.title}
           tone="success"
         >
-          <View style={styles.completeBadges}>
-            <XPBadge label={savedHandoff.xpLabel} />
-            {savedMilestone ? (
-              <>
-                <Badge
-                  label={savedMilestone.title}
-                  tone={savedMilestone.progressPercent === 100 ? 'success' : 'info'}
-                />
-                <Badge label={`Streak ${savedMilestone.streakValue}`} tone="secondary" />
-              </>
-            ) : (
-              <Badge label="Streak updated" tone="accent" />
-            )}
-            {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.badgeLabel} tone="accent" /> : null}
-            {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.totalXpLabel} tone="info" /> : null}
-            {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
-          </View>
+          <Animated.View style={[styles.rewardMomentCard, rewardPulseStyle]}>
+            <View style={styles.rewardMomentHeader}>
+              <Text style={styles.rewardMomentLabel}>Reward</Text>
+              <XPBadge label={savedHandoff.xpLabel} />
+            </View>
+            <Text numberOfLines={1} style={styles.rewardMomentTitle}>
+              Momentum saved
+            </Text>
+            <View style={styles.completeBadges}>
+              {savedMilestone ? (
+                <>
+                  <Badge
+                    label={savedMilestone.title}
+                    tone={savedMilestone.progressPercent === 100 ? 'success' : 'info'}
+                  />
+                  <Badge label={`Streak ${savedMilestone.streakValue}`} tone="secondary" />
+                </>
+              ) : (
+                <Badge label="Streak updated" tone="accent" />
+              )}
+              {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.badgeLabel} tone="accent" /> : null}
+              {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.totalXpLabel} tone="info" /> : null}
+              {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
+            </View>
+          </Animated.View>
           {savedCoachRecap ? (
             <View style={styles.savedCoachStrip}>
               <Text numberOfLines={1} style={styles.savedCoachStripText}>
@@ -479,7 +523,7 @@ export function RoleplayScreen({
           {savedPathProgress ? (
             <View style={styles.savedPathBox}>
               <View style={styles.oneThingHeader}>
-                <Text style={styles.savedPathLabel}>Career path</Text>
+                <Text style={styles.savedPathLabel}>Next unlocked</Text>
                 <Badge label={savedPathProgress.badgeLabel} tone="accent" />
               </View>
               <Text numberOfLines={1} style={styles.savedPathNext}>
@@ -1581,6 +1625,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  rewardMomentCard: {
+    ...shadows.soft,
+    backgroundColor: colors.white,
+    borderColor: colors.successDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  rewardMomentHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  rewardMomentLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  rewardMomentTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   levelUpStrip: {
     backgroundColor: colors.accentSoft,

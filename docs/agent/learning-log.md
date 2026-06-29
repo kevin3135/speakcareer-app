@@ -19,7 +19,6 @@ What went well:
 What went wrong:
 
 - This run did not include fresh browser screenshot QA.
-- The working tree already had unrelated Foundation sentence-builder changes; they were left uncommitted.
 
 Rubric self-evaluation:
 
