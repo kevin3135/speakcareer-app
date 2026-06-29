@@ -109,9 +109,12 @@ export function ProfileScreen({
       />
 
       <Card tone="muted">
-        <Text style={styles.cardKicker}>Privacy</Text>
-        <Text style={styles.cardTitle}>Local MVP mode</Text>
-        <Text style={styles.cardBody}>Practice progress is stored on this device for now. No real auth, payments or AI API are connected.</Text>
+        <View style={styles.privacyHeader}>
+          <Text style={styles.cardKicker}>Privacy</Text>
+          <Badge label="Device preview" tone="info" />
+        </View>
+        <Text style={styles.cardTitle}>Private practice space</Text>
+        <Text style={styles.cardBody}>Your progress stays on this device in the preview. No account setup needed.</Text>
       </Card>
     </ScreenContainer>
   );
@@ -201,5 +204,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '800',
+  },
+  privacyHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
   },
 });

@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Profile Privacy Copy
+
+Made one focused night design polish: the Profile privacy card now reads like a learner-facing device preview instead of a technical MVP integration note.
+
+Why it changed:
+
+- The design audit called out Profile/Me as still containing implementation notes that feel technical.
+- Me should feel calm and trustworthy, not like a developer status page.
+- A short device-preview badge keeps the privacy reassurance visible without competing with daily target or Learn handoff.
+
+What changed:
+
+- Replaced `Local MVP mode` with `Private practice space`.
+- Added a compact `Device preview` badge using the existing Badge component and theme tokens.
+- Shortened the body copy to focus on local progress and no account setup.
+
+What went well:
+
+- The change stayed inside `ProfileScreen` and this log.
+- No app logic, storage, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- The copy is shorter, more user-facing and still accurate for the local MVP.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh browser screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 3
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 3
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep user-facing privacy copy focused on trust and control, not on internal integration status.
+- Technical integration notes belong in docs unless they help the learner make a decision.
+
+Next suggested task:
+
+- Preview the Me screen on a narrow mobile viewport and make the Premium preview CTA feel more action-oriented if it still reads like a static card.
+
 ## 2026-06-29: Coach Bubble Identity
 
 Made one focused night design polish: the shared CoachBubble now has a warmer Career Coach identity with a framed `SC` avatar, premium bubble surface and compact `Guide` badge.
