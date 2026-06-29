@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Quest 1 Save Unlock Hint
+
+Made one focused first-quest polish: the Step 3 save card now repeats the unlock outcome in one compact line before the learner taps Save.
+
+Why it changed:
+
+- The Quest 1 coach card explains the first review, but the final save card still felt like a generic save prompt.
+- Saving the first Job Interview answer is the moment that unlocks the broader app loop.
+- A short final-step hint makes the primary Save action feel more rewarding without adding a new reward system.
+
+What changed:
+
+- Added a compact `Final step` hint to the first-quest save prompt.
+- Reused the existing `Unlock Home and Progress` copy from `createRoleplayFirstQuestState`.
+- Kept the Save button, feedback flow, XP logic, storage and navigation unchanged.
+
+What went well:
+
+- The change stayed inside `RoleplayScreen` and this log.
+- No new screens, APIs, auth, payments, analytics, backend work or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first save should clearly connect the final action to unlocking Home and Progress.
+- Keep first-quest reward language short and outcome-focused, not celebratory or childish.
+
+Next suggested task:
+
+- Mobile QA the first Job Interview review and save cards together, then trim any duplicate unlock wording if both cards feel repetitive.
+
 ## 2026-06-29: Quest 1 Coach Review Card
 
 Made one focused AI feedback improvement: the first Job Interview review step now shows a compact `Quest 1 coach` card with a simpler readiness message, a short model answer and an unlock reminder before save.
