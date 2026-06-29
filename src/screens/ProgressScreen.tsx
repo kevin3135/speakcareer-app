@@ -32,7 +32,6 @@ import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
   dailyTarget: DailyPracticeTarget;
-  onBackToLearn: () => void;
   onMarkMistakePracticed: (mistakeId: string) => void;
   onOpenRoleplay: (roleplayId: RoleplayId, warmupCue?: RoleplayWarmupCue) => void;
   practicedMistakeIds: string[];
@@ -43,7 +42,6 @@ const weekActivity = [28, 44, 18, 65, 40, 72, 55];
 
 export function ProgressScreen({
   dailyTarget,
-  onBackToLearn,
   onMarkMistakePracticed,
   onOpenRoleplay,
   practicedMistakeIds,
@@ -160,9 +158,9 @@ export function ProgressScreen({
         ) : null}
         <View style={styles.cardAction}>
           <AppButton
-            accessibilityHint="Return to the guided Learn path"
-            label="Back to Learn"
-            onPress={onBackToLearn}
+            accessibilityHint="Open the recommended next roleplay from your progress card"
+            label={nextStepGuide.ctaLabel}
+            onPress={() => onOpenRoleplay(nextStepGuide.roleplayId)}
           />
         </View>
       </Card>

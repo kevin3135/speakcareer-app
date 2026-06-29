@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Progress Next-Step CTA
+
+Made one focused UX polish: the Progress next-step card now opens the recommended roleplay directly instead of sending the learner back to Learn first.
+
+Why it changed:
+
+- Progress already knows the next recommended roleplay through `createProgressNextStepGuide`.
+- A `Back to Learn` button made the user take an extra step after the app had already identified the next practice.
+- Directly opening the recommended roleplay makes Wins feel app-led and keeps the habit loop moving.
+
+What changed:
+
+- Updated the primary CTA in `ProgressScreen` to use `nextStepGuide.ctaLabel`.
+- Routed that CTA to `onOpenRoleplay(nextStepGuide.roleplayId)`.
+- Removed the now-unused `onBackToLearn` prop from the Progress screen wiring.
+
+What went well:
+
+- The change reused existing next-step data and navigation callbacks.
+- No new screens, storage, APIs, auth, payments, analytics, backend work or dependencies were added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA in the browser preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 76 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a screen already computes a recommended next roleplay, the primary CTA should open that roleplay directly.
+- Progress should motivate and guide the next practice, not act like a passive report.
+
+Next suggested task:
+
+- Make the Progress next-step card visually more dominant than secondary progress sections if mobile QA shows the level runway competes with the primary action.
+
 ## 2026-06-29: Progress Level Runway
 
 Made one focused progress improvement: the Progress screen now shows a dedicated level runway card so the learner can see the current level, XP progress to the next level and how today’s target keeps that bar moving.
