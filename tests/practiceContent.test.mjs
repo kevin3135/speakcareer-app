@@ -806,7 +806,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.equal(starterPanel.starterLabel, 'Loaded starter');
   assert.equal(starterPanel.editPlanLabel, 'Make it yours');
   assert.deepEqual(starterPanel.editPlanSteps, starterProfile.starterEditSteps);
-  assert.ok(starterPanel.body.includes('Edit this first line'));
+  assert.equal(starterPanel.body, 'Make it yours, then check.');
   assert.ok(starterPanel.starterAnswer.includes('The result was'));
   assert.ok(confidentCue.note.includes('business result'));
   assert.ok(confidentCue.starterAnswer.includes('As a result'));

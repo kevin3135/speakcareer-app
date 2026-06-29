@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Roleplay Warmup Copy
+
+Made one focused night design polish: the Roleplay foundation warmup body copy is shorter so the answer area can feel closer to the current task.
+
+Why it changed:
+
+- The starter answer and edit-plan rows already explain what to personalize.
+- The previous body copy repeated the same instruction and added height before the learner reaches the answer input.
+- Roleplay should keep the active practice state focused on one loop: coach asks, learner answers, app checks.
+
+What changed:
+
+- Shortened the foundation warmup panel body from a full instruction to `Make it yours, then check.`
+- Shortened the no-note fallback to `Use this line, then check.`
+- Updated the focused practice-content test expectation for the new concise warmup copy.
+
+What went well:
+
+- The change stayed inside one copy utility, one existing test and this log.
+- No screen layout, storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Warmup copy should not repeat guidance already shown by the starter answer and edit-plan rows.
+- Keep every Roleplay warmup line short enough to preserve the answer box as the next obvious action.
+
+Next suggested task:
+
+- Do a narrow mobile screenshot QA pass on the first Job Interview handoff and adjust only spacing if the answer box still appears too low.
+
 ## 2026-06-29: Roleplay Warmup Edit Plan
 
 Made one focused night design polish: the Roleplay foundation warmup edit-plan rows are now more compact so the answer box can appear sooner.

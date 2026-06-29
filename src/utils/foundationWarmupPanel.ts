@@ -23,8 +23,8 @@ export function createFoundationWarmupPanel({
 
   return {
     body: hasCoachNote
-      ? 'Edit this first line so it matches your real work, then check it.'
-      : 'Use this first line to begin faster, then check it.',
+      ? 'Make it yours, then check.'
+      : 'Use this line, then check.',
     coachLabel: 'Coach note',
     editPlanLabel: 'Make it yours',
     editPlanSteps,
