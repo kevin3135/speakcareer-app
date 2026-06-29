@@ -19,6 +19,7 @@ import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
+import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
 import { summarizePracticeAnswer } from '../utils/answerReview';
 
 type HomeScreenProps = {
@@ -65,7 +66,8 @@ export function HomeScreen({
   const resumeRoleplay = draft
     ? practiceContent.roleplays.find((roleplay) => roleplay.id === draft.roleplayId) ?? null
     : null;
-  const resumeWordCount = draft ? summarizePracticeAnswer(draft.draftAnswer).wordCount : 0;
+  const resumeReview = draft ? summarizePracticeAnswer(draft.draftAnswer) : null;
+  const resumeCue = resumeReview ? createRoleplayResumeCue(resumeReview) : null;
   const activeRoleplayId = activeLesson.roleplayId;
   const startActiveLesson = resumeRoleplay
     ? () => onOpenRoleplay(resumeRoleplay.id)
@@ -81,9 +83,13 @@ export function HomeScreen({
   const startCardCtaLabel = resumeRoleplay
     ? 'Finish your saved answer'
     : activeLesson.ctaLabel ?? learnState.hero.ctaLabel;
-  const startCardHabitLabel = resumeRoleplay ? 'Saved on this device' : isMissionComplete ? 'Today done' : 'Today goal';
-  const startCardHabitValue = resumeRoleplay
-    ? `${resumeWordCount} ${resumeWordCount === 1 ? 'word' : 'words'} ready to finish`
+  const startCardHabitLabel = resumeRoleplay && resumeCue
+    ? resumeCue.badgeLabel
+    : isMissionComplete
+      ? 'Today done'
+      : 'Today goal';
+  const startCardHabitValue = resumeRoleplay && resumeCue
+    ? resumeCue.body
     : missionCard.targetLabel;
   const startCardPathLabel = resumeRoleplay ? 'Resume now' : pathStatusLabel;
   const startCardTitle = resumeRoleplay ? `Resume ${resumeRoleplay.title}` : activeLesson.title;

@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Home Resume Cue
+
+Made one focused night design polish: the Home start card now shows the same concrete saved-draft cue used by Roleplay when a learner has unfinished work.
+
+Why it changed:
+
+- Home already prioritized resuming a saved answer, but the habit pill only said the draft was ready to finish.
+- The app feels more guided when Home, Practice and Roleplay all point to the same next improvement.
+- A concrete cue helps the learner understand what to do before they tap back into the draft.
+
+What changed:
+
+- Reused `createRoleplayResumeCue` in `HomeScreen` for saved-draft states.
+- Replaced the generic saved-answer word-count text with a cue such as `Saved draft: add one result or next step, or check now.`
+- Kept the main CTA as `Finish your saved answer`.
+
+What went well:
+
+- The change stayed inside `HomeScreen` and this log.
+- No storage, navigation, data shape, APIs, auth, payments, analytics, backend work or dependencies were changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Saved-draft guidance should match across Home, Practice and Roleplay.
+- Home can show concrete guidance inside the habit pill without adding another CTA.
+
+Next suggested task:
+
+- Visually QA the Home saved-draft card on a narrow viewport and trim the cue copy if it truncates too early.
+
 ## 2026-06-29: Roleplay Restored Draft Cue
 
 Made one focused practice-flow improvement: the Roleplay screen now gives a concrete saved-draft coach cue when a learner reopens an unfinished answer.
