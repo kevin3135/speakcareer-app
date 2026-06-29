@@ -629,6 +629,15 @@ test('creates a level-matched foundation handoff before the first interview', as
 
   assert.equal(starterHandoff.eyebrow, 'Next step');
   assert.equal(starterHandoff.title, 'Quest 1: Job Interview');
+  assert.equal(starterHandoff.pathLabel, 'What happens next');
+  assert.deepEqual(
+    starterHandoff.pathSteps.map((step) => step.badgeLabel),
+    ['Now', 'After save'],
+  );
+  assert.equal(starterHandoff.pathSteps[0].title, 'Open Job Interview');
+  assert.ok(starterHandoff.pathSteps[0].detail.includes('starter line'));
+  assert.equal(starterHandoff.pathSteps[1].title, 'Unlock Learn + Wins');
+  assert.ok(starterHandoff.pathSteps[1].detail.includes('XP'));
   assert.equal(starterHandoff.starterLabel, 'Starter answer');
   assert.ok(starterHandoff.body.includes('first interview answer'));
   assert.ok(starterHandoff.coachNote.includes('Keep it simple'));

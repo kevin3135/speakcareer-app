@@ -186,6 +186,20 @@ export function FoundationScreen({
           </View>
           <Text style={styles.handoffTitle}>{handoff.title}</Text>
           <Text style={styles.handoffBody}>{handoff.body}</Text>
+          <View style={styles.handoffPathBox}>
+            <Text style={styles.handoffPathLabel}>{handoff.pathLabel}</Text>
+            <View style={styles.handoffPathList}>
+              {handoff.pathSteps.map((step, index) => (
+                <View key={step.badgeLabel} style={styles.handoffPathStep}>
+                  <View style={styles.handoffPathStepHeader}>
+                    <Badge label={step.badgeLabel} tone={index === 0 ? 'accent' : 'success'} />
+                    <Text style={styles.handoffPathStepTitle}>{step.title}</Text>
+                  </View>
+                  <Text style={styles.handoffPathStepDetail}>{step.detail}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
           <View style={styles.handoffExampleBox}>
             <Text style={styles.handoffExampleLabel}>{handoff.starterLabel}</Text>
             <Text numberOfLines={2} style={styles.handoffExampleText}>
@@ -438,6 +452,51 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: typography.lineBody,
     marginTop: spacing.sm,
+  },
+  handoffPathBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  handoffPathLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  handoffPathList: {
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  handoffPathStep: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.sm,
+  },
+  handoffPathStepHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  handoffPathStepTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  handoffPathStepDetail: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   handoffExampleBox: {
     backgroundColor: colors.white,

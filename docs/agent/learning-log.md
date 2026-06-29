@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-06-29: Foundation Quest Unlock Cue
+
+Made one focused practice-flow improvement: Lesson 1 completion now shows a compact `What happens next` cue so the learner sees the immediate interview launch and the first unlock after saving.
+
+Why it changed:
+
+- The Foundation screen already showed the first interview handoff, but it did not make the next two app states explicit enough.
+- The English MVP should keep one obvious path: finish Lesson 1, open Job Interview, save once, unlock the ongoing Learn and Wins loop.
+- A small unlock cue is higher value than adding more content because it reduces hesitation before the first real practice step.
+
+What changed:
+
+- Extended `createFoundationHandoff` with a short two-step next-state preview: `Now` and `After save`.
+- Added a compact `What happens next` panel to `src/screens/FoundationScreen.tsx`.
+- Kept the existing starter answer and coach note intact so the cue reinforces the current handoff instead of replacing it.
+- Added focused assertions in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- The implementation stayed inside `src/utils/foundationHandoff.ts`, `src/screens/FoundationScreen.tsx`, `tests/practiceContent.test.mjs` and this log.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The new copy keeps the user-facing loop concrete without adding new navigation, storage, backend or onboarding scope.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the new handoff panel spacing should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Early guided screens should show both the next action and the first unlock after that action.
+- Small progress-loop cues are more useful than adding extra explanation copy to the same handoff card.
+
+Next suggested task:
+
+- Preview the completed Foundation handoff on a narrow viewport and tighten spacing if the `Continue to interview` button sits too low.
+
 ## 2026-06-29: Wins Mistake Queue Polish
 
 Made one focused night design polish: the collapsed mistake queue in Wins now looks like an intentional saved-for-later cue instead of a plain text strip.
