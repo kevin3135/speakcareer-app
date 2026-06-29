@@ -517,7 +517,8 @@ test('creates a personalized onboarding first-path preview from the selected lev
     firstQuestSubtitle: guidedStart.subtitle,
     firstQuestTitle: guidedStart.title,
     levelLabel: starterChoice.label,
-    starterPrompt: starterProfile.answerPlaceholder,
+    starterAnswer: starterProfile.starterAnswer,
+    starterEditSteps: starterProfile.starterEditSteps,
   });
   const confidentChoice = levelAssessment.choices.find((choice) => choice.id === 'confident');
   const confidentProfile = getStartingLevelProfile('confident');
@@ -529,7 +530,8 @@ test('creates a personalized onboarding first-path preview from the selected lev
     firstQuestSubtitle: guidedStart.subtitle,
     firstQuestTitle: guidedStart.title,
     levelLabel: confidentChoice.label,
-    starterPrompt: confidentProfile.answerPlaceholder,
+    starterAnswer: confidentProfile.starterAnswer,
+    starterEditSteps: confidentProfile.starterEditSteps,
   });
 
   assert.equal(starterPreview.title, 'Your first English path');
@@ -540,7 +542,8 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(starterPreview.steps[1].label, 'Quest 1');
   assert.equal(starterPreview.steps[1].title, 'Quest 1: Job Interview');
   assert.ok(starterPreview.coachNote.includes('Keep it simple'));
-  assert.ok(starterPreview.starterPrompt.includes('I worked on'));
+  assert.ok(starterPreview.starterAnswer.includes('The result was'));
+  assert.deepEqual(starterPreview.starterEditSteps, starterProfile.starterEditSteps);
   assert.equal(starterPreview.dailyTargetLabel, '1 roleplay a day');
   assert.ok(starterPreview.dailyTargetNote.includes('steady five-minute'));
   assert.equal(starterPreview.nextQuestTitleShort, 'Job Interview');
@@ -559,7 +562,8 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(confidentPreview.levelLabel, 'B2');
   assert.ok(confidentPreview.steps[0].detail.includes('business result'));
   assert.ok(confidentPreview.coachNote.includes('business result'));
-  assert.ok(confidentPreview.starterPrompt.includes('In my current role'));
+  assert.ok(confidentPreview.starterAnswer.includes('As a result'));
+  assert.deepEqual(confidentPreview.starterEditSteps, confidentProfile.starterEditSteps);
   assert.equal(confidentPreview.dailyTargetLabel, '3 roleplays a day');
   assert.ok(confidentPreview.dailyTargetNote.includes('extra interview reps'));
   assert.ok(confidentPreview.sessionNote.includes('two more short roleplays later today'));

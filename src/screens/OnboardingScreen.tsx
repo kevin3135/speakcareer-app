@@ -41,7 +41,8 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
           firstQuestSubtitle: guidedStart.subtitle,
           firstQuestTitle: guidedStart.title,
           levelLabel: selectedChoice.label,
-          starterPrompt: selectedProfile.answerPlaceholder,
+          starterAnswer: selectedProfile.starterAnswer,
+          starterEditSteps: selectedProfile.starterEditSteps,
         })
       : null;
 
@@ -187,10 +188,21 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
           </View>
 
           <View style={styles.planStarter}>
-            <Text style={styles.planStarterLabel}>First answer starter</Text>
-            <Text numberOfLines={2} style={styles.planStarterText}>
-              {planPreview.starterPrompt}
+            <Text style={styles.planStarterLabel}>First interview starter</Text>
+            <Text style={styles.planStarterText}>
+              {planPreview.starterAnswer}
             </Text>
+            <View style={styles.planStarterEditBox}>
+              <Text style={styles.planStarterEditLabel}>Make it yours</Text>
+              <View style={styles.planStarterEditList}>
+                {planPreview.starterEditSteps.map((step, index) => (
+                  <View key={`${index + 1}-${step}`} style={styles.planStarterEditStep}>
+                    <Text style={styles.planStarterEditStepNumber}>{index + 1}</Text>
+                    <Text style={styles.planStarterEditStepText}>{step}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
           </View>
         </View>
       ) : null}
@@ -453,6 +465,48 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  planStarterEditBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  planStarterEditLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  planStarterEditList: {
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  planStarterEditStep: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  planStarterEditStepNumber: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    width: 12,
+  },
+  planStarterEditStepText: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
   },
   sessionLoopBadge: {
     alignItems: 'center',

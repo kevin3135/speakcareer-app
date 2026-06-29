@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-06-29: Onboarding Starter Answer Preview
+
+Made one focused onboarding improvement: the onboarding first-path preview now shows the real first interview starter answer and the same `Make it yours` edit steps the learner will see later in the guided flow.
+
+Why it changed:
+
+- The onboarding preview labeled the section as a starter answer, but it was still showing placeholder-style prompt text instead of the actual guided starter line.
+- The first session feels easier to trust when onboarding previews the real answer shape, not a generic instruction.
+- Showing the edit steps earlier makes the first interview feel concrete without adding a new screen or more state.
+
+What changed:
+
+- Updated `src/utils/onboardingPlan.ts` so the onboarding preview now carries `starterAnswer` and `starterEditSteps` instead of placeholder prompt text.
+- Updated `src/screens/OnboardingScreen.tsx` to show the real first interview starter answer plus a compact `Make it yours` checklist inside the existing preview card.
+- Updated `tests/practiceContent.test.mjs` so the onboarding preview contract now checks for the real starter answer and level-matched edit steps.
+
+What went well:
+
+- The improvement stayed inside the existing onboarding preview flow and reused the current starting-level profile data.
+- The preview is now consistent with the later Foundation handoff and first Job Interview warmup, so the app-guided path feels more continuous.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/mobile visual QA, so the taller starter-answer area should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 75 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When onboarding previews a later guided step, it should show the real content the learner will receive, not placeholder-only copy.
+- Reuse the same starter-answer guidance between onboarding, Foundation handoff and Roleplay warmup so the first practice path feels continuous.
+
+Next suggested task:
+
+- Do a narrow mobile QA pass on onboarding and trim spacing only if the new starter-answer checklist pushes the Continue button too low.
+
 ## 2026-06-29: Roleplay Warmup Copy
 
 Made one focused night design polish: the Roleplay foundation warmup body copy is shorter so the answer area can feel closer to the current task.

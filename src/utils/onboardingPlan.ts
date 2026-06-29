@@ -14,7 +14,8 @@ export type OnboardingPlanPreviewInput = {
   firstQuestSubtitle: string;
   firstQuestTitle: string;
   levelLabel: string;
-  starterPrompt: string;
+  starterAnswer: string;
+  starterEditSteps: [string, string, string];
 };
 
 export type OnboardingPlanPreview = {
@@ -30,7 +31,8 @@ export type OnboardingPlanPreview = {
   sessionNote: string;
   sessionSteps: [OnboardingPlanStep, OnboardingPlanStep, OnboardingPlanStep];
   sessionTitle: string;
-  starterPrompt: string;
+  starterAnswer: string;
+  starterEditSteps: [string, string, string];
   steps: [OnboardingPlanStep, OnboardingPlanStep];
   title: string;
 };
@@ -43,7 +45,8 @@ export function createOnboardingPlanPreview({
   firstQuestSubtitle,
   firstQuestTitle,
   levelLabel,
-  starterPrompt,
+  starterAnswer,
+  starterEditSteps,
 }: OnboardingPlanPreviewInput): OnboardingPlanPreview {
   const nextQuestTitleShort = createShortQuestTitle(firstQuestTitle);
 
@@ -76,7 +79,8 @@ export function createOnboardingPlanPreview({
       },
     ],
     sessionTitle: 'Your first practice loop',
-    starterPrompt,
+    starterAnswer,
+    starterEditSteps,
     steps: [
       {
         detail: firstLessonDetail,
