@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-01: Roleplay Runway Density
+
+Made one focused Roleplay visual polish: the three-step `Answer -> Review -> Save` runway now fits more safely on narrow mobile screens.
+
+Why it changed:
+
+- The shared Roleplay runway improved flow clarity, but the three horizontal chips could feel tight on small phones.
+- The runway should guide the user without taking attention away from the current answer, review or save action.
+- Keeping the labels stable and one-line protects the mobile layout from small text shifts.
+
+What changed:
+
+- Added one-line protection to runway step labels in `src/screens/RoleplayScreen.tsx`.
+- Reduced horizontal runway spacing and padding slightly.
+- Added `minWidth: 0` to flexible runway text areas so labels truncate cleanly instead of pushing the row wider.
+- Kept runway state logic, copy, XP, save behavior, feedback and navigation unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- It directly follows the previous mobile-density concern without adding new UI concepts.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Roleplay answer, review and save cards at a narrow width to confirm the runway chips and optional follow-up chip both feel calm.
+
 ## 2026-07-01: Follow-Up Bonus Step
 
 Made one focused Roleplay save-card polish: the optional follow-up now reads like a guided bonus step instead of a separate side module.

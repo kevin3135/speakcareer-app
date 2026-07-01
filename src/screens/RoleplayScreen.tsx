@@ -575,6 +575,7 @@ export function RoleplayScreen({
                 </Text>
               </View>
               <Text
+                numberOfLines={1}
                 style={[
                   styles.flowRunwayStepLabel,
                   step.state === 'current' && styles.flowRunwayStepLabelCurrent,
@@ -1259,12 +1260,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
-    marginLeft: spacing.md,
+    marginLeft: spacing.sm,
+    minWidth: 0,
     textAlign: 'right',
   },
   flowRunwaySteps: {
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
     marginTop: spacing.sm,
   },
   flowRunwayStep: {
@@ -1276,8 +1278,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     gap: spacing.xs,
-    minHeight: 44,
-    paddingHorizontal: spacing.sm,
+    minHeight: 40,
+    minWidth: 0,
+    paddingHorizontal: spacing.xs,
     paddingVertical: spacing.xs,
   },
   flowRunwayStepCurrent: {
@@ -1324,6 +1327,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    minWidth: 0,
   },
   flowRunwayStepLabelCurrent: {
     color: colors.primaryDark,
