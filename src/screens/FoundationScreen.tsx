@@ -204,14 +204,14 @@ export function FoundationScreen({
               ))}
             </View>
           </View>
-          <View style={styles.handoffExampleBox}>
-            <Text style={styles.handoffExampleLabel}>{handoff.starterLabel}</Text>
+          <View style={styles.handoffStarterKit}>
+            <View style={styles.handoffStarterHeader}>
+              <Text style={styles.handoffExampleLabel}>{handoff.starterLabel}</Text>
+              <Badge label={handoff.editPlanLabel} tone="secondary" />
+            </View>
             <Text numberOfLines={2} style={styles.handoffExampleText}>
               {handoff.starterAnswer}
             </Text>
-          </View>
-          <View style={styles.handoffEditBox}>
-            <Text style={styles.handoffEditLabel}>{handoff.editPlanLabel}</Text>
             <View style={styles.handoffEditList}>
               {handoff.editPlanSteps.map((step, index) => (
                 <View key={`${index + 1}-${step}`} style={styles.handoffEditStep}>
@@ -513,7 +513,7 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
-  handoffExampleBox: {
+  handoffStarterKit: {
     backgroundColor: colors.white,
     borderColor: colors.accent,
     borderRadius: radius.lg,
@@ -521,8 +521,15 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     padding: spacing.sm,
   },
+  handoffStarterHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: spacing.sm,
+  },
   handoffExampleLabel: {
     color: colors.accentDark,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
@@ -535,23 +542,9 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
   },
-  handoffEditBox: {
-    backgroundColor: colors.white,
-    borderColor: colors.accent,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.sm,
-  },
-  handoffEditLabel: {
-    color: colors.accentDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
   handoffEditList: {
     gap: spacing.xs,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   handoffEditStep: {
     alignItems: 'center',

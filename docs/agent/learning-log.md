@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-01: Foundation Starter Kit Density
+
+Made one focused Foundation handoff design polish: the completed Foundation card now combines the starter answer and edit plan into one compact starter-kit block.
+
+Why it changed:
+
+- The previous Foundation handoff had separate white blocks for the starter answer and `Make it yours` edit plan.
+- After adding the first-save milestone language, the completed handoff card could feel tall on mobile.
+- The starter answer and edit plan are one job for the learner: get ready for the Job Interview answer.
+
+What changed:
+
+- Replaced the separate starter-answer box and edit-plan box in `src/screens/FoundationScreen.tsx` with one `handoffStarterKit`.
+- Added a compact header that keeps `Starter answer` and `Make it yours` together.
+- Reduced the internal gap before the edit steps.
+- Kept Foundation progress, handoff data, navigation, roleplay starter behavior and daily-target copy unchanged.
+
+What went well:
+
+- The change stayed inside one screen and this log.
+- The primary `Continue to interview` action should sit closer after the completed handoff.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the completed Foundation handoff card at 390px width and only then decide if the `What happens next` path rows need the same density treatment.
+
 ## 2026-07-01: Foundation First-Save Handoff
 
 Made one focused Foundation handoff polish: the completed Foundation lesson now carries the same day-one first-save promise from onboarding into the live handoff before Job Interview.
