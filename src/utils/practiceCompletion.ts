@@ -508,14 +508,14 @@ function createSavedPathRunwayBody({
   savedRoleplayTitle: string | null;
 }) {
   if (isPathComplete) {
-    return `You cleared the full English path. Replay ${nextStepTitle} to keep the streak moving from this win screen.`;
+    return `Full path cleared. Replay ${nextStepTitle} to keep your streak moving.`;
   }
 
   const savedTitle = savedRoleplayTitle ?? 'This lesson';
 
   if (!nextUnlockStepTitle) {
-    return `${savedTitle} is saved. Start ${nextStepTitle} now to keep the guided path moving.`;
+    return `${savedTitle} saved. Start ${nextStepTitle} to keep the path moving.`;
   }
 
-  return `${savedTitle} is saved. Start ${nextStepTitle} now to unlock ${nextUnlockStepTitle} and keep the guided path moving.`;
+  return `${savedTitle} saved. Start ${nextStepTitle} to unlock ${nextUnlockStepTitle}.`;
 }

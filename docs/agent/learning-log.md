@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-07-01: Saved Runway Copy Density
+
+Made one focused Roleplay completion polish: the saved-completion runway body copy is now shorter and more action-led.
+
+Why it changed:
+
+- The saved-completion runway already shows title, rows, XP and progress, so the body text did not need a long explanation.
+- Shorter copy helps the reward moment feel faster on mobile.
+- The next unlock should read like a quick cue after saving, not another report.
+
+What changed:
+
+- Shortened `createSavedPathRunwayBody` in `src/utils/practiceCompletion.ts`.
+- Changed the normal saved path message to `Presentation Practice saved. Start Sales Call to unlock Workplace Small Talk.` style copy.
+- Changed the full-path message to `Full path cleared. Replay Job Interview to keep your streak moving.`
+- Updated focused assertions in `tests/practiceContent.test.mjs`.
+- Kept storage, XP, streak, navigation, runway state and screen structure unchanged.
+
+What went well:
+
+- The change stayed inside one small helper, one existing test file and this log.
+- The copy now supports the same unlock loop with less reading.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the saved completion hero and runway at a narrow width, then decide if the progress bar label needs the same density treatment.
+
 ## 2026-07-01: Saved Runway Badge Density
 
 Made one focused Roleplay completion polish: the saved-completion runway rows now keep the XP badge on the meta line instead of crowding the main title row.

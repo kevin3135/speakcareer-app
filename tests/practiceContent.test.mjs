@@ -1540,7 +1540,10 @@ test('creates a rewarding roleplay completion summary', async () => {
       '05:Workplace Small Talk:Unlock next',
     ],
   );
-  assert.ok(savedPathProgress.runway?.body.includes('Start Sales Call now to unlock Workplace Small Talk'));
+  assert.equal(
+    savedPathProgress.runway?.body,
+    'Presentation Practice saved. Start Sales Call to unlock Workplace Small Talk.',
+  );
 
   const nextAfterSales = createNextPracticeRecommendation('sales-call', practiceContent.roleplays);
   assert.equal(nextAfterSales.roleplayId, 'workplace-small-talk');
@@ -1643,7 +1646,10 @@ test('creates a rewarding roleplay completion summary', async () => {
     completedPathProgress.runway?.items.find((item) => item.state === 'active')?.statusLabel,
     'Replay now',
   );
-  assert.ok(completedPathProgress.runway?.body.includes('Replay Job Interview'));
+  assert.equal(
+    completedPathProgress.runway?.body,
+    'Full path cleared. Replay Job Interview to keep your streak moving.',
+  );
   assert.equal(replayHandoff.ctaLabel, 'Replay Job Interview');
   assert.ok(replayHandoff.body.includes('cleared the full career path'));
 });
