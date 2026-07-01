@@ -50,6 +50,7 @@ import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { createFoundationWarmupPanel } from '../utils/foundationWarmupPanel';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
+import { createRoleplayFlowRunway, type RoleplayFlowRunway } from '../utils/roleplayFlowRunway';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
 import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
@@ -261,6 +262,9 @@ export function RoleplayScreen({
     })
     : null;
   const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
+  const answerRunway = createRoleplayFlowRunway('answer');
+  const reviewRunway = createRoleplayFlowRunway('review');
+  const saveRunway = createRoleplayFlowRunway('save');
   const answerPulseStyle = {
     opacity: answerPulse.interpolate({
       inputRange: [0, 1],
@@ -531,6 +535,61 @@ export function RoleplayScreen({
     setIsFollowUpOpen(true);
   }
 
+  function renderFlowRunway(
+    runway: RoleplayFlowRunway,
+    currentStepMeta: string,
+  ) {
+    return (
+      <View style={styles.flowRunway}>
+        <View style={styles.flowRunwayHeader}>
+          <Text style={styles.flowRunwayProgressLabel}>{runway.progressLabel}</Text>
+          <Text numberOfLines={1} style={styles.flowRunwayCurrentLabel}>
+            {currentStepMeta}
+          </Text>
+        </View>
+        <View style={styles.flowRunwaySteps}>
+          {runway.steps.map((step) => (
+            <View
+              key={step.id}
+              style={[
+                styles.flowRunwayStep,
+                step.state === 'current' && styles.flowRunwayStepCurrent,
+                step.state === 'done' && styles.flowRunwayStepDone,
+              ]}
+            >
+              <View
+                style={[
+                  styles.flowRunwayStepNumber,
+                  step.state === 'current' && styles.flowRunwayStepNumberCurrent,
+                  step.state === 'done' && styles.flowRunwayStepNumberDone,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.flowRunwayStepNumberText,
+                    step.state === 'current' && styles.flowRunwayStepNumberTextCurrent,
+                    step.state === 'done' && styles.flowRunwayStepNumberTextDone,
+                  ]}
+                >
+                  {step.numberLabel}
+                </Text>
+              </View>
+              <Text
+                style={[
+                  styles.flowRunwayStepLabel,
+                  step.state === 'current' && styles.flowRunwayStepLabelCurrent,
+                  step.state === 'done' && styles.flowRunwayStepLabelDone,
+                ]}
+              >
+                {step.label}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    );
+  }
+
   if (savedSession) {
     return (
       <ScreenContainer>
@@ -657,15 +716,7 @@ export function RoleplayScreen({
 
       {!feedbackResult ? (
         <Card tone="strong">
-          <View style={styles.practiceStepStrip}>
-            <Text style={styles.practiceStepLabel}>Step 1</Text>
-            <View style={styles.practiceStepTrack}>
-              <View style={styles.practiceStepFill} />
-            </View>
-            <Text style={styles.practiceStepMeta}>
-              {visibleFirstQuestState?.progressLabel ?? 'Answer'}
-            </Text>
-          </View>
+          {renderFlowRunway(answerRunway, visibleFirstQuestState?.progressLabel ?? answerRunway.currentStepLabel)}
           <View style={styles.coachPromptBubble}>
             <View style={styles.coachPromptBadge}>
               <Text style={styles.coachPromptBadgeText}>SC</Text>
@@ -892,6 +943,7 @@ export function RoleplayScreen({
 
       {feedbackResult ? (
         <Card tone="strong">
+          {renderFlowRunway(reviewRunway, reviewRunway.currentStepLabel)}
           <View style={styles.oneThingHeader}>
             <View style={styles.feedbackHeroCopy}>
               <Text style={styles.cardKicker}>Coach says</Text>
@@ -1039,6 +1091,7 @@ export function RoleplayScreen({
 
       {feedbackResult && answerReview?.isReadyForFeedback && savePrompt ? (
         <Card tone="accent">
+          {renderFlowRunway(saveRunway, saveRunway.currentStepLabel)}
           <View style={styles.oneThingHeader}>
             <Text style={styles.cardKicker}>{savePrompt.eyebrow}</Text>
             <XPBadge label={savePrompt.xpLabel} />
@@ -1186,36 +1239,97 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  practiceStepStrip: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.sm,
+  flowRunway: {
     marginBottom: spacing.md,
   },
-  practiceStepLabel: {
+  flowRunwayHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  flowRunwayProgressLabel: {
     color: colors.primaryDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  practiceStepTrack: {
-    backgroundColor: colors.surfaceStrong,
-    borderRadius: radius.pill,
+  flowRunwayCurrentLabel: {
+    color: colors.textMuted,
     flex: 1,
-    height: 8,
-    overflow: 'hidden',
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginLeft: spacing.md,
+    textAlign: 'right',
   },
-  practiceStepFill: {
-    backgroundColor: colors.primary,
+  flowRunwaySteps: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  flowRunwayStep: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.xs,
+    minHeight: 44,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  flowRunwayStepCurrent: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  flowRunwayStepDone: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  flowRunwayStepNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.border,
     borderRadius: radius.pill,
-    height: 8,
-    width: '34%',
+    borderWidth: 1,
+    height: 24,
+    justifyContent: 'center',
+    width: 24,
   },
-  practiceStepMeta: {
+  flowRunwayStepNumberCurrent: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primaryDark,
+  },
+  flowRunwayStepNumberDone: {
+    backgroundColor: colors.success,
+    borderColor: colors.successDark,
+  },
+  flowRunwayStepNumberText: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
+  },
+  flowRunwayStepNumberTextCurrent: {
+    color: colors.white,
+  },
+  flowRunwayStepNumberTextDone: {
+    color: colors.white,
+  },
+  flowRunwayStepLabel: {
+    color: colors.textMuted,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  flowRunwayStepLabelCurrent: {
+    color: colors.primaryDark,
+  },
+  flowRunwayStepLabelDone: {
+    color: colors.successDark,
   },
   coachPromptBubble: {
     backgroundColor: colors.coachSoft,

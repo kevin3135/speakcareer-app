@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-01: Roleplay Step Runway
+
+Made one focused practice-flow improvement: the Roleplay screen now shows a consistent three-step runway across answer, review and save instead of a single hardcoded Step 1 strip.
+
+Why it changed:
+
+- The core English MVP loop is usable, but the roleplay flow still lost some clarity after the first answer because only the draft card showed a progress strip.
+- Review and save are the moments where the app should feel most guided and habit-forming.
+- A shared runway makes the next action clearer without changing storage, navigation or feedback rules.
+
+What changed:
+
+- Added `src/utils/roleplayFlowRunway.ts` to generate a reusable `Answer -> Review -> Save` runway state.
+- Updated `src/screens/RoleplayScreen.tsx` to render the same compact runway at the top of the answer, review and save cards.
+- Kept the first-quest `0/1 saved` progress cue on the answer step by feeding it into the new runway header.
+- Added focused coverage in `tests/practiceContent.test.mjs` for answer, review and save runway states.
+
+What went well:
+
+- The change stayed inside one new helper, one screen and one existing test file.
+- The Roleplay flow now has clearer progression without adding new screens, copy-heavy panels or progression rules.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the three-chip runway should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a practice loop already has clear states, make the state transition visible before inventing new rewards or extra content.
+- Reuse one progression pattern across answer, review and save so the roleplay flow feels like one guided sequence.
+
+Next suggested task:
+
+- Make the optional follow-up bonus turn use the same guided step language so it feels like part of the loop, not a side quest.
 ## 2026-07-01: Practice Next-Unlock Runway
 
 Made one focused practice-flow improvement: the Practice screen now shows a compact next-unlock runway under the recommended roleplay so the tab feels like a guided sequence instead of a detached library.

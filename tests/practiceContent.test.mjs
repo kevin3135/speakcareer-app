@@ -296,6 +296,38 @@ test('creates a live readiness cue for the roleplay draft answer', async () => {
   assert.equal(readyCue.progressPercent, 100);
 });
 
+test('creates a three-step runway for the roleplay flow', async () => {
+  const { createRoleplayFlowRunway } = await import('../src/utils/roleplayFlowRunway.ts');
+
+  const answerRunway = createRoleplayFlowRunway('answer');
+  const reviewRunway = createRoleplayFlowRunway('review');
+  const saveRunway = createRoleplayFlowRunway('save');
+
+  assert.equal(answerRunway.progressLabel, 'Step 1 of 3');
+  assert.equal(answerRunway.currentStepLabel, 'Answer now');
+  assert.equal(answerRunway.progressPercent, 33);
+  assert.deepEqual(
+    answerRunway.steps.map((step) => `${step.numberLabel}-${step.label}-${step.state}`),
+    ['1-Answer-current', '2-Review-upcoming', '3-Save-upcoming'],
+  );
+
+  assert.equal(reviewRunway.progressLabel, 'Step 2 of 3');
+  assert.equal(reviewRunway.currentStepLabel, 'Review now');
+  assert.equal(reviewRunway.progressPercent, 67);
+  assert.deepEqual(
+    reviewRunway.steps.map((step) => step.state),
+    ['done', 'current', 'upcoming'],
+  );
+
+  assert.equal(saveRunway.progressLabel, 'Step 3 of 3');
+  assert.equal(saveRunway.currentStepLabel, 'Save now');
+  assert.equal(saveRunway.progressPercent, 100);
+  assert.deepEqual(
+    saveRunway.steps.map((step) => step.state),
+    ['done', 'done', 'current'],
+  );
+});
+
 test('creates a simple first-quest completion handoff', async () => {
   const { createFirstQuestCompletionState } = await import('../src/utils/firstQuestCompletion.ts');
 
