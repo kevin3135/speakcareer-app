@@ -734,11 +734,13 @@ export function RoleplayScreen({
                             }
                           />
                         </View>
-                        <Text numberOfLines={1} style={styles.savedPathRunwayItemMeta}>
-                          {item.metaLabel}
-                        </Text>
+                        <View style={styles.savedPathRunwayMetaRow}>
+                          <Text numberOfLines={1} style={styles.savedPathRunwayItemMeta}>
+                            {item.metaLabel}
+                          </Text>
+                          <XPBadge label={item.xpLabel} />
+                        </View>
                       </View>
-                      <XPBadge label={item.xpLabel} />
                     </View>
                   ))}
                 </View>
@@ -2353,7 +2355,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   savedPathRunwayItem: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: colors.successSoft,
     borderColor: colors.success,
     borderRadius: radius.lg,
@@ -2380,10 +2382,11 @@ const styles = StyleSheet.create({
   },
   savedPathRunwayItemMeta: {
     color: colors.textMuted,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: 2,
+    minWidth: 0,
   },
   savedPathRunwayItemTitle: {
     color: colors.ink,
@@ -2397,6 +2400,12 @@ const styles = StyleSheet.create({
   savedPathRunwayList: {
     gap: spacing.xs,
     marginTop: spacing.sm,
+  },
+  savedPathRunwayMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: 2,
   },
   savedPathRunwaySequence: {
     alignItems: 'center',

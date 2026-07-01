@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-01: Saved Runway Badge Density
+
+Made one focused Roleplay completion polish: the saved-completion runway rows now keep the XP badge on the meta line instead of crowding the main title row.
+
+Why it changed:
+
+- The saved-completion runway gives a stronger next-unlock moment, but the title, status badge and XP badge could feel crowded on narrow screens.
+- The row should scan as `step -> title/status -> details/XP`, not as three competing columns.
+- Reward information should stay visible without stealing attention from the next unlocked lesson.
+
+What changed:
+
+- Moved each saved-runway XP badge into a new meta row in `src/screens/RoleplayScreen.tsx`.
+- Kept the title and status badge together on the main row.
+- Added a compact `savedPathRunwayMetaRow` style and protected the meta text with flexible width.
+- Kept saved-runway data, XP values, storage, navigation and completion behavior unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- It directly addresses the row-density concern from the previous saved-runway run.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the saved completion hero on a narrow viewport and only then decide whether the runway body copy should be shortened.
+
 ## 2026-07-01: Saved Next-Unlock Runway
 
 Made one focused Roleplay completion improvement: after saving a roleplay, the win screen now shows a compact next-unlock runway instead of only one `Next unlocked` row.
