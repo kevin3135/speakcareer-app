@@ -587,6 +587,13 @@ test('creates a personalized onboarding first-path preview from the selected lev
   );
   assert.ok(starterPreview.sessionSteps[2].detail.includes('save the win for XP'));
   assert.ok(starterPreview.sessionNote.includes('enough to start the habit'));
+  assert.equal(starterPreview.firstSaveMilestone.title, 'Day 1 target complete');
+  assert.equal(starterPreview.firstSaveMilestone.badgeLabel, 'After save 1/1');
+  assert.equal(starterPreview.firstSaveMilestone.progressLabel, 'After save: 1/1 roleplay today');
+  assert.equal(starterPreview.firstSaveMilestone.progressPercent, 100);
+  assert.equal(starterPreview.firstSaveMilestone.tone, 'success');
+  assert.ok(starterPreview.firstSaveMilestone.body.includes('starts your streak'));
+  assert.ok(starterPreview.firstSaveMilestone.body.includes('unlocks Progress'));
   assert.equal(starterPreview.ctaLabel, 'Start A1-A2 path');
   assert.equal(starterPreview.commitmentTitle, 'Learn one clear sentence now. Job Interview next.');
   assert.equal(starterPreview.commitmentNote, 'Lesson now. First Job Interview save today.');
@@ -599,6 +606,12 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(confidentPreview.dailyTargetLabel, '3 roleplays a day');
   assert.ok(confidentPreview.dailyTargetNote.includes('extra interview reps'));
   assert.ok(confidentPreview.sessionNote.includes('two more short roleplays later today'));
+  assert.equal(confidentPreview.firstSaveMilestone.title, '2 more sprints later today');
+  assert.equal(confidentPreview.firstSaveMilestone.badgeLabel, 'After save 1/3');
+  assert.equal(confidentPreview.firstSaveMilestone.progressLabel, 'After save: 1/3 roleplays today');
+  assert.equal(confidentPreview.firstSaveMilestone.progressPercent, 33);
+  assert.equal(confidentPreview.firstSaveMilestone.tone, 'info');
+  assert.ok(confidentPreview.firstSaveMilestone.body.includes('Save 2 more short roleplays later today'));
   assert.equal(confidentPreview.ctaLabel, 'Start B2 path');
   assert.equal(confidentPreview.commitmentNote, 'Lesson now. 3 saves today, starting with Job Interview.');
 });

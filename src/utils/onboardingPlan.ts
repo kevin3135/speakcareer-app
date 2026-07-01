@@ -6,6 +6,15 @@ type OnboardingPlanStep = {
   title: string;
 };
 
+type OnboardingFirstSaveMilestone = {
+  badgeLabel: string;
+  body: string;
+  progressLabel: string;
+  progressPercent: number;
+  title: string;
+  tone: 'info' | 'success';
+};
+
 export type OnboardingPlanPreviewInput = {
   coachNote: string;
   dailyTarget: DailyPracticeTarget;
@@ -25,6 +34,7 @@ export type OnboardingPlanPreview = {
   coachNote: string;
   dailyTargetLabel: string;
   dailyTargetNote: string;
+  firstSaveMilestone: OnboardingFirstSaveMilestone;
   levelLabel: string;
   nextQuestTitleShort: string;
   sessionBadgeLabel: string;
@@ -57,6 +67,7 @@ export function createOnboardingPlanPreview({
     coachNote,
     dailyTargetLabel: createDailyTargetLabel(dailyTarget),
     dailyTargetNote: createDailyTargetNote(dailyTarget),
+    firstSaveMilestone: createFirstSaveMilestone(dailyTarget, nextQuestTitleShort),
     levelLabel,
     nextQuestTitleShort,
     sessionBadgeLabel: 'First 5 min',
@@ -139,4 +150,38 @@ function createSessionNote(dailyTarget: DailyPracticeTarget, nextQuestTitleShort
   }
 
   return `Save your first ${nextQuestTitleShort} answer now, then keep going with two more short roleplays later today.`;
+}
+
+function createFirstSaveMilestone(
+  dailyTarget: DailyPracticeTarget,
+  nextQuestTitleShort: string,
+): OnboardingFirstSaveMilestone {
+  const completedAfterFirstSave = 1;
+  const remainingAfterFirstSave = Math.max(dailyTarget - completedAfterFirstSave, 0);
+
+  if (remainingAfterFirstSave === 0) {
+    return {
+      badgeLabel: `After save ${completedAfterFirstSave}/${dailyTarget}`,
+      body: `Your first saved ${nextQuestTitleShort} answer starts your streak, unlocks Progress, and completes today's target.`,
+      progressLabel: `After save: ${completedAfterFirstSave}/${dailyTarget} roleplay today`,
+      progressPercent: 100,
+      title: 'Day 1 target complete',
+      tone: 'success',
+    };
+  }
+
+  const remainingLabel =
+    remainingAfterFirstSave === 1
+      ? 'One more sprint later today'
+      : `${remainingAfterFirstSave} more sprints later today`;
+  const roleplayLabel = remainingAfterFirstSave === 1 ? 'roleplay' : 'roleplays';
+
+  return {
+    badgeLabel: `After save ${completedAfterFirstSave}/${dailyTarget}`,
+    body: `Your first saved ${nextQuestTitleShort} answer starts your streak and unlocks Progress. Save ${remainingAfterFirstSave} more short ${roleplayLabel} later today to close the target.`,
+    progressLabel: `After save: ${completedAfterFirstSave}/${dailyTarget} roleplays today`,
+    progressPercent: Math.round((completedAfterFirstSave / dailyTarget) * 100),
+    title: remainingLabel,
+    tone: 'info',
+  };
 }

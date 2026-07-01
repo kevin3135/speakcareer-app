@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-01: Onboarding First-Save Milestone Preview
+
+Made one focused onboarding improvement: after a learner picks a level, the onboarding plan now previews what the first saved answer will do for the day-one habit loop.
+
+Why it changed:
+
+- The onboarding screen already showed the first lesson, first quest and starter answer, but it still did not explain the reward state after the first save clearly enough.
+- Kevin wants the MVP loop to feel guided, habit-forming and businesslike, which means the user should understand streak start, Progress unlock and daily-target progress before starting.
+- A compact first-save milestone is higher value than adding another onboarding step or another reward system.
+
+What changed:
+
+- Extended `src/utils/onboardingPlan.ts` with a `firstSaveMilestone` preview derived from the selected daily target and first quest.
+- Updated `src/screens/OnboardingScreen.tsx` to show an `After first save` milestone block inside the existing first-practice-loop card, including badge, title, body and progress bar.
+- Added focused onboarding assertions in `tests/practiceContent.test.mjs` for `1/day` and `3/day` milestone states.
+
+What went well:
+
+- The change stayed inside the existing onboarding preview flow and did not add new screens, storage or navigation rules.
+- The new milestone makes the first-day streak and target loop visible without making the app feel childish.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new milestone block should still be checked on a narrow phone viewport for height and spacing.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding is stronger when it previews the immediate reward state, not only the first content path.
+- Tie first-day motivation to professional outcomes like streak start, Progress unlock and a clear daily target, not to abstract gamification.
+
+Next suggested task:
+
+- Carry the same day-one milestone language into the Foundation-to-Roleplay handoff so the onboarding promise matches the first live practice step.
+
 ## 2026-07-01: Saved Runway Copy Density
 
 Made one focused Roleplay completion polish: the saved-completion runway body copy is now shorter and more action-led.

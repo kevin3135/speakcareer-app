@@ -185,6 +185,26 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               })}
             </View>
             <Text style={styles.sessionLoopNote}>{planPreview.sessionNote}</Text>
+            <View style={styles.sessionMilestone}>
+              <View style={styles.sessionMilestoneHeader}>
+                <Text style={styles.sessionMilestoneLabel}>After first save</Text>
+                <Badge
+                  label={planPreview.firstSaveMilestone.badgeLabel}
+                  tone={planPreview.firstSaveMilestone.tone}
+                />
+              </View>
+              <Text style={styles.sessionMilestoneTitle}>{planPreview.firstSaveMilestone.title}</Text>
+              <Text style={styles.sessionMilestoneBody}>{planPreview.firstSaveMilestone.body}</Text>
+              <View style={styles.sessionMilestoneProgress}>
+                <ProgressBar
+                  tone={planPreview.firstSaveMilestone.tone}
+                  value={planPreview.firstSaveMilestone.progressPercent}
+                />
+              </View>
+              <Text style={styles.sessionMilestoneProgressLabel}>
+                {planPreview.firstSaveMilestone.progressLabel}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.planStarter}>
@@ -578,6 +598,53 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  sessionMilestone: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  sessionMilestoneBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  sessionMilestoneHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  sessionMilestoneLabel: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  sessionMilestoneProgress: {
+    marginTop: spacing.sm,
+  },
+  sessionMilestoneProgressLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  sessionMilestoneTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
     marginTop: spacing.sm,
   },
   sessionLoopRail: {
