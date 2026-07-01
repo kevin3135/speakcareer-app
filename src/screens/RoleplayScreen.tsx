@@ -1131,7 +1131,7 @@ export function RoleplayScreen({
             isFollowUpExpanded ? (
               <View style={styles.followUpPromptBox}>
                 <View style={styles.oneThingHeader}>
-                  <Text style={styles.followUpPromptLabel}>{savePrompt.followUpLabel}</Text>
+                  <Text style={styles.followUpPromptLabel}>Bonus step</Text>
                   <Badge
                     label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpPrompt.focusLabel}
                     tone={includedFollowUp ? 'success' : 'secondary'}
@@ -1184,9 +1184,9 @@ export function RoleplayScreen({
                 ]}
               >
                 <View style={styles.followUpBonusCopy}>
-                  <Text style={styles.followUpSummaryLabel}>{savePrompt.followUpLabel}</Text>
+                  <Text style={styles.followUpSummaryLabel}>Optional after Save</Text>
                   <Text numberOfLines={1} style={styles.followUpBonusFocus}>
-                    Next: {followUpPrompt.focusLabel}
+                    Bonus step: {followUpPrompt.focusLabel}
                   </Text>
                 </View>
                 <View style={styles.followUpBonusReward}>
@@ -2016,9 +2016,10 @@ const styles = StyleSheet.create({
   },
   followUpBonusChip: {
     alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
     borderRadius: radius.lg,
+    borderStyle: 'dashed',
     borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -2028,8 +2029,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   followUpBonusChipPressed: {
-    backgroundColor: colors.surfaceStrong,
-    borderColor: colors.borderStrong,
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
   },
   followUpBonusCopy: {
     flex: 1,
@@ -2052,8 +2053,8 @@ const styles = StyleSheet.create({
   },
   followUpBonusReward: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
     borderWidth: 1,
     borderRadius: radius.md,
     justifyContent: 'center',
@@ -2068,9 +2069,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.xxs,
   },
   followUpSummaryLabel: {
-    color: colors.textMuted,
+    color: colors.secondaryDark,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
   followUpStatusBox: {

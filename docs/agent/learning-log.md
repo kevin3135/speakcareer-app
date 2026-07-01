@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-01: Follow-Up Bonus Step
+
+Made one focused Roleplay save-card polish: the optional follow-up now reads like a guided bonus step instead of a separate side module.
+
+Why it changed:
+
+- The main Roleplay flow now uses clear `Answer -> Review -> Save` runway language.
+- The collapsed follow-up still said `Next`, which could compete with the primary Save action.
+- The bonus turn should feel available and motivating, but still clearly optional after saving.
+
+What changed:
+
+- Updated the collapsed follow-up chip copy in `src/screens/RoleplayScreen.tsx` to `Optional after Save` and `Bonus step`.
+- Updated the expanded follow-up panel label to `Bonus step`.
+- Restyled the collapsed chip with a quiet dashed coach-colored border and a clearer XP reward pill.
+- Kept follow-up logic, XP, save behavior and storage unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- The Save button remains the only primary CTA in the save card.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the save card with the optional follow-up closed and open, especially the dashed chip density under the primary Save button.
+
 ## 2026-07-01: Roleplay Step Runway
 
 Made one focused practice-flow improvement: the Roleplay screen now shows a consistent three-step runway across answer, review and save instead of a single hardcoded Step 1 strip.
