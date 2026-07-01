@@ -1531,6 +1531,16 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(savedPathProgress.progressLabel, '3 of 5 complete');
   assert.equal(savedPathProgress.progressPercent, 60);
   assert.equal(savedPathProgress.isPathComplete, false);
+  assert.equal(savedPathProgress.runway?.title, 'After Presentation Practice');
+  assert.deepEqual(
+    savedPathProgress.runway?.items.map((item) => `${item.sequenceLabel}:${item.title}:${item.statusLabel}`),
+    [
+      '03:Presentation Practice:Done',
+      '04:Sales Call:Do now',
+      '05:Workplace Small Talk:Unlock next',
+    ],
+  );
+  assert.ok(savedPathProgress.runway?.body.includes('Start Sales Call now to unlock Workplace Small Talk'));
 
   const nextAfterSales = createNextPracticeRecommendation('sales-call', practiceContent.roleplays);
   assert.equal(nextAfterSales.roleplayId, 'workplace-small-talk');
@@ -1628,6 +1638,12 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(completedPathProgress.nextLabel, 'Replay ready');
   assert.equal(completedPathProgress.progressPercent, 100);
   assert.equal(completedPathProgress.isPathComplete, true);
+  assert.equal(completedPathProgress.runway?.title, 'Full path complete');
+  assert.equal(
+    completedPathProgress.runway?.items.find((item) => item.state === 'active')?.statusLabel,
+    'Replay now',
+  );
+  assert.ok(completedPathProgress.runway?.body.includes('Replay Job Interview'));
   assert.equal(replayHandoff.ctaLabel, 'Replay Job Interview');
   assert.ok(replayHandoff.body.includes('cleared the full career path'));
 });

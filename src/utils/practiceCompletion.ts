@@ -9,6 +9,8 @@ import type {
 import { createLocalProgressStats, type LocalProgressStats } from './localProgress.ts';
 // @ts-expect-error Node test imports require the explicit .ts extension here.
 import { createPracticeCareerPath } from './practiceCareerPath.ts';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createPracticeRunway, type PracticeRunwayState } from './practiceRunway.ts';
 
 export type PracticeCompletionSummary = {
   title: string;
@@ -89,6 +91,7 @@ export type SavedRoleplayPathProgress = {
   progressLabel: string;
   progressPercent: number;
   roleplayId: RoleplayId;
+  runway: PracticeRunwayState | null;
   title: string;
 };
 
@@ -405,6 +408,9 @@ export function createSavedRoleplayPathProgress({
     sessions: previewSessions,
   });
   const nextStep = path.steps.find((step) => step.state === 'active') ?? path.steps[0];
+  const nextUnlockStep = path.steps.find((step) => step.state === 'locked') ?? null;
+  const savedRoleplay = roleplays.find((roleplay) => roleplay.id === savedSession.roleplayId) ?? null;
+  const runway = createPracticeRunway(path);
 
   return {
     badgeLabel: path.meta,
@@ -414,6 +420,22 @@ export function createSavedRoleplayPathProgress({
     progressLabel: path.progressLabel,
     progressPercent: path.progressPercent,
     roleplayId: nextStep?.roleplayId ?? path.roleplayId,
+    runway: runway
+      ? {
+        ...runway,
+        body: createSavedPathRunwayBody({
+          isPathComplete: path.progressPercent === 100,
+          nextStepTitle: nextStep?.title ?? path.title,
+          nextUnlockStepTitle: nextUnlockStep?.title ?? null,
+          savedRoleplayTitle: savedRoleplay?.title ?? null,
+        }),
+        title: path.progressPercent === 100
+          ? 'Full path complete'
+          : savedRoleplay?.title
+            ? `After ${savedRoleplay.title}`
+            : 'After this save',
+      }
+      : null,
     title: path.title,
   };
 }
@@ -472,4 +494,28 @@ function createTodayLockInValue(progressLabel: string, progressTitle: string) {
   }
 
   return `Reaches ${progressValue}`;
+}
+
+function createSavedPathRunwayBody({
+  isPathComplete,
+  nextStepTitle,
+  nextUnlockStepTitle,
+  savedRoleplayTitle,
+}: {
+  isPathComplete: boolean;
+  nextStepTitle: string;
+  nextUnlockStepTitle: string | null;
+  savedRoleplayTitle: string | null;
+}) {
+  if (isPathComplete) {
+    return `You cleared the full English path. Replay ${nextStepTitle} to keep the streak moving from this win screen.`;
+  }
+
+  const savedTitle = savedRoleplayTitle ?? 'This lesson';
+
+  if (!nextUnlockStepTitle) {
+    return `${savedTitle} is saved. Start ${nextStepTitle} now to keep the guided path moving.`;
+  }
+
+  return `${savedTitle} is saved. Start ${nextStepTitle} now to unlock ${nextUnlockStepTitle} and keep the guided path moving.`;
 }

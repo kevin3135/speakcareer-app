@@ -676,13 +676,77 @@ export function RoleplayScreen({
           ) : null}
           {savedPathProgress ? (
             <View style={styles.savedPathBox}>
-              <View style={styles.oneThingHeader}>
-                <Text style={styles.savedPathLabel}>Next unlocked</Text>
+              <View style={styles.savedPathHeader}>
+                <View style={styles.savedPathHeaderCopy}>
+                  <Text style={styles.savedPathLabel}>
+                    {savedPathProgress.runway?.eyebrow ?? 'What unlocks next'}
+                  </Text>
+                  <Text numberOfLines={1} style={styles.savedPathTitle}>
+                    {savedPathProgress.runway?.title ?? savedPathProgress.title}
+                  </Text>
+                </View>
                 <Badge label={savedPathProgress.badgeLabel} tone="accent" />
               </View>
-              <Text numberOfLines={1} style={styles.savedPathNext}>
-                {savedPathProgress.nextLabel}: {savedPathProgress.nextTitle}
+              <Text style={styles.savedPathBody}>
+                {savedPathProgress.runway?.body ?? `${savedPathProgress.nextLabel}: ${savedPathProgress.nextTitle}`}
               </Text>
+              {savedPathProgress.runway ? (
+                <View style={styles.savedPathRunwayList}>
+                  {savedPathProgress.runway.items.map((item) => (
+                    <View
+                      key={item.id}
+                      style={[
+                        styles.savedPathRunwayItem,
+                        item.state === 'active' && styles.savedPathRunwayItemActive,
+                        item.state === 'locked' && styles.savedPathRunwayItemLocked,
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.savedPathRunwaySequence,
+                          item.state === 'active' && styles.savedPathRunwaySequenceActive,
+                          item.state === 'locked' && styles.savedPathRunwaySequenceLocked,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.savedPathRunwaySequenceText,
+                            item.state === 'active' && styles.savedPathRunwaySequenceTextActive,
+                            item.state === 'locked' && styles.savedPathRunwaySequenceTextLocked,
+                          ]}
+                        >
+                          {item.sequenceLabel}
+                        </Text>
+                      </View>
+                      <View style={styles.savedPathRunwayCopy}>
+                        <View style={styles.savedPathRunwayItemHeader}>
+                          <Text numberOfLines={1} style={styles.savedPathRunwayItemTitle}>
+                            {item.title}
+                          </Text>
+                          <Badge
+                            label={item.statusLabel}
+                            tone={
+                              item.state === 'done'
+                                ? 'success'
+                                : item.state === 'active'
+                                  ? 'accent'
+                                  : 'secondary'
+                            }
+                          />
+                        </View>
+                        <Text numberOfLines={1} style={styles.savedPathRunwayItemMeta}>
+                          {item.metaLabel}
+                        </Text>
+                      </View>
+                      <XPBadge label={item.xpLabel} />
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <Text numberOfLines={1} style={styles.savedPathNext}>
+                  {savedPathProgress.nextLabel}: {savedPathProgress.nextTitle}
+                </Text>
+              )}
               <View style={styles.savedPathProgress}>
                 <ProgressBar
                   label={savedPathProgress.progressLabel}
@@ -2250,6 +2314,23 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     padding: spacing.sm,
   },
+  savedPathBody: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  savedPathHeader: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  savedPathHeaderCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
   savedPathLabel: {
     color: colors.successDark,
     fontFamily: fonts.rounded,
@@ -2266,5 +2347,93 @@ const styles = StyleSheet.create({
   },
   savedPathProgress: {
     marginTop: spacing.sm,
+  },
+  savedPathRunwayCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  savedPathRunwayItem: {
+    alignItems: 'center',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    minWidth: 0,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  savedPathRunwayItemActive: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  savedPathRunwayItemHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+    justifyContent: 'space-between',
+  },
+  savedPathRunwayItemLocked: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+  },
+  savedPathRunwayItemMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: 2,
+  },
+  savedPathRunwayItemTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    minWidth: 0,
+  },
+  savedPathRunwayList: {
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  savedPathRunwaySequence: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.success,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 26,
+    justifyContent: 'center',
+    width: 26,
+  },
+  savedPathRunwaySequenceActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primaryDark,
+  },
+  savedPathRunwaySequenceLocked: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+  },
+  savedPathRunwaySequenceText: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  savedPathRunwaySequenceTextActive: {
+    color: colors.white,
+  },
+  savedPathRunwaySequenceTextLocked: {
+    color: colors.textMuted,
+  },
+  savedPathTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: 2,
   },
 });

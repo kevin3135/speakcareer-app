@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-01: Saved Next-Unlock Runway
+
+Made one focused Roleplay completion improvement: after saving a roleplay, the win screen now shows a compact next-unlock runway instead of only one `Next unlocked` row.
+
+Why it changed:
+
+- The Practice tab already explains the guided path clearly, but the saved Roleplay screen still dropped back to a single next-step line.
+- The reward moment should point forward immediately so the English MVP feels like one calm, habit-forming sequence.
+- Reusing the same path language after save is higher value than adding a new reward system or more completion copy.
+
+What changed:
+
+- Extended `src/utils/practiceCompletion.ts` so saved path progress now includes a compact runway derived from the existing career-path data.
+- Updated `src/screens/RoleplayScreen.tsx` to render the saved-completion runway with the current step, next unlock and XP labels inside the success hero.
+- Added focused assertions in `tests/practiceContent.test.mjs` for in-progress and full-path-complete saved runway states.
+
+What went well:
+
+- The change stayed inside one existing utility, one screen and one existing test file.
+- The save flow, local storage, XP, streak and navigation behavior all stayed unchanged.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first typecheck run caught an invalid `fonts.body` reference during styling and it had to be corrected to the existing theme family.
+- This run did not include fresh mobile visual QA, so the saved-completion runway density should still be checked on a narrow phone screen.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a path pattern already exists in Practice, reuse it in the Roleplay completion moment before adding new progression concepts.
+- Theme typography currently exposes `fonts.rounded` only, so style additions should not assume a second body font token.
+
+Next suggested task:
+
+- Mobile QA the saved Roleplay completion hero on a narrow viewport, then tighten the new runway row spacing if the XP badge line feels crowded.
+
 ## 2026-07-01: Roleplay Runway Density
 
 Made one focused Roleplay visual polish: the three-step `Answer -> Review -> Save` runway now fits more safely on narrow mobile screens.
