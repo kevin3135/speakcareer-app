@@ -745,12 +745,14 @@ test('creates a level-matched foundation handoff before the first interview', as
   const confidentProfile = getStartingLevelProfile('confident');
   const starterHandoff = createFoundationHandoff({
     coachNote: starterProfile.coachMessage,
+    dailyTarget: 1,
     nextQuestTitle: guidedStart.title,
     starterAnswer: starterProfile.starterAnswer,
     starterEditSteps: starterProfile.starterEditSteps,
   });
   const confidentHandoff = createFoundationHandoff({
     coachNote: confidentProfile.coachMessage,
+    dailyTarget: 3,
     nextQuestTitle: guidedStart.title,
     starterAnswer: confidentProfile.starterAnswer,
     starterEditSteps: confidentProfile.starterEditSteps,
@@ -765,8 +767,8 @@ test('creates a level-matched foundation handoff before the first interview', as
   );
   assert.equal(starterHandoff.pathSteps[0].title, 'Open Job Interview');
   assert.ok(starterHandoff.pathSteps[0].detail.includes('starter line'));
-  assert.equal(starterHandoff.pathSteps[1].title, 'Unlock Learn + Wins');
-  assert.ok(starterHandoff.pathSteps[1].detail.includes('XP'));
+  assert.equal(starterHandoff.pathSteps[1].title, 'Unlock Wins');
+  assert.equal(starterHandoff.pathSteps[1].detail, 'Start your streak and complete 1/1 today.');
   assert.equal(starterHandoff.starterLabel, 'Starter answer');
   assert.equal(starterHandoff.editPlanLabel, 'Make it yours');
   assert.deepEqual(starterHandoff.editPlanSteps, starterProfile.starterEditSteps);
@@ -775,6 +777,7 @@ test('creates a level-matched foundation handoff before the first interview', as
   assert.ok(starterHandoff.starterAnswer.includes('The result was'));
 
   assert.ok(confidentHandoff.coachNote.includes('business result'));
+  assert.equal(confidentHandoff.pathSteps[1].detail, 'Start your streak and reach 1/3 today.');
   assert.ok(confidentHandoff.starterAnswer.includes('As a result'));
   assert.notEqual(confidentHandoff.starterAnswer, starterHandoff.starterAnswer);
 });

@@ -1,5 +1,8 @@
+import type { DailyPracticeTarget } from '../types';
+
 export type FoundationHandoffInput = {
   coachNote: string;
+  dailyTarget: DailyPracticeTarget;
   nextQuestTitle: string;
   starterAnswer: string;
   starterEditSteps: [string, string, string];
@@ -24,6 +27,7 @@ export type FoundationHandoff = {
 
 export function createFoundationHandoff({
   coachNote,
+  dailyTarget,
   nextQuestTitle,
   starterAnswer,
   starterEditSteps,
@@ -47,12 +51,20 @@ export function createFoundationHandoff({
       },
       {
         badgeLabel: 'After save',
-        detail: 'Track XP, streak and the next guided step.',
-        title: 'Unlock Learn + Wins',
+        detail: createFirstSavePathDetail(dailyTarget),
+        title: 'Unlock Wins',
       },
     ],
     starterAnswer,
     starterLabel: 'Starter answer',
     title: nextQuestTitle,
   };
+}
+
+function createFirstSavePathDetail(dailyTarget: DailyPracticeTarget) {
+  if (dailyTarget === 1) {
+    return 'Start your streak and complete 1/1 today.';
+  }
+
+  return `Start your streak and reach 1/${dailyTarget} today.`;
 }

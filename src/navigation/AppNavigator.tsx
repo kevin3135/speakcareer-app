@@ -212,6 +212,7 @@ export function AppNavigator() {
         ) : null}
         {activeScreen === 'Foundation' ? (
           <FoundationScreen
+            dailyTarget={dailyTarget}
             initialCompletedSteps={foundationCompletedSteps}
             onBack={() => setActiveScreen('Home')}
             onProgressChange={updateFoundationProgress}

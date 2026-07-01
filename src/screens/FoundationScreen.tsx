@@ -10,12 +10,13 @@ import {
 } from '../components/ui';
 import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
-import type { StartingLevelId } from '../types';
+import type { DailyPracticeTarget, StartingLevelId } from '../types';
 import { createFoundationHandoff } from '../utils/foundationHandoff';
 import { createFoundationSentenceBuilderState } from '../utils/foundationSentenceBuilder';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type FoundationScreenProps = {
+  dailyTarget: DailyPracticeTarget;
   initialCompletedSteps: number;
   onBack: () => void;
   onProgressChange: (completedSteps: number) => void;
@@ -24,6 +25,7 @@ type FoundationScreenProps = {
 };
 
 export function FoundationScreen({
+  dailyTarget,
   initialCompletedSteps,
   onBack,
   onProgressChange,
@@ -43,6 +45,7 @@ export function FoundationScreen({
   const activePiece = builderState.activePiece;
   const handoff = createFoundationHandoff({
     coachNote: levelProfile.coachMessage,
+    dailyTarget,
     nextQuestTitle: guidedStart.title,
     starterAnswer: levelProfile.starterAnswer,
     starterEditSteps: levelProfile.starterEditSteps,

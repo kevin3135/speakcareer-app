@@ -1,5 +1,47 @@
 # Agent Learning Log
 
+## 2026-07-01: Foundation First-Save Handoff
+
+Made one focused Foundation handoff polish: the completed Foundation lesson now carries the same day-one first-save promise from onboarding into the live handoff before Job Interview.
+
+Why it changed:
+
+- Onboarding now previews that the first saved answer starts a streak, unlocks progress and counts toward the daily target.
+- The Foundation-to-Roleplay handoff still used a more generic `After save` row.
+- The first live practice step should reinforce the same habit loop without adding another screen or more decisions.
+
+What changed:
+
+- Passed the existing `dailyTarget` into `FoundationScreen`.
+- Extended `createFoundationHandoff` with daily-target aware `After save` copy.
+- Changed the handoff second step to `Unlock Wins` with compact details like `Start your streak and complete 1/1 today.`
+- Added focused assertions for 1/day and 3/day handoff states in `tests/practiceContent.test.mjs`.
+- Kept navigation, storage, XP, streak logic and roleplay behavior unchanged.
+
+What went well:
+
+- The change stayed inside one existing handoff component path and one existing helper test.
+- The copy is shorter and more concrete than the previous generic XP/streak line.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 78 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the completed Foundation handoff card on a narrow viewport and tighten the starter/edit blocks only if the card feels too tall.
+
 ## 2026-07-01: Onboarding First-Save Milestone Preview
 
 Made one focused onboarding improvement: after a learner picks a level, the onboarding plan now previews what the first saved answer will do for the day-one habit loop.
