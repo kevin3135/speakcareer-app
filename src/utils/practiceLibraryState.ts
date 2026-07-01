@@ -2,6 +2,8 @@ import type { PracticeSession, RoleplayDraft, RoleplayId, RoleplayScenario } fro
 // @ts-expect-error Node test imports require the explicit .ts extension here.
 import { createPracticeCareerPath } from './practiceCareerPath.ts';
 // @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createPracticeRunway, type PracticeRunwayState } from './practiceRunway.ts';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
 import { summarizePracticeAnswer } from './answerReview.ts';
 
 type PracticeLibraryRoleplay = Pick<
@@ -30,6 +32,7 @@ export type PracticeLibraryState = {
   progressLabel: string;
   progressPercent: number;
   recommendedCard: PracticeLibraryCard;
+  runway: PracticeRunwayState | null;
   subtitle: string;
   title: string;
 };
@@ -72,6 +75,7 @@ export function createPracticeLibraryState({
     progressLabel: path.progressLabel,
     progressPercent: path.progressPercent,
     recommendedCard,
+    runway: isResumeMode ? null : createPracticeRunway(path),
     subtitle: isResumeMode && savedDraftRoleplay && draftReview
       ? createSavedDraftSubtitle(savedDraftRoleplay.title, draftReview.wordCount)
       : path.body,

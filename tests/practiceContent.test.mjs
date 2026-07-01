@@ -3027,6 +3027,13 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(firstRunState.browseCards.length, 4);
   assert.equal(firstRunState.browseCards[0].categoryLabel, 'Later');
   assert.equal(firstRunState.browseLabel, '4 more roleplays');
+  assert.equal(firstRunState.runway?.title, 'After Job Interview');
+  assert.equal(firstRunState.runway?.items.length, 3);
+  assert.deepEqual(
+    firstRunState.runway?.items.map((item) => item.statusLabel),
+    ['Do now', 'Unlock next', 'Later'],
+  );
+  assert.ok(firstRunState.runway?.body.includes('unlock Meeting Practice'));
 
   const activeState = createPracticeLibraryState({
     roleplays: practiceContent.roleplays,
@@ -3042,6 +3049,14 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').categoryLabel, 'Completed');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').ctaLabel, 'Practice again');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'sales-call').categoryLabel, 'Later');
+  assert.deepEqual(
+    activeState.runway?.items.map((item) => `${item.sequenceLabel}:${item.title}:${item.statusLabel}`),
+    [
+      '02:Meeting Practice:Done',
+      '03:Presentation Practice:Do now',
+      '04:Sales Call:Unlock next',
+    ],
+  );
 
   const resumeState = createPracticeLibraryState({
     draft: {
@@ -3063,6 +3078,43 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.recommendedCard.focus, 'Coach cue: add one result or next step.');
   assert.ok(resumeState.recommendedCard.description.includes('Check it, save XP'));
   assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
+  assert.equal(resumeState.runway, null);
+});
+
+test('creates a compact practice runway around the active path step', async () => {
+  const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
+  const { createPracticeRunway } = await import('../src/utils/practiceRunway.ts');
+
+  const activePath = createPracticeCareerPath({
+    roleplays: practiceContent.roleplays,
+    sessions: [
+      { roleplayId: 'meeting-practice' },
+      { roleplayId: 'job-interview' },
+    ],
+  });
+  const activeRunway = createPracticeRunway(activePath);
+
+  assert.equal(activeRunway?.eyebrow, 'What unlocks next');
+  assert.equal(activeRunway?.title, 'After Presentation Practice');
+  assert.equal(activeRunway?.progressLabel, '2 of 5 complete');
+  assert.deepEqual(
+    activeRunway?.items.map((item) => item.state),
+    ['done', 'active', 'locked'],
+  );
+  assert.ok(activeRunway?.body.includes('unlock Sales Call'));
+
+  const completePath = createPracticeCareerPath({
+    roleplays: practiceContent.roleplays,
+    sessions: practiceContent.roleplays.map((roleplay) => ({ roleplayId: roleplay.id })),
+  });
+  const completeRunway = createPracticeRunway(completePath);
+
+  assert.equal(completeRunway?.title, 'Full path complete');
+  assert.equal(
+    completeRunway?.items.find((item) => item.state === 'active')?.statusLabel,
+    'Replay now',
+  );
+  assert.ok(completeRunway?.body.includes('Replay Meeting Practice'));
 });
 
 test('creates a concrete restored-draft cue for the roleplay resume state', async () => {

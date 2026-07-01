@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-01: Practice Next-Unlock Runway
+
+Made one focused practice-flow improvement: the Practice screen now shows a compact next-unlock runway under the recommended roleplay so the tab feels like a guided sequence instead of a detached library.
+
+Why it changed:
+
+- The current Practice screen had a good recommended card, but it still read more like a browse destination than an app-led path.
+- The design notes and prior runs repeatedly pointed to the same issue: users should understand what unlocks after the current roleplay without opening the full library.
+- A small visible sequence is a stronger habit cue than another explanation paragraph.
+
+What changed:
+
+- Added `src/utils/practiceRunway.ts` to build a three-step Practice runway around the active guided roleplay.
+- Updated `src/utils/practiceLibraryState.ts` so the Practice screen gets a runway state in normal guided mode and keeps resume-draft mode quieter.
+- Updated `src/screens/PracticeScreen.tsx` to render a compact `What unlocks next` card with numbered steps, state badges and XP labels directly below the recommended roleplay.
+- Extended `tests/practiceContent.test.mjs` with focused coverage for first-run, mid-path, full-path and resume-mode Practice runway behavior.
+
+What went well:
+
+- The change stayed inside the Practice flow and reused the existing career-path sequencing instead of adding another navigation model.
+- The new runway gives immediate context for the next unlock while keeping the full library secondary.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the runway row density still needs a quick phone-width visual check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 77 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Reuse the same next-unlock path language on the saved Roleplay completion screen so the reward moment and Practice tab point forward in the same way.
+
 ## 2026-06-29: First Save App Unlock Handoff
 
 Made one focused completion-state polish: the first saved practice now shows a compact `App unlocked` strip inside the reward moment.

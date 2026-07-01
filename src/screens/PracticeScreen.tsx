@@ -10,6 +10,7 @@ import {
   RoleplayCard,
   ScreenContainer,
   SectionHeader,
+  XPBadge,
 } from '../components/ui';
 import { practiceContent } from '../data/content';
 import { colors, fonts, spacing, typography } from '../theme';
@@ -76,6 +77,70 @@ export function PracticeScreen({ draft, onOpenRoleplay, sessions }: PracticeScre
         xp={libraryState.recommendedCard.xp}
       />
 
+      {libraryState.runway ? (
+        <Card tone="muted">
+          <View style={styles.runwayHeader}>
+            <View style={styles.flexOne}>
+              <Text style={styles.runwayKicker}>{libraryState.runway.eyebrow}</Text>
+              <Text style={styles.runwayTitle}>{libraryState.runway.title}</Text>
+            </View>
+            <Badge label={libraryState.runway.progressLabel} tone="info" />
+          </View>
+          <Text style={styles.runwayBody}>{libraryState.runway.body}</Text>
+          <View style={styles.runwayList}>
+            {libraryState.runway.items.map((item) => (
+              <View
+                key={item.id}
+                style={[
+                  styles.runwayItem,
+                  item.state === 'active' && styles.runwayItemActive,
+                  item.state === 'locked' && styles.runwayItemLocked,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.runwaySequence,
+                    item.state === 'active' && styles.runwaySequenceActive,
+                    item.state === 'locked' && styles.runwaySequenceLocked,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.runwaySequenceText,
+                      item.state === 'active' && styles.runwaySequenceTextActive,
+                      item.state === 'locked' && styles.runwaySequenceTextLocked,
+                    ]}
+                  >
+                    {item.sequenceLabel}
+                  </Text>
+                </View>
+                <View style={styles.flexOne}>
+                  <View style={styles.runwayItemHeader}>
+                    <Text numberOfLines={1} style={styles.runwayItemTitle}>
+                      {item.title}
+                    </Text>
+                    <Badge
+                      label={item.statusLabel}
+                      tone={
+                        item.state === 'done'
+                          ? 'success'
+                          : item.state === 'active'
+                            ? 'accent'
+                            : 'secondary'
+                      }
+                    />
+                  </View>
+                  <Text numberOfLines={1} style={styles.runwayItemMeta}>
+                    {item.metaLabel}
+                  </Text>
+                </View>
+                <XPBadge label={item.xpLabel} />
+              </View>
+            ))}
+          </View>
+        </Card>
+      ) : null}
+
       <SectionHeader
         action={libraryState.browseCards.length > 0 ? (
           <AppButton
@@ -127,6 +192,9 @@ export function PracticeScreen({ draft, onOpenRoleplay, sessions }: PracticeScre
 }
 
 const styles = StyleSheet.create({
+  flexOne: {
+    flex: 1,
+  },
   heroProgressCard: {
     backgroundColor: 'rgba(12, 26, 42, 0.38)',
     borderColor: 'rgba(255, 255, 255, 0.18)',
@@ -158,6 +226,105 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   libraryTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
+  },
+  runwayBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  runwayHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  runwayItem: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: 16,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    padding: spacing.md,
+  },
+  runwayItemActive: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  runwayItemHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  runwayItemLocked: {
+    backgroundColor: colors.surfaceMuted,
+  },
+  runwayItemMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  runwayItemTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  runwayKicker: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  runwayList: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  runwaySequence: {
+    alignItems: 'center',
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 40,
+    justifyContent: 'center',
+    width: 40,
+  },
+  runwaySequenceActive: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
+  },
+  runwaySequenceLocked: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+  },
+  runwaySequenceText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  runwaySequenceTextActive: {
+    color: colors.ink,
+  },
+  runwaySequenceTextLocked: {
+    color: colors.textMuted,
+  },
+  runwayTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.h3,
