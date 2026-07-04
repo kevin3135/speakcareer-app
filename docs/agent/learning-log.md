@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-04: Home Start Node Emphasis
+
+Made one focused Home/Learn polish: the START node now gets a subtle accent border and pulse color whenever the Home start card is in the post-save unlock state.
+
+Why it changed:
+
+- The previous run added an `Unlocked now` cue and accent path badge after a saved practice answer.
+- The primary action should still be the START node, not the badge.
+- Strengthening the tap target is safer than adding another animation or more explanatory copy.
+
+What changed:
+
+- Updated `src/screens/HomeScreen.tsx` so the START circle shares the same accent state as the post-save path badge.
+- Added token-based `startTargetUnlocked`, `startRingUnlocked` and `startTargetTextUnlocked` styles.
+- Kept the Home path state, copy, navigation, XP, streak, local storage and roleplay selection unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- The unlock cue should now support the primary tap target instead of competing with it.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 79 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Home post-save state at 390px width and check whether the coach cue below the map should be quieter after one saved answer.
+
 ## 2026-07-04: Home Unlock State Cue
 
 Made one focused Home/Learn polish: the active start card now changes its top cue after a saved practice answer, so the next lesson feels visibly unlocked.

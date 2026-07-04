@@ -291,17 +291,30 @@ function AnimatedStartCard({
       style={({ pressed }) => [styles.startCard, pressed && styles.pressed]}
     >
       <View style={styles.startMainRow}>
-        <View style={styles.startTarget}>
+        <View
+          style={[
+            styles.startTarget,
+            pathBadgeTone === 'accent' && styles.startTargetUnlocked,
+          ]}
+        >
           <Animated.View
             style={[
               styles.startRing,
+              pathBadgeTone === 'accent' && styles.startRingUnlocked,
               {
                 opacity: ringOpacity,
                 transform: [{ scale: ringScale }],
               },
             ]}
           />
-          <Text style={styles.startTargetText}>START</Text>
+          <Text
+            style={[
+              styles.startTargetText,
+              pathBadgeTone === 'accent' && styles.startTargetTextUnlocked,
+            ]}
+          >
+            START
+          </Text>
         </View>
 
         <View style={styles.startCopy}>
@@ -513,10 +526,16 @@ const styles = StyleSheet.create({
   startTarget: {
     alignItems: 'center',
     backgroundColor: colors.white,
+    borderColor: colors.secondarySoft,
     borderRadius: radius.pill,
+    borderWidth: 1,
     height: 76,
     justifyContent: 'center',
     width: 76,
+  },
+  startTargetUnlocked: {
+    borderColor: colors.accent,
+    borderWidth: 2,
   },
   startRing: {
     backgroundColor: colors.secondarySoft,
@@ -525,11 +544,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 76,
   },
+  startRingUnlocked: {
+    backgroundColor: colors.accentSoft,
+  },
   startTargetText: {
     color: colors.successDark,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
+  },
+  startTargetTextUnlocked: {
+    color: colors.accentDark,
   },
   startCopy: {
     flex: 1,
