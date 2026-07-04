@@ -14,22 +14,39 @@ import {
 } from '../components/ui';
 import { practiceContent } from '../data/content';
 import { colors, fonts, spacing, typography } from '../theme';
-import type { PracticeSession, RoleplayDraft, RoleplayId } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
+import { createPracticeDailySprint } from '../utils/practiceDailySprint';
 import { createPracticeLibraryState } from '../utils/practiceLibraryState';
 
 type PracticeScreenProps = {
+  dailyTarget: DailyPracticeTarget;
   draft: RoleplayDraft | null;
   onOpenRoleplay: (roleplayId: RoleplayId) => void;
   sessions: PracticeSession[];
 };
 
-export function PracticeScreen({ draft, onOpenRoleplay, sessions }: PracticeScreenProps) {
+export function PracticeScreen({
+  dailyTarget,
+  draft,
+  onOpenRoleplay,
+  sessions,
+}: PracticeScreenProps) {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const libraryState = createPracticeLibraryState({
     draft,
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const nextUnlockTitle = libraryState.runway?.items.find((item) => item.state === 'locked')?.title;
+  const dailySprint = createPracticeDailySprint({
+    dailyTarget,
+    isResumeMode: libraryState.isResumeMode,
+    nextUnlockTitle,
+    recommendedRoleplayTitle: libraryState.recommendedCard.title,
+    recommendedXpLabel: libraryState.recommendedCard.xp,
+    sessions,
+  });
+  const sprintProgressTone = dailySprint.statusTone === 'success' ? 'success' : 'secondary';
 
   return (
     <ScreenContainer
@@ -57,6 +74,28 @@ export function PracticeScreen({ draft, onOpenRoleplay, sessions }: PracticeScre
           />
         </Card>
       </GradientHero>
+
+      <Card tone="strong">
+        <View style={styles.runwayHeader}>
+          <View style={styles.flexOne}>
+            <Text style={styles.dailySprintKicker}>{dailySprint.eyebrow}</Text>
+            <Text style={styles.dailySprintTitle}>{dailySprint.title}</Text>
+          </View>
+          <Badge label={dailySprint.statusLabel} tone={dailySprint.statusTone} />
+        </View>
+        <Text style={styles.dailySprintBody}>{dailySprint.body}</Text>
+        <View style={styles.dailySprintMetaRow}>
+          <Text style={styles.dailySprintMetaLabel}>Reward when saved</Text>
+          <XPBadge label={dailySprint.rewardLabel} />
+        </View>
+        <View style={styles.dailySprintProgress}>
+          <ProgressBar
+            label={dailySprint.progressLabel}
+            tone={sprintProgressTone}
+            value={dailySprint.progressPercent}
+          />
+        </View>
+      </Card>
 
       <SectionHeader
         subtitle={libraryState.isResumeMode
@@ -192,6 +231,42 @@ export function PracticeScreen({ draft, onOpenRoleplay, sessions }: PracticeScre
 }
 
 const styles = StyleSheet.create({
+  dailySprintBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
+  },
+  dailySprintKicker: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  dailySprintMetaLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+  },
+  dailySprintMetaRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+  },
+  dailySprintProgress: {
+    marginTop: spacing.md,
+  },
+  dailySprintTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
+  },
   flexOne: {
     flex: 1,
   },

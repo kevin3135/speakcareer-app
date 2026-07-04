@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-04: Practice Daily Sprint Card
+
+Made one focused Practice-flow improvement: the Practice screen now shows a compact daily sprint card that ties the recommended roleplay to today’s target, streak habit and next unlock.
+
+Why it changed:
+
+- The Practice tab already recommends one roleplay first, but it did not explain clearly how that choice advances today’s habit loop.
+- Home and Roleplay already use stronger streak/XP/progress language, so Practice needed the same clarity to keep the English MVP feeling like one connected loop.
+- A focused sprint card is higher value than adding more library controls because it strengthens the main next action without changing navigation or storage.
+
+What changed:
+
+- Added `src/utils/practiceDailySprint.ts` to generate a compact `today` state for first save, in-progress target, saved draft and bonus-practice states.
+- Updated `src/screens/PracticeScreen.tsx` to show the new sprint card above `Do this now`, including reward, progress and next-unlock context.
+- Passed `dailyTarget` into `PracticeScreen` from `src/navigation/AppNavigator.tsx`.
+- Added focused coverage in `tests/practiceContent.test.mjs` for first-save, target-finishing, resume-draft and bonus-practice states.
+
+What went well:
+
+- The change stayed inside one visible screen, one small helper, one prop wire-up, one existing test file and this log.
+- Practice should now explain more clearly why the recommended roleplay matters today, not only what to open next.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new sprint card should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 80 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The Practice tab feels stronger when the recommended scenario is tied directly to `today` progress instead of only to path progress.
+- Reuse the same daily-target language across screens so the loop feels calm and consistent rather than gamified in one place and vague in another.
+
+Next suggested task:
+
+- Carry the same `x/y today` language into the Roleplay save CTA for `2/day` and `3/day` targets so the final save step closes the loop even more clearly.
+
 ## 2026-07-04: Home Start Node Emphasis
 
 Made one focused Home/Learn polish: the START node now gets a subtle accent border and pulse color whenever the Home start card is in the post-save unlock state.

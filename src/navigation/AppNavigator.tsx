@@ -229,7 +229,12 @@ export function AppNavigator() {
           />
         ) : null}
         {activeScreen === 'Practice' ? (
-          <PracticeScreen draft={roleplayDraft} onOpenRoleplay={openRoleplay} sessions={practiceSessions} />
+          <PracticeScreen
+            dailyTarget={dailyTarget}
+            draft={roleplayDraft}
+            onOpenRoleplay={openRoleplay}
+            sessions={practiceSessions}
+          />
         ) : null}
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen

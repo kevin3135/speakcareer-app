@@ -3180,6 +3180,73 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.runway, null);
 });
 
+test('creates a focused daily sprint cue for the Practice screen', async () => {
+  const { createPracticeDailySprint } = await import('../src/utils/practiceDailySprint.ts');
+
+  const firstSprint = createPracticeDailySprint({
+    dailyTarget: 1,
+    isResumeMode: false,
+    nextUnlockTitle: 'Meeting Practice',
+    recommendedRoleplayTitle: 'Job Interview',
+    recommendedXpLabel: '+48 XP',
+    sessions: [],
+  });
+
+  assert.equal(firstSprint.eyebrow, "Today's sprint");
+  assert.equal(firstSprint.title, "Start today's practice");
+  assert.equal(firstSprint.progressLabel, '0/1 saved today');
+  assert.equal(firstSprint.statusLabel, 'Then Meeting Practice');
+  assert.equal(firstSprint.statusTone, 'accent');
+  assert.ok(firstSprint.body.includes('start your streak'));
+
+  const almostDoneSprint = createPracticeDailySprint({
+    dailyTarget: 2,
+    isResumeMode: false,
+    nextUnlockTitle: 'Sales Call',
+    recommendedRoleplayTitle: 'Presentation Practice',
+    recommendedXpLabel: '+32 XP',
+    sessions: [{ id: 'session-1' }],
+  });
+
+  assert.equal(almostDoneSprint.title, 'One more save finishes today');
+  assert.equal(almostDoneSprint.progressLabel, '1/2 saved today');
+  assert.equal(almostDoneSprint.statusLabel, 'Finish target');
+  assert.equal(almostDoneSprint.statusTone, 'success');
+  assert.ok(almostDoneSprint.body.includes('2/2 today'));
+  assert.ok(almostDoneSprint.body.includes('Sales Call'));
+
+  const resumeSprint = createPracticeDailySprint({
+    dailyTarget: 3,
+    isResumeMode: true,
+    nextUnlockTitle: null,
+    recommendedRoleplayTitle: 'Meeting Practice',
+    recommendedXpLabel: '+28 XP',
+    sessions: [{ id: 'session-1' }],
+  });
+
+  assert.equal(resumeSprint.eyebrow, 'Finish today');
+  assert.equal(resumeSprint.title, 'Save Meeting Practice');
+  assert.equal(resumeSprint.statusLabel, '2/3 after save');
+  assert.equal(resumeSprint.statusTone, 'accent');
+  assert.ok(resumeSprint.body.includes('keep your streak alive'));
+
+  const bonusSprint = createPracticeDailySprint({
+    dailyTarget: 1,
+    isResumeMode: false,
+    nextUnlockTitle: 'Workplace Small Talk',
+    recommendedRoleplayTitle: 'Sales Call',
+    recommendedXpLabel: '+24 XP',
+    sessions: [{ id: 'session-1' }, { id: 'session-2' }],
+  });
+
+  assert.equal(bonusSprint.eyebrow, 'Target complete');
+  assert.equal(bonusSprint.title, 'Extra practice available');
+  assert.equal(bonusSprint.progressLabel, '1/1 saved today');
+  assert.equal(bonusSprint.statusLabel, 'Bonus XP');
+  assert.equal(bonusSprint.statusTone, 'success');
+  assert.ok(bonusSprint.body.includes('extra XP'));
+});
+
 test('creates a compact practice runway around the active path step', async () => {
   const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
   const { createPracticeRunway } = await import('../src/utils/practiceRunway.ts');
