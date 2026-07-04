@@ -79,10 +79,20 @@ export function HomeScreen({
   const isMissionComplete = missionCard.progressPercent >= 100;
   const completedPathSteps = learnState.steps.filter((lesson) => lesson.state === 'completed').length;
   const totalPathSteps = Math.max(learnState.steps.length, 1);
+  const hasSavedPractice = sessions.length > 0;
+  const isFullPathCleared = completedPathSteps >= totalPathSteps;
   const pathStatusLabel = `${completedPathSteps}/${totalPathSteps} cleared`;
   const startCardCtaLabel = resumeRoleplay
     ? 'Finish your saved answer'
     : activeLesson.ctaLabel ?? learnState.hero.ctaLabel;
+  const startCardKickerLabel = resumeRoleplay
+    ? 'Resume now'
+    : isFullPathCleared
+      ? 'Replay now'
+      : hasSavedPractice
+        ? 'Unlocked now'
+        : 'Do this now';
+  const startCardPathTone = hasSavedPractice && !resumeRoleplay ? 'accent' : 'secondary';
   const startCardHabitLabel = resumeRoleplay && resumeCue
     ? resumeCue.badgeLabel
     : isMissionComplete
@@ -123,6 +133,8 @@ export function HomeScreen({
           levelProgressLabel={levelProgress.progressLabel}
           levelProgressPercent={levelProgress.progressPercent}
           onPress={startActiveLesson}
+          pathBadgeTone={startCardPathTone}
+          pathKickerLabel={startCardKickerLabel}
           pathLabel={startCardPathLabel}
           title={startCardTitle}
           xpLabel={startCardXpLabel}
@@ -215,6 +227,8 @@ function AnimatedStartCard({
   levelProgressLabel,
   levelProgressPercent,
   onPress,
+  pathBadgeTone,
+  pathKickerLabel,
   pathLabel,
   title,
   xpLabel,
@@ -226,6 +240,8 @@ function AnimatedStartCard({
   levelProgressLabel: string;
   levelProgressPercent: number;
   onPress: () => void;
+  pathBadgeTone: 'accent' | 'secondary';
+  pathKickerLabel: string;
   pathLabel: string;
   title: string;
   xpLabel: string;
@@ -290,8 +306,8 @@ function AnimatedStartCard({
 
         <View style={styles.startCopy}>
           <View style={styles.startKickerRow}>
-            <Text style={styles.startKicker}>Do this now</Text>
-            <Badge label={pathLabel} tone="secondary" />
+            <Text style={styles.startKicker}>{pathKickerLabel}</Text>
+            <Badge label={pathLabel} tone={pathBadgeTone} />
           </View>
           <Text style={styles.startTitle}>{title}</Text>
           <View style={styles.startRewardRow}>

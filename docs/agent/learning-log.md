@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-04: Home Unlock State Cue
+
+Made one focused Home/Learn polish: the active start card now changes its top cue after a saved practice answer, so the next lesson feels visibly unlocked.
+
+Why it changed:
+
+- The Progress screen now uses progressive disclosure for early wins, but Home still looked almost the same after a saved answer.
+- After saving, the user should immediately feel that the next career-English step opened.
+- A small state cue is safer than adding a new animation system or another reward component.
+
+What changed:
+
+- Added a post-save `Unlocked now` kicker for the Home start card in `src/screens/HomeScreen.tsx`.
+- Changed the path badge tone from secondary to accent after a saved practice answer.
+- Kept `Resume now` for saved drafts and `Replay now` for a fully cleared path.
+- Kept Home path state, navigation, XP, streak, storage, roleplay selection and bottom navigation unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- The first post-save Home visit should better communicate `save -> next unlock`.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 79 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Home start card after one saved answer and verify that the accent badge does not overpower the primary START node.
+
 ## 2026-07-04: Early Progress Momentum Unlock
 
 Made one focused Progress improvement: the Wins screen now stays intentionally narrow until the learner has three saved answers, then unlocks the denser trend views.
