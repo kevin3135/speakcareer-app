@@ -2196,6 +2196,35 @@ test('creates a locked session history preview for first-time progress users', a
   assert.equal(emptyState.unlockLabel, 'First unlock: history, XP and daily target progress');
 });
 
+test('keeps deeper progress insights locked until three saved sessions', async () => {
+  const {
+    createProgressMomentumUnlock,
+    DETAILED_PROGRESS_UNLOCK_TARGET,
+  } = await import('../src/utils/progressMomentumUnlock.ts');
+
+  assert.equal(DETAILED_PROGRESS_UNLOCK_TARGET, 3);
+  assert.equal(createProgressMomentumUnlock(0), null);
+  assert.equal(createProgressMomentumUnlock(3), null);
+
+  const firstSaveUnlock = createProgressMomentumUnlock(1);
+  assert.equal(firstSaveUnlock.eyebrow, 'Unlock next');
+  assert.equal(firstSaveUnlock.progressLabel, '1/3 saved');
+  assert.equal(firstSaveUnlock.progressPercent, 33);
+  assert.equal(firstSaveUnlock.title, '2 more saves unlock deeper wins');
+  assert.ok(firstSaveUnlock.body.includes('one clear next step'));
+  assert.deepEqual(firstSaveUnlock.items, [
+    'Earlier saved coaching targets',
+    'Skill trend and weekly rhythm',
+    'Full correction queue',
+  ]);
+
+  const secondSaveUnlock = createProgressMomentumUnlock(2);
+  assert.equal(secondSaveUnlock.progressLabel, '2/3 saved');
+  assert.equal(secondSaveUnlock.progressPercent, 67);
+  assert.equal(secondSaveUnlock.title, 'One more save unlocks deeper wins');
+  assert.ok(secondSaveUnlock.body.includes('One more saved answer'));
+});
+
 test('creates a compact earlier-save history for returning progress users', async () => {
   const { createProgressRecentSessions } = await import('../src/utils/progressRecentSessions.ts');
 

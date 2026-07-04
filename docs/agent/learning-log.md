@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-04: Early Progress Momentum Unlock
+
+Made one focused Progress improvement: the Wins screen now stays intentionally narrow until the learner has three saved answers, then unlocks the denser trend views.
+
+Why it changed:
+
+- The current Progress screen is useful, but after the first saved answer it still reveals too many analytics-like sections too early.
+- The design audit called out the same issue: Progress should feel like motivating wins, not a report, especially at the start.
+- A simple unlock state is higher value than adding more progress content because it keeps the next action clear while still previewing what opens later.
+
+What changed:
+
+- Added `src/utils/progressMomentumUnlock.ts` to define the `3 saved answers` unlock state for deeper Progress insights.
+- Updated `src/screens/ProgressScreen.tsx` so early Progress shows the next step, latest win, one active correction and a compact `Unlock next` card instead of the full analytics stack.
+- Kept `Recent saves`, `Skill progress`, `Weekly rhythm`, the stat strip and the full mistake-bank queue hidden until the learner reaches three saved sessions.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new unlock thresholds and copy.
+
+What went well:
+
+- The change stayed inside one screen, one small helper, one existing test file and this log.
+- It directly reduces cognitive load in the first few Progress visits without changing storage, XP, streak, roleplay flow or mock feedback logic.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new `Unlock next` card should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 79 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress becomes easier to trust when early sessions unlock depth gradually instead of exposing every metric immediately.
+- Keep the first few Wins visits centered on one next action, one saved win and one correction before showing trend views.
+
+Next suggested task:
+
+- Carry the same progressive-disclosure rule into the Home path by adding a small unlock motion or state change after a saved answer.
+
 ## 2026-07-01: Foundation Starter Kit Density
 
 Made one focused Foundation handoff design polish: the completed Foundation card now combines the starter answer and edit plan into one compact starter-kit block.

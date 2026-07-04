@@ -25,6 +25,10 @@ import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressLevelRunway } from '../utils/progressLevelRunway';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
+import {
+  createProgressMomentumUnlock,
+  DETAILED_PROGRESS_UNLOCK_TARGET,
+} from '../utils/progressMomentumUnlock';
 import { createProgressNextStepGuide } from '../utils/progressNextStep';
 import { createProgressRecentSessions } from '../utils/progressRecentSessions';
 import { createRoleplayWarmupCue } from '../utils/roleplayWarmupCue';
@@ -71,6 +75,10 @@ export function ProgressScreen({
   });
   const primaryGuideStep = nextStepGuide.steps[0];
   const emptyState = isFirstSaveLocked ? createProgressEmptyState() : null;
+  const progressMomentumUnlock = isFirstSaveLocked
+    ? null
+    : createProgressMomentumUnlock(sessions.length);
+  const hasDetailedProgressUnlocked = sessions.length >= DETAILED_PROGRESS_UNLOCK_TARGET;
   const mistakePreview = isFirstSaveLocked ? createProgressMistakeBankPreview(mistakeBank) : null;
   const mistakeDrill = isFirstSaveLocked
     ? null
@@ -205,22 +213,24 @@ export function ProgressScreen({
         </>
       ) : (
         <>
-          <Card style={styles.statStrip} tone="muted">
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{summary.minutesPracticed}</Text>
-              <Text style={styles.statLabel}>Minutes</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{localProgress.sessionsCompleted}</Text>
-              <Text style={styles.statLabel}>Roleplays</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{mistakesFixed}</Text>
-              <Text style={styles.statLabel}>Fixes</Text>
-            </View>
-          </Card>
+          {hasDetailedProgressUnlocked ? (
+            <Card style={styles.statStrip} tone="muted">
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{summary.minutesPracticed}</Text>
+                <Text style={styles.statLabel}>Minutes</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{localProgress.sessionsCompleted}</Text>
+                <Text style={styles.statLabel}>Roleplays</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{mistakesFixed}</Text>
+                <Text style={styles.statLabel}>Fixes</Text>
+              </View>
+            </Card>
+          ) : null}
 
           {latestSession ? (
             <Card>
@@ -271,7 +281,37 @@ export function ProgressScreen({
             </Card>
           ) : null}
 
-          {recentSessions ? (
+          {progressMomentumUnlock ? (
+            <Card tone="muted">
+              <View style={styles.rowBetween}>
+                <View style={styles.flexOne}>
+                  <Text style={styles.cardKicker}>{progressMomentumUnlock.eyebrow}</Text>
+                  <Text style={styles.cardTitle}>{progressMomentumUnlock.title}</Text>
+                </View>
+                <Badge label={progressMomentumUnlock.progressLabel} tone="info" />
+              </View>
+              <Text style={styles.cardBody}>{progressMomentumUnlock.body}</Text>
+              <View style={styles.progressWrap}>
+                <ProgressBar
+                  label={progressMomentumUnlock.progressLabel}
+                  tone="secondary"
+                  value={progressMomentumUnlock.progressPercent}
+                />
+              </View>
+              <View style={styles.unlockList}>
+                {progressMomentumUnlock.items.map((item, index) => (
+                  <View key={item} style={styles.unlockListRow}>
+                    <View style={styles.unlockListIndex}>
+                      <Text style={styles.unlockListIndexText}>{index + 1}</Text>
+                    </View>
+                    <Text style={styles.unlockListText}>{item}</Text>
+                  </View>
+                ))}
+              </View>
+            </Card>
+          ) : null}
+
+          {hasDetailedProgressUnlocked && recentSessions ? (
             <Card tone="muted">
               <View style={styles.rowBetween}>
                 <View style={styles.flexOne}>
@@ -308,30 +348,34 @@ export function ProgressScreen({
             </Card>
           ) : null}
 
-          <SectionHeader
-            subtitle="Simple skill meters for the English you need at work."
-            title="Skill progress"
-          />
-          <View style={styles.skillGrid}>
-            <SkillProgressCard label="Clarity" tone="primary" value={summary.clarityScore} />
-            <SkillProgressCard label="Confidence" tone="purple" value={summary.confidenceScore} />
-          </View>
-          <View style={styles.skillGrid}>
-            <SkillProgressCard label="Tone" tone="secondary" value={76} />
-            <SkillProgressCard label="Structure" tone="accent" value={82} />
-          </View>
+          {hasDetailedProgressUnlocked ? (
+            <>
+              <SectionHeader
+                subtitle="Simple skill meters for the English you need at work."
+                title="Skill progress"
+              />
+              <View style={styles.skillGrid}>
+                <SkillProgressCard label="Clarity" tone="primary" value={summary.clarityScore} />
+                <SkillProgressCard label="Confidence" tone="purple" value={summary.confidenceScore} />
+              </View>
+              <View style={styles.skillGrid}>
+                <SkillProgressCard label="Tone" tone="secondary" value={76} />
+                <SkillProgressCard label="Structure" tone="accent" value={82} />
+              </View>
 
-          <Card style={styles.weekCard} tone="muted">
-            <Text style={styles.cardKicker}>Weekly rhythm</Text>
-            <View style={styles.chart}>
-              {weekActivity.map((value, index) => (
-                <View key={`${value}-${index}`} style={styles.chartColumn}>
-                  <View style={[styles.chartBar, { height: value }]} />
-                  <Text style={styles.chartLabel}>{index + 1}</Text>
+              <Card style={styles.weekCard} tone="muted">
+                <Text style={styles.cardKicker}>Weekly rhythm</Text>
+                <View style={styles.chart}>
+                  {weekActivity.map((value, index) => (
+                    <View key={`${value}-${index}`} style={styles.chartColumn}>
+                      <View style={[styles.chartBar, { height: value }]} />
+                      <Text style={styles.chartLabel}>{index + 1}</Text>
+                    </View>
+                  ))}
                 </View>
-              ))}
-            </View>
-          </Card>
+              </Card>
+            </>
+          ) : null}
 
           {mistakeDrill ? (
             <Card tone="accent">
@@ -391,70 +435,74 @@ export function ProgressScreen({
             </Card>
           ) : null}
 
-          <SectionHeader
-            subtitle="One correction first. Open the full list only when needed."
-            title="Mistake bank"
-          />
-          {mistakeQueue ? (
-            <Card tone="muted">
-              <View style={styles.rowBetween}>
-                <View style={styles.flexOne}>
-                  <Text style={styles.cardKicker}>{mistakeQueue.eyebrow}</Text>
-                  <Text style={styles.cardTitle}>{mistakeQueue.title}</Text>
-                </View>
-                <Badge label={mistakeQueue.progressLabel} tone="info" />
-              </View>
-              <Text numberOfLines={2} style={styles.cardBody}>{mistakeQueue.body}</Text>
-              {mistakeQueue.items.length > 0 ? (
-                <View style={styles.queueList}>
-                  {hiddenMistakeQueueCount > 0 ? (
-                    <View style={styles.queueCollapsedCue}>
-                      <View style={styles.queueCollapsedIcon}>
-                        <Text style={styles.queueCollapsedIconText}>Q</Text>
-                      </View>
-                      <View style={styles.flexOne}>
-                        <Text style={styles.queueMoreLabel}>
-                          {hiddenMistakeQueueCount} saved for later
-                        </Text>
-                        <Text numberOfLines={1} style={styles.queueMoreHint}>
-                          Open only when you want the full queue.
-                        </Text>
-                      </View>
+          {hasDetailedProgressUnlocked ? (
+            <>
+              <SectionHeader
+                subtitle="One correction first. Open the full list only when needed."
+                title="Mistake bank"
+              />
+              {mistakeQueue ? (
+                <Card tone="muted">
+                  <View style={styles.rowBetween}>
+                    <View style={styles.flexOne}>
+                      <Text style={styles.cardKicker}>{mistakeQueue.eyebrow}</Text>
+                      <Text style={styles.cardTitle}>{mistakeQueue.title}</Text>
                     </View>
-                  ) : null}
-                  {visibleMistakeQueueItems.map((mistake) => (
-                    <View key={mistake.id} style={styles.queueItem}>
-                      <View style={styles.rowBetween}>
-                        <Badge
-                          label={mistake.category}
-                          tone={mistake.isPracticed ? 'success' : 'secondary'}
-                        />
-                        <Badge
-                          label={mistake.statusLabel}
-                          tone={mistake.isPracticed ? 'success' : 'info'}
-                        />
-                      </View>
-                      <Text numberOfLines={2} style={styles.queueCorrection}>
-                        {mistake.correction}
-                      </Text>
-                    </View>
-                  ))}
+                    <Badge label={mistakeQueue.progressLabel} tone="info" />
+                  </View>
+                  <Text numberOfLines={2} style={styles.cardBody}>{mistakeQueue.body}</Text>
                   {mistakeQueue.items.length > 0 ? (
-                    <View style={styles.queueToggleAction}>
-                      <AppButton
-                        accessibilityHint={isMistakeQueueOpen
-                          ? 'Hide the extra queued mistakes'
-                          : 'Show the full queued mistake bank'}
-                        label={isMistakeQueueOpen ? 'Hide list' : 'See all mistakes'}
-                        onPress={() => setIsMistakeQueueOpen((isOpen) => !isOpen)}
-                        size="small"
-                        variant="quiet"
-                      />
+                    <View style={styles.queueList}>
+                      {hiddenMistakeQueueCount > 0 ? (
+                        <View style={styles.queueCollapsedCue}>
+                          <View style={styles.queueCollapsedIcon}>
+                            <Text style={styles.queueCollapsedIconText}>Q</Text>
+                          </View>
+                          <View style={styles.flexOne}>
+                            <Text style={styles.queueMoreLabel}>
+                              {hiddenMistakeQueueCount} saved for later
+                            </Text>
+                            <Text numberOfLines={1} style={styles.queueMoreHint}>
+                              Open only when you want the full queue.
+                            </Text>
+                          </View>
+                        </View>
+                      ) : null}
+                      {visibleMistakeQueueItems.map((mistake) => (
+                        <View key={mistake.id} style={styles.queueItem}>
+                          <View style={styles.rowBetween}>
+                            <Badge
+                              label={mistake.category}
+                              tone={mistake.isPracticed ? 'success' : 'secondary'}
+                            />
+                            <Badge
+                              label={mistake.statusLabel}
+                              tone={mistake.isPracticed ? 'success' : 'info'}
+                            />
+                          </View>
+                          <Text numberOfLines={2} style={styles.queueCorrection}>
+                            {mistake.correction}
+                          </Text>
+                        </View>
+                      ))}
+                      {mistakeQueue.items.length > 0 ? (
+                        <View style={styles.queueToggleAction}>
+                          <AppButton
+                            accessibilityHint={isMistakeQueueOpen
+                              ? 'Hide the extra queued mistakes'
+                              : 'Show the full queued mistake bank'}
+                            label={isMistakeQueueOpen ? 'Hide list' : 'See all mistakes'}
+                            onPress={() => setIsMistakeQueueOpen((isOpen) => !isOpen)}
+                            size="small"
+                            variant="quiet"
+                          />
+                        </View>
+                      ) : null}
                     </View>
                   ) : null}
-                </View>
+                </Card>
               ) : null}
-            </Card>
+            </>
           ) : null}
         </>
       )}
@@ -528,6 +576,36 @@ const styles = StyleSheet.create({
   },
   progressWrap: {
     marginTop: spacing.lg,
+  },
+  unlockList: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  unlockListIndex: {
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    height: 26,
+    justifyContent: 'center',
+    width: 26,
+  },
+  unlockListIndexText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  unlockListRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  unlockListText: {
+    color: colors.text,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    lineHeight: typography.lineBody,
   },
   levelRunwayMeta: {
     alignItems: 'center',
