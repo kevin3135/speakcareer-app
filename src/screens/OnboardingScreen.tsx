@@ -156,6 +156,8 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             <View style={styles.segmentedControl}>
               {dailyTargetOptions.map((target) => {
                 const isActive = target === selectedDailyTarget;
+                const isRecommended = target === dailyTargetGuide?.recommendedTarget;
+                const showRecommendedMarker = isActive && isRecommended;
 
                 return (
                   <Pressable
@@ -174,9 +176,14 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                       pressed && styles.segmentPressed,
                     ]}
                   >
-                    <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
-                      {target}/day
-                    </Text>
+                    <View style={styles.segmentContent}>
+                      <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
+                        {target}/day
+                      </Text>
+                      {showRecommendedMarker ? (
+                        <Text style={styles.segmentMarker}>Recommended</Text>
+                      ) : null}
+                    </View>
                   </Pressable>
                 );
               })}
@@ -578,10 +585,21 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     flex: 1,
     justifyContent: 'center',
-    minHeight: 44,
+    minHeight: 52,
   },
   segmentActive: {
     backgroundColor: colors.primary,
+  },
+  segmentContent: {
+    alignItems: 'center',
+    gap: spacing.xs,
+    justifyContent: 'center',
+  },
+  segmentMarker: {
+    color: colors.primarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
   },
   segmentPressed: {
     opacity: 0.82,

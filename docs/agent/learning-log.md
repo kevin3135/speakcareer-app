@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-05: Onboarding Recommended Pace Marker
+
+Made one focused onboarding design polish: the auto-selected recommended pace chip now carries a small `Recommended` marker.
+
+Why it changed:
+
+- The previous run auto-selected the coach-recommended daily pace, but the active chip did not explain why it was already selected.
+- The onboarding flow should feel app-led without making the learner compare extra text blocks.
+- A tiny marker on the active recommended chip makes the coach choice understandable at a glance.
+
+What changed:
+
+- Updated `src/screens/OnboardingScreen.tsx` so the active chip shows `Recommended` only when it matches the coach-recommended target.
+- Slightly increased the target chip height so the marker has room while staying easy to tap.
+- Kept the recommendation logic, manual override behavior, storage and onboarding CTA unchanged.
+
+What went well:
+
+- The change stayed inside one visible onboarding component and this log.
+- The auto-selected pace now explains itself directly in the control.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first typecheck caught that `typography.lineMicro` does not exist; the style was corrected to use existing theme tokens.
+- This run did not include fresh screenshot QA, so the `Recommended` marker should still be checked on narrow mobile widths.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Capture an onboarding mobile screenshot after selecting each level and confirm the recommended chip marker does not crowd the segmented control.
+
 ## 2026-07-05: Onboarding Auto-Selected Pace
 
 Made one focused onboarding improvement: after the learner picks a starting level, the daily target now auto-selects the coach-recommended pace until the learner manually changes it.
