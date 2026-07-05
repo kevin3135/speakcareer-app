@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Wins Level Runway Compact
+
+Made one focused Progress/Wins polish: the Level runway card is now quieter on completed-target days so it supports the review path instead of competing with it.
+
+Why it changed:
+
+- The completed-day Wins stack now correctly puts the latest saved win before Level runway.
+- The Level runway body still read like another progress instruction after the learner had already finished today's target.
+- Shorter bonus-XP copy keeps the first Wins scroll focused on reviewing the saved correction.
+
+What changed:
+
+- Updated `src/screens/ProgressScreen.tsx` so the Level runway body changes to `Review first. Bonus XP can wait.` only when today's target is complete.
+- Added a compact completed-day style for that body copy using existing theme tokens.
+- Kept the normal Level runway copy, progress bar, XP math, navigation and saved-session data unchanged.
+
+What went well:
+
+- The diff stayed inside one screen and this log.
+- The change reduces visual weight without removing any useful progress context.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the completed-target Wins stack should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the completed-target Wins stack and then move to the next weak visible area: Profile/Me should lose technical-feeling integration copy.
+
 ## 2026-07-05: Wins Review Card Priority
 
 Made one focused Progress/Wins polish: when today's target is already complete, the latest saved win now appears above the Level runway so the review path lands on the actual correction before extra progress context.

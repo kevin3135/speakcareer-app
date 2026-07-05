@@ -105,6 +105,9 @@ export function ProgressScreen({
   const hiddenMistakeQueueCount = mistakeQueue
     ? Math.max(0, mistakeQueue.items.length - visibleMistakeQueueItems.length)
     : 0;
+  const levelRunwayBody = isDailyTargetComplete
+    ? 'Review first. Bonus XP can wait.'
+    : levelRunway.body;
   const latestWinCard = latestSession ? (
     <Card>
       <View style={styles.rowBetween}>
@@ -164,7 +167,15 @@ export function ProgressScreen({
         </View>
         <LevelBadge label={levelRunway.badgeLabel} />
       </View>
-      <Text style={styles.cardBody}>{levelRunway.body}</Text>
+      <Text
+        numberOfLines={isDailyTargetComplete ? 1 : undefined}
+        style={[
+          styles.cardBody,
+          isDailyTargetComplete && styles.levelRunwayBodyComplete,
+        ]}
+      >
+        {levelRunwayBody}
+      </Text>
       <View style={styles.levelRunwayMeta}>
         <Text style={styles.levelRunwayMetaLabel}>{levelRunway.targetLabel}</Text>
         <Text style={styles.levelRunwayMetaValue}>{levelRunway.totalXpLabel}</Text>
@@ -677,6 +688,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: spacing.md,
+  },
+  levelRunwayBodyComplete: {
+    color: colors.textMuted,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
   },
   levelRunwayMetaLabel: {
     color: colors.primaryDark,
