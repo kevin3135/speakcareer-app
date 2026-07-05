@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Practice Guided Sprint Card
+
+Made one focused Practice polish: the recommended card under `Do this now` now reads like the next guided sprint instead of a generic library card.
+
+Why it changed:
+
+- The Practice screen already recommends one roleplay first, but the card focus line still described the roleplay topic more than the action loop.
+- A new user should understand that this card is the next sprint: start, save one answer, then unlock the next career step.
+- Resume mode should feel equally action-led while still using the existing saved draft data.
+
+What changed:
+
+- Updated `src/utils/practiceLibraryState.ts` so active recommended cards use `Next sprint` copy with the next locked step when available.
+- Updated resume focus copy from `Coach cue` to `Resume sprint` so unfinished drafts feel like the current action, not a report.
+- Added assertions in `tests/practiceContent.test.mjs` for first-run, active-path and resume recommended card copy.
+
+What went well:
+
+- The change stayed inside Practice state copy and existing tests; no screen layout, storage, API or navigation logic changed.
+- Browse cards keep their original roleplay descriptions, so the library still has useful detail when opened.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the longer `Next sprint` line should be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 84 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Visually quiet the secondary Practice library area so `Do this now` feels even more dominant on the first mobile viewport.
+
 ## 2026-07-05: Practice After-Save Payoff
 
 Made one focused Practice polish: the daily sprint card now shows a compact `After save` payoff strip.

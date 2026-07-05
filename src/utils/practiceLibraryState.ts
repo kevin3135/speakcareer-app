@@ -53,13 +53,14 @@ export function createPracticeLibraryState({
     roleplays.map((roleplay) => [roleplay.id, createBaseCard(roleplay)]),
   );
   const activeStep = path.steps.find((step) => step.state === 'active') ?? path.steps[0];
+  const nextLockedStepTitle = activeStep ? getNextLockedStepTitle(path.steps, activeStep.id) : null;
   const savedDraftRoleplay = draft
     ? roleplays.find((roleplay) => roleplay.id === draft.roleplayId) ?? null
     : null;
   const recommendedCard = savedDraftRoleplay && draft
     ? createSavedDraftCard(savedDraftRoleplay, draft)
     : activeStep
-    ? createMappedCard(activeStep.roleplayId, cardMap, activeStep.state)
+    ? createMappedCard(activeStep.roleplayId, cardMap, activeStep.state, nextLockedStepTitle)
     : createFallbackCard();
   const browseCards = path.steps
     .filter((step) => step.roleplayId !== recommendedCard.roleplayId)
@@ -87,13 +88,19 @@ function createMappedCard(
   roleplayId: RoleplayId,
   cardMap: Map<RoleplayId, PracticeLibraryCard>,
   state: 'done' | 'active' | 'locked',
+  nextLockedStepTitle?: string | null,
 ): PracticeLibraryCard {
   const baseCard = cardMap.get(roleplayId) ?? createFallbackCard(roleplayId);
+  const activeCardCopy = state === 'active'
+    ? createActiveRecommendedCardCopy(nextLockedStepTitle)
+    : null;
 
   return {
     ...baseCard,
     categoryLabel: createCategoryLabel(state),
     ctaLabel: createCtaLabel(state),
+    description: activeCardCopy?.description ?? baseCard.description,
+    focus: activeCardCopy?.focus ?? baseCard.focus,
   };
 }
 
@@ -166,6 +173,30 @@ function createCtaLabel(state: 'done' | 'active' | 'locked') {
   return 'Open anyway';
 }
 
+function getNextLockedStepTitle(
+  steps: { id: string; state: 'done' | 'active' | 'locked'; title: string }[],
+  activeStepId: string,
+) {
+  const activeIndex = steps.findIndex((step) => step.id === activeStepId);
+  const laterLockedStep = steps.slice(activeIndex + 1).find((step) => step.state === 'locked');
+
+  return laterLockedStep?.title ?? null;
+}
+
+function createActiveRecommendedCardCopy(nextLockedStepTitle?: string | null) {
+  if (nextLockedStepTitle) {
+    return {
+      description: 'Check it, earn XP, then open the next career step.',
+      focus: `Next sprint: save one answer to unlock ${nextLockedStepTitle}.`,
+    };
+  }
+
+  return {
+    description: 'Check it, earn XP, then keep your streak moving.',
+    focus: 'Next sprint: save one sharp answer for today.',
+  };
+}
+
 function createSavedDraftSubtitle(roleplayTitle: string, wordCount: number) {
   const wordLabel = `${wordCount} ${wordCount === 1 ? 'word' : 'words'}`;
 
@@ -188,16 +219,16 @@ function createSavedDraftDescription(review: ReturnType<typeof summarizePractice
 
 function createSavedDraftFocus(review: ReturnType<typeof summarizePracticeAnswer>) {
   if (review.wordCount === 0) {
-    return 'Coach cue: write one clear work action.';
+    return 'Resume sprint: write one clear work action.';
   }
 
   if (!review.isReadyForFeedback) {
-    return 'Coach cue: add one concrete work example.';
+    return 'Resume sprint: add one concrete work example.';
   }
 
   if (review.readinessLabel === 'Good start') {
-    return 'Coach cue: add one result or next step.';
+    return 'Resume sprint: add one result or next step.';
   }
 
-  return 'Coach cue: review clarity, then save.';
+  return 'Resume sprint: review clarity, then save.';
 }

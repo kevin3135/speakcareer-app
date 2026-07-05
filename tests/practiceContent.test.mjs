@@ -3410,6 +3410,14 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(firstRunState.recommendedCard.roleplayId, 'job-interview');
   assert.equal(firstRunState.recommendedCard.categoryLabel, 'Next');
   assert.equal(firstRunState.recommendedCard.ctaLabel, 'Start now');
+  assert.equal(
+    firstRunState.recommendedCard.focus,
+    'Next sprint: save one answer to unlock Meeting Practice.',
+  );
+  assert.equal(
+    firstRunState.recommendedCard.description,
+    'Check it, earn XP, then open the next career step.',
+  );
   assert.equal(firstRunState.browseCards.length, 4);
   assert.equal(firstRunState.browseCards[0].categoryLabel, 'Later');
   assert.equal(firstRunState.browseLabel, '4 more roleplays');
@@ -3432,6 +3440,10 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(activeState.title, 'Next: Presentation Practice');
   assert.equal(activeState.progressPercent, 40);
   assert.equal(activeState.recommendedCard.roleplayId, 'presentation-practice');
+  assert.equal(
+    activeState.recommendedCard.focus,
+    'Next sprint: save one answer to unlock Sales Call.',
+  );
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').categoryLabel, 'Completed');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').ctaLabel, 'Practice again');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'sales-call').categoryLabel, 'Later');
@@ -3461,7 +3473,7 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.recommendedCard.roleplayId, 'meeting-practice');
   assert.equal(resumeState.recommendedCard.categoryLabel, 'Resume');
   assert.equal(resumeState.recommendedCard.ctaLabel, 'Finish now');
-  assert.equal(resumeState.recommendedCard.focus, 'Coach cue: add one result or next step.');
+  assert.equal(resumeState.recommendedCard.focus, 'Resume sprint: add one result or next step.');
   assert.ok(resumeState.recommendedCard.description.includes('Check it, save XP'));
   assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
   assert.equal(resumeState.runway, null);
