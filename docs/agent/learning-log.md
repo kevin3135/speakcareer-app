@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Optional Follow-Up Cue
+
+Made one focused Roleplay design polish: the collapsed optional follow-up cue now feels secondary to the Save action.
+
+Why it changed:
+
+- The previous run made Save the first post-check action, but the collapsed bonus follow-up chip still led with `+15 XP`.
+- That reward-first presentation could make the optional turn feel like it competes with saving the ready answer.
+- The MVP loop should keep Save as the main win, with bonus practice clearly available but quieter.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the collapsed follow-up chip says `Optional turn` and leads with the decision cue such as `Save first`.
+- Moved `+15 XP` into the secondary line of the chip instead of the primary reward line.
+- Softened the chip and reward badge styling with quieter surface/border tokens.
+
+What went well:
+
+- The change stayed inside the existing Roleplay follow-up cue and this log.
+- The bonus turn remains available, but Save should now feel more dominant.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the quieter chip still needs a visual check beside the Save-card CTA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Move to Progress/Wins and make the first visible win card more motivational without adding new progress data.
+
 ## 2026-07-05: Roleplay Save-First Review Actions
 
 Made one focused Roleplay UX polish: after checking a ready answer, `Save` is now the first visible action and rewrite/edit choices sit below it as optional secondary actions.

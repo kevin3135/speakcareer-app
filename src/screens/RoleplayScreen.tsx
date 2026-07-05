@@ -1363,7 +1363,7 @@ export function RoleplayScreen({
                 ]}
               >
                 <View style={styles.followUpBonusCopy}>
-                  <Text style={styles.followUpSummaryLabel}>Bonus turn</Text>
+                  <Text style={styles.followUpSummaryLabel}>Optional turn</Text>
                   <Text numberOfLines={1} style={styles.followUpBonusTitle}>
                     {followUpReadinessCue?.title ?? `Bonus step: ${followUpPrompt.focusLabel}`}
                   </Text>
@@ -1372,8 +1372,10 @@ export function RoleplayScreen({
                   </Text>
                 </View>
                 <View style={styles.followUpBonusReward}>
-                  <Text style={styles.followUpBonusCta}>{`+${FOLLOW_UP_BONUS_XP} XP`}</Text>
-                  <Text style={styles.followUpBonusAction}>{followUpReadinessCue?.badgeLabel ?? 'Try'}</Text>
+                  <Text style={styles.followUpBonusCta}>
+                    {followUpReadinessCue?.badgeLabel ?? 'Optional'}
+                  </Text>
+                  <Text style={styles.followUpBonusAction}>{`+${FOLLOW_UP_BONUS_XP} XP`}</Text>
                 </View>
               </Pressable>
             )
@@ -2312,8 +2314,8 @@ const styles = StyleSheet.create({
   },
   followUpBonusChip: {
     alignItems: 'center',
-    backgroundColor: colors.white,
-    borderColor: colors.secondary,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderRadius: radius.lg,
     borderStyle: 'dashed',
     borderWidth: 1,
@@ -2325,7 +2327,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   followUpBonusChipPressed: {
-    backgroundColor: colors.secondarySoft,
+    backgroundColor: colors.surfaceMuted,
     borderColor: colors.secondary,
   },
   followUpBonusCopy: {
@@ -2334,7 +2336,7 @@ const styles = StyleSheet.create({
     paddingRight: spacing.md,
   },
   followUpBonusCta: {
-    color: colors.accentDark,
+    color: colors.secondaryDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
@@ -2349,8 +2351,8 @@ const styles = StyleSheet.create({
   },
   followUpBonusReward: {
     alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
     borderWidth: 1,
     borderRadius: radius.md,
     justifyContent: 'center',
