@@ -123,14 +123,21 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             <Text numberOfLines={1} style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
             {dailyTargetGuide ? (
               <View style={styles.targetGuideBox}>
-                <View style={styles.targetGuideHeader}>
-                  <Text style={styles.targetGuideLabel}>Recommended to start</Text>
-                  <Badge label={dailyTargetGuide.recommendationLabel} tone="accent" />
+                <View style={styles.targetGuideCoachBadge}>
+                  <Text style={styles.targetGuideCoachText}>SC</Text>
                 </View>
-                <Text style={styles.targetGuideTitle}>{dailyTargetGuide.recommendationTitle}</Text>
-                <Text numberOfLines={2} style={styles.targetGuideBody}>
-                  {dailyTargetGuide.recommendationBody}
-                </Text>
+                <View style={styles.targetGuideCopy}>
+                  <View style={styles.targetGuideHeader}>
+                    <Text style={styles.targetGuideLabel}>Coach pick</Text>
+                    <Badge label={dailyTargetGuide.recommendationLabel} tone="accent" />
+                  </View>
+                  <Text numberOfLines={1} style={styles.targetGuideTitle}>
+                    {dailyTargetGuide.recommendationTitle}
+                  </Text>
+                  <Text numberOfLines={2} style={styles.targetGuideBody}>
+                    {dailyTargetGuide.recommendationBody}
+                  </Text>
+                </View>
               </View>
             ) : null}
             <View style={styles.segmentedControl}>
@@ -430,12 +437,33 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   targetGuideBox: {
+    alignItems: 'flex-start',
     backgroundColor: colors.primarySoft,
     borderColor: colors.primaryGlow,
     borderRadius: radius.md,
     borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
     marginTop: spacing.md,
     padding: spacing.sm,
+  },
+  targetGuideCoachBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    height: 34,
+    justifyContent: 'center',
+    width: 34,
+  },
+  targetGuideCoachText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  targetGuideCopy: {
+    flex: 1,
+    minWidth: 0,
   },
   targetGuideHeader: {
     alignItems: 'center',

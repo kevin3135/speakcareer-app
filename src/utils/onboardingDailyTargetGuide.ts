@@ -44,7 +44,7 @@ export function createOnboardingDailyTargetGuide(
   const config = DAILY_TARGET_GUIDE_CONFIG[startingLevelId];
   const previewStats = createPreviewStats(selectedTarget);
   const recommendationLabel = `${config.recommendedTarget}/day`;
-  const recommendationTitle = `Recommended start: ${formatDailyTarget(config.recommendedTarget)}`;
+  const recommendationTitle = `Start with ${recommendationLabel}`;
 
   if (selectedTarget === config.recommendedTarget) {
     return {
@@ -85,10 +85,6 @@ export function createOnboardingDailyTargetGuide(
     selectionLabel: 'Faster push',
     selectionTone: 'accent',
   };
-}
-
-function formatDailyTarget(dailyTarget: DailyPracticeTarget) {
-  return `${dailyTarget} ${dailyTarget === 1 ? 'roleplay' : 'roleplays'} a day`;
 }
 
 function createPreviewStats(

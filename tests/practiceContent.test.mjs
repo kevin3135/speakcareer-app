@@ -713,7 +713,7 @@ test('recommends a starting daily target based on onboarding level', async () =>
   assert.ok(fasterGuide.previewBody.includes('stronger sprint'));
 
   const confidentGuide = createOnboardingDailyTargetGuide('confident', 3);
-  assert.equal(confidentGuide.recommendationTitle, 'Recommended start: 3 roleplays a day');
+  assert.equal(confidentGuide.recommendationTitle, 'Start with 3/day');
   assert.ok(confidentGuide.recommendationBody.includes('real interview practice'));
 });
 

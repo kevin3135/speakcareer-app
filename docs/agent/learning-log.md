@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Onboarding Coach Pick Card
+
+Made one focused onboarding design polish: the daily target recommendation now looks like a compact `SC` coach pick instead of a repeated recommendation text block.
+
+Why it changed:
+
+- The previous target card already used shorter feedback, but the recommendation area still repeated `Recommended` language and a long daily-target title.
+- The onboarding choice should feel like the app is calmly guiding the learner, not asking them to compare paragraphs.
+- A small coach badge also strengthens the professional coach identity called out in the design audit.
+
+What changed:
+
+- Updated `src/screens/OnboardingScreen.tsx` so the recommendation box uses a compact `SC` badge, `Coach pick` label, short pace badge and one-line title.
+- Updated `src/utils/onboardingDailyTargetGuide.ts` so the recommendation title now uses compact copy like `Start with 3/day`.
+- Updated the onboarding guide assertion in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- The change stayed inside the onboarding daily-target card and its helper/test.
+- The card should scan faster on narrow mobile screens while keeping the same recommendation logic and selected target behavior.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run still did not include fresh browser screenshot QA, so the `SC` badge spacing should be checked visually in the web preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Use the in-app browser to capture a mobile screenshot of onboarding after selecting each level and confirm the compact coach-pick card spacing.
+
 ## 2026-07-05: Onboarding Compact Target Feedback
 
 Made one focused onboarding design polish: the daily target feedback now reads as a compact coach cue with a tighter first-week preview.
