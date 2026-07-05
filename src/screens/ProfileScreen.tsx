@@ -29,7 +29,7 @@ export function ProfileScreen({
   return (
     <ScreenContainer
       overline="Me"
-      subtitle="Your local learner settings for the English MVP."
+      subtitle="Your practice rhythm, language focus and private preview settings."
       title="English Career Learner"
     >
       <GradientHero
@@ -86,12 +86,12 @@ export function ProfileScreen({
       <Card>
         <View style={styles.languageRow}>
           <Text style={styles.languageName}>{practiceContent.firstTargetLanguage}</Text>
-          <Badge label="MVP active" tone="success" />
+          <Badge label="Active now" tone="success" />
         </View>
         {practiceContent.plannedLanguages.map((language) => (
           <View key={language} style={styles.languageRow}>
             <Text style={styles.plannedLanguage}>{language}</Text>
-            <Badge label="Later" tone="info" />
+            <Badge label="Coming later" tone="info" />
           </View>
         ))}
       </Card>
@@ -104,17 +104,17 @@ export function ProfileScreen({
           'Interview and meeting packs',
           'Future Spanish, French and Mandarin access',
         ]}
-        subtitle="A future upgrade preview for serious career practice. No payment is connected."
+        subtitle="A preview of the deeper practice plan for serious career English."
         title="SpeakCareer Pro"
       />
 
       <Card tone="muted">
         <View style={styles.privacyHeader}>
           <Text style={styles.cardKicker}>Privacy</Text>
-          <Badge label="Device preview" tone="info" />
+          <Badge label="Local preview" tone="info" />
         </View>
         <Text style={styles.cardTitle}>Private practice space</Text>
-        <Text style={styles.cardBody}>Your progress stays on this device in the preview. No account setup needed.</Text>
+        <Text style={styles.cardBody}>Your progress stays on this device while SpeakCareer is in preview. No account needed.</Text>
       </Card>
     </ScreenContainer>
   );

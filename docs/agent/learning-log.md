@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Profile Learner Copy
+
+Made one focused Profile/Me polish: the screen now reads more like learner settings and less like an internal MVP status page.
+
+Why it changed:
+
+- The design audit calls out Profile/Me as a screen that still feels technical and user-facing in the wrong way.
+- Labels like `MVP active`, `Device preview` and `No payment is connected` explain implementation status instead of helping the learner.
+- A copy-only polish is safer than redesigning Profile because the screen already has usable cards and controls.
+
+What changed:
+
+- Updated `src/screens/ProfileScreen.tsx` header copy to frame the screen as practice rhythm, language focus and privacy settings.
+- Replaced technical language labels with learner-facing labels: `Active now`, `Coming later` and `Local preview`.
+- Reworded the Pro and privacy card subtitles so they avoid payment/backend-style wording while keeping the preview honest.
+
+What went well:
+
+- The change stayed inside one screen and this log.
+- No profile state, daily target behavior, navigation, storage, payments, auth, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the Profile screen should still be checked for line wrapping on narrow phones.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Give Profile/Me one stronger learner identity card at the top, such as a compact `Career goal` card, without adding account logic.
+
 ## 2026-07-05: Wins Level Runway Compact
 
 Made one focused Progress/Wins polish: the Level runway card is now quieter on completed-target days so it supports the review path instead of competing with it.
