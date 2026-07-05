@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Home Daily Pace Cue
+
+Made one focused Home/Learn polish: the active START card now reflects the learner's chosen daily pace from onboarding.
+
+Why it changed:
+
+- The new onboarding daily target recommendation helps the learner pick a practice rhythm, but Home still mostly showed the target as a saved-count progress value.
+- The first post-onboarding screen should reassure the learner that the app remembered their setup choice.
+- Showing `Your pace` inside the existing START card is safer than adding another card or decision.
+
+What changed:
+
+- Updated `src/screens/HomeScreen.tsx` to derive a short daily pace label like `1 roleplay today` or `3 roleplays today`.
+- Changed the START-card habit cue from `Today goal` to `Your pace` when the daily mission is not complete.
+- Kept completed-day, saved-draft, mission progress, storage, navigation and onboarding logic unchanged.
+
+What went well:
+
+- The change stayed inside one existing Home card and this log.
+- It connects onboarding setup to Home without adding new product surface or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the START-card pace label should still be checked for truncation on narrow phones.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Home START card after onboarding with 1, 2 and 3 daily targets; if it wraps awkwardly, shorten the pace value to `1/day`, `2/day` and `3/day`.
+
 ## 2026-07-05: Onboarding Daily Pace Recommendation
 
 Made one focused onboarding improvement: the daily target picker now recommends a starting pace based on the learner's selected English level instead of leaving all target options equally weighted.
