@@ -3259,6 +3259,59 @@ test('creates a level runway for the Progress screen', async () => {
   assert.ok(bonusRunway.body.includes('extra saved answer'));
 });
 
+test('creates a more motivational latest-win recap for Progress', async () => {
+  const { createProgressLatestWinState } = await import('../src/utils/progressLatestWin.ts');
+
+  const completedTargetWin = createProgressLatestWinState({
+    isDailyTargetComplete: true,
+    session: {
+      feedbackSummary: 'Good structure. Add one stronger outcome line next time.',
+      includedFollowUp: true,
+      nextFocusLabel: 'Vocabulary 62',
+      nextFocusText: 'Add one stronger result phrase before the follow-up.',
+      readinessLabel: 'Ready for feedback',
+      roleplayTitle: 'Meeting Practice',
+      wordCount: 44,
+    },
+  });
+
+  assert.equal(completedTargetWin.eyebrow, 'Review this win first');
+  assert.equal(completedTargetWin.badgeLabel, 'Follow-up saved');
+  assert.ok(completedTargetWin.body.includes("finished today's target"));
+  assert.equal(completedTargetWin.coachLabel, 'Keep this correction');
+  assert.equal(completedTargetWin.coachBadgeLabel, 'Vocabulary 62');
+  assert.equal(
+    completedTargetWin.coachText,
+    'Add one stronger result phrase before the follow-up.',
+  );
+  assert.equal(completedTargetWin.recapLabel, 'Why it counts');
+  assert.ok(completedTargetWin.recapText.includes('real workplace conversation'));
+
+  const coreWin = createProgressLatestWinState({
+    isDailyTargetComplete: false,
+    session: {
+      feedbackSummary: 'Good start. Add one result or next step to make it stronger.',
+      includedFollowUp: false,
+      nextFocusLabel: '',
+      nextFocusText: '   ',
+      readinessLabel: 'Good start',
+      roleplayTitle: 'Job Interview',
+      wordCount: 18,
+    },
+  });
+
+  assert.equal(coreWin.eyebrow, 'Saved today');
+  assert.equal(coreWin.badgeLabel, 'Core answer saved');
+  assert.ok(coreWin.body.includes('next sprint'));
+  assert.equal(coreWin.coachLabel, 'Coach recap');
+  assert.equal(coreWin.coachBadgeLabel, 'Good start');
+  assert.equal(
+    coreWin.coachText,
+    'Good start. Add one result or next step to make it stronger.',
+  );
+  assert.ok(coreWin.recapText.includes('streak, XP and coach history'));
+});
+
 test('creates a guided practice career path for first-time users', async () => {
   const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
   const path = createPracticeCareerPath({

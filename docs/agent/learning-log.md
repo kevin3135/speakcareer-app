@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Progress Motivational Latest Win
+
+Made one focused Progress improvement: the first visible saved-answer card now feels more like a concrete win with a stronger reason to care and a clearer correction to keep.
+
+Why it changed:
+
+- The previous `Latest win` card showed useful data, but it still read like a neutral session record.
+- After the recent save-flow polish, the Progress screen should reinforce that saving an answer is a real achievement, not only a logged event.
+- The MVP loop benefits when one saved answer clearly turns into momentum: what counted, what to repeat and what to fix next.
+
+What changed:
+
+- Added `src/utils/progressLatestWin.ts` to derive motivational win copy from the latest saved session using existing local data only.
+- Updated `src/screens/ProgressScreen.tsx` so the latest win card now shows a stronger win headline, compact saved/length/reward chips, a short `Why it counts` recap and a clearer coach correction box.
+- Added focused coverage in `tests/practiceContent.test.mjs` for follow-up-complete and core-answer latest-win states.
+
+What went well:
+
+- The change stayed focused on one Progress card, one small helper and one test area.
+- It improves the habit loop without adding new storage, new progress models or backend work.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser visual QA, so the new meta chips and recap box should still be checked on a narrow mobile viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 84 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Return to Practice and make the daily sprint card show one clearer after-save payoff when only one save remains.
+
 ## 2026-07-05: Roleplay Optional Follow-Up Cue
 
 Made one focused Roleplay design polish: the collapsed optional follow-up cue now feels secondary to the Save action.

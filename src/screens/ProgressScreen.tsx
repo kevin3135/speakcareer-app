@@ -23,6 +23,7 @@ import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressLevelRunway } from '../utils/progressLevelRunway';
+import { createProgressLatestWinState } from '../utils/progressLatestWin';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import {
@@ -73,6 +74,12 @@ export function ProgressScreen({
   const isFirstSaveLocked = sessions.length === 0;
   const isDailyTargetComplete =
     !isFirstSaveLocked && localProgress.targetSessionsRemaining === 0;
+  const latestWin = latestSession
+    ? createProgressLatestWinState({
+      isDailyTargetComplete,
+      session: latestSession,
+    })
+    : null;
   const showDailyTargetReviewCue = isDailyTargetComplete && latestReviewText.length > 0;
   const mistakesFixed = sessions.length > 0 ? Math.min(mistakeBank.length, sessions.length + 1) : 0;
   const nextStepGuide = createProgressNextStepGuide({
@@ -108,50 +115,54 @@ export function ProgressScreen({
   const levelRunwayBody = isDailyTargetComplete
     ? 'Review first. Bonus XP can wait.'
     : levelRunway.body;
-  const latestWinCard = latestSession ? (
+  const latestWinCard = latestSession && latestWin ? (
     <Card>
       <View style={styles.rowBetween}>
-        <Text style={styles.cardKicker}>
-          {isDailyTargetComplete ? 'Review this win first' : 'Latest win'}
-        </Text>
-        {latestSession.includedFollowUp ? <Badge label="Follow-up saved" tone="success" /> : null}
+        <Text style={styles.cardKicker}>{latestWin.eyebrow}</Text>
+        <Badge
+          label={latestWin.badgeLabel}
+          tone={latestSession.includedFollowUp || isDailyTargetComplete ? 'success' : 'accent'}
+        />
       </View>
       <Text style={styles.cardTitle}>{latestSession.roleplayTitle}</Text>
-      <Text style={styles.metaLine}>
-        {formatSessionDate(latestSession.completedAt)} - {latestSession.wordCount} words - +{latestSession.xpReward} XP
-      </Text>
-      {latestSessionFocusText ? (
-        <>
-          <View style={styles.latestFocusBox}>
-            <View style={styles.rowBetween}>
-              <Text style={styles.latestFocusLabel}>Next correction</Text>
-              <Badge
-                label={latestSession.nextFocusLabel?.trim() || 'Coach target'}
-                tone="accent"
-              />
-            </View>
-            <Text style={styles.latestFocusText}>{latestSessionFocusText}</Text>
-          </View>
-          <View style={styles.latestAnswerBox}>
-            <Text style={styles.latestAnswerLabel}>Saved answer</Text>
-            <Text numberOfLines={1} style={styles.latestAnswerText}>
-              {latestSession.answerPreview}
-            </Text>
-          </View>
-        </>
-      ) : (
-        <>
-          <Text numberOfLines={2} style={styles.sessionPreview}>
-            {latestSession.answerPreview}
-          </Text>
-          <Text numberOfLines={2} style={styles.sessionFeedback}>
-            {latestSession.feedbackSummary}
-          </Text>
-        </>
-      )}
+      <Text style={styles.cardBody}>{latestWin.body}</Text>
+      <View style={styles.latestWinMetaRow}>
+        <View style={styles.latestWinMetaChip}>
+          <Text style={styles.latestWinMetaLabel}>Saved</Text>
+          <Text style={styles.latestWinMetaValue}>{formatSessionDate(latestSession.completedAt)}</Text>
+        </View>
+        <View style={styles.latestWinMetaChip}>
+          <Text style={styles.latestWinMetaLabel}>Length</Text>
+          <Text style={styles.latestWinMetaValue}>{latestSession.wordCount} words</Text>
+        </View>
+        <View style={styles.latestWinMetaChip}>
+          <Text style={styles.latestWinMetaLabel}>Reward</Text>
+          <Text style={styles.latestWinMetaValue}>+{latestSession.xpReward} XP</Text>
+        </View>
+      </View>
+      <View style={styles.latestWinRecapBox}>
+        <Text style={styles.latestWinRecapLabel}>{latestWin.recapLabel}</Text>
+        <Text style={styles.latestWinRecapText}>{latestWin.recapText}</Text>
+      </View>
+      <View style={styles.latestFocusBox}>
+        <View style={styles.rowBetween}>
+          <Text style={styles.latestFocusLabel}>{latestWin.coachLabel}</Text>
+          <Badge
+            label={latestWin.coachBadgeLabel}
+            tone={latestSessionFocusText ? 'accent' : 'secondary'}
+          />
+        </View>
+        <Text style={styles.latestFocusText}>{latestWin.coachText}</Text>
+      </View>
+      <View style={styles.latestAnswerBox}>
+        <Text style={styles.latestAnswerLabel}>Saved answer</Text>
+        <Text numberOfLines={2} style={styles.latestAnswerText}>
+          {latestSession.answerPreview}
+        </Text>
+      </View>
       <View style={styles.cardAction}>
         <AppButton
-          label="Retry this scenario"
+          label="Practice this scenario again"
           onPress={() => onOpenRoleplay(latestSession.roleplayId)}
           variant="secondary"
         />
@@ -744,11 +755,53 @@ const styles = StyleSheet.create({
   cardAction: {
     marginTop: spacing.lg,
   },
-  metaLine: {
+  latestWinMetaRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  latestWinMetaChip: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  latestWinMetaLabel: {
     color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  latestWinMetaValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.xxs,
+  },
+  latestWinRecapBox: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  latestWinRecapLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  latestWinRecapText: {
+    color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
+    lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
   nextFocusBox: {
@@ -804,21 +857,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
-  },
-  sessionPreview: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '800',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.md,
-  },
-  sessionFeedback: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
   },
   latestFocusBox: {
     backgroundColor: colors.accentSoft,
