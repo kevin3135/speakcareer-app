@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
+import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { MainScreen } from '../types';
 
 type BottomTab = {
@@ -77,40 +77,39 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
-    paddingTop: spacing.xs,
+    paddingTop: spacing.xxs,
   },
   container: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceElevated,
     borderColor: colors.border,
-    borderRadius: radius.xl,
+    borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
-    padding: spacing.xs,
-    ...shadows.soft,
+    padding: spacing.xxs,
   },
   tab: {
     alignItems: 'center',
-    borderRadius: radius.lg,
+    borderRadius: radius.md,
     flex: 1,
-    minHeight: 54,
+    minHeight: 50,
     justifyContent: 'center',
     paddingHorizontal: spacing.xs,
   },
   learnTab: {
-    flex: 1.42,
+    flex: 1.28,
   },
   learnTabIdle: {
-    backgroundColor: colors.surfaceElevated,
-    borderColor: colors.primaryGlow,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
     borderWidth: 1,
   },
   activeLearnTab: {
     backgroundColor: colors.primarySoft,
-    borderColor: colors.primary,
+    borderColor: colors.primaryGlow,
     borderWidth: 1,
   },
   activeSecondaryTab: {
-    backgroundColor: colors.surfaceMuted,
+    backgroundColor: colors.surface,
   },
   pressed: {
     opacity: 0.82,
@@ -118,17 +117,17 @@ const styles = StyleSheet.create({
   dot: {
     backgroundColor: colors.border,
     borderRadius: radius.pill,
-    height: 4,
+    height: 3,
     marginBottom: spacing.xs,
-    width: 20,
+    width: 16,
   },
   learnDot: {
     backgroundColor: colors.primaryGlow,
-    width: 28,
+    width: 24,
   },
   activeLearnDot: {
     backgroundColor: colors.primary,
-    width: 34,
+    width: 30,
   },
   activeSecondaryDot: {
     backgroundColor: colors.borderStrong,
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '900',
+    fontWeight: '800',
   },
   learnLabel: {
     color: colors.primaryDark,

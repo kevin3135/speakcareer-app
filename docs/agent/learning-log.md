@@ -1,5 +1,44 @@
 # Agent Learning Log
 
+## 2026-07-05: Bottom Nav Quiet Polish
+
+Made one focused app-flow polish: the bottom navigation now feels lighter and less like a competing card after the learner has saved a lesson.
+
+Why it changed:
+
+- The design audit calls out bottom navigation as a recurring competitor to the guided Learn path.
+- Home now has a strong lesson map, START node and coach cue, so the nav should support orientation without drawing equal attention.
+- Flattening the nav is safer than changing navigation rules because it keeps Learn, Wins and Me available while reducing visual noise.
+
+What changed:
+
+- Updated `src/components/BottomNav.tsx` to remove the nav shadow, soften the rail, slightly reduce the Learn tab width, tighten the container and use subtler active/inactive tab styling.
+- Kept tab labels, routes, accessibility roles, bottom-nav visibility logic and screen flow unchanged.
+
+What went well:
+
+- The change stayed inside one reusable component and this log.
+- The main Home action should feel more dominant while the secondary tabs remain easy to tap.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the bottom nav should still be checked on Home after one saved answer.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 80 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Capture a 390px mobile screenshot of Home after one saved answer and compare the START node, coach cue and bottom nav hierarchy in one viewport.
+
 ## 2026-07-05: Home Coach Cue Quiet Polish
 
 Made one focused Home/Learn polish: the coach cue under the lesson map now reads as a compact guidance cue instead of a second prominent card.
