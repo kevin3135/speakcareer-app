@@ -688,18 +688,29 @@ test('recommends a starting daily target based on onboarding level', async () =>
   assert.equal(starterGuide.selectionLabel, 'Best fit');
   assert.equal(starterGuide.selectionTone, 'success');
   assert.ok(starterGuide.recommendationBody.includes('habit'));
+  assert.deepEqual(starterGuide.previewStats, [
+    { label: 'First week', value: '7 reps' },
+    { label: 'Daily time', value: '5 min' },
+  ]);
+  assert.ok(starterGuide.previewBody.includes('daily streak'));
 
   const lighterGuide = createOnboardingDailyTargetGuide('basic', 1);
   assert.equal(lighterGuide.recommendedTarget, 2);
   assert.equal(lighterGuide.selectionLabel, 'Lighter start');
   assert.equal(lighterGuide.selectionTone, 'info');
   assert.ok(lighterGuide.selectionBody.includes('consistency'));
+  assert.equal(lighterGuide.previewStats[0].value, '7 reps');
 
   const fasterGuide = createOnboardingDailyTargetGuide('basic', 3);
   assert.equal(fasterGuide.recommendedTarget, 2);
   assert.equal(fasterGuide.selectionLabel, 'Faster push');
   assert.equal(fasterGuide.selectionTone, 'accent');
   assert.ok(fasterGuide.selectionBody.includes('extra short reps'));
+  assert.deepEqual(fasterGuide.previewStats, [
+    { label: 'First week', value: '21 reps' },
+    { label: 'Daily time', value: '15 min' },
+  ]);
+  assert.ok(fasterGuide.previewBody.includes('stronger sprint'));
 
   const confidentGuide = createOnboardingDailyTargetGuide('confident', 3);
   assert.equal(confidentGuide.recommendationTitle, 'Recommended start: 3 roleplays a day');

@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Onboarding First-Week Target Preview
+
+Made one focused onboarding improvement: the daily-target chooser now shows a compact first-week preview after level selection so `1/day`, `2/day` and `3/day` feel like concrete routines instead of abstract numbers.
+
+Why it changed:
+
+- The onboarding recommendation already suggested a target, but the choice still read like a number picker instead of a habit decision.
+- A short first-week preview makes the pace feel real without adding another onboarding step or new storage.
+- The MVP needs a clearer, more habit-forming English start while staying professional and calm.
+
+What changed:
+
+- Updated `src/utils/onboardingDailyTargetGuide.ts` so the onboarding target guide now returns two compact preview stats: first-week reps and estimated daily minutes, plus a short rhythm note for the selected pace.
+- Updated `src/screens/OnboardingScreen.tsx` to render that preview directly under the existing target recommendation and selection feedback.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the new `1/day` and `3/day` preview states.
+
+What went well:
+
+- The change stayed inside the existing onboarding card and did not add a new screen, dependency or persistence rule.
+- The new preview connects the target choice to streak-building behavior in a compact way that fits the current design language.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh device or Expo web screenshot QA, so the new two-tile preview still needs a quick narrow-screen visual check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Auto-select the recommended daily target when a learner picks a starting level, unless they manually change the pace.
+
 ## 2026-07-05: Home Compact Pace Cue
 
 Made one focused Home/Learn polish: the START card daily pace value is now compact enough for narrow mobile screens.

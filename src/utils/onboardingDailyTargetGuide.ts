@@ -5,7 +5,14 @@ type DailyTargetGuideConfig = {
   recommendedTarget: DailyPracticeTarget;
 };
 
+type DailyTargetPreviewStat = {
+  label: string;
+  value: string;
+};
+
 export type OnboardingDailyTargetGuide = {
+  previewBody: string;
+  previewStats: [DailyTargetPreviewStat, DailyTargetPreviewStat];
   recommendationBody: string;
   recommendationLabel: string;
   recommendationTitle: string;
@@ -38,11 +45,14 @@ export function createOnboardingDailyTargetGuide(
   selectedTarget: DailyPracticeTarget,
 ): OnboardingDailyTargetGuide {
   const config = DAILY_TARGET_GUIDE_CONFIG[startingLevelId];
+  const previewStats = createPreviewStats(selectedTarget);
   const recommendationLabel = `${config.recommendedTarget}/day`;
   const recommendationTitle = `Recommended start: ${formatDailyTarget(config.recommendedTarget)}`;
 
   if (selectedTarget === config.recommendedTarget) {
     return {
+      previewBody: createPreviewBody(selectedTarget),
+      previewStats,
       recommendationBody: config.recommendationBody,
       recommendationLabel,
       recommendationTitle,
@@ -55,6 +65,8 @@ export function createOnboardingDailyTargetGuide(
 
   if (selectedTarget < config.recommendedTarget) {
     return {
+      previewBody: createPreviewBody(selectedTarget),
+      previewStats,
       recommendationBody: config.recommendationBody,
       recommendationLabel,
       recommendationTitle,
@@ -66,6 +78,8 @@ export function createOnboardingDailyTargetGuide(
   }
 
   return {
+    previewBody: createPreviewBody(selectedTarget),
+    previewStats,
     recommendationBody: config.recommendationBody,
     recommendationLabel,
     recommendationTitle,
@@ -78,4 +92,31 @@ export function createOnboardingDailyTargetGuide(
 
 function formatDailyTarget(dailyTarget: DailyPracticeTarget) {
   return `${dailyTarget} ${dailyTarget === 1 ? 'roleplay' : 'roleplays'} a day`;
+}
+
+function createPreviewStats(
+  dailyTarget: DailyPracticeTarget,
+): [DailyTargetPreviewStat, DailyTargetPreviewStat] {
+  return [
+    {
+      label: 'First week',
+      value: `${dailyTarget * 7} reps`,
+    },
+    {
+      label: 'Daily time',
+      value: `${dailyTarget * 5} min`,
+    },
+  ];
+}
+
+function createPreviewBody(dailyTarget: DailyPracticeTarget) {
+  if (dailyTarget === 1) {
+    return 'Best for protecting a calm daily streak while you build answer structure.';
+  }
+
+  if (dailyTarget === 2) {
+    return 'Balanced enough to feel like real practice without making the routine heavy.';
+  }
+
+  return 'A stronger sprint for faster interview repetition if you want extra momentum this week.';
 }

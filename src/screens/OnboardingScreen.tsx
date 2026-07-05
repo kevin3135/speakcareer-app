@@ -160,6 +160,17 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               <View style={styles.targetSelectionBox}>
                 <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
                 <Text style={styles.targetSelectionText}>{dailyTargetGuide.selectionBody}</Text>
+                <View style={styles.targetPreviewCard}>
+                  <View style={styles.targetPreviewStats}>
+                    {dailyTargetGuide.previewStats.map((stat) => (
+                      <View key={stat.label} style={styles.targetPreviewStat}>
+                        <Text style={styles.targetPreviewStatLabel}>{stat.label}</Text>
+                        <Text style={styles.targetPreviewStatValue}>{stat.value}</Text>
+                      </View>
+                    ))}
+                  </View>
+                  <Text style={styles.targetPreviewBody}>{dailyTargetGuide.previewBody}</Text>
+                </View>
               </View>
             ) : null}
           </View>
@@ -452,6 +463,51 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: spacing.sm,
     marginTop: spacing.md,
+  },
+  targetPreviewBody: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  targetPreviewCard: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.xs,
+    padding: spacing.sm,
+    width: '100%',
+  },
+  targetPreviewStat: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  targetPreviewStatLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  targetPreviewStatValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  targetPreviewStats: {
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
   targetSelectionText: {
     color: colors.textMuted,
