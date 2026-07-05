@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Wins Review First Cue
+
+Made one focused Wins polish: the completed-day top card now shows the learner exactly which saved coach note to review first.
+
+Why it changed:
+
+- The previous completed-day cue made Wins calmer, but it still said `Read one saved feedback note` without showing the actual note.
+- After Roleplay sends the learner to `Review Wins`, the first viewport should reward completion and point to one useful correction.
+- Showing the latest coach target early is more helpful than pushing another optional sprint.
+
+What changed:
+
+- Updated `src/screens/ProgressScreen.tsx` to derive a compact latest review note from the latest saved session.
+- Added a `Review first` cue inside the completed-day Wins guidance card, with the latest coach target or feedback summary.
+- Kept target math, saved-session data, navigation and the optional bonus practice route unchanged.
+
+What went well:
+
+- The change stayed inside one visible Wins component and this log.
+- It uses existing `Badge`, `Card`, color tokens and typography tokens with no new dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the top Wins card should still be checked at 390px width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the completed-day Wins card; if it feels tall, collapse the level runway below latest win on completed-target days.
+
 ## 2026-07-05: Wins Today Complete Cue
 
 Made one focused Progress/Wins polish: the top guidance card now has a calmer completed-day state when the learner lands there after finishing the daily target.

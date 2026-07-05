@@ -65,10 +65,15 @@ export function ProgressScreen({
   });
   const latestSession = sessions[0];
   const latestSessionFocusText = latestSession?.nextFocusText?.trim() ?? '';
+  const latestReviewText = latestSessionFocusText || latestSession?.feedbackSummary?.trim() || '';
+  const latestReviewLabel = latestSessionFocusText
+    ? latestSession?.nextFocusLabel?.trim() || 'Coach target'
+    : 'Latest feedback';
   const recentSessions = createProgressRecentSessions(sessions);
   const isFirstSaveLocked = sessions.length === 0;
   const isDailyTargetComplete =
     !isFirstSaveLocked && localProgress.targetSessionsRemaining === 0;
+  const showDailyTargetReviewCue = isDailyTargetComplete && latestReviewText.length > 0;
   const mistakesFixed = sessions.length > 0 ? Math.min(mistakeBank.length, sessions.length + 1) : 0;
   const nextStepGuide = createProgressNextStepGuide({
     dailyTarget,
@@ -152,6 +157,15 @@ export function ProgressScreen({
                 <Text numberOfLines={2} style={styles.nextFocusText}>{primaryGuideStep}</Text>
               </View>
             </View>
+          </View>
+        ) : null}
+        {showDailyTargetReviewCue ? (
+          <View style={styles.completeReviewCue}>
+            <View style={styles.rowBetween}>
+              <Text style={styles.completeReviewLabel}>Review first</Text>
+              <Badge label={latestReviewLabel} tone="success" />
+            </View>
+            <Text numberOfLines={2} style={styles.completeReviewText}>{latestReviewText}</Text>
           </View>
         ) : null}
         {!isFirstSaveLocked ? (
@@ -595,6 +609,28 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
+  },
+  completeReviewCue: {
+    backgroundColor: colors.white,
+    borderColor: colors.success,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  completeReviewLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  completeReviewText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   progressWrap: {
     marginTop: spacing.lg,
