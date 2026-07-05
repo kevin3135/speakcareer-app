@@ -87,6 +87,24 @@ export function createOnboardingDailyTargetGuide(
   };
 }
 
+export function getRecommendedOnboardingDailyTarget(
+  startingLevelId: StartingLevelId,
+): DailyPracticeTarget {
+  return DAILY_TARGET_GUIDE_CONFIG[startingLevelId].recommendedTarget;
+}
+
+export function resolveOnboardingDailyTarget(
+  startingLevelId: StartingLevelId,
+  selectedTarget: DailyPracticeTarget,
+  hasManualSelection: boolean,
+): DailyPracticeTarget {
+  if (hasManualSelection) {
+    return selectedTarget;
+  }
+
+  return getRecommendedOnboardingDailyTarget(startingLevelId);
+}
+
 function createPreviewStats(
   dailyTarget: DailyPracticeTarget,
 ): [DailyTargetPreviewStat, DailyTargetPreviewStat] {

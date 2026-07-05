@@ -11,7 +11,10 @@ import {
 } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget } from '../types';
-import { createOnboardingDailyTargetGuide } from '../utils/onboardingDailyTargetGuide';
+import {
+  createOnboardingDailyTargetGuide,
+  resolveOnboardingDailyTarget,
+} from '../utils/onboardingDailyTargetGuide';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
@@ -28,6 +31,7 @@ const dailyTargetOptions: DailyPracticeTarget[] = [1, 2, 3];
 export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenProps) {
   const [selectedLevelId, setSelectedLevelId] = useState<LevelAssessmentChoice['id'] | null>(null);
   const [selectedDailyTarget, setSelectedDailyTarget] = useState<DailyPracticeTarget>(dailyTarget);
+  const [hasManualDailyTargetSelection, setHasManualDailyTargetSelection] = useState(false);
   const progressWidth = `${levelAssessment.progressPercent}%` as DimensionValue;
   const selectedChoice =
     levelAssessment.choices.find((choice) => choice.id === selectedLevelId) ?? null;
@@ -80,7 +84,16 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               accessibilityRole="button"
               accessibilityState={{ selected: isSelected }}
               key={choice.id}
-              onPress={() => setSelectedLevelId(choice.id)}
+              onPress={() => {
+                setSelectedLevelId(choice.id);
+                setSelectedDailyTarget(
+                  resolveOnboardingDailyTarget(
+                    choice.id,
+                    selectedDailyTarget,
+                    hasManualDailyTargetSelection,
+                  ),
+                );
+              }}
               style={({ pressed }) => [
                 styles.optionCard,
                 isSelected && styles.optionCardSelected,
@@ -151,7 +164,10 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                     accessibilityRole="button"
                     accessibilityState={{ selected: isActive }}
                     key={target}
-                    onPress={() => setSelectedDailyTarget(target)}
+                    onPress={() => {
+                      setSelectedDailyTarget(target);
+                      setHasManualDailyTargetSelection(true);
+                    }}
                     style={({ pressed }) => [
                       styles.segment,
                       isActive && styles.segmentActive,

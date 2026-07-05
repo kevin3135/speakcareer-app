@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-05: Onboarding Auto-Selected Pace
+
+Made one focused onboarding improvement: after the learner picks a starting level, the daily target now auto-selects the coach-recommended pace until the learner manually changes it.
+
+Why it changed:
+
+- The onboarding card already recommended a pace, but the segmented control still started from the stored default instead of the level-matched choice.
+- That made the recommendation feel advisory rather than app-guided, which weakens the first habit decision.
+- Auto-selecting the recommended pace keeps the flow calmer while still respecting manual learner control.
+
+What changed:
+
+- Updated `src/utils/onboardingDailyTargetGuide.ts` with small helpers to return the recommended pace and preserve a manual pace override.
+- Updated `src/screens/OnboardingScreen.tsx` so tapping a starting level now switches the daily target to the recommended pace unless the learner has already tapped a pace option.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the auto-select and manual-override cases.
+
+What went well:
+
+- The change stayed narrow to one existing screen, one existing helper, one existing test file and this log.
+- It improves the onboarding habit loop without adding storage changes, new UI steps or backend work.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the auto-switch behavior should still be checked visually in Expo/web preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If onboarding recommends a pace, the default control state should reflect that recommendation instead of waiting for the learner to infer it.
+- Preserve manual control once the learner has explicitly changed a guided default.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a small `Recommended` marker directly on the auto-selected pace chip so the reason for the switch is obvious at a glance.
+
 ## 2026-07-05: Onboarding Coach Pick Card
 
 Made one focused onboarding design polish: the daily target recommendation now looks like a compact `SC` coach pick instead of a repeated recommendation text block.

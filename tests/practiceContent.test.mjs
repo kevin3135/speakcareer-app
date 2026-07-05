@@ -678,7 +678,7 @@ test('creates a personalized onboarding first-path preview from the selected lev
 });
 
 test('recommends a starting daily target based on onboarding level', async () => {
-  const { createOnboardingDailyTargetGuide } = await import(
+  const { createOnboardingDailyTargetGuide, resolveOnboardingDailyTarget } = await import(
     '../src/utils/onboardingDailyTargetGuide.ts'
   );
 
@@ -715,6 +715,11 @@ test('recommends a starting daily target based on onboarding level', async () =>
   const confidentGuide = createOnboardingDailyTargetGuide('confident', 3);
   assert.equal(confidentGuide.recommendationTitle, 'Start with 3/day');
   assert.ok(confidentGuide.recommendationBody.includes('real interview practice'));
+
+  assert.equal(resolveOnboardingDailyTarget('starter', 3, false), 1);
+  assert.equal(resolveOnboardingDailyTarget('confident', 1, false), 3);
+  assert.equal(resolveOnboardingDailyTarget('basic', 1, true), 1);
+  assert.equal(resolveOnboardingDailyTarget('confident', 2, true), 2);
 });
 
 test('stores the daily practice target in local storage', async () => {
