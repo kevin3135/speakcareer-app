@@ -67,6 +67,8 @@ export function ProgressScreen({
   const latestSessionFocusText = latestSession?.nextFocusText?.trim() ?? '';
   const recentSessions = createProgressRecentSessions(sessions);
   const isFirstSaveLocked = sessions.length === 0;
+  const isDailyTargetComplete =
+    !isFirstSaveLocked && localProgress.targetSessionsRemaining === 0;
   const mistakesFixed = sessions.length > 0 ? Math.min(mistakeBank.length, sessions.length + 1) : 0;
   const nextStepGuide = createProgressNextStepGuide({
     dailyTarget,
@@ -118,7 +120,7 @@ export function ProgressScreen({
         </View>
       </GradientHero>
 
-      <Card tone="strong">
+      <Card tone={isDailyTargetComplete ? 'accent' : 'strong'}>
         <View style={styles.rowBetween}>
           <View style={styles.flexOne}>
             <Text style={styles.cardKicker}>{nextStepGuide.eyebrow}</Text>
@@ -128,9 +130,28 @@ export function ProgressScreen({
         </View>
         <Text numberOfLines={2} style={styles.cardBody}>{nextStepGuide.body}</Text>
         {primaryGuideStep ? (
-          <View style={styles.nextFocusBox}>
-            <Text style={styles.nextFocusLabel}>Do now</Text>
-            <Text style={styles.nextFocusText}>{primaryGuideStep}</Text>
+          <View
+            style={[
+              styles.nextFocusBox,
+              isDailyTargetComplete && styles.nextFocusBoxComplete,
+            ]}
+          >
+            <View style={styles.nextFocusHeader}>
+              {isDailyTargetComplete ? (
+                <View style={styles.nextFocusIcon}>
+                  <Text style={styles.nextFocusIconText}>OK</Text>
+                </View>
+              ) : null}
+              <View style={styles.nextFocusCopy}>
+                <Text style={[
+                  styles.nextFocusLabel,
+                  isDailyTargetComplete && styles.nextFocusLabelComplete,
+                ]}>
+                  {isDailyTargetComplete ? 'Today complete' : 'Do now'}
+                </Text>
+                <Text numberOfLines={2} style={styles.nextFocusText}>{primaryGuideStep}</Text>
+              </View>
+            </View>
           </View>
         ) : null}
         {!isFirstSaveLocked ? (
@@ -147,6 +168,7 @@ export function ProgressScreen({
             accessibilityHint="Open the recommended next roleplay from your progress card"
             label={nextStepGuide.ctaLabel}
             onPress={() => onOpenRoleplay(nextStepGuide.roleplayId)}
+            variant={isDailyTargetComplete ? 'secondary' : 'primary'}
           />
         </View>
       </Card>
@@ -676,11 +698,43 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
     padding: spacing.md,
   },
+  nextFocusBoxComplete: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  nextFocusCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  nextFocusHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  nextFocusIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.success,
+    borderColor: colors.successDark,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 34,
+    justifyContent: 'center',
+    width: 34,
+  },
+  nextFocusIconText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
   nextFocusLabel: {
     color: colors.secondaryDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  nextFocusLabelComplete: {
+    color: colors.successDark,
   },
   nextFocusText: {
     color: colors.ink,

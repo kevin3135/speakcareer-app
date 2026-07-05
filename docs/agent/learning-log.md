@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Wins Today Complete Cue
+
+Made one focused Progress/Wins polish: the top guidance card now has a calmer completed-day state when the learner lands there after finishing the daily target.
+
+Why it changed:
+
+- The Roleplay saved state now correctly sends the learner to `Review Wins` when today's target is complete.
+- Wins still made the next roleplay CTA feel like the main job, which weakened the reward-and-review moment.
+- A stronger completed-day cue makes Wins feel like a useful landing area instead of another practice prompt.
+
+What changed:
+
+- Updated `src/screens/ProgressScreen.tsx` so the top Wins card switches to the accent surface when the daily target is complete.
+- Added a compact `Today complete` cue with an `OK` badge inside the existing next-step box.
+- Kept the optional bonus practice route available, but changed its button to the secondary style when today's target is already done.
+
+What went well:
+
+- The change stayed inside one screen and this log.
+- No saved-session data, target math, navigation, auth, APIs, payments or package dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the completed-day card should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Wins first viewport after a completed target and, if it still feels too busy, make the latest correction card appear higher before bonus practice.
+
 ## 2026-07-05: Saved Handoff Targets Today
 
 Made one focused practice-flow improvement: the Roleplay saved state now changes its main next action based on whether today's target is still in progress or already complete.
