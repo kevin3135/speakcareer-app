@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Save-First Review Actions
+
+Made one focused Roleplay UX polish: after checking a ready answer, `Save` is now the first visible action and rewrite/edit choices sit below it as optional secondary actions.
+
+Why it changed:
+
+- The previous review state showed `Retry answer` and `Use better English` before the Save card, which made the post-check decision feel less app-led.
+- For the MVP loop, the main win is checking a short answer and saving it for XP, Progress and unlocks.
+- Optional improvement should stay available, but it should not compete with the primary save action.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so ready answers no longer show retry/rewrite buttons inside the feedback card.
+- Added a compact secondary action box under the primary Save button with `Try rewrite` and `Edit answer`.
+- Kept not-ready answers focused on `Add more first`, and kept save logic, follow-up logic, storage and feedback generation unchanged.
+
+What went well:
+
+- The change stayed inside one Roleplay screen and this log.
+- The post-check flow now has a clearer action hierarchy: review feedback, save, then optionally polish.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first typecheck caught a missing JSX `: null` branch in the not-ready feedback conditional; the ternary was fixed.
+- This run did not include fresh mobile screenshot QA, so the Save-card secondary action box should be checked visually.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Visually check the Roleplay review/save state on mobile, then polish the optional follow-up card if it still feels like it competes with Save.
+
 ## 2026-07-05: Foundation Starter Edit Cue
 
 Made one focused practice-flow improvement: the first Job Interview handoff from Lesson 1 now behaves like an edit-first starter workflow instead of a passive starter reminder.

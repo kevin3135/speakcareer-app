@@ -1224,32 +1224,18 @@ export function RoleplayScreen({
             <Text style={styles.betterEnglishLabel}>Better English</Text>
             <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
           </View>
-          {answerReview?.isReadyForFeedback && hasAppliedBetterEnglish ? null : (
+          {answerReview && !answerReview.isReadyForFeedback ? (
             <View style={styles.feedbackActions}>
-              {answerReview?.isReadyForFeedback ? (
-                <View style={styles.feedbackActionItem}>
-                  <AppButton
-                    accessibilityHint="Returns to your draft so you can improve it before saving"
-                    label="Retry answer"
-                    onPress={retryAnswer}
-                    variant="quiet"
-                  />
-                </View>
-              ) : null}
               <View style={styles.feedbackActionItem}>
                 <AppButton
-                  accessibilityHint={
-                    answerReview?.isReadyForFeedback
-                      ? 'Moves the better English rewrite back into the answer box'
-                      : 'Returns to the answer box so you can add more detail'
-                  }
-                  label={answerReview?.isReadyForFeedback ? 'Use better English' : 'Add more first'}
-                  onPress={answerReview?.isReadyForFeedback ? useBetterEnglishAnswer : retryAnswer}
+                  accessibilityHint="Returns to the answer box so you can add more detail"
+                  label="Add more first"
+                  onPress={retryAnswer}
                   variant="secondary"
                 />
               </View>
             </View>
-          )}
+          ) : null}
         </Card>
       ) : null}
 
@@ -1291,6 +1277,29 @@ export function RoleplayScreen({
               />
             </View>
           </View>
+          {hasAppliedBetterEnglish ? null : (
+            <View style={styles.saveSecondaryActions}>
+              <Text style={styles.saveSecondaryLabel}>Want one cleaner version first?</Text>
+              <View style={styles.saveSecondaryButtonRow}>
+                <View style={styles.feedbackActionItem}>
+                  <AppButton
+                    accessibilityHint="Moves the better English rewrite back into the answer box"
+                    label="Try rewrite"
+                    onPress={useBetterEnglishAnswer}
+                    variant="secondary"
+                  />
+                </View>
+                <View style={styles.feedbackActionItem}>
+                  <AppButton
+                    accessibilityHint="Returns to your draft so you can improve it before saving"
+                    label="Edit answer"
+                    onPress={retryAnswer}
+                    variant="quiet"
+                  />
+                </View>
+              </View>
+            </View>
+          )}
           {followUpPrompt ? (
             isFollowUpExpanded ? (
               <View style={styles.followUpPromptBox}>
@@ -1902,6 +1911,25 @@ const styles = StyleSheet.create({
   },
   feedbackActionItem: {
     flex: 1,
+  },
+  saveSecondaryActions: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  saveSecondaryButtonRow: {
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  saveSecondaryLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
   },
   reviewDecisionBody: {
     color: colors.textMuted,
