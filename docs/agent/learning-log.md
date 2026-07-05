@@ -1,5 +1,53 @@
 # Agent Learning Log
 
+## 2026-07-05: Foundation Starter Edit Cue
+
+Made one focused practice-flow improvement: the first Job Interview handoff from Lesson 1 now behaves like an edit-first starter workflow instead of a passive starter reminder.
+
+Why it changed:
+
+- The app already auto-loaded the level-matched Lesson 1 starter into the first interview answer box, but the warmup card still mostly repeated content instead of telling the learner what to do next.
+- That made the first answer handoff less explicit than it should be for the English MVP's first usable practice loop.
+- A stateful starter cue keeps the learner focused on one action: edit the loaded answer, reload it if needed, then check.
+
+What changed:
+
+- Added `src/utils/foundationStarterAction.ts` to classify the loaded Lesson 1 starter as `Loaded`, `Edited` or `Cleared` based on the current draft.
+- Updated `src/screens/RoleplayScreen.tsx` so the Foundation handoff card now shows a matching action button (`Edit answer` or `Reload starter`) plus a clear next-step status message.
+- Updated `src/utils/foundationWarmupPanel.ts` copy so the warmup card explicitly says the starter is already loaded below.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the new Foundation starter action states and revised warmup copy.
+
+What went well:
+
+- The change stayed inside the first Lesson 1 to Job Interview handoff without adding new screens, storage rules or integrations.
+- The new cue makes the loaded starter feel active and editable instead of duplicated static copy.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- The first lint run failed because a local helper named `useWarmupStarter` was treated like a Hook by the React Hooks rule; renaming it fixed the issue.
+- This run did not include fresh Expo or browser visual QA, so the new Foundation handoff button row should still be checked on a narrow mobile viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the app auto-loads a starter answer, the UI should explicitly acknowledge whether that starter is still loaded, already edited or has been cleared.
+- Avoid naming ordinary local helpers with a `use*` prefix inside React components unless they are real Hooks.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Make the review step decision clearer by turning the first post-check action into one stronger default choice between `Save` and `Try the rewrite`.
+
 ## 2026-07-05: Onboarding Compact Pace Marker
 
 Made one focused onboarding design polish: the recommended pace marker inside the active daily-target chip is now shorter and styled as a tiny pill.

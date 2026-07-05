@@ -49,6 +49,7 @@ import { createRuleBasedFeedback, type RuleBasedFeedbackResult } from '../utils/
 import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { createFoundationWarmupPanel } from '../utils/foundationWarmupPanel';
+import { createFoundationStarterAction } from '../utils/foundationStarterAction';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayFlowRunway, type RoleplayFlowRunway } from '../utils/roleplayFlowRunway';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
@@ -217,6 +218,12 @@ export function RoleplayScreen({
       editPlanSteps: levelProfile.starterEditSteps,
       note: warmupCue.note,
       starterAnswer: warmupCue.starterAnswer,
+    })
+    : null;
+  const foundationStarterAction = foundationWarmupPanel
+    ? createFoundationStarterAction({
+      draftAnswer,
+      starterAnswer: foundationWarmupPanel.starterAnswer,
     })
     : null;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
@@ -489,7 +496,7 @@ export function RoleplayScreen({
     answerInputRef.current?.focus();
   }
 
-  function useWarmupStarter() {
+  function applyWarmupStarter() {
     if (!warmupCue) {
       return;
     }
@@ -501,6 +508,19 @@ export function RoleplayScreen({
     setIsFeedbackDetailsOpen(false);
     setLevelUpMoment(null);
     answerInputRef.current?.focus();
+  }
+
+  function runFoundationStarterAction() {
+    if (!foundationStarterAction) {
+      return;
+    }
+
+    if (foundationStarterAction.mode === 'loaded') {
+      answerInputRef.current?.focus();
+      return;
+    }
+
+    applyWarmupStarter();
   }
 
   function addWritingSupportText(text: string) {
@@ -823,7 +843,7 @@ export function RoleplayScreen({
               <Text style={styles.promptText}>{openingLine}</Text>
             </View>
           </View>
-          {foundationWarmupPanel && warmupCue ? (
+          {foundationWarmupPanel && warmupCue && foundationStarterAction ? (
             <View style={styles.foundationWarmupBox}>
               <View style={styles.oneThingHeader}>
                 <Text style={styles.foundationWarmupLabel}>{warmupCue.eyebrow}</Text>
@@ -832,11 +852,38 @@ export function RoleplayScreen({
               <Text style={styles.foundationWarmupTitle}>{foundationWarmupPanel.title}</Text>
               <Text style={styles.foundationWarmupBody}>{foundationWarmupPanel.body}</Text>
               <View style={styles.foundationWarmupStarterBox}>
-                <Text style={styles.foundationWarmupStarterLabel}>
-                  {foundationWarmupPanel.starterLabel}
-                </Text>
+                <View style={styles.foundationWarmupStarterHeader}>
+                  <Text style={styles.foundationWarmupStarterLabel}>
+                    {foundationWarmupPanel.starterLabel}
+                  </Text>
+                  <AppButton
+                    accessibilityHint={
+                      foundationStarterAction.mode === 'loaded'
+                        ? 'Moves focus to the answer box so you can edit the starter'
+                        : 'Loads the original Lesson 1 starter into the answer box again'
+                    }
+                    label={foundationStarterAction.ctaLabel}
+                    onPress={runFoundationStarterAction}
+                    size="small"
+                    variant="quiet"
+                  />
+                </View>
                 <Text style={styles.foundationWarmupStarterText}>
                   {foundationWarmupPanel.starterAnswer}
+                </Text>
+              </View>
+              <View style={styles.foundationWarmupActionBox}>
+                <View style={styles.oneThingHeader}>
+                  <Text style={styles.foundationWarmupActionTitle}>
+                    {foundationStarterAction.title}
+                  </Text>
+                  <Badge
+                    label={foundationStarterAction.badgeLabel}
+                    tone={foundationStarterAction.tone}
+                  />
+                </View>
+                <Text style={styles.foundationWarmupActionBody}>
+                  {foundationStarterAction.body}
                 </Text>
               </View>
               <View style={styles.foundationWarmupEditBox}>
@@ -949,7 +996,7 @@ export function RoleplayScreen({
                         accessibilityHint="Starts your answer with the suggested warm-up line"
                         accessibilityLabel={warmupCue.ctaLabel}
                         label={warmupCue.ctaLabel}
-                        onPress={useWarmupStarter}
+                        onPress={applyWarmupStarter}
                         size="small"
                         variant="quiet"
                       />
@@ -1544,8 +1591,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: spacing.sm,
   },
+  foundationWarmupStarterHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
   foundationWarmupStarterLabel: {
     color: colors.secondaryDark,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
@@ -1879,6 +1933,29 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  foundationWarmupActionBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    padding: spacing.sm,
+  },
+  foundationWarmupActionTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginRight: spacing.sm,
+  },
+  foundationWarmupActionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },

@@ -934,6 +934,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createFoundationWarmupCue,
     createRoleplayWarmupCue,
   } = await import('../src/utils/roleplayWarmupCue.ts');
+  const { createFoundationStarterAction } = await import('../src/utils/foundationStarterAction.ts');
   const { createFoundationWarmupPanel } = await import('../src/utils/foundationWarmupPanel.ts');
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 
@@ -964,8 +965,54 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.equal(starterPanel.starterLabel, 'Loaded starter');
   assert.equal(starterPanel.editPlanLabel, 'Make it yours');
   assert.deepEqual(starterPanel.editPlanSteps, starterProfile.starterEditSteps);
-  assert.equal(starterPanel.body, 'Make it yours, then check.');
+  assert.equal(
+    starterPanel.body,
+    'Your Lesson 1 starter is already loaded below. Change the task and result, then check.',
+  );
   assert.ok(starterPanel.starterAnswer.includes('The result was'));
+  assert.deepEqual(
+    createFoundationStarterAction({
+      draftAnswer: starterPanel.starterAnswer,
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Loaded',
+      body: 'Change the task and result in the answer box, then tap Check.',
+      ctaLabel: 'Edit answer',
+      mode: 'loaded',
+      title: 'Starter is already in your answer',
+      tone: 'secondary',
+    },
+  );
+  assert.deepEqual(
+    createFoundationStarterAction({
+      draftAnswer: '',
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Cleared',
+      body: 'Reload the starter or write your own version from scratch before you check.',
+      ctaLabel: 'Reload starter',
+      mode: 'cleared',
+      title: 'Starter was cleared',
+      tone: 'accent',
+    },
+  );
+  assert.deepEqual(
+    createFoundationStarterAction({
+      draftAnswer:
+        'I worked on customer onboarding, and I helped the team reply faster. The result was happier customers.',
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Edited',
+      body: 'Good. Do one final clarity pass, then tap Check.',
+      ctaLabel: 'Reload starter',
+      mode: 'edited',
+      title: 'This answer already sounds more like you',
+      tone: 'success',
+    },
+  );
   assert.ok(confidentCue.note.includes('business result'));
   assert.ok(confidentCue.starterAnswer.includes('As a result'));
   const confidentPanel = createFoundationWarmupPanel({
