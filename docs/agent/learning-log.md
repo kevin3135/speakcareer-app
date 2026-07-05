@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Review Decision Cue
+
+Made one focused practice-flow improvement: the Roleplay review step now tells the learner clearly when to retry before save versus when the answer is good enough to bank, and it adds a direct retry action for reviewable answers.
+
+Why it changed:
+
+- The review step already showed mock feedback, but it did not make the save-or-retry decision explicit.
+- Once an answer was reviewable, the user could save or apply the rewrite, but there was no clean `keep my own draft and improve it once` path.
+- A compact decision cue is higher value than adding another panel because it makes the next action clearer inside the existing MVP loop.
+
+What changed:
+
+- Added `src/utils/reviewDecisionCue.ts` to generate three review states: retry first, good enough to save, and ready to save.
+- Updated `src/screens/RoleplayScreen.tsx` to show the new `Your call` cue in the review card and to add a direct `Retry answer` action when the answer is already reviewable.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the three decision states.
+
+What went well:
+
+- The change stayed inside one helper, one existing screen, one existing test file and this log.
+- The review step should now feel more like a professional coaching decision instead of a passive feedback dump.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the new review cue and second action button should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 81 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Review feels stronger when the learner gets a clear coaching decision, not only a score and rewrite.
+- If the app offers a model rewrite, keep a parallel path for improving the learner's own draft so the practice still feels theirs.
+
+Next suggested task:
+
+- Add one compact follow-up readiness cue so the optional bonus turn explains exactly when the extra XP is worth doing.
+
 ## 2026-07-05: Bottom Nav Quiet Polish
 
 Made one focused app-flow polish: the bottom navigation now feels lighter and less like a competing card after the learner has saved a lesson.

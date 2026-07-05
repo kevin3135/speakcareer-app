@@ -240,6 +240,67 @@ test('creates a balanced coach recap for the review step', async () => {
   );
 });
 
+test('creates a clear save-versus-retry cue in the review step', async () => {
+  const { createReviewDecisionCue } = await import('../src/utils/reviewDecisionCue.ts');
+
+  const needsRetry = createReviewDecisionCue({
+    feedbackResult: {
+      feedback: {
+        improvements: ['Add one concrete action you took or would take.'],
+      },
+    },
+    review: {
+      isReadyForFeedback: false,
+      readinessLabel: 'Needs more detail',
+      reviewNote: 'Add one concrete action or example from work.',
+      wordCount: 9,
+    },
+  });
+
+  assert.equal(needsRetry.tone, 'info');
+  assert.equal(needsRetry.badgeLabel, 'Retry first');
+  assert.equal(needsRetry.title, 'Add one more sentence first');
+  assert.ok(needsRetry.body.includes('Then check again before saving.'));
+
+  const goodEnough = createReviewDecisionCue({
+    feedbackResult: {
+      feedback: {
+        improvements: ['Add a result, decision or next step to make the answer stronger.'],
+      },
+    },
+    review: {
+      isReadyForFeedback: true,
+      readinessLabel: 'Good start',
+      reviewNote: 'Add a result, decision or next step to make the answer stronger.',
+      wordCount: 24,
+    },
+  });
+
+  assert.equal(goodEnough.tone, 'accent');
+  assert.equal(goodEnough.badgeLabel, 'Save or retry once');
+  assert.equal(goodEnough.title, 'Good enough to save');
+  assert.ok(goodEnough.body.includes('Otherwise bank this rep'));
+
+  const readyToSave = createReviewDecisionCue({
+    feedbackResult: {
+      feedback: {
+        improvements: ['Add one stronger result line.'],
+      },
+    },
+    review: {
+      isReadyForFeedback: true,
+      readinessLabel: 'Ready for feedback',
+      reviewNote: 'Strong length for a short professional answer.',
+      wordCount: 41,
+    },
+  });
+
+  assert.equal(readyToSave.tone, 'success');
+  assert.equal(readyToSave.badgeLabel, 'Bank this rep');
+  assert.equal(readyToSave.title, 'Ready to save');
+  assert.ok(readyToSave.body.includes('strong enough for today'));
+});
+
 test('keeps the Home coach focus short and actionable', async () => {
   const { createHomeCoachFocusText } = await import('../src/utils/homeCoachFocus.ts');
 

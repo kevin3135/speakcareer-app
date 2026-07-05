@@ -54,6 +54,7 @@ import { createRoleplayFlowRunway, type RoleplayFlowRunway } from '../utils/role
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
 import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
+import { createReviewDecisionCue } from '../utils/reviewDecisionCue';
 import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
@@ -230,6 +231,12 @@ export function RoleplayScreen({
     ? createFeedbackMomentumRecap({
       improvements: feedbackResult.feedback.improvements,
       summary: feedbackScoreSummary,
+    })
+    : null;
+  const reviewDecisionCue = feedbackResult && answerReview
+    ? createReviewDecisionCue({
+      feedbackResult,
+      review: answerReview,
     })
     : null;
   const followUpPrompt = answerReview?.isReadyForFeedback
@@ -1094,6 +1101,16 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
+          {reviewDecisionCue ? (
+            <View style={styles.reviewDecisionBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.reviewDecisionLabel}>Your call</Text>
+                <Badge label={reviewDecisionCue.badgeLabel} tone={reviewDecisionCue.tone} />
+              </View>
+              <Text style={styles.reviewDecisionTitle}>{reviewDecisionCue.title}</Text>
+              <Text style={styles.reviewDecisionBody}>{reviewDecisionCue.body}</Text>
+            </View>
+          ) : null}
           <Pressable
             accessibilityHint="Shows or hides score bars and detailed coach notes"
             accessibilityLabel={isFeedbackDetailsOpen ? 'Hide coach details' : 'Show coach details'}
@@ -1141,6 +1158,16 @@ export function RoleplayScreen({
           </View>
           {answerReview?.isReadyForFeedback && hasAppliedBetterEnglish ? null : (
             <View style={styles.feedbackActions}>
+              {answerReview?.isReadyForFeedback ? (
+                <View style={styles.feedbackActionItem}>
+                  <AppButton
+                    accessibilityHint="Returns to your draft so you can improve it before saving"
+                    label="Retry answer"
+                    onPress={retryAnswer}
+                    variant="quiet"
+                  />
+                </View>
+              ) : null}
               <View style={styles.feedbackActionItem}>
                 <AppButton
                   accessibilityHint={
@@ -1788,6 +1815,35 @@ const styles = StyleSheet.create({
   },
   feedbackActionItem: {
     flex: 1,
+  },
+  reviewDecisionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  reviewDecisionBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  reviewDecisionLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  reviewDecisionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   feedbackDetailsToggle: {
     alignItems: 'center',
