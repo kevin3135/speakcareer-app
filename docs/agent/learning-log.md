@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Practice After-Save Payoff
+
+Made one focused Practice polish: the daily sprint card now shows a compact `After save` payoff strip.
+
+Why it changed:
+
+- The Practice sprint card already guided the next roleplay, but the concrete payoff after saving was buried inside the body copy.
+- When only one save remains, the user should immediately see that saving completes the daily target or unlocks the next career conversation.
+- A small payoff strip keeps Practice more app-led and motivating without adding new progress data.
+
+What changed:
+
+- Updated `src/utils/practiceDailySprint.ts` to return an `afterSavePayoff` label from existing daily target, session and unlock data.
+- Updated `src/screens/PracticeScreen.tsx` to render the payoff as a compact strip below the sprint body.
+- Added assertions in `tests/practiceContent.test.mjs` for first-save, final-save, resume and bonus sprint payoff states.
+
+What went well:
+
+- The change stayed inside the existing Practice daily sprint card, helper and test coverage.
+- The user now sees the after-save result before the reward row and progress bar.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the new payoff strip should be checked for one-line fit on narrow screens.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 84 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Polish the Practice recommended card focus line so the first visible card under `Do this now` feels less like a library item and more like the next guided sprint.
+
 ## 2026-07-05: Progress Motivational Latest Win
 
 Made one focused Progress improvement: the first visible saved-answer card now feels more like a concrete win with a stronger reason to care and a clearer correction to keep.

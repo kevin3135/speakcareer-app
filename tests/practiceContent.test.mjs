@@ -3484,6 +3484,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(firstSprint.progressLabel, '0/1 saved today');
   assert.equal(firstSprint.statusLabel, 'Then Meeting Practice');
   assert.equal(firstSprint.statusTone, 'accent');
+  assert.equal(firstSprint.afterSavePayoff, 'Target complete, Meeting Practice unlocks');
   assert.ok(firstSprint.body.includes('start your streak'));
 
   const almostDoneSprint = createPracticeDailySprint({
@@ -3499,6 +3500,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(almostDoneSprint.progressLabel, '1/2 saved today');
   assert.equal(almostDoneSprint.statusLabel, 'Finish target');
   assert.equal(almostDoneSprint.statusTone, 'success');
+  assert.equal(almostDoneSprint.afterSavePayoff, 'Target complete, Sales Call unlocks');
   assert.ok(almostDoneSprint.body.includes('2/2 today'));
   assert.ok(almostDoneSprint.body.includes('Sales Call'));
 
@@ -3515,6 +3517,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(resumeSprint.title, 'Save Meeting Practice');
   assert.equal(resumeSprint.statusLabel, '2/3 after save');
   assert.equal(resumeSprint.statusTone, 'accent');
+  assert.equal(resumeSprint.afterSavePayoff, '2/3 saved today');
   assert.ok(resumeSprint.body.includes('keep your streak alive'));
 
   const bonusSprint = createPracticeDailySprint({
@@ -3531,6 +3534,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(bonusSprint.progressLabel, '1/1 saved today');
   assert.equal(bonusSprint.statusLabel, 'Bonus XP');
   assert.equal(bonusSprint.statusTone, 'success');
+  assert.equal(bonusSprint.afterSavePayoff, 'Bonus XP, faster path to Workplace Small Talk');
   assert.ok(bonusSprint.body.includes('extra XP'));
 });
 

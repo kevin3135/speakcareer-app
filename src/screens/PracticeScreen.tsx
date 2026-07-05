@@ -13,7 +13,7 @@ import {
   XPBadge,
 } from '../components/ui';
 import { practiceContent } from '../data/content';
-import { colors, fonts, spacing, typography } from '../theme';
+import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
 import { createPracticeDailySprint } from '../utils/practiceDailySprint';
 import { createPracticeLibraryState } from '../utils/practiceLibraryState';
@@ -84,6 +84,12 @@ export function PracticeScreen({
           <Badge label={dailySprint.statusLabel} tone={dailySprint.statusTone} />
         </View>
         <Text style={styles.dailySprintBody}>{dailySprint.body}</Text>
+        <View style={styles.dailySprintPayoff}>
+          <Text style={styles.dailySprintPayoffLabel}>After save</Text>
+          <Text numberOfLines={1} style={styles.dailySprintPayoffText}>
+            {dailySprint.afterSavePayoff}
+          </Text>
+        </View>
         <View style={styles.dailySprintMetaRow}>
           <Text style={styles.dailySprintMetaLabel}>Reward when saved</Text>
           <XPBadge label={dailySprint.rewardLabel} />
@@ -258,6 +264,29 @@ const styles = StyleSheet.create({
   },
   dailySprintProgress: {
     marginTop: spacing.md,
+  },
+  dailySprintPayoff: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  dailySprintPayoffLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  dailySprintPayoffText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
   },
   dailySprintTitle: {
     color: colors.ink,

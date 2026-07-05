@@ -1,6 +1,7 @@
 import type { DailyPracticeTarget, PracticeSession } from '../types';
 
 export type PracticeDailySprintState = {
+  afterSavePayoff: string;
   body: string;
   eyebrow: string;
   progressLabel: string;
@@ -35,6 +36,9 @@ export function createPracticeDailySprint({
 
   if (isResumeMode) {
     return {
+      afterSavePayoff: completed >= dailyTarget
+        ? 'Bonus XP banked'
+        : createAfterSavePayoff(nextSavedCount, dailyTarget, nextUnlockTitle),
       body: completed >= dailyTarget
         ? `Today's target is already done. Save ${recommendedRoleplayTitle} for bonus XP and a cleaner practice record.`
         : `Finish and save ${recommendedRoleplayTitle} to move to ${nextSavedCount}/${dailyTarget} today and keep your streak alive.`,
@@ -50,6 +54,7 @@ export function createPracticeDailySprint({
 
   if (completed === 0) {
     return {
+      afterSavePayoff: createAfterSavePayoff(nextSavedCount, dailyTarget, nextUnlockTitle),
       body: nextUnlockTitle
         ? `Save ${recommendedRoleplayTitle} first to start your streak and unlock ${nextUnlockTitle}.`
         : `Save ${recommendedRoleplayTitle} first to start your streak and log today's practice.`,
@@ -67,6 +72,7 @@ export function createPracticeDailySprint({
     const remaining = dailyTarget - completed;
 
     return {
+      afterSavePayoff: createAfterSavePayoff(nextSavedCount, dailyTarget, nextUnlockTitle),
       body: nextUnlockTitle
         ? `Save ${recommendedRoleplayTitle} to reach ${nextSavedCount}/${dailyTarget} today and keep the path moving toward ${nextUnlockTitle}.`
         : `Save ${recommendedRoleplayTitle} to reach ${nextSavedCount}/${dailyTarget} today and keep your streak moving.`,
@@ -81,6 +87,7 @@ export function createPracticeDailySprint({
   }
 
   return {
+    afterSavePayoff: nextUnlockTitle ? `Bonus XP, faster path to ${nextUnlockTitle}` : 'Bonus XP banked',
     body: nextUnlockTitle
       ? `Today's target is done. Save ${recommendedRoleplayTitle} next when you want extra XP and a faster path to ${nextUnlockTitle}.`
       : `Today's target is done. Save ${recommendedRoleplayTitle} next when you want extra XP and another short English rep.`,
@@ -92,4 +99,18 @@ export function createPracticeDailySprint({
     statusTone: 'success',
     title: 'Extra practice available',
   };
+}
+
+function createAfterSavePayoff(
+  nextSavedCount: number,
+  dailyTarget: DailyPracticeTarget,
+  nextUnlockTitle?: string | null,
+) {
+  if (nextSavedCount >= dailyTarget) {
+    return nextUnlockTitle ? `Target complete, ${nextUnlockTitle} unlocks` : 'Target complete';
+  }
+
+  return nextUnlockTitle
+    ? `${nextSavedCount}/${dailyTarget} saved, ${nextUnlockTitle} next`
+    : `${nextSavedCount}/${dailyTarget} saved today`;
 }
