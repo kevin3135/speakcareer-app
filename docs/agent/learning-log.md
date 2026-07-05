@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-05: Practice Quiet Library Preview
+
+Made one focused Practice polish: the closed secondary library on the Practice screen now stays quieter and more clearly optional, so `Do this now` holds the first action.
+
+Why it changed:
+
+- The recommended sprint card was already the right first action, but the closed `Full library` block still read like a second primary destination.
+- On mobile, the Practice tab should keep one clear next step visible before offering the rest of the roleplay list.
+- A compact hidden-library preview keeps choice available while reinforcing the guided English practice sequence.
+
+What changed:
+
+- Updated `src/utils/practiceLibraryState.ts` to return a compact `closedPreview` state for the hidden secondary library, including quiet summary copy and preview titles.
+- Updated `src/screens/PracticeScreen.tsx` so the section now reads `Other roleplays`, uses `Change focus` or `Switch roleplay` as the closed-state action, and renders a quieter hidden-state preview with compact roleplay pills.
+- Added assertions in `tests/practiceContent.test.mjs` for first-run and resume closed-library preview copy.
+
+What went well:
+
+- The change stayed focused on one Practice surface, one helper and one existing test file.
+- The first viewport should now keep the guided sprint dominant while still reassuring the user that other roleplays are available.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser visual QA, so the new preview pills should still be checked on a narrow mobile viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 84 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a screen has one recommended action, optional browsing should stay visibly available but visually secondary.
+- Compact preview pills work better than a second large explanatory block when preserving optional choice on mobile.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one compact payoff line on the Roleplay save-completion handoff so the next recommended roleplay feels even more automatic after a saved answer.
+
 ## 2026-07-05: Practice Guided Sprint Card
 
 Made one focused Practice polish: the recommended card under `Do this now` now reads like the next guided sprint instead of a generic library card.

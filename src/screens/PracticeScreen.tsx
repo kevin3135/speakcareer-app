@@ -192,7 +192,11 @@ export function PracticeScreen({
             accessibilityHint={isLibraryOpen
               ? 'Hide the rest of the practice library'
               : 'Show the rest of the practice library'}
-            label={isLibraryOpen ? 'Hide list' : 'Show list'}
+            label={isLibraryOpen
+              ? 'Hide list'
+              : libraryState.isResumeMode
+                ? 'Switch roleplay'
+                : 'Change focus'}
             onPress={() => setIsLibraryOpen((isOpen) => !isOpen)}
             size="small"
             variant="quiet"
@@ -201,7 +205,7 @@ export function PracticeScreen({
         subtitle={libraryState.isResumeMode
           ? 'Open this only if you want to leave the saved answer for later and practice a different work situation.'
           : 'Use this only when you want to break sequence and practice another work situation.'}
-        title="Full library"
+        title="Other roleplays"
       />
 
       {libraryState.browseCards.length > 0 ? (
@@ -222,13 +226,21 @@ export function PracticeScreen({
           ))
         ) : (
           <Card tone="muted">
-            <Text style={styles.libraryKicker}>Hidden by default</Text>
-            <Text style={styles.libraryTitle}>{libraryState.browseLabel}</Text>
-            <Text style={styles.libraryBody}>
-              {libraryState.isResumeMode
-                ? 'Finish the saved answer first. Open the rest only when you want a different career conversation.'
-                : 'Keep the next action simple first. Open the rest when you want a different career conversation.'}
-            </Text>
+            <View style={styles.libraryPreviewHeader}>
+              <Text style={styles.libraryKicker}>{libraryState.closedPreview.eyebrow}</Text>
+              <Badge label={libraryState.browseLabel} tone="secondary" />
+            </View>
+            <Text style={styles.libraryTitle}>{libraryState.closedPreview.title}</Text>
+            <Text style={styles.libraryBody}>{libraryState.closedPreview.body}</Text>
+            <View style={styles.libraryPreviewRow}>
+              {libraryState.closedPreview.previewTitles.map((title) => (
+                <View key={title} style={styles.libraryPreviewPill}>
+                  <Text numberOfLines={1} style={styles.libraryPreviewPillText}>
+                    {title}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </Card>
         )
       ) : null}
@@ -319,8 +331,9 @@ const styles = StyleSheet.create({
   libraryBody: {
     color: colors.text,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    lineHeight: typography.lineBody,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
   libraryKicker: {
@@ -336,6 +349,33 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineH3,
     marginTop: spacing.xs,
+  },
+  libraryPreviewHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  libraryPreviewPill: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    maxWidth: '48%',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  libraryPreviewPillText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+  },
+  libraryPreviewRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.md,
   },
   runwayBody: {
     color: colors.text,

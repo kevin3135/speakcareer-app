@@ -27,6 +27,12 @@ export type PracticeLibraryCard = {
 export type PracticeLibraryState = {
   browseCards: PracticeLibraryCard[];
   browseLabel: string;
+  closedPreview: {
+    body: string;
+    eyebrow: string;
+    previewTitles: string[];
+    title: string;
+  };
   isResumeMode: boolean;
   meta: string;
   progressLabel: string;
@@ -67,10 +73,12 @@ export function createPracticeLibraryState({
     .map((step) => createMappedCard(step.roleplayId, cardMap, step.state));
   const draftReview = draft ? summarizePracticeAnswer(draft.draftAnswer) : null;
   const isResumeMode = Boolean(savedDraftRoleplay && draftReview);
+  const closedPreview = createClosedPreview(browseCards, isResumeMode);
 
   return {
     browseCards,
     browseLabel: browseCards.length === 1 ? '1 more roleplay' : `${browseCards.length} more roleplays`,
+    closedPreview,
     isResumeMode,
     meta: isResumeMode ? 'Saved draft' : path.meta,
     progressLabel: path.progressLabel,
@@ -231,4 +239,18 @@ function createSavedDraftFocus(review: ReturnType<typeof summarizePracticeAnswer
   }
 
   return 'Resume sprint: review clarity, then save.';
+}
+
+function createClosedPreview(browseCards: PracticeLibraryCard[], isResumeMode: boolean) {
+  const count = browseCards.length;
+  const previewTitles = browseCards.slice(0, 3).map((card) => card.title);
+
+  return {
+    body: isResumeMode
+      ? 'Stay with the saved draft first. Open the rest only if you want a different English rep.'
+      : 'Stay with the recommended sprint first. Open the rest only if you want a different English rep.',
+    eyebrow: 'Optional later',
+    previewTitles,
+    title: count === 1 ? '1 other roleplay stays hidden' : `${count} other roleplays stay hidden`,
+  };
 }

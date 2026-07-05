@@ -3421,6 +3421,14 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(firstRunState.browseCards.length, 4);
   assert.equal(firstRunState.browseCards[0].categoryLabel, 'Later');
   assert.equal(firstRunState.browseLabel, '4 more roleplays');
+  assert.equal(firstRunState.closedPreview.eyebrow, 'Optional later');
+  assert.equal(firstRunState.closedPreview.title, '4 other roleplays stay hidden');
+  assert.deepEqual(firstRunState.closedPreview.previewTitles, [
+    'Meeting Practice',
+    'Presentation Practice',
+    'Sales Call',
+  ]);
+  assert.ok(firstRunState.closedPreview.body.includes('recommended sprint first'));
   assert.equal(firstRunState.runway?.title, 'After Job Interview');
   assert.equal(firstRunState.runway?.items.length, 3);
   assert.deepEqual(
@@ -3476,6 +3484,13 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.recommendedCard.focus, 'Resume sprint: add one result or next step.');
   assert.ok(resumeState.recommendedCard.description.includes('Check it, save XP'));
   assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
+  assert.equal(resumeState.closedPreview.title, '4 other roleplays stay hidden');
+  assert.deepEqual(resumeState.closedPreview.previewTitles, [
+    'Job Interview',
+    'Presentation Practice',
+    'Sales Call',
+  ]);
+  assert.ok(resumeState.closedPreview.body.includes('saved draft first'));
   assert.equal(resumeState.runway, null);
 });
 
