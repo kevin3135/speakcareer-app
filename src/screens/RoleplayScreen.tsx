@@ -235,16 +235,18 @@ export function RoleplayScreen({
   const followUpPrompt = answerReview?.isReadyForFeedback
     ? createAdaptiveFollowUpPrompt(roleplay, draftAnswer, answerReview)
     : null;
-  const savePrompt = answerReview?.isReadyForFeedback
-    ? createPracticeSavePrompt({
-      includedFollowUp,
-      xpReward: totalXpReward,
-    })
-    : null;
   const targetPreview = createPracticeTargetPreview({
     completedSessions: sessions.length,
     dailyTarget,
   });
+  const savePrompt = answerReview?.isReadyForFeedback
+    ? createPracticeSavePrompt({
+      includedFollowUp,
+      progressLabel: targetPreview.progressLabel,
+      progressTitle: targetPreview.title,
+      xpReward: totalXpReward,
+    })
+    : null;
   const saveLockInPreview = answerReview?.isReadyForFeedback
     ? createPracticeSaveLockInPreview({
       includedFollowUp,

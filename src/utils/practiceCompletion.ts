@@ -114,6 +114,8 @@ type CreatePracticeCompletionSummaryInput = {
 
 type CreatePracticeSavePromptInput = {
   includedFollowUp: boolean;
+  progressLabel: string;
+  progressTitle: string;
   xpReward: number;
 };
 
@@ -133,18 +135,37 @@ type CreateFirstQuestSaveRecapInput = {
 
 export function createPracticeSavePrompt({
   includedFollowUp,
+  progressLabel,
+  progressTitle,
   xpReward,
 }: CreatePracticeSavePromptInput): PracticeSavePrompt {
   const safeXpReward = Math.max(0, xpReward);
+  const targetLabel = createTodayTargetLabel(progressLabel);
+  const isTargetCompleteAfterSave = progressTitle === 'This lesson completes today\'s target';
+  const isBonusPractice = progressTitle === 'Daily target already complete';
+  const progressBody = includedFollowUp
+    ? 'Save both turns to Progress'
+    : 'Save this answer to Progress';
+
+  if (isBonusPractice) {
+    return {
+      body: `${progressBody}. Today's target is already done, so this counts as bonus practice.`,
+      ctaLabel: 'Save bonus practice',
+      eyebrow: 'Bonus practice',
+      followUpLabel: includedFollowUp ? 'Bonus turn added' : 'Bonus turn optional',
+      title: 'Bank an extra save',
+      xpLabel: `+${safeXpReward} XP`,
+    };
+  }
 
   return {
     body: includedFollowUp
-      ? 'Save both turns to Progress and bank the full practice win.'
-      : 'Save this answer now. The bonus turn stays optional.',
-    ctaLabel: 'Complete lesson',
-    eyebrow: 'Finish lesson',
+      ? `${progressBody} and ${isTargetCompleteAfterSave ? 'complete' : 'reach'} ${targetLabel}.`
+      : `Save this answer now to ${isTargetCompleteAfterSave ? 'complete' : 'reach'} ${targetLabel}. The bonus turn stays optional.`,
+    ctaLabel: isTargetCompleteAfterSave ? 'Save and finish today' : `Save for ${targetLabel}`,
+    eyebrow: isTargetCompleteAfterSave ? 'Finish today' : 'Keep today moving',
     followUpLabel: includedFollowUp ? 'Bonus turn added' : 'Bonus turn optional',
-    title: 'Save this lesson',
+    title: isTargetCompleteAfterSave ? `Save to finish ${targetLabel}` : `Save to reach ${targetLabel}`,
     xpLabel: `+${safeXpReward} XP`,
   };
 }
@@ -484,16 +505,21 @@ function createTodayLockInValue(progressLabel: string, progressTitle: string) {
     return 'Counts as bonus practice';
   }
 
-  const progressMatch = progressLabel.match(/(\d+\/\d+)/);
-  const progressValue = progressMatch
-    ? `${progressMatch[1]} today`
-    : progressLabel.replace(/^After save:\s*/, '');
+  const progressValue = createTodayTargetLabel(progressLabel);
 
   if (progressTitle === 'This lesson completes today\'s target') {
     return `Completes ${progressValue}`;
   }
 
   return `Reaches ${progressValue}`;
+}
+
+function createTodayTargetLabel(progressLabel: string) {
+  const progressMatch = progressLabel.match(/(\d+\/\d+)/);
+
+  return progressMatch
+    ? `${progressMatch[1]} today`
+    : progressLabel.replace(/^After save:\s*/, '');
 }
 
 function createSavedPathRunwayBody({

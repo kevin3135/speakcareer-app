@@ -1346,23 +1346,44 @@ test('creates a rewarding roleplay completion summary', async () => {
 
   const firstAnswerPrompt = createPracticeSavePrompt({
     includedFollowUp: false,
+    progressLabel: 'After save: 1/2 roleplays today',
+    progressTitle: 'One more sprint after this',
     xpReward: 55,
   });
 
-  assert.equal(firstAnswerPrompt.eyebrow, 'Finish lesson');
-  assert.equal(firstAnswerPrompt.title, 'Save this lesson');
+  assert.equal(firstAnswerPrompt.eyebrow, 'Keep today moving');
+  assert.equal(firstAnswerPrompt.title, 'Save to reach 1/2 today');
   assert.equal(firstAnswerPrompt.xpLabel, '+55 XP');
-  assert.equal(firstAnswerPrompt.ctaLabel, 'Complete lesson');
+  assert.equal(firstAnswerPrompt.ctaLabel, 'Save for 1/2 today');
   assert.equal(firstAnswerPrompt.followUpLabel, 'Bonus turn optional');
+  assert.ok(firstAnswerPrompt.body.includes('reach 1/2 today'));
   assert.ok(firstAnswerPrompt.body.includes('optional'));
 
   const followUpPrompt = createPracticeSavePrompt({
     includedFollowUp: true,
+    progressLabel: 'After save: 2/2 roleplays today',
+    progressTitle: 'This lesson completes today\'s target',
     xpReward: 70,
   });
 
+  assert.equal(followUpPrompt.eyebrow, 'Finish today');
+  assert.equal(followUpPrompt.title, 'Save to finish 2/2 today');
+  assert.equal(followUpPrompt.ctaLabel, 'Save and finish today');
   assert.equal(followUpPrompt.followUpLabel, 'Bonus turn added');
   assert.ok(followUpPrompt.body.includes('both turns'));
+  assert.ok(followUpPrompt.body.includes('complete 2/2 today'));
+
+  const bonusPrompt = createPracticeSavePrompt({
+    includedFollowUp: false,
+    progressLabel: '1/1 roleplay today',
+    progressTitle: 'Daily target already complete',
+    xpReward: 40,
+  });
+
+  assert.equal(bonusPrompt.eyebrow, 'Bonus practice');
+  assert.equal(bonusPrompt.title, 'Bank an extra save');
+  assert.equal(bonusPrompt.ctaLabel, 'Save bonus practice');
+  assert.ok(bonusPrompt.body.includes('bonus practice'));
 
   const firstAnswerLockIn = createPracticeSaveLockInPreview({
     includedFollowUp: false,

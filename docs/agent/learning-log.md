@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Save Daily-Target CTA
+
+Made one focused practice-flow improvement: the Roleplay save step now uses explicit `x/y today` language in the main save card, so the learner sees what this save does for today before tapping the final CTA.
+
+Why it changed:
+
+- The Practice tab already explains daily progress clearly with `today` language, but the Roleplay save card still sounded generic at the exact moment the user decides whether to bank the lesson.
+- The save screen had the right information in the secondary lock-in list, but the main title, body and CTA did not reinforce the habit loop strongly enough for `2/day` and `3/day` targets.
+- Tightening this copy is higher value than adding another panel because it improves the final conversion step inside the existing MVP flow.
+
+What changed:
+
+- Updated `src/utils/practiceCompletion.ts` so `createPracticeSavePrompt` now adapts its eyebrow, title, body and CTA to three states: reaching today’s next count, finishing today’s target, and bonus practice after the target is already complete.
+- Updated `src/screens/RoleplayScreen.tsx` to pass the existing `createPracticeTargetPreview` result into the save prompt helper, so the main save card and the lock-in preview now use the same daily-target state.
+- Extended `tests/practiceContent.test.mjs` with focused coverage for in-progress, target-finishing and bonus-practice save prompt states.
+
+What went well:
+
+- The change stayed focused to one helper, one existing screen, one test file and this log.
+- The save step should now feel more like the end of a clear daily sprint instead of a generic completion action.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the updated save-card title and CTA should still be checked on a narrow viewport, especially for `3/day`.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 80 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The final save CTA is part of the habit loop, so it should repeat the same daily-progress language the user already saw earlier in Practice.
+- When one screen already has a secondary preview with the right state, prefer promoting that state into the main headline/CTA before adding more UI.
+
+Next suggested task:
+
+- Add a compact weak-answer decision cue in the review step that tells the learner when to retry before save versus when to bank the lesson and move on.
+
 ## 2026-07-04: Practice Daily Sprint Card
 
 Made one focused Practice-flow improvement: the Practice screen now shows a compact daily sprint card that ties the recommended roleplay to today’s target, streak habit and next unlock.
