@@ -11,6 +11,7 @@ import {
 } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget } from '../types';
+import { createOnboardingDailyTargetGuide } from '../utils/onboardingDailyTargetGuide';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
@@ -31,6 +32,9 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
   const selectedChoice =
     levelAssessment.choices.find((choice) => choice.id === selectedLevelId) ?? null;
   const selectedProfile = selectedLevelId ? getStartingLevelProfile(selectedLevelId) : null;
+  const dailyTargetGuide = selectedLevelId
+    ? createOnboardingDailyTargetGuide(selectedLevelId, selectedDailyTarget)
+    : null;
   const planPreview =
     selectedChoice && selectedProfile
       ? createOnboardingPlanPreview({
@@ -117,6 +121,16 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               <Text style={styles.targetTitle}>{planPreview.dailyTargetLabel}</Text>
             </View>
             <Text numberOfLines={1} style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
+            {dailyTargetGuide ? (
+              <View style={styles.targetGuideBox}>
+                <View style={styles.targetGuideHeader}>
+                  <Text style={styles.targetGuideLabel}>Recommended to start</Text>
+                  <Badge label={dailyTargetGuide.recommendationLabel} tone="accent" />
+                </View>
+                <Text style={styles.targetGuideTitle}>{dailyTargetGuide.recommendationTitle}</Text>
+                <Text style={styles.targetGuideBody}>{dailyTargetGuide.recommendationBody}</Text>
+              </View>
+            ) : null}
             <View style={styles.segmentedControl}>
               {dailyTargetOptions.map((target) => {
                 const isActive = target === selectedDailyTarget;
@@ -142,6 +156,12 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                 );
               })}
             </View>
+            {dailyTargetGuide ? (
+              <View style={styles.targetSelectionBox}>
+                <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
+                <Text style={styles.targetSelectionText}>{dailyTargetGuide.selectionBody}</Text>
+              </View>
+            ) : null}
           </View>
 
           <View style={styles.planPath}>
@@ -383,6 +403,41 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.sm,
   },
+  targetGuideBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  targetGuideBox: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  targetGuideHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  targetGuideLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  targetGuideTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
   segmentedControl: {
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
@@ -392,6 +447,17 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     marginTop: spacing.md,
     padding: spacing.xs,
+  },
+  targetSelectionBox: {
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  targetSelectionText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
   },
   segment: {
     alignItems: 'center',

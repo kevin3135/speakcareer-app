@@ -677,6 +677,35 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(confidentPreview.commitmentNote, 'Lesson now. 3 saves today, starting with Job Interview.');
 });
 
+test('recommends a starting daily target based on onboarding level', async () => {
+  const { createOnboardingDailyTargetGuide } = await import(
+    '../src/utils/onboardingDailyTargetGuide.ts'
+  );
+
+  const starterGuide = createOnboardingDailyTargetGuide('starter', 1);
+  assert.equal(starterGuide.recommendedTarget, 1);
+  assert.equal(starterGuide.recommendationLabel, '1/day');
+  assert.equal(starterGuide.selectionLabel, 'Best fit');
+  assert.equal(starterGuide.selectionTone, 'success');
+  assert.ok(starterGuide.recommendationBody.includes('habit'));
+
+  const lighterGuide = createOnboardingDailyTargetGuide('basic', 1);
+  assert.equal(lighterGuide.recommendedTarget, 2);
+  assert.equal(lighterGuide.selectionLabel, 'Lighter start');
+  assert.equal(lighterGuide.selectionTone, 'info');
+  assert.ok(lighterGuide.selectionBody.includes('consistency'));
+
+  const fasterGuide = createOnboardingDailyTargetGuide('basic', 3);
+  assert.equal(fasterGuide.recommendedTarget, 2);
+  assert.equal(fasterGuide.selectionLabel, 'Faster push');
+  assert.equal(fasterGuide.selectionTone, 'accent');
+  assert.ok(fasterGuide.selectionBody.includes('extra short reps'));
+
+  const confidentGuide = createOnboardingDailyTargetGuide('confident', 3);
+  assert.equal(confidentGuide.recommendationTitle, 'Recommended start: 3 roleplays a day');
+  assert.ok(confidentGuide.recommendationBody.includes('real interview practice'));
+});
+
 test('stores the daily practice target in local storage', async () => {
   const {
     DAILY_TARGET_KEY,
