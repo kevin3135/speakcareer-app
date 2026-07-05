@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Completion Strips
+
+Made one focused Roleplay completion polish: the saved-state support strips are now more compact so the reward moment still leads toward Continue on mobile.
+
+Why it changed:
+
+- The completion screen now has richer reward feedback, including practice depth, app unlock, coach target, level-up and next-path context.
+- Those support strips could stack tall after the reward card, especially on a narrow phone.
+- Tightening them is safer than removing useful completion context because it preserves the win while keeping the next action closer.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` to reduce vertical margins and padding for app unlock, coach target, level-up, fallback next-step and saved-path strips.
+- Reduced the app-unlock badge size and softened the saved-path body text so it reads as supporting context instead of another headline.
+- Kept completion copy, reward pulse, XP, saved-session data, Progress data, navigation and storage unchanged.
+
+What went well:
+
+- The change stayed inside one visible completion state and this log.
+- The saved completion screen should feel less stacked while still explaining the reward and next path.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the final completion height should still be checked at 390px width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the saved completion screen and, if Continue is still too low, make the saved path runway collapse to the next active item only.
+
 ## 2026-07-05: Roleplay Practice Depth Recap
 
 Made one focused Roleplay completion polish: the reward card now tells the learner whether they banked a core answer only or a deeper two-turn rep.
