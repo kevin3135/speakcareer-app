@@ -1649,18 +1649,20 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.ok(nextAfterSales.reason.includes('small talk'));
 
   const savedHandoff = createSavedRoleplayHandoff({
+    dailyTarget: 3,
     isPathComplete: savedPathProgress.isPathComplete,
     nextPracticeTitle: savedPathProgress.nextTitle,
+    savedSessionCount: 2,
     xpReward: 45,
   });
 
   assert.equal(savedHandoff.title, 'Saved');
   assert.equal(savedHandoff.ctaTarget, 'roleplay');
   assert.equal(savedHandoff.ctaLabel, 'Start Sales Call');
-  assert.equal(savedHandoff.nextLabel, 'Next lesson');
+  assert.equal(savedHandoff.nextLabel, 'Finish today with');
   assert.equal(savedHandoff.nextTitle, 'Sales Call');
   assert.equal(savedHandoff.xpLabel, '+45 XP');
-  assert.ok(savedHandoff.body.includes('streak'));
+  assert.ok(savedHandoff.body.includes('finish 3/3 today'));
 
   const savedCoachRecap = createSavedCoachRecap({
     feedbackSummary: 'Clear opening with one useful next step.',
@@ -1705,15 +1707,18 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(nextAfterSmallTalk.roleplayId, 'job-interview');
 
   const fallbackSavedHandoff = createSavedRoleplayHandoff({
+    dailyTarget: 2,
     nextPracticeTitle: null,
+    savedSessionCount: 2,
     xpReward: 25,
   });
 
   assert.equal(fallbackSavedHandoff.ctaTarget, 'progress');
-  assert.equal(fallbackSavedHandoff.ctaLabel, 'Open Progress');
-  assert.equal(fallbackSavedHandoff.nextLabel, 'Next stop');
-  assert.equal(fallbackSavedHandoff.nextTitle, 'Progress');
+  assert.equal(fallbackSavedHandoff.ctaLabel, 'Review Wins');
+  assert.equal(fallbackSavedHandoff.nextLabel, 'Bonus next');
+  assert.equal(fallbackSavedHandoff.nextTitle, 'Another short English sprint');
   assert.equal(fallbackSavedHandoff.xpLabel, '+25 XP');
+  assert.ok(fallbackSavedHandoff.body.includes('Today is complete'));
 
   const completedPathProgress = createSavedRoleplayPathProgress({
     roleplays: practiceContent.roleplays,
@@ -1730,8 +1735,10 @@ test('creates a rewarding roleplay completion summary', async () => {
   });
 
   const replayHandoff = createSavedRoleplayHandoff({
+    dailyTarget: 2,
     isPathComplete: completedPathProgress.isPathComplete,
     nextPracticeTitle: completedPathProgress.nextTitle,
+    savedSessionCount: 1,
     xpReward: 45,
   });
 
@@ -1749,7 +1756,23 @@ test('creates a rewarding roleplay completion summary', async () => {
     'Full path cleared. Replay Job Interview to keep your streak moving.',
   );
   assert.equal(replayHandoff.ctaLabel, 'Replay Job Interview');
-  assert.ok(replayHandoff.body.includes('cleared the full career path'));
+  assert.equal(replayHandoff.ctaTarget, 'roleplay');
+  assert.equal(replayHandoff.nextLabel, 'Finish today with');
+  assert.ok(replayHandoff.body.includes('finish 2/2 today'));
+
+  const targetCompleteHandoff = createSavedRoleplayHandoff({
+    dailyTarget: 1,
+    isPathComplete: false,
+    nextPracticeTitle: 'Meeting Practice',
+    savedSessionCount: 1,
+    xpReward: 32,
+  });
+
+  assert.equal(targetCompleteHandoff.ctaTarget, 'progress');
+  assert.equal(targetCompleteHandoff.ctaLabel, 'Review Wins');
+  assert.equal(targetCompleteHandoff.nextLabel, 'Bonus practice');
+  assert.equal(targetCompleteHandoff.nextTitle, 'Meeting Practice');
+  assert.ok(targetCompleteHandoff.body.includes("Today's target is complete"));
 });
 
 test('shows a locked mistake-bank preview before the first saved session', async () => {

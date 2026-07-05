@@ -35,7 +35,6 @@ import { createFollowUpReadinessCue } from '../utils/followUpReadinessCue';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import {
-  createPracticeCompletionSummary,
   createFirstQuestSaveRecap,
   createPracticeSaveLockInPreview,
   createPracticeSavePrompt,
@@ -134,18 +133,18 @@ export function RoleplayScreen({
       sessions,
     })
     : null;
+  const savedSessionCountAfterSave = savedSession
+    ? sessions.some((session) => session.id === savedSession.id)
+      ? sessions.length
+      : sessions.length + 1
+    : sessions.length;
   const savedHandoff = createSavedRoleplayHandoff({
+    dailyTarget,
     isPathComplete: savedPathProgress?.isPathComplete,
     nextPracticeTitle: savedPathProgress?.nextTitle ?? null,
+    savedSessionCount: savedSessionCountAfterSave,
     xpReward: savedSession?.xpReward ?? totalXpReward,
   });
-  const savedSummary = savedSession
-    ? createPracticeCompletionSummary({
-      includedFollowUp: savedSession.includedFollowUp,
-      roleplayTitle: savedSession.roleplayTitle,
-      xpReward: savedSession.xpReward,
-    })
-    : null;
   const savedPracticeDepth = savedSession
     ? {
       body: savedSession.includedFollowUp
@@ -164,11 +163,6 @@ export function RoleplayScreen({
       summary: progressData.summary,
     })
     : null;
-  const savedSessionCountAfterSave = savedSession
-    ? sessions.some((session) => session.id === savedSession.id)
-      ? sessions.length
-      : sessions.length + 1
-    : sessions.length;
   const appUnlockedHandoff = savedSession && savedSessionCountAfterSave === 1
     ? {
       body: 'Learn and Wins are ready.',
@@ -473,7 +467,7 @@ export function RoleplayScreen({
   }
 
   function continueToNext() {
-    if (savedPathProgress) {
+    if (savedHandoff.ctaTarget === 'roleplay' && savedPathProgress) {
       onSelectRoleplay(savedPathProgress.roleplayId);
       return;
     }
@@ -631,7 +625,7 @@ export function RoleplayScreen({
 
         <GradientHero
           overline="Career win"
-          subtitle={savedSummary?.body ?? savedHandoff.body}
+          subtitle={savedHandoff.body}
           title={savedHandoff.title}
           tone="success"
         >

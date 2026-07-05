@@ -266,37 +266,66 @@ export function createNextPracticeRecommendation(
 }
 
 type CreateSavedRoleplayHandoffInput = {
+  dailyTarget: DailyPracticeTarget;
   isPathComplete?: boolean;
   nextPracticeTitle: string | null;
+  savedSessionCount: number;
   xpReward: number;
 };
 
 export function createSavedRoleplayHandoff({
+  dailyTarget,
   isPathComplete = false,
   nextPracticeTitle,
+  savedSessionCount,
   xpReward,
 }: CreateSavedRoleplayHandoffInput): SavedRoleplayHandoff {
   const safeXpReward = Math.max(0, xpReward);
+  const safeDailyTarget = Math.max(1, dailyTarget);
+  const completedToday = Math.min(Math.max(0, savedSessionCount), safeDailyTarget);
+  const remainingToday = Math.max(safeDailyTarget - completedToday, 0);
+  const todayTargetLabel = `${completedToday}/${safeDailyTarget} today`;
+  const isTargetComplete = remainingToday === 0;
 
   if (!nextPracticeTitle) {
     return {
-      body: 'Your answer is saved. Review Progress now, or come back later for another short English sprint.',
-      ctaLabel: 'Open Progress',
+      body: isTargetComplete
+        ? 'Your answer is saved. Today is complete, so review Wins now and come back later for bonus practice.'
+        : `Your answer is saved. Review Wins now, then come back to reach ${todayTargetLabel}.`,
+      ctaLabel: 'Review Wins',
       ctaTarget: 'progress',
-      nextLabel: 'Next stop',
-      nextTitle: 'Progress',
+      nextLabel: isTargetComplete ? 'Bonus next' : 'Today next',
+      nextTitle: isTargetComplete ? 'Another short English sprint' : `Reach ${todayTargetLabel}`,
       title: 'Saved',
       xpLabel: `+${safeXpReward} XP`,
     };
   }
 
+  if (isTargetComplete) {
+    return {
+      body: isPathComplete
+        ? `Your answer is saved. Today's target is complete and the full path is cleared. Review Wins now, then replay ${nextPracticeTitle} later for bonus practice.`
+        : `Your answer is saved. Today's target is complete. Review Wins now, then start ${nextPracticeTitle} later for bonus practice.`,
+      ctaLabel: 'Review Wins',
+      ctaTarget: 'progress',
+      nextLabel: isPathComplete ? 'Replay later' : 'Bonus practice',
+      nextTitle: nextPracticeTitle,
+      title: 'Saved',
+      xpLabel: `+${safeXpReward} XP`,
+    };
+  }
+
+  const nextTodayLabel = remainingToday === 1
+    ? `finish ${safeDailyTarget}/${safeDailyTarget} today`
+    : `reach ${todayTargetLabel}`;
+
   return {
     body: isPathComplete
-      ? `Your answer is saved. You cleared the full career path. Replay ${nextPracticeTitle} to keep the streak professional and sharp.`
-      : 'Your answer is saved. Keep the streak moving with one more guided workplace conversation.',
+      ? `Your answer is saved. Replay ${nextPracticeTitle} now to ${nextTodayLabel}.`
+      : `Your answer is saved. Start ${nextPracticeTitle} now to ${nextTodayLabel}.`,
     ctaLabel: `${isPathComplete ? 'Replay' : 'Start'} ${nextPracticeTitle}`,
     ctaTarget: 'roleplay',
-    nextLabel: 'Next lesson',
+    nextLabel: remainingToday === 1 ? 'Finish today with' : 'Keep today moving with',
     nextTitle: nextPracticeTitle,
     title: 'Saved',
     xpLabel: `+${safeXpReward} XP`,

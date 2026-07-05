@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-05: Saved Handoff Targets Today
+
+Made one focused practice-flow improvement: the Roleplay saved state now changes its main next action based on whether today's target is still in progress or already complete.
+
+Why it changed:
+
+- The saved screen already calculated next-path and daily-target state, but the hero subtitle still showed a generic `saved to Progress` message.
+- The main CTA always pushed toward the next roleplay whenever path data existed, even after the learner had already finished today's target.
+- A target-aware handoff is higher value than adding more reward UI because it makes the post-save loop feel clearer and more professional.
+
+What changed:
+
+- Updated `src/utils/practiceCompletion.ts` so `createSavedRoleplayHandoff` now uses daily-target progress plus saved-session count to choose between `Start next roleplay` and `Review Wins`.
+- Updated `src/screens/RoleplayScreen.tsx` so the saved hero now shows the handoff guidance instead of the generic save summary, and the main CTA follows the handoff target correctly.
+- Extended `tests/practiceContent.test.mjs` with focused coverage for in-progress, target-complete, fallback-progress and replay-after-path-complete saved handoffs.
+
+What went well:
+
+- The change stayed inside one existing helper, one existing screen, one test file and this log.
+- The post-save state should now feel more like a real daily practice loop: keep going when today is unfinished, review Wins when today is done.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the saved hero copy should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The saved state is part of the practice loop, so its primary CTA should follow `today` progress, not only path unlock state.
+- If a screen already computes the right behavior in helpers, make sure the visible hero copy actually uses that state before adding more UI.
+
+Next suggested task:
+
+- Add a compact `Today complete` recap at the top of Wins so the new post-save `Review Wins` path lands on a stronger first card.
+
 ## 2026-07-05: Roleplay Completion Strips
 
 Made one focused Roleplay completion polish: the saved-state support strips are now more compact so the reward moment still leads toward Continue on mobile.
