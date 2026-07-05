@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-05: Wins Review Card Priority
+
+Made one focused Progress/Wins polish: when today's target is already complete, the latest saved win now appears above the Level runway so the review path lands on the actual correction before extra progress context.
+
+Why it changed:
+
+- The top Wins card already tells the learner to `Review first`, but the next card in the stack was still `Level runway`.
+- After Roleplay sends the learner to `Review Wins`, the most useful second viewport is the saved scenario plus its next correction, not more progress framing.
+- Reordering the existing cards is safer than adding another summary box because it keeps the loop clearer without changing data or navigation.
+
+What changed:
+
+- Updated `src/screens/ProgressScreen.tsx` to extract the existing `Latest win` and `Level runway` cards into reusable JSX blocks.
+- On completed-target days, the screen now renders `Latest win` immediately after the top guidance card and moves `Level runway` below it.
+- Added a small `Review this win first` eyebrow on the latest win card for the completed-day state.
+
+What went well:
+
+- The improvement stayed inside one existing screen and this log.
+- No storage, roleplay logic, progress calculations, navigation, dependencies or backend plans changed.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the completed-day Wins stack should still be checked on a 390px-wide viewport.
+- No focused unit test was added because the change is a JSX-only card ordering adjustment; validation relied on the existing full test suite.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the completed-day Wins first viewport and, if it still feels tall, shorten the Level runway body on completed-target days.
+
 ## 2026-07-05: Wins Review First Cue
 
 Made one focused Wins polish: the completed-day top card now shows the learner exactly which saved coach note to review first.

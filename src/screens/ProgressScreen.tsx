@@ -105,6 +105,79 @@ export function ProgressScreen({
   const hiddenMistakeQueueCount = mistakeQueue
     ? Math.max(0, mistakeQueue.items.length - visibleMistakeQueueItems.length)
     : 0;
+  const latestWinCard = latestSession ? (
+    <Card>
+      <View style={styles.rowBetween}>
+        <Text style={styles.cardKicker}>
+          {isDailyTargetComplete ? 'Review this win first' : 'Latest win'}
+        </Text>
+        {latestSession.includedFollowUp ? <Badge label="Follow-up saved" tone="success" /> : null}
+      </View>
+      <Text style={styles.cardTitle}>{latestSession.roleplayTitle}</Text>
+      <Text style={styles.metaLine}>
+        {formatSessionDate(latestSession.completedAt)} - {latestSession.wordCount} words - +{latestSession.xpReward} XP
+      </Text>
+      {latestSessionFocusText ? (
+        <>
+          <View style={styles.latestFocusBox}>
+            <View style={styles.rowBetween}>
+              <Text style={styles.latestFocusLabel}>Next correction</Text>
+              <Badge
+                label={latestSession.nextFocusLabel?.trim() || 'Coach target'}
+                tone="accent"
+              />
+            </View>
+            <Text style={styles.latestFocusText}>{latestSessionFocusText}</Text>
+          </View>
+          <View style={styles.latestAnswerBox}>
+            <Text style={styles.latestAnswerLabel}>Saved answer</Text>
+            <Text numberOfLines={1} style={styles.latestAnswerText}>
+              {latestSession.answerPreview}
+            </Text>
+          </View>
+        </>
+      ) : (
+        <>
+          <Text numberOfLines={2} style={styles.sessionPreview}>
+            {latestSession.answerPreview}
+          </Text>
+          <Text numberOfLines={2} style={styles.sessionFeedback}>
+            {latestSession.feedbackSummary}
+          </Text>
+        </>
+      )}
+      <View style={styles.cardAction}>
+        <AppButton
+          label="Retry this scenario"
+          onPress={() => onOpenRoleplay(latestSession.roleplayId)}
+          variant="secondary"
+        />
+      </View>
+    </Card>
+  ) : null;
+  const levelRunwayCard = (
+    <Card tone="muted">
+      <View style={styles.rowBetween}>
+        <View style={styles.flexOne}>
+          <Text style={styles.cardKicker}>Level runway</Text>
+          <Text style={styles.cardTitle}>{levelRunway.title}</Text>
+        </View>
+        <LevelBadge label={levelRunway.badgeLabel} />
+      </View>
+      <Text style={styles.cardBody}>{levelRunway.body}</Text>
+      <View style={styles.levelRunwayMeta}>
+        <Text style={styles.levelRunwayMetaLabel}>{levelRunway.targetLabel}</Text>
+        <Text style={styles.levelRunwayMetaValue}>{levelRunway.totalXpLabel}</Text>
+      </View>
+      <View style={styles.progressWrap}>
+        <ProgressBar
+          label={levelRunway.progressLabel}
+          tone="purple"
+          value={levelRunway.progressPercent}
+        />
+      </View>
+    </Card>
+  );
 
   return (
     <ScreenContainer
@@ -187,27 +260,8 @@ export function ProgressScreen({
         </View>
       </Card>
 
-      <Card tone="muted">
-        <View style={styles.rowBetween}>
-          <View style={styles.flexOne}>
-            <Text style={styles.cardKicker}>Level runway</Text>
-            <Text style={styles.cardTitle}>{levelRunway.title}</Text>
-          </View>
-          <LevelBadge label={levelRunway.badgeLabel} />
-        </View>
-        <Text style={styles.cardBody}>{levelRunway.body}</Text>
-        <View style={styles.levelRunwayMeta}>
-          <Text style={styles.levelRunwayMetaLabel}>{levelRunway.targetLabel}</Text>
-          <Text style={styles.levelRunwayMetaValue}>{levelRunway.totalXpLabel}</Text>
-        </View>
-        <View style={styles.progressWrap}>
-          <ProgressBar
-            label={levelRunway.progressLabel}
-            tone="purple"
-            value={levelRunway.progressPercent}
-          />
-        </View>
-      </Card>
+      {isDailyTargetComplete ? latestWinCard : null}
+      {levelRunwayCard}
 
       {isFirstSaveLocked ? (
         <>
@@ -268,54 +322,7 @@ export function ProgressScreen({
             </Card>
           ) : null}
 
-          {latestSession ? (
-            <Card>
-              <View style={styles.rowBetween}>
-                <Text style={styles.cardKicker}>Latest win</Text>
-                {latestSession.includedFollowUp ? <Badge label="Follow-up saved" tone="success" /> : null}
-              </View>
-              <Text style={styles.cardTitle}>{latestSession.roleplayTitle}</Text>
-              <Text style={styles.metaLine}>
-                {formatSessionDate(latestSession.completedAt)} - {latestSession.wordCount} words - +{latestSession.xpReward} XP
-              </Text>
-              {latestSessionFocusText ? (
-                <>
-                  <View style={styles.latestFocusBox}>
-                    <View style={styles.rowBetween}>
-                      <Text style={styles.latestFocusLabel}>Next correction</Text>
-                      <Badge
-                        label={latestSession.nextFocusLabel?.trim() || 'Coach target'}
-                        tone="accent"
-                      />
-                    </View>
-                    <Text style={styles.latestFocusText}>{latestSessionFocusText}</Text>
-                  </View>
-                  <View style={styles.latestAnswerBox}>
-                    <Text style={styles.latestAnswerLabel}>Saved answer</Text>
-                    <Text numberOfLines={1} style={styles.latestAnswerText}>
-                      {latestSession.answerPreview}
-                    </Text>
-                  </View>
-                </>
-              ) : (
-                <>
-                  <Text numberOfLines={2} style={styles.sessionPreview}>
-                    {latestSession.answerPreview}
-                  </Text>
-                  <Text numberOfLines={2} style={styles.sessionFeedback}>
-                    {latestSession.feedbackSummary}
-                  </Text>
-                </>
-              )}
-              <View style={styles.cardAction}>
-                <AppButton
-                  label="Retry this scenario"
-                  onPress={() => onOpenRoleplay(latestSession.roleplayId)}
-                  variant="secondary"
-                />
-              </View>
-            </Card>
-          ) : null}
+          {!isDailyTargetComplete ? latestWinCard : null}
 
           {progressMomentumUnlock ? (
             <Card tone="muted">
