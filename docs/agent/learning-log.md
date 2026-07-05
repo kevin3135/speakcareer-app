@@ -1,5 +1,44 @@
 # Agent Learning Log
 
+## 2026-07-05: Home Coach Cue Quiet Polish
+
+Made one focused Home/Learn polish: the coach cue under the lesson map now reads as a compact guidance cue instead of a second prominent card.
+
+Why it changed:
+
+- The Home map and START node are now strong, but the coach cue still had a heavy coach border, full shadow and large badge.
+- After a saved answer or unlock state, that visual weight could compete with the primary START action.
+- A quieter cue keeps the AI coach useful while preserving the app-led habit loop.
+
+What changed:
+
+- Updated `src/screens/HomeScreen.tsx` so the coach cue uses a softer token border, no card shadow, tighter vertical padding, a smaller `SC` badge and less heavy text styling.
+- Kept the cue copy, latest-session logic, navigation, XP, streak, lesson map and storage unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- The Home first viewport should now keep the lesson map and START node dominant.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the Home post-save state should still be checked at 390px width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 80 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Capture fresh mobile screenshots for Home after one saved answer and confirm the START node remains the clear single action above the bottom navigation.
+
 ## 2026-07-05: Roleplay Save Daily-Target CTA
 
 Made one focused practice-flow improvement: the Roleplay save step now uses explicit `x/y today` language in the main save card, so the learner sees what this save does for today before tapping the final CTA.

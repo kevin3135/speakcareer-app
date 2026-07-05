@@ -363,14 +363,13 @@ const styles = StyleSheet.create({
   coachCue: {
     alignItems: 'center',
     backgroundColor: colors.coachSoft,
-    borderColor: colors.coach,
+    borderColor: colors.coachSoft,
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    ...shadows.soft,
+    paddingVertical: spacing.xs,
   },
   coachCueBadge: {
     alignItems: 'center',
@@ -378,9 +377,9 @@ const styles = StyleSheet.create({
     borderColor: colors.primaryGlow,
     borderRadius: radius.pill,
     borderWidth: 1,
-    height: 38,
+    height: 32,
     justifyContent: 'center',
-    width: 38,
+    width: 32,
   },
   coachCueBadgeText: {
     color: colors.white,
@@ -392,10 +391,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   coachCueText: {
-    color: colors.ink,
+    color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '900',
+    fontWeight: '800',
     lineHeight: typography.lineSmall,
   },
   statusRow: {
