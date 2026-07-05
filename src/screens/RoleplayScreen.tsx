@@ -146,6 +146,14 @@ export function RoleplayScreen({
       xpReward: savedSession.xpReward,
     })
     : null;
+  const savedPracticeDepth = savedSession
+    ? {
+      body: savedSession.includedFollowUp
+        ? 'Main answer and follow-up saved together.'
+        : 'Main answer saved. Bonus turn stayed optional.',
+      title: savedSession.includedFollowUp ? 'Deeper two-turn rep' : 'Core answer only',
+    }
+    : null;
   const savedCoachRecap = savedSession ? createSavedCoachRecap(savedSession) : null;
   const savedLevelUpRecap = levelUpMoment ? createSavedLevelUpRecap(levelUpMoment) : null;
   const savedMilestone = savedSession
@@ -651,6 +659,17 @@ export function RoleplayScreen({
               {savedLevelUpRecap ? <Badge label={savedLevelUpRecap.totalXpLabel} tone="info" /> : null}
               {savedSession.includedFollowUp ? <Badge label="Follow-up saved" tone="secondary" /> : null}
             </View>
+            {savedPracticeDepth ? (
+              <View style={styles.practiceDepthStrip}>
+                <Text style={styles.practiceDepthLabel}>Practice depth</Text>
+                <Text numberOfLines={1} style={styles.practiceDepthTitle}>
+                  {savedPracticeDepth.title}
+                </Text>
+                <Text numberOfLines={1} style={styles.practiceDepthBody}>
+                  {savedPracticeDepth.body}
+                </Text>
+              </View>
+            ) : null}
           </Animated.View>
           {appUnlockedHandoff ? (
             <View style={styles.appUnlockedStrip}>
@@ -2312,6 +2331,39 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.sm,
+  },
+  practiceDepthStrip: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderLeftColor: colors.successDark,
+    borderLeftWidth: 4,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  practiceDepthLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  practiceDepthTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
+  practiceDepthBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '700',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
   },
   appUnlockedStrip: {
     alignItems: 'center',

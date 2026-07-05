@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Practice Depth Recap
+
+Made one focused Roleplay completion polish: the reward card now tells the learner whether they banked a core answer only or a deeper two-turn rep.
+
+Why it changed:
+
+- The follow-up readiness cue made the optional second turn clearer before saving.
+- After saving, the completion state only showed a small `Follow-up saved` badge, so the learner could miss what kind of practice record they banked.
+- A compact depth recap reinforces the win without adding a new reward system or changing XP/storage logic.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` to derive a small `Practice depth` recap from `savedSession.includedFollowUp`.
+- Added a compact success strip inside the existing reward card with `Core answer only` or `Deeper two-turn rep` copy.
+- Kept session storage, XP, follow-up readiness, save flow, Progress data and navigation unchanged.
+
+What went well:
+
+- The change stayed inside one visible completion state and this log.
+- The reward moment should now better connect the optional follow-up choice to the saved result.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the completion card height should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the saved completion screen at 390px width and check whether the reward card, app-unlock strip and next-path card still fit with one obvious Continue action.
+
 ## 2026-07-05: Follow-Up Readiness Cue
 
 Made one focused Roleplay save-step improvement: the optional bonus follow-up now explains when it is worth doing versus when the learner should just bank the main answer and keep today moving.
