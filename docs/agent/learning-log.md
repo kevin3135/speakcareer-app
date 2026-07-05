@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Saved Payoff Cue
+
+Made one focused Roleplay polish: the saved-completion handoff now shows a compact payoff cue that explains the next automatic step.
+
+Why it changed:
+
+- The completion screen already showed XP, streak and the next CTA, but the "what happens now" message was mixed into longer body copy.
+- After saving an answer, the user should immediately feel that the app has unlocked or chosen the next career English sprint.
+- A small payoff strip keeps the reward moment motivating without adding a new reward system or extra decision.
+
+What changed:
+
+- Updated `src/utils/practiceCompletion.ts` so `createSavedRoleplayHandoff` returns a short `payoffLine` for next-roleplay, review-Wins and replay states.
+- Updated `src/screens/RoleplayScreen.tsx` to render that payoff line as a compact success strip inside the saved completion hero.
+- Added assertions in `tests/practiceContent.test.mjs` for unlocked-next, bonus, review-Wins and completed-path payoff copy.
+
+What went well:
+
+- The change stayed inside the existing Roleplay completion state and reused existing success theme tokens.
+- The primary CTA remains unchanged and dominant.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile screenshot QA, so the two-line payoff strip should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 84 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Polish the saved-completion path box so the runway items feel slightly less dense on small mobile screens.
+
 ## 2026-07-05: Practice Quiet Library Preview
 
 Made one focused Practice polish: the closed secondary library on the Practice screen now stays quieter and more clearly optional, so `Do this now` holds the first action.

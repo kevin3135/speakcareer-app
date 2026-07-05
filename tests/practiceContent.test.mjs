@@ -1753,6 +1753,7 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(savedHandoff.ctaLabel, 'Start Sales Call');
   assert.equal(savedHandoff.nextLabel, 'Finish today with');
   assert.equal(savedHandoff.nextTitle, 'Sales Call');
+  assert.equal(savedHandoff.payoffLine, 'Next: Sales Call is unlocked and ready.');
   assert.equal(savedHandoff.xpLabel, '+45 XP');
   assert.ok(savedHandoff.body.includes('finish 3/3 today'));
 
@@ -1809,6 +1810,10 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(fallbackSavedHandoff.ctaLabel, 'Review Wins');
   assert.equal(fallbackSavedHandoff.nextLabel, 'Bonus next');
   assert.equal(fallbackSavedHandoff.nextTitle, 'Another short English sprint');
+  assert.equal(
+    fallbackSavedHandoff.payoffLine,
+    'Next: review your win or bank a bonus sprint later.',
+  );
   assert.equal(fallbackSavedHandoff.xpLabel, '+25 XP');
   assert.ok(fallbackSavedHandoff.body.includes('Today is complete'));
 
@@ -1850,6 +1855,7 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(replayHandoff.ctaLabel, 'Replay Job Interview');
   assert.equal(replayHandoff.ctaTarget, 'roleplay');
   assert.equal(replayHandoff.nextLabel, 'Finish today with');
+  assert.equal(replayHandoff.payoffLine, 'Next: replay Job Interview to keep the career path warm.');
   assert.ok(replayHandoff.body.includes('finish 2/2 today'));
 
   const targetCompleteHandoff = createSavedRoleplayHandoff({
@@ -1864,6 +1870,10 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(targetCompleteHandoff.ctaLabel, 'Review Wins');
   assert.equal(targetCompleteHandoff.nextLabel, 'Bonus practice');
   assert.equal(targetCompleteHandoff.nextTitle, 'Meeting Practice');
+  assert.equal(
+    targetCompleteHandoff.payoffLine,
+    'Next: review Wins, then Meeting Practice is ready as bonus practice.',
+  );
   assert.ok(targetCompleteHandoff.body.includes("Today's target is complete"));
 });
 

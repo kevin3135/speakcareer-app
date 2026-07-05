@@ -59,6 +59,7 @@ export type SavedRoleplayHandoff = {
   ctaTarget: 'progress' | 'roleplay';
   nextLabel: string;
   nextTitle: string;
+  payoffLine: string;
   title: string;
   xpLabel: string;
 };
@@ -296,6 +297,9 @@ export function createSavedRoleplayHandoff({
       ctaTarget: 'progress',
       nextLabel: isTargetComplete ? 'Bonus next' : 'Today next',
       nextTitle: isTargetComplete ? 'Another short English sprint' : `Reach ${todayTargetLabel}`,
+      payoffLine: isTargetComplete
+        ? 'Next: review your win or bank a bonus sprint later.'
+        : `Next: review Wins, then save another sprint for ${todayTargetLabel}.`,
       title: 'Saved',
       xpLabel: `+${safeXpReward} XP`,
     };
@@ -310,6 +314,9 @@ export function createSavedRoleplayHandoff({
       ctaTarget: 'progress',
       nextLabel: isPathComplete ? 'Replay later' : 'Bonus practice',
       nextTitle: nextPracticeTitle,
+      payoffLine: isPathComplete
+        ? `Next: review Wins, then replay ${nextPracticeTitle} when you want a sharper rep.`
+        : `Next: review Wins, then ${nextPracticeTitle} is ready as bonus practice.`,
       title: 'Saved',
       xpLabel: `+${safeXpReward} XP`,
     };
@@ -327,6 +334,9 @@ export function createSavedRoleplayHandoff({
     ctaTarget: 'roleplay',
     nextLabel: remainingToday === 1 ? 'Finish today with' : 'Keep today moving with',
     nextTitle: nextPracticeTitle,
+    payoffLine: isPathComplete
+      ? `Next: replay ${nextPracticeTitle} to keep the career path warm.`
+      : `Next: ${nextPracticeTitle} is unlocked and ready.`,
     title: 'Saved',
     xpLabel: `+${safeXpReward} XP`,
   };

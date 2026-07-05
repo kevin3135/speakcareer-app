@@ -685,6 +685,12 @@ export function RoleplayScreen({
               </View>
             ) : null}
           </Animated.View>
+          <View style={styles.savedPayoffStrip}>
+            <Text numberOfLines={2} style={styles.savedPayoffText}>
+              <Text style={styles.savedPayoffLabel}>After save </Text>
+              {savedHandoff.payoffLine}
+            </Text>
+          </View>
           {appUnlockedHandoff ? (
             <View style={styles.appUnlockedStrip}>
               <View style={styles.appUnlockedBadge}>
@@ -2511,6 +2517,28 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xxs,
+  },
+  savedPayoffStrip: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  savedPayoffLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  savedPayoffText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   levelUpStrip: {
     backgroundColor: colors.accentSoft,
