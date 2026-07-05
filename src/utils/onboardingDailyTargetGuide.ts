@@ -24,18 +24,15 @@ export type OnboardingDailyTargetGuide = {
 
 const DAILY_TARGET_GUIDE_CONFIG: Record<StartingLevelId, DailyTargetGuideConfig> = {
   starter: {
-    recommendationBody:
-      'Keep day one light so the English answer shape becomes a repeatable habit first.',
+    recommendationBody: 'Build a repeatable habit before adding more reps.',
     recommendedTarget: 1,
   },
   basic: {
-    recommendationBody:
-      'Two short reps give you enough repetition to build confidence without making the routine heavy.',
+    recommendationBody: 'Two short reps build confidence without a heavy routine.',
     recommendedTarget: 2,
   },
   confident: {
-    recommendationBody:
-      'Three short reps turn the first week into real interview practice, not only a warm-up.',
+    recommendationBody: 'Three short reps make week one real interview practice.',
     recommendedTarget: 3,
   },
 };
@@ -57,7 +54,7 @@ export function createOnboardingDailyTargetGuide(
       recommendationLabel,
       recommendationTitle,
       recommendedTarget: config.recommendedTarget,
-      selectionBody: 'This matches the recommended pace for your current English level.',
+      selectionBody: 'Best fit for your level.',
       selectionLabel: 'Best fit',
       selectionTone: 'success',
     };
@@ -71,7 +68,7 @@ export function createOnboardingDailyTargetGuide(
       recommendationLabel,
       recommendationTitle,
       recommendedTarget: config.recommendedTarget,
-      selectionBody: 'A lighter pace is still fine if consistency matters more than speed this week.',
+      selectionBody: 'Lighter pace: consistency first.',
       selectionLabel: 'Lighter start',
       selectionTone: 'info',
     };
@@ -84,7 +81,7 @@ export function createOnboardingDailyTargetGuide(
     recommendationLabel,
     recommendationTitle,
     recommendedTarget: config.recommendedTarget,
-    selectionBody: 'This is a faster push. Keep it only if you want extra short reps today.',
+    selectionBody: 'Faster push: extra short reps today.',
     selectionLabel: 'Faster push',
     selectionTone: 'accent',
   };
@@ -111,12 +108,12 @@ function createPreviewStats(
 
 function createPreviewBody(dailyTarget: DailyPracticeTarget) {
   if (dailyTarget === 1) {
-    return 'Best for protecting a calm daily streak while you build answer structure.';
+    return 'Protect a calm daily streak while answer shape becomes automatic.';
   }
 
   if (dailyTarget === 2) {
-    return 'Balanced enough to feel like real practice without making the routine heavy.';
+    return 'Balanced practice: real reps without a heavy routine.';
   }
 
-  return 'A stronger sprint for faster interview repetition if you want extra momentum this week.';
+  return 'A stronger sprint for extra interview repetition this week.';
 }

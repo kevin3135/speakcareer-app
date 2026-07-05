@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Onboarding Compact Target Feedback
+
+Made one focused onboarding design polish: the daily target feedback now reads as a compact coach cue with a tighter first-week preview.
+
+Why it changed:
+
+- The first-week target preview made the daily rhythm choice more concrete, but the selection feedback still felt like another paragraph under the segmented control.
+- On mobile, the learner should quickly understand whether the chosen pace is the best fit, lighter or faster without reading a long explanation.
+- The onboarding card needs to feel app-led and premium while keeping the first START path easy to trust.
+
+What changed:
+
+- Shortened the onboarding daily-target recommendation and selected-pace copy in `src/utils/onboardingDailyTargetGuide.ts`.
+- Updated `src/screens/OnboardingScreen.tsx` so the selected pace badge and coach cue sit in one compact row.
+- Kept the first-week stat preview, storage, selected target behavior, CTA and onboarding flow unchanged.
+
+What went well:
+
+- The diff stayed limited to the target guide helper, onboarding screen styling and this log.
+- The target choice is easier to scan and should fit better on narrow mobile screens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo web screenshot QA, so the compact target card still needs a quick visual check in the browser.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Do mobile QA on the onboarding daily-target card for `1/day`, `2/day` and `3/day`, then polish spacing only if one option wraps awkwardly.
+
 ## 2026-07-05: Onboarding First-Week Target Preview
 
 Made one focused onboarding improvement: the daily-target chooser now shows a compact first-week preview after level selection so `1/day`, `2/day` and `3/day` feel like concrete routines instead of abstract numbers.

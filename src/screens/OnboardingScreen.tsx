@@ -128,7 +128,9 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                   <Badge label={dailyTargetGuide.recommendationLabel} tone="accent" />
                 </View>
                 <Text style={styles.targetGuideTitle}>{dailyTargetGuide.recommendationTitle}</Text>
-                <Text style={styles.targetGuideBody}>{dailyTargetGuide.recommendationBody}</Text>
+                <Text numberOfLines={2} style={styles.targetGuideBody}>
+                  {dailyTargetGuide.recommendationBody}
+                </Text>
               </View>
             ) : null}
             <View style={styles.segmentedControl}>
@@ -158,8 +160,12 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             </View>
             {dailyTargetGuide ? (
               <View style={styles.targetSelectionBox}>
-                <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
-                <Text style={styles.targetSelectionText}>{dailyTargetGuide.selectionBody}</Text>
+                <View style={styles.targetSelectionHeader}>
+                  <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
+                  <Text numberOfLines={1} style={styles.targetSelectionText}>
+                    {dailyTargetGuide.selectionBody}
+                  </Text>
+                </View>
                 <View style={styles.targetPreviewCard}>
                   <View style={styles.targetPreviewStats}>
                     {dailyTargetGuide.previewStats.map((stat) => (
@@ -169,7 +175,9 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                       </View>
                     ))}
                   </View>
-                  <Text style={styles.targetPreviewBody}>{dailyTargetGuide.previewBody}</Text>
+                  <Text numberOfLines={2} style={styles.targetPreviewBody}>
+                    {dailyTargetGuide.previewBody}
+                  </Text>
                 </View>
               </View>
             ) : null}
@@ -460,24 +468,28 @@ const styles = StyleSheet.create({
     padding: spacing.xs,
   },
   targetSelectionBox: {
-    alignItems: 'flex-start',
-    gap: spacing.sm,
+    gap: spacing.xs,
     marginTop: spacing.md,
   },
+  targetSelectionHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    width: '100%',
+  },
   targetPreviewBody: {
-    color: colors.ink,
+    color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   targetPreviewCard: {
     backgroundColor: colors.white,
     borderColor: colors.border,
     borderRadius: radius.md,
     borderWidth: 1,
-    marginTop: spacing.xs,
     padding: spacing.sm,
     width: '100%',
   },
@@ -507,12 +519,14 @@ const styles = StyleSheet.create({
   },
   targetPreviewStats: {
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   targetSelectionText: {
+    flex: 1,
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    fontWeight: '800',
     lineHeight: typography.lineSmall,
   },
   segment: {
