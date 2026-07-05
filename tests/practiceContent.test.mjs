@@ -3033,6 +3033,43 @@ test('adapts follow-up prompts to the first answer weakness', async () => {
   assert.ok(strongPrompt.starterAnswer.includes('next step'));
 });
 
+test('explains when the bonus follow-up turn is worth doing', async () => {
+  const { createFollowUpReadinessCue } = await import('../src/utils/followUpReadinessCue.ts');
+
+  const saveFirstCue = createFollowUpReadinessCue({
+    focus: 'result',
+    progressTitle: 'One more sprint after this',
+    review: { wordCount: 24 },
+  });
+
+  assert.equal(saveFirstCue.tone, 'info');
+  assert.equal(saveFirstCue.badgeLabel, 'Save first');
+  assert.equal(saveFirstCue.title, 'Save stays the main win');
+  assert.ok(saveFirstCue.body.includes('30 more seconds'));
+
+  const deeperRepCue = createFollowUpReadinessCue({
+    focus: 'next-step',
+    progressTitle: 'One more sprint after this',
+    review: { wordCount: 41 },
+  });
+
+  assert.equal(deeperRepCue.tone, 'success');
+  assert.equal(deeperRepCue.badgeLabel, 'Worth doing');
+  assert.equal(deeperRepCue.title, 'This adds a real follow-up rep');
+  assert.ok(deeperRepCue.chipLine.includes('realistic second turn'));
+
+  const bonusDayCue = createFollowUpReadinessCue({
+    focus: 'confidence',
+    progressTitle: 'Daily target already complete',
+    review: { wordCount: 29 },
+  });
+
+  assert.equal(bonusDayCue.tone, 'success');
+  assert.equal(bonusDayCue.badgeLabel, 'Worth doing');
+  assert.equal(bonusDayCue.title, 'Good time for a deeper rep');
+  assert.ok(bonusDayCue.body.includes("target is already done"));
+});
+
 test('creates a professional daily mission from progress data', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const mission = createDailyMission(progressMock.summary);

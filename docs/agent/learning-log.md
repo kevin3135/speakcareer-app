@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-05: Follow-Up Readiness Cue
+
+Made one focused Roleplay save-step improvement: the optional bonus follow-up now explains when it is worth doing versus when the learner should just bank the main answer and keep today moving.
+
+Why it changed:
+
+- The save card already offered a bonus follow-up turn, but it did not tell the learner when that detour was actually useful.
+- On a shorter answer, the safest habit-forming move is still to save the main rep first.
+- On a stronger answer or after the daily target is already complete, the bonus turn is more clearly worth the extra effort.
+
+What changed:
+
+- Added `src/utils/followUpReadinessCue.ts` to generate compact `save first`, `optional polish` and `worth doing` guidance based on answer strength, follow-up focus and daily-target state.
+- Updated `src/screens/RoleplayScreen.tsx` so the collapsed bonus chip and expanded bonus panel both use the new readiness cue instead of generic optional-bonus wording.
+- Added focused coverage in `tests/practiceContent.test.mjs` for save-first, realistic-second-turn and bonus-day states.
+
+What went well:
+
+- The change stayed focused to one small helper, one existing screen, one existing test file and this log.
+- The save step should now feel more professional and decisive, not like the bonus turn is always equally important.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the taller collapsed bonus chip should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 82 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional follow-up work needs a clear `worth it or skip it` rule, otherwise it competes with the main save action.
+- When a screen already has the right state signals, prefer surfacing that decision in copy before adding any new flow logic.
+
+Next suggested task:
+
+- Reflect `core answer only` versus `deeper two-turn rep` in the saved-state recap so the learner sees what kind of practice they banked.
+
 ## 2026-07-05: Roleplay Better English Cue
 
 Made one focused Roleplay review polish: the `Better English` correction now reads as a compact correction cue instead of a second large feedback card.

@@ -31,6 +31,7 @@ import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
 import { createFeedbackMomentumRecap } from '../utils/feedbackMomentum';
 import { createFirstQuestFeedbackState } from '../utils/firstQuestFeedback';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
+import { createFollowUpReadinessCue } from '../utils/followUpReadinessCue';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import {
@@ -246,6 +247,13 @@ export function RoleplayScreen({
     completedSessions: sessions.length,
     dailyTarget,
   });
+  const followUpReadinessCue = followUpPrompt && answerReview
+    ? createFollowUpReadinessCue({
+      focus: followUpPrompt.focus,
+      progressTitle: targetPreview.title,
+      review: answerReview,
+    })
+    : null;
   const savePrompt = answerReview?.isReadyForFeedback
     ? createPracticeSavePrompt({
       includedFollowUp,
@@ -1229,10 +1237,16 @@ export function RoleplayScreen({
                 <View style={styles.oneThingHeader}>
                   <Text style={styles.followUpPromptLabel}>Bonus step</Text>
                   <Badge
-                    label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpPrompt.focusLabel}
-                    tone={includedFollowUp ? 'success' : 'secondary'}
+                    label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpReadinessCue?.badgeLabel ?? followUpPrompt.focusLabel}
+                    tone={includedFollowUp ? 'success' : followUpReadinessCue?.tone ?? 'secondary'}
                   />
                 </View>
+                {followUpReadinessCue ? (
+                  <View style={styles.followUpDecisionBox}>
+                    <Text style={styles.followUpDecisionTitle}>{followUpReadinessCue.title}</Text>
+                    <Text style={styles.followUpDecisionBody}>{followUpReadinessCue.body}</Text>
+                  </View>
+                ) : null}
                 <Text style={styles.followUpPromptText}>{followUpPrompt.prompt}</Text>
                 <Text style={styles.followUpPromptNote}>{followUpPrompt.coachingNote}</Text>
                 {!isFollowUpOpen ? null : (
@@ -1280,14 +1294,17 @@ export function RoleplayScreen({
                 ]}
               >
                 <View style={styles.followUpBonusCopy}>
-                  <Text style={styles.followUpSummaryLabel}>Optional after Save</Text>
-                  <Text numberOfLines={1} style={styles.followUpBonusFocus}>
-                    Bonus step: {followUpPrompt.focusLabel}
+                  <Text style={styles.followUpSummaryLabel}>Bonus turn</Text>
+                  <Text numberOfLines={1} style={styles.followUpBonusTitle}>
+                    {followUpReadinessCue?.title ?? `Bonus step: ${followUpPrompt.focusLabel}`}
+                  </Text>
+                  <Text numberOfLines={2} style={styles.followUpBonusFocus}>
+                    {followUpReadinessCue?.chipLine ?? `Bonus step: ${followUpPrompt.focusLabel}`}
                   </Text>
                 </View>
                 <View style={styles.followUpBonusReward}>
                   <Text style={styles.followUpBonusCta}>{`+${FOLLOW_UP_BONUS_XP} XP`}</Text>
-                  <Text style={styles.followUpBonusAction}>Try</Text>
+                  <Text style={styles.followUpBonusAction}>{followUpReadinessCue?.badgeLabel ?? 'Try'}</Text>
                 </View>
               </Pressable>
             )
@@ -2135,6 +2152,31 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
+  followUpDecisionBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderLeftColor: colors.accent,
+    borderLeftWidth: 4,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  followUpDecisionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+  },
+  followUpDecisionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
   followUpPromptNote: {
     color: colors.text,
     fontFamily: fonts.rounded,
@@ -2209,6 +2251,14 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
+  },
+  followUpBonusTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
   },
   followUpStatusBox: {
     backgroundColor: colors.surfaceMuted,
