@@ -1,5 +1,44 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Better English Cue
+
+Made one focused Roleplay review polish: the `Better English` correction now reads as a compact correction cue instead of a second large feedback card.
+
+Why it changed:
+
+- The review step now has a coach decision cue, a Better English correction and a Save card.
+- The correction was still styled with a strong full border, large padding and heavy text, which could make it compete with the Save action.
+- A tighter correction cue keeps the rewrite valuable while preserving the save step as the main next action.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so `betterEnglishBox` uses a subtle correction rail, softer border, tighter spacing and slightly calmer text weight.
+- Kept the suggested rewrite copy, review logic, buttons, save flow, follow-up flow and storage unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- The review stack should now feel less like three equal cards and more like coach cue, correction, then save.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the review stack should still be checked at 390px width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 81 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Roleplay review stack and, if the optional bonus turn still competes with Save, make the follow-up chip quieter until after the lesson is saved.
+
 ## 2026-07-05: Roleplay Review Cue Polish
 
 Made one focused Roleplay polish: the new review decision cue now looks more like a compact coach instruction instead of another full muted feedback card.
