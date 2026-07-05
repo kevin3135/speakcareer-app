@@ -1,5 +1,44 @@
 # Agent Learning Log
 
+## 2026-07-05: Roleplay Review Cue Polish
+
+Made one focused Roleplay polish: the new review decision cue now looks more like a compact coach instruction instead of another full muted feedback card.
+
+Why it changed:
+
+- The review decision cue made the save-or-retry choice clearer, but its first visual pass still blended into the surrounding feedback stack.
+- During review, the learner should quickly see the coach recommendation, then decide between retry, better English and save.
+- A small style refinement is safer than adding another state or changing the review logic.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so `reviewDecisionBox` uses the coach color role, a subtle left rail, tighter vertical padding and quieter body text.
+- Kept the review decision helper, cue copy, retry action, save flow, feedback details and storage unchanged.
+
+What went well:
+
+- The change stayed inside one visible screen and this log.
+- The review cue should now scan faster on mobile without overpowering the Better English and Save areas.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh mobile visual QA, so the review step should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 81 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA the Roleplay review step at 390px width and confirm the cue, Better English box and Save card do not feel like three equal primary actions.
+
 ## 2026-07-05: Roleplay Review Decision Cue
 
 Made one focused practice-flow improvement: the Roleplay review step now tells the learner clearly when to retry before save versus when the answer is good enough to bank, and it adds a direct retry action for reviewable answers.
