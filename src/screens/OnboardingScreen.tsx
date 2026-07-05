@@ -181,7 +181,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                         {target}/day
                       </Text>
                       {showRecommendedMarker ? (
-                        <Text style={styles.segmentMarker}>Recommended</Text>
+                        <Text style={styles.segmentMarker}>Best pick</Text>
                       ) : null}
                     </View>
                   </Pressable>
@@ -596,10 +596,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   segmentMarker: {
-    color: colors.primarySoft,
+    backgroundColor: colors.primaryDark,
+    borderRadius: radius.pill,
+    color: colors.white,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 2,
   },
   segmentPressed: {
     opacity: 0.82,

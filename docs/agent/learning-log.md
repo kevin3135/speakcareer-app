@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Onboarding Compact Pace Marker
+
+Made one focused onboarding design polish: the recommended pace marker inside the active daily-target chip is now shorter and styled as a tiny pill.
+
+Why it changed:
+
+- The previous `Recommended` marker explained the auto-selected pace, but the word could feel crowded inside three equal-width mobile chips.
+- The onboarding control should stay easy to scan while still explaining the coach-guided choice.
+- A compact `Best pick` pill keeps the app-led signal visible without adding another text row.
+
+What changed:
+
+- Updated `src/screens/OnboardingScreen.tsx` so the active recommended chip now shows `Best pick` instead of `Recommended`.
+- Styled the marker as a small pill using existing theme tokens.
+- Kept auto-selection, manual override behavior, storage and onboarding copy unchanged.
+
+What went well:
+
+- The change stayed inside one visible onboarding control and this log.
+- The marker should be safer on narrow mobile widths while still explaining the coach recommendation.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run still did not include fresh browser screenshot QA, so the mini-pill should be visually checked in the onboarding preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Move to a different high-value surface next, preferably a small Roleplay or Progress polish, after one quick visual check of the onboarding target chips.
+
 ## 2026-07-05: Onboarding Recommended Pace Marker
 
 Made one focused onboarding design polish: the auto-selected recommended pace chip now carries a small `Recommended` marker.
