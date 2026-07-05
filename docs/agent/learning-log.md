@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-05: Home Compact Pace Cue
+
+Made one focused Home/Learn polish: the START card daily pace value is now compact enough for narrow mobile screens.
+
+Why it changed:
+
+- The previous Home cue connected onboarding to Home, but values like `3 roleplays today` could crowd the small habit pill.
+- The label `Your pace` already explains the meaning, so the value can be shorter without becoming unclear.
+- A compact `3/day` value keeps the START card clean while preserving the onboarding handoff.
+
+What changed:
+
+- Updated `src/screens/HomeScreen.tsx` so the START-card pace value now renders as `1/day`, `2/day` or `3/day`.
+- Kept the completed-day label, saved-draft label, mission progress, storage and navigation unchanged.
+- Did not add new helpers, dependencies or product behavior.
+
+What went well:
+
+- The diff stayed to one Home copy value and this log.
+- The mobile truncation risk is lower while the START action remains the dominant visual element.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run still did not include fresh screenshot QA, so the compact pill should be checked visually in Expo/Web preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 83 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Mobile QA onboarding-to-Home with all three daily target options, then polish the onboarding recommendation card if its note wraps too tall.
+
 ## 2026-07-05: Home Daily Pace Cue
 
 Made one focused Home/Learn polish: the active START card now reflects the learner's chosen daily pace from onboarding.

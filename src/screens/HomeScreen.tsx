@@ -77,7 +77,7 @@ export function HomeScreen({
   const previewLessons = learnState.steps.filter((_, index) => index !== activeLessonIndex);
   const nextUnlock = previewLessons.find((lesson) => lesson.state === 'locked') ?? previewLessons[0];
   const isMissionComplete = missionCard.progressPercent >= 100;
-  const dailyPaceLabel = `${dailyTarget} ${dailyTarget === 1 ? 'roleplay' : 'roleplays'} today`;
+  const dailyPaceLabel = `${dailyTarget}/day`;
   const completedPathSteps = learnState.steps.filter((lesson) => lesson.state === 'completed').length;
   const totalPathSteps = Math.max(learnState.steps.length, 1);
   const hasSavedPractice = sessions.length > 0;
