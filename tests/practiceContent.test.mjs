@@ -952,6 +952,45 @@ test('turns the profile daily target into a clear weekly pace summary', async ()
   assert.ok(focusedPlan.note.includes('interview, meeting, or presentation'));
 });
 
+test('creates a Profile current-focus handoff back to the next roleplay', async () => {
+  const { createProfileCurrentFocus } = await import('../src/utils/profileCurrentFocus.ts');
+
+  const firstFocus = createProfileCurrentFocus({
+    dailyTarget: 1,
+    roleplays: practiceContent.roleplays,
+    sessions: [],
+  });
+
+  assert.equal(firstFocus.eyebrow, 'Current focus');
+  assert.equal(firstFocus.title, 'Next: Job Interview');
+  assert.equal(firstFocus.badgeLabel, '0/1 today');
+  assert.equal(firstFocus.ctaLabel, 'Start Job Interview');
+  assert.equal(firstFocus.roleplayId, 'job-interview');
+  assert.ok(firstFocus.body.includes('first workplace answer'));
+  assert.ok(firstFocus.metaLabel.includes('Interview'));
+
+  const nextFocus = createProfileCurrentFocus({
+    dailyTarget: 2,
+    roleplays: practiceContent.roleplays,
+    sessions: [{ roleplayId: 'job-interview' }],
+  });
+
+  assert.equal(nextFocus.title, 'Next: Meeting Practice');
+  assert.equal(nextFocus.badgeLabel, '1/2 today');
+  assert.equal(nextFocus.roleplayId, 'meeting-practice');
+  assert.ok(nextFocus.body.includes('Meeting Practice'));
+  assert.equal(nextFocus.progressLabel, '1 of 5 complete');
+
+  const bonusFocus = createProfileCurrentFocus({
+    dailyTarget: 1,
+    roleplays: practiceContent.roleplays,
+    sessions: [{ roleplayId: 'job-interview' }],
+  });
+
+  assert.equal(bonusFocus.badgeLabel, 'Target done');
+  assert.ok(bonusFocus.body.includes('Optional Meeting Practice'));
+});
+
 test('personalizes the first lesson and answer starter by starting level', async () => {
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 

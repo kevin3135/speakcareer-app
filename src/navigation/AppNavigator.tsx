@@ -269,6 +269,8 @@ export function AppNavigator() {
             dailyTarget={dailyTarget}
             onBackToLearn={() => setActiveScreen('Home')}
             onChangeDailyTarget={changeDailyTarget}
+            onOpenRoleplay={openRoleplay}
+            sessions={practiceSessions}
           />
         ) : null}
       </View>

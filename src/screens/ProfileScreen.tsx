@@ -6,18 +6,22 @@ import {
   Card,
   GradientHero,
   PremiumCard,
+  ProgressBar,
   ScreenContainer,
   SectionHeader,
 } from '../components/ui';
 import { practiceContent } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
-import type { DailyPracticeTarget } from '../types';
+import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
+import { createProfileCurrentFocus } from '../utils/profileCurrentFocus';
 import { createProfileDailyTargetPlan } from '../utils/profileDailyTargetPlan';
 
 type ProfileScreenProps = {
   dailyTarget: DailyPracticeTarget;
   onBackToLearn: () => void;
   onChangeDailyTarget: (target: DailyPracticeTarget) => void;
+  onOpenRoleplay: (roleplayId: RoleplayId) => void;
+  sessions: PracticeSession[];
 };
 
 const dailyTargetOptions: DailyPracticeTarget[] = [1, 2, 3];
@@ -26,12 +30,19 @@ export function ProfileScreen({
   dailyTarget,
   onBackToLearn,
   onChangeDailyTarget,
+  onOpenRoleplay,
+  sessions,
 }: ProfileScreenProps) {
   const dailyTargetPlans = dailyTargetOptions.map((target) => ({
     target,
     plan: createProfileDailyTargetPlan(target),
   }));
   const activeTargetPlan = dailyTargetPlans.find(({ target }) => target === dailyTarget)?.plan;
+  const currentFocus = createProfileCurrentFocus({
+    dailyTarget,
+    roleplays: practiceContent.roleplays,
+    sessions,
+  });
 
   return (
     <ScreenContainer
@@ -111,6 +122,35 @@ export function ProfileScreen({
             <Text style={styles.targetNoteText}>{activeTargetPlan.note}</Text>
           </View>
         ) : null}
+      </Card>
+
+      <Card style={styles.currentFocusCard} tone="strong">
+        <View style={styles.currentFocusHeader}>
+          <View style={styles.currentFocusIcon}>
+            <Text style={styles.currentFocusIconText}>GO</Text>
+          </View>
+          <View style={styles.currentFocusCopy}>
+            <Text style={styles.currentFocusEyebrow}>{currentFocus.eyebrow}</Text>
+            <Text numberOfLines={1} style={styles.currentFocusTitle}>{currentFocus.title}</Text>
+          </View>
+          <Badge label={currentFocus.badgeLabel} tone="secondary" />
+        </View>
+        <Text numberOfLines={2} style={styles.currentFocusBody}>{currentFocus.body}</Text>
+        <Text style={styles.currentFocusMeta}>{currentFocus.metaLabel}</Text>
+        <View style={styles.currentFocusProgress}>
+          <ProgressBar
+            label={currentFocus.progressLabel}
+            tone="secondary"
+            value={currentFocus.progressPercent}
+          />
+        </View>
+        <View style={styles.currentFocusAction}>
+          <AppButton
+            accessibilityHint="Open today's recommended career English roleplay"
+            label={currentFocus.ctaLabel}
+            onPress={() => onOpenRoleplay(currentFocus.roleplayId)}
+          />
+        </View>
       </Card>
 
       <SectionHeader
@@ -285,6 +325,69 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  currentFocusAction: {
+    marginTop: spacing.lg,
+  },
+  currentFocusBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
+  },
+  currentFocusCard: {
+    borderColor: colors.secondary,
+  },
+  currentFocusCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  currentFocusEyebrow: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  currentFocusHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  currentFocusIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.secondary,
+    borderColor: colors.secondaryDark,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  currentFocusIconText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  currentFocusMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginTop: spacing.xs,
+  },
+  currentFocusProgress: {
+    marginTop: spacing.md,
+  },
+  currentFocusTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
     marginTop: spacing.xs,
   },
   targetSummaryLabel: {

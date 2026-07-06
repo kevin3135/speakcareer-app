@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Profile Current Focus Handoff
+
+Made one focused Profile/Me polish: the screen now includes a compact `Current focus` card that points back to the next recommended career roleplay.
+
+Why it changed:
+
+- The Me screen now has a clear daily-target control, but it could still feel separate from the app-led learning path.
+- The product direction says secondary screens should not compete with Learn, but they should still guide users back to the next useful action.
+- The smallest useful fix was to reuse the existing career-path recommendation instead of adding new navigation or product logic.
+
+What changed:
+
+- Added `src/utils/profileCurrentFocus.ts` to turn the existing practice career path into one compact Profile handoff.
+- Updated `src/screens/ProfileScreen.tsx` with a focused roleplay card showing progress, roleplay metadata and one primary CTA.
+- Updated `src/navigation/AppNavigator.tsx` so Profile can open the recommended roleplay directly.
+- Added focused coverage in `tests/practiceContent.test.mjs` for first-run, next-roleplay and target-complete Profile focus states.
+
+What went well:
+
+- The change stayed inside the Profile handoff and reused existing path logic.
+- Daily target storage, saved sessions, auth, payments, analytics and backend behavior stayed unchanged.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new focus card should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 96 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Profile should stay quiet, but it can still hand the learner back to the guided path with one clear action.
+- Reuse `createPracticeCareerPath` for cross-screen next-roleplay consistency.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a compact Profile privacy/local-data row that feels reassuring without reading like technical implementation copy.
+
 ## 2026-07-06: Profile Daily Target Main Card
 
 Made one focused Profile habit-loop improvement: the Me screen now treats the daily target as the main learner control, with a clearer weekly payoff and calmer supporting hierarchy.
