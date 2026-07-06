@@ -170,15 +170,51 @@ export function HomeScreen({
           title={startCardTitle}
           xpLabel={startCardXpLabel}
         />
+        <View style={styles.lessonConnector}>
+          <View style={styles.lessonConnectorLine} />
+          <View style={styles.lessonConnectorDot} />
+        </View>
         <View style={styles.runwayBox}>
           <View style={styles.runwayHeader}>
             <Text style={styles.runwayTitle}>{runway.title}</Text>
             <Badge label={runway.badgeLabel} tone={isMissionComplete ? 'success' : 'accent'} />
           </View>
           <View style={styles.runwayCardRow}>
-            {runway.cards.map((card) => (
-              <View key={`${card.eyebrow}-${card.title}`} style={styles.runwayCard}>
-                <Text style={styles.runwayEyebrow}>{card.eyebrow}</Text>
+            {runway.cards.map((card, index) => (
+              <View
+                key={`${card.eyebrow}-${card.title}`}
+                style={[
+                  styles.runwayCard,
+                  index === 0 ? styles.runwayCardActive : styles.runwayCardLocked,
+                ]}
+              >
+                <View style={styles.runwayNodeHeader}>
+                  <View
+                    style={[
+                      styles.runwayNodeDot,
+                      index === 0 ? styles.runwayNodeDotActive : styles.runwayNodeDotLocked,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.runwayNodeNumber,
+                        index === 0
+                          ? styles.runwayNodeNumberActive
+                          : styles.runwayNodeNumberLocked,
+                      ]}
+                    >
+                      {index + 1}
+                    </Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.runwayEyebrow,
+                      index === 0 ? styles.runwayEyebrowActive : styles.runwayEyebrowLocked,
+                    ]}
+                  >
+                    {card.eyebrow}
+                  </Text>
+                </View>
                 <Text numberOfLines={1} style={styles.runwayCardTitle}>
                   {card.title}
                 </Text>
@@ -398,7 +434,26 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   lessonMap: {
-    gap: spacing.md,
+    gap: spacing.xs,
+  },
+  lessonConnector: {
+    alignItems: 'center',
+    minHeight: 24,
+  },
+  lessonConnectorDot: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.pill,
+    borderWidth: 2,
+    height: 14,
+    marginTop: -spacing.xs,
+    width: 14,
+  },
+  lessonConnectorLine: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.pill,
+    height: 20,
+    width: 4,
   },
   startCard: {
     backgroundColor: colors.success,
@@ -606,6 +661,10 @@ const styles = StyleSheet.create({
     minWidth: 0,
     padding: spacing.sm,
   },
+  runwayCardActive: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
   runwayCardBody: {
     color: colors.text,
     fontFamily: fonts.rounded,
@@ -626,11 +685,20 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
   },
+  runwayCardLocked: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
   runwayEyebrow: {
-    color: colors.primary,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
+  },
+  runwayEyebrowActive: {
+    color: colors.successDark,
+  },
+  runwayEyebrowLocked: {
+    color: colors.accentDark,
   },
   runwayHeader: {
     alignItems: 'center',
@@ -654,6 +722,38 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     marginRight: spacing.sm,
+  },
+  runwayNodeDot: {
+    alignItems: 'center',
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 24,
+    justifyContent: 'center',
+    width: 24,
+  },
+  runwayNodeDotActive: {
+    backgroundColor: colors.success,
+    borderColor: colors.successDark,
+  },
+  runwayNodeDotLocked: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+  },
+  runwayNodeHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+  },
+  runwayNodeNumber: {
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  runwayNodeNumberActive: {
+    color: colors.white,
+  },
+  runwayNodeNumberLocked: {
+    color: colors.accentDark,
   },
   pressed: {
     opacity: 0.9,

@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: Home Connected Lesson Nodes
+
+Made one focused Home/Learn polish: the START card now visually connects to the compact Today / Next unlock runway with a small connector and node-style cards.
+
+Why it changed:
+
+- Home already had the right app-led structure, but the active lesson and next unlock still felt like separate cards.
+- The design principles call for a career path with one active node and visible future steps.
+- The smallest useful fix was to keep the same Home content and make the existing runway look more like connected lesson nodes.
+
+What changed:
+
+- Added a small token-based connector between the START lesson card and the runway.
+- Restyled the two runway cards as numbered nodes: active Today uses success styling, and Next unlock uses reward/accent styling.
+- Kept the START card as the only primary action and did not change navigation, storage or product logic.
+
+What went well:
+
+- The change stayed in `src/screens/HomeScreen.tsx` only.
+- Existing helper tests did not need new logic because the content model stayed the same.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the connector and two-node row should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 93 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Capture a mobile Home screenshot after first save and tune the node row if the two cards feel cramped on small devices.
+
 ## 2026-07-06: Home Runway Payoff Copy
 
 Made one focused Home polish: the compact runway under the START card now uses clean payoff copy instead of a bullet separator that could render inconsistently in test output.
