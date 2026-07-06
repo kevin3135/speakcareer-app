@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: Saved Path Runway Density
+
+Made one focused Roleplay completion polish: the saved-path roadmap now uses slimmer status chips and one short support line per step so the completion box feels lighter on small mobile screens.
+
+Why it changed:
+
+- The saved completion state already showed a clear next action, but the path box still stacked a badge, meta line and XP badge on every runway item.
+- On narrow screens, that made the saved-success payoff feel denser than the rest of the completion hero.
+- The MVP loop works better when the saved roadmap stays scannable after the reward moment and keeps the next career step obvious.
+
+What changed:
+
+- Updated `src/utils/practiceCompletion.ts` so saved path runway items now include a compact `supportLabel` for done, active and locked states.
+- Updated `src/screens/RoleplayScreen.tsx` so the saved path box uses a slimmer inline status chip, removes the per-row XP badge, and shortens the supporting row to one compact line.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the new saved-path support labels in active and path-complete states.
+
+What went well:
+
+- The change stayed inside the saved completion recap and did not alter practice logic, navigation or local storage behavior.
+- The active step still keeps its level/time/XP context, while done and locked steps now read faster.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile screenshot QA, so the slimmer saved-path rows should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 84 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Visually check the saved completion hero on mobile, then compact the coach target or level-up strip if either still wraps too often under the saved payoff.
+
 ## 2026-07-05: Roleplay Saved Payoff Cue
 
 Made one focused Roleplay polish: the saved-completion handoff now shows a compact payoff cue that explains the next automatic step.

@@ -1730,6 +1730,14 @@ test('creates a rewarding roleplay completion summary', async () => {
       '05:Workplace Small Talk:Unlock next',
     ],
   );
+  assert.deepEqual(
+    savedPathProgress.runway?.items.map((item) => item.supportLabel),
+    [
+      'Saved already',
+      'Sales | B2 | 14 min • +56 XP',
+      'Opens after this save',
+    ],
+  );
   assert.equal(
     savedPathProgress.runway?.body,
     'Presentation Practice saved. Start Sales Call to unlock Workplace Small Talk.',
@@ -1847,6 +1855,10 @@ test('creates a rewarding roleplay completion summary', async () => {
   assert.equal(
     completedPathProgress.runway?.items.find((item) => item.state === 'active')?.statusLabel,
     'Replay now',
+  );
+  assert.equal(
+    completedPathProgress.runway?.items.find((item) => item.state === 'active')?.supportLabel,
+    'Interview | B1-B2 | 12 min • +48 XP',
   );
   assert.equal(
     completedPathProgress.runway?.body,

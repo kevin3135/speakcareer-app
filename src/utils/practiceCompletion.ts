@@ -10,7 +10,7 @@ import { createLocalProgressStats, type LocalProgressStats } from './localProgre
 // @ts-expect-error Node test imports require the explicit .ts extension here.
 import { createPracticeCareerPath } from './practiceCareerPath.ts';
 // @ts-expect-error Node test imports require the explicit .ts extension here.
-import { createPracticeRunway, type PracticeRunwayState } from './practiceRunway.ts';
+import { createPracticeRunway, type PracticeRunwayItem, type PracticeRunwayState } from './practiceRunway.ts';
 
 export type PracticeCompletionSummary = {
   title: string;
@@ -92,8 +92,16 @@ export type SavedRoleplayPathProgress = {
   progressLabel: string;
   progressPercent: number;
   roleplayId: RoleplayId;
-  runway: PracticeRunwayState | null;
+  runway: SavedRoleplayPathRunway | null;
   title: string;
+};
+
+export type SavedRoleplayPathRunwayItem = PracticeRunwayItem & {
+  supportLabel: string;
+};
+
+export type SavedRoleplayPathRunway = Omit<PracticeRunwayState, 'items'> & {
+  items: SavedRoleplayPathRunwayItem[];
 };
 
 export type SavedCoachRecap = {
@@ -483,6 +491,10 @@ export function createSavedRoleplayPathProgress({
     runway: runway
       ? {
         ...runway,
+        items: runway.items.map((item) => ({
+          ...item,
+          supportLabel: createSavedPathRunwaySupportLabel(item),
+        })),
         body: createSavedPathRunwayBody({
           isPathComplete: path.progressPercent === 100,
           nextStepTitle: nextStep?.title ?? path.title,
@@ -583,4 +595,16 @@ function createSavedPathRunwayBody({
   }
 
   return `${savedTitle} saved. Start ${nextStepTitle} to unlock ${nextUnlockStepTitle}.`;
+}
+
+function createSavedPathRunwaySupportLabel(item: PracticeRunwayItem) {
+  if (item.state === 'done') {
+    return 'Saved already';
+  }
+
+  if (item.state === 'active') {
+    return `${item.metaLabel} • ${item.xpLabel}`;
+  }
+
+  return item.statusLabel === 'Unlock next' ? 'Opens after this save' : 'Later in the path';
 }

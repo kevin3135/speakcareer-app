@@ -779,23 +779,20 @@ export function RoleplayScreen({
                           <Text numberOfLines={1} style={styles.savedPathRunwayItemTitle}>
                             {item.title}
                           </Text>
-                          <Badge
-                            label={item.statusLabel}
-                            tone={
-                              item.state === 'done'
-                                ? 'success'
-                                : item.state === 'active'
-                                  ? 'accent'
-                                  : 'secondary'
-                            }
-                          />
-                        </View>
-                        <View style={styles.savedPathRunwayMetaRow}>
-                          <Text numberOfLines={1} style={styles.savedPathRunwayItemMeta}>
-                            {item.metaLabel}
+                          <Text
+                            style={[
+                              styles.savedPathRunwayStatus,
+                              item.state === 'done' && styles.savedPathRunwayStatusDone,
+                              item.state === 'active' && styles.savedPathRunwayStatusActive,
+                              item.state === 'locked' && styles.savedPathRunwayStatusLocked,
+                            ]}
+                          >
+                            {item.statusLabel}
                           </Text>
-                          <XPBadge label={item.xpLabel} />
                         </View>
+                        <Text numberOfLines={1} style={styles.savedPathRunwayItemMeta}>
+                          {item.supportLabel}
+                        </Text>
                       </View>
                     </View>
                   ))}
@@ -2660,10 +2657,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
     minWidth: 0,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   savedPathRunwayItemActive: {
     backgroundColor: colors.primarySoft,
@@ -2681,11 +2678,36 @@ const styles = StyleSheet.create({
   },
   savedPathRunwayItemMeta: {
     color: colors.textMuted,
-    flex: 1,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     lineHeight: typography.lineSmall,
     minWidth: 0,
+    marginTop: spacing.xxs,
+  },
+  savedPathRunwayStatus: {
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+  },
+  savedPathRunwayStatusActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primaryDark,
+    color: colors.white,
+  },
+  savedPathRunwayStatusDone: {
+    backgroundColor: colors.white,
+    borderColor: colors.success,
+    color: colors.successDark,
+  },
+  savedPathRunwayStatusLocked: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    color: colors.textMuted,
   },
   savedPathRunwayItemTitle: {
     color: colors.ink,
@@ -2700,21 +2722,16 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     marginTop: spacing.sm,
   },
-  savedPathRunwayMetaRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.xs,
-    marginTop: 2,
-  },
   savedPathRunwaySequence: {
     alignItems: 'center',
     backgroundColor: colors.white,
     borderColor: colors.success,
     borderRadius: radius.pill,
     borderWidth: 1,
-    height: 26,
+    height: 22,
     justifyContent: 'center',
-    width: 26,
+    marginTop: 1,
+    width: 22,
   },
   savedPathRunwaySequenceActive: {
     backgroundColor: colors.primary,
