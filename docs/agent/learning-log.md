@@ -1,5 +1,53 @@
 # Agent Learning Log
 
+## 2026-07-06: Progress Empty-State Continue CTA
+
+Made one focused Progress improvement: the locked first-time `Wins` state now includes a direct `Continue today` CTA that opens the current guided next step instead of leaving the learner at a dead end.
+
+Why it changed:
+
+- The empty `Wins` card explained what would unlock after the first save, but it still made the learner decide where to go next.
+- For the English MVP habit loop, a locked state should still point to one concrete action.
+- The smallest useful fix was to keep the existing empty-state card and add one guided continuation path.
+
+What changed:
+
+- Updated `src/utils/progressEmptyState.ts` so the first-time Progress state now carries a guided action for either the unfinished Foundation lesson or the first Job Interview save.
+- Updated `src/screens/ProgressScreen.tsx` to render a compact `Next guided step` box plus a `Continue today` button inside the locked `Wins` card.
+- Updated `src/navigation/AppNavigator.tsx` so Progress can route that CTA back to Foundation when needed.
+- Added focused assertions in `tests/practiceContent.test.mjs` for both the pre-foundation and post-foundation empty-state routes.
+
+What went well:
+
+- The improvement stayed narrow: one helper, one screen, one navigator prop pass-through and one existing test file.
+- The CTA uses the app's current guided path instead of inventing another navigation rule or storage flag.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new `Next guided step` box and button spacing should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 89 tests pass.
+- Draft PR creation may still hit the same GitHub permission blocker seen in earlier runs.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a screen is locked, it should still expose one explicit way back into the guided English practice loop.
+- Reusing the existing guided path is better than adding a Progress-only shortcut model.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one compact first-win handoff inside `Wins` after the first save so the learner sees why to return tomorrow, not only what was saved.
+
 ## 2026-07-06: Progress Earlier Win Replay CTA
 
 Made one focused Progress improvement: each earlier saved win in Wins now includes a compact replay CTA so the learner can reopen that scenario straight from the coaching history.

@@ -15,8 +15,10 @@ import {
   XPBadge,
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
+import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayWarmupCue } from '../types';
+import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
@@ -37,8 +39,10 @@ import { formatSessionDate } from '../utils/sessionHistory';
 
 type ProgressScreenProps = {
   dailyTarget: DailyPracticeTarget;
+  foundationCompletedSteps: number;
   onMarkMistakePracticed: (mistakeId: string) => void;
   onOpenRoleplay: (roleplayId: RoleplayId, warmupCue?: RoleplayWarmupCue) => void;
+  onStartFoundation: () => void;
   practicedMistakeIds: string[];
   sessions: PracticeSession[];
 };
@@ -47,8 +51,10 @@ const weekActivity = [28, 44, 18, 65, 40, 72, 55];
 
 export function ProgressScreen({
   dailyTarget,
+  foundationCompletedSteps,
   onMarkMistakePracticed,
   onOpenRoleplay,
+  onStartFoundation,
   practicedMistakeIds,
   sessions,
 }: ProgressScreenProps) {
@@ -88,7 +94,14 @@ export function ProgressScreen({
     sessions,
   });
   const primaryGuideStep = nextStepGuide.steps[0];
-  const emptyState = isFirstSaveLocked ? createProgressEmptyState() : null;
+  const hasCompletedFoundation = foundationCompletedSteps >= FOUNDATION_TOTAL_STEPS;
+  const emptyState = isFirstSaveLocked
+    ? createProgressEmptyState({
+      foundationTitle: foundationStart.title,
+      hasCompletedFoundation,
+      nextRoleplayTitle: guidedStart.title,
+    })
+    : null;
   const progressMomentumUnlock = isFirstSaveLocked
     ? null
     : createProgressMomentumUnlock(sessions.length);
@@ -298,6 +311,27 @@ export function ProgressScreen({
               </View>
               <Text style={styles.cardBody}>{emptyState.body}</Text>
               <Text style={styles.unlockLabel}>{emptyState.unlockLabel}</Text>
+              <View style={styles.emptyStateActionBox}>
+                <Text style={styles.emptyStateActionLabel}>Next guided step</Text>
+                <Text style={styles.emptyStateActionTitle}>{emptyState.action.title}</Text>
+                <Text style={styles.emptyStateActionBody}>{emptyState.action.body}</Text>
+              </View>
+              <View style={styles.cardAction}>
+                <AppButton
+                  accessibilityHint={emptyState.action.target === 'foundation'
+                    ? 'Open the current guided foundation lesson from Wins'
+                    : 'Open the first guided interview roleplay from Wins'}
+                  label={emptyState.action.ctaLabel}
+                  onPress={() => {
+                    if (emptyState.action.target === 'foundation') {
+                      onStartFoundation();
+                      return;
+                    }
+
+                    onOpenRoleplay(guidedStart.roleplayId);
+                  }}
+                />
+              </View>
             </Card>
           ) : null}
 
@@ -971,6 +1005,35 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.md,
+  },
+  emptyStateActionBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  emptyStateActionLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  emptyStateActionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  emptyStateActionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   lockedPreview: {
     backgroundColor: colors.surfaceMuted,

@@ -2634,13 +2634,35 @@ test('creates a combined writing support helper state', async () => {
 
 test('creates a locked session history preview for first-time progress users', async () => {
   const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
-  const emptyState = createProgressEmptyState();
+  const emptyState = createProgressEmptyState({
+    foundationTitle: 'Learn one clear sentence',
+    hasCompletedFoundation: false,
+    nextRoleplayTitle: 'Quest 1: Job Interview',
+  });
 
   assert.equal(emptyState.eyebrow, 'Locked until first save');
   assert.equal(emptyState.progressLabel, '0/1 saved');
   assert.equal(emptyState.title, 'Session history starts after one save');
   assert.ok(emptyState.body.includes('feedback summary'));
   assert.equal(emptyState.unlockLabel, 'First unlock: history, XP and daily target progress');
+  assert.equal(emptyState.action.target, 'foundation');
+  assert.equal(emptyState.action.title, 'Learn one clear sentence');
+  assert.equal(emptyState.action.ctaLabel, 'Continue today');
+  assert.ok(emptyState.action.body.includes('shortest route'));
+});
+
+test('points the locked progress state to the first roleplay after foundation is done', async () => {
+  const { createProgressEmptyState } = await import('../src/utils/progressEmptyState.ts');
+  const emptyState = createProgressEmptyState({
+    foundationTitle: 'Learn one clear sentence',
+    hasCompletedFoundation: true,
+    nextRoleplayTitle: 'Quest 1: Job Interview',
+  });
+
+  assert.equal(emptyState.action.target, 'roleplay');
+  assert.equal(emptyState.action.title, 'Quest 1: Job Interview');
+  assert.equal(emptyState.action.ctaLabel, 'Continue today');
+  assert.ok(emptyState.action.body.includes('first guided save'));
 });
 
 test('keeps deeper progress insights locked until three saved sessions', async () => {
