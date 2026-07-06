@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: First Review Unlock Handoff
+
+Made one focused first-review improvement: after the first Job Interview answer is checked, the review card now shows a compact `Next unlock` handoff that makes Save the obvious next step.
+
+Why it changed:
+
+- The first review already showed useful coach feedback, XP and a rewrite, but the old `Save is next.` hint was too small to explain the unlock loop.
+- A new learner should understand immediately that saving the checked answer unlocks Home and Progress.
+- The smallest useful fix was to extend the existing first-quest feedback state with a short unlock handoff instead of adding another screen or CTA.
+
+What changed:
+
+- Updated `src/utils/firstQuestFeedback.ts` so ready first-quest feedback can include a tested `nextUnlock` cue.
+- Updated `src/screens/RoleplayScreen.tsx` to render that cue as a compact accent box under the first-quest feedback.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new `Next unlock` copy.
+
+What went well:
+
+- The change stayed inside the existing first-review surface and did not change save logic, navigation or storage.
+- The primary Save CTA remains in the next card and no new competing action was added.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new unlock box should still be checked on a narrow viewport after tapping Check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Polish the Save card immediately after first review so `Save and unlock Home` feels like the single strongest action on mobile.
+
 ## 2026-07-06: First Answer Edit Cue
 
 Made one focused first-roleplay improvement: the first Job Interview answer area now tells the learner to edit the loaded starter directly in the answer box, and the `Check` action now sits inside a clearer primary-next-step panel.

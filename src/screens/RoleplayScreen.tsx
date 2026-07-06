@@ -209,9 +209,10 @@ export function RoleplayScreen({
     ? createFirstQuestFeedbackState({
       answerReview,
       feedbackResult,
+      progressLabel: firstQuestState.progressLabel,
+      unlockLabel: firstQuestState.unlockLabel,
     })
     : null;
-  const firstQuestReviewHint = firstQuestState ? 'Save is next.' : null;
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
@@ -1267,8 +1268,21 @@ export function RoleplayScreen({
                   <Text style={styles.firstQuestRewriteText}>{firstQuestFeedback.rewrite}</Text>
                 </View>
               ) : null}
-              {firstQuestReviewHint ? (
-                <Text style={styles.firstQuestUnlockHint}>{firstQuestReviewHint}</Text>
+              {firstQuestFeedback.nextUnlock ? (
+                <View style={styles.firstQuestUnlockBox}>
+                  <View style={styles.oneThingHeader}>
+                    <Text style={styles.firstQuestUnlockLabel}>
+                      {firstQuestFeedback.nextUnlock.eyebrow}
+                    </Text>
+                    <Badge label={firstQuestFeedback.nextUnlock.progressLabel} tone="accent" />
+                  </View>
+                  <Text style={styles.firstQuestUnlockTitle}>
+                    {firstQuestFeedback.nextUnlock.title}
+                  </Text>
+                  <Text style={styles.firstQuestUnlockBody}>
+                    {firstQuestFeedback.nextUnlock.body}
+                  </Text>
+                </View>
               ) : null}
             </View>
           ) : null}
@@ -2459,13 +2473,35 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
-  firstQuestUnlockHint: {
-    color: colors.secondaryDark,
+  firstQuestUnlockBody: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  firstQuestUnlockBox: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  firstQuestUnlockLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  firstQuestUnlockTitle: {
+    color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    marginTop: spacing.md,
+    marginTop: spacing.xs,
   },
   feedbackSnapshotBox: {
     backgroundColor: colors.surface,

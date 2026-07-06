@@ -134,6 +134,8 @@ test('creates one simple first-quest feedback card', async () => {
       },
       xpReward: 40,
     },
+    progressLabel: '0/1 saved',
+    unlockLabel: 'Unlock Home and Progress',
   });
 
   assert.equal(ready.title, 'Good. Say it like this.');
@@ -144,6 +146,12 @@ test('creates one simple first-quest feedback card', async () => {
   );
   assert.ok(ready.rewrite.length < 92);
   assert.equal(ready.xpLabel, '+40 XP');
+  assert.deepEqual(ready.nextUnlock, {
+    body: 'Next step is Save. This first win will unlock Home and Progress.',
+    eyebrow: 'Next unlock',
+    progressLabel: '0/1 saved',
+    title: 'Unlock Home and Progress',
+  });
 });
 
 test('summarizes roleplay feedback scores for the coach step', async () => {
