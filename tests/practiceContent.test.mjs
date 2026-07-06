@@ -991,6 +991,22 @@ test('creates a Profile current-focus handoff back to the next roleplay', async 
   assert.ok(bonusFocus.body.includes('Optional Meeting Practice'));
 });
 
+test('creates a friendly Profile privacy cue for local preview practice', async () => {
+  const { createProfilePrivacyCue } = await import('../src/utils/profilePrivacyCue.ts');
+
+  const cue = createProfilePrivacyCue();
+
+  assert.equal(cue.badgeLabel, 'On this device');
+  assert.equal(cue.title, 'Practice stays yours');
+  assert.ok(cue.body.includes('No account'));
+  assert.deepEqual(
+    cue.items.map((item) => item.title),
+    ['Saved here', 'No account'],
+  );
+  assert.ok(cue.items[0].body.includes('app preview'));
+  assert.ok(cue.items[1].body.includes('without signup'));
+});
+
 test('personalizes the first lesson and answer starter by starting level', async () => {
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 

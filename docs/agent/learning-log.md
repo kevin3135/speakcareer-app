@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Profile Privacy Reassurance
+
+Made one focused Profile/Me polish: the privacy/local-data section now feels like a friendly reassurance card instead of technical preview copy.
+
+Why it changed:
+
+- The previous privacy card was accurate, but `Local preview` and the plain text block felt closer to implementation language than learner reassurance.
+- Profile should stay quiet and useful, with privacy notes secondary but still trustworthy.
+- The smallest useful fix was to keep the same local-preview behavior and improve only the visual card and copy.
+
+What changed:
+
+- Added `src/utils/profilePrivacyCue.ts` with short, testable privacy reassurance copy.
+- Updated `src/screens/ProfileScreen.tsx` so the privacy card uses a friendly `Practice stays yours` headline, an `On this device` badge and two compact trust rows.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new Profile privacy cue.
+
+What went well:
+
+- The change stayed inside Profile and did not touch storage behavior, auth, payments, analytics or backend work.
+- The card uses existing info/surface tokens and avoids raw screen colors.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the two privacy rows should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 97 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Profile privacy copy should reassure the learner without sounding like backend or implementation notes.
+- Use short trust rows for privacy details instead of a paragraph-only card.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Polish the Premium preview card hierarchy so it feels aspirational but clearly secondary to practice.
+
 ## 2026-07-06: Profile Current Focus Handoff
 
 Made one focused Profile/Me polish: the screen now includes a compact `Current focus` card that points back to the next recommended career roleplay.

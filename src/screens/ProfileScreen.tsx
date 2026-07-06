@@ -15,6 +15,7 @@ import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId } from '../types';
 import { createProfileCurrentFocus } from '../utils/profileCurrentFocus';
 import { createProfileDailyTargetPlan } from '../utils/profileDailyTargetPlan';
+import { createProfilePrivacyCue } from '../utils/profilePrivacyCue';
 
 type ProfileScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -43,6 +44,7 @@ export function ProfileScreen({
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const privacyCue = createProfilePrivacyCue();
 
   return (
     <ScreenContainer
@@ -186,13 +188,31 @@ export function ProfileScreen({
         title="SpeakCareer Pro"
       />
 
-      <Card tone="muted">
+      <Card style={styles.privacyCard} tone="muted">
         <View style={styles.privacyHeader}>
-          <Text style={styles.cardKicker}>Privacy</Text>
-          <Badge label="Local preview" tone="info" />
+          <View style={styles.privacyIcon}>
+            <Text style={styles.privacyIconText}>OK</Text>
+          </View>
+          <View style={styles.privacyCopy}>
+            <Text style={styles.privacyKicker}>Privacy</Text>
+            <Text style={styles.privacyTitle}>{privacyCue.title}</Text>
+          </View>
+          <Badge label={privacyCue.badgeLabel} tone="info" />
         </View>
-        <Text style={styles.cardTitle}>Private practice space</Text>
-        <Text style={styles.cardBody}>Your progress stays on this device while SpeakCareer is in preview. No account needed.</Text>
+        <Text style={styles.privacyBody}>{privacyCue.body}</Text>
+        <View style={styles.privacyItems}>
+          {privacyCue.items.map((item) => (
+            <View key={item.title} style={styles.privacyItem}>
+              <View style={styles.privacyItemMark}>
+                <Text style={styles.privacyItemMarkText}>OK</Text>
+              </View>
+              <View style={styles.privacyItemCopy}>
+                <Text style={styles.privacyItemTitle}>{item.title}</Text>
+                <Text style={styles.privacyItemBody}>{item.body}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </Card>
     </ScreenContainer>
   );
@@ -304,6 +324,101 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     justifyContent: 'space-between',
+  },
+  privacyBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '800',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
+  },
+  privacyCard: {
+    backgroundColor: colors.infoSoft,
+    borderColor: colors.info,
+  },
+  privacyCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  privacyIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.info,
+    borderColor: colors.infoDark,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  privacyIconText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  privacyItem: {
+    alignItems: 'flex-start',
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    minWidth: 0,
+    padding: spacing.sm,
+  },
+  privacyItemBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
+  privacyItemCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  privacyItemMark: {
+    alignItems: 'center',
+    backgroundColor: colors.infoSoft,
+    borderRadius: radius.pill,
+    height: 26,
+    justifyContent: 'center',
+    width: 26,
+  },
+  privacyItemMarkText: {
+    color: colors.infoDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  privacyItems: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  privacyItemTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  privacyKicker: {
+    color: colors.infoDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  privacyTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
   },
   targetNoteBox: {
     backgroundColor: colors.white,
