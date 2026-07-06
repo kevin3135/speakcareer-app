@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Premium Preview Card Hierarchy
+
+Made one focused Profile/Me polish: the Premium preview card now feels like a future coaching unlock instead of a mock pricing strip.
+
+Why it changed:
+
+- Profile should keep daily practice and the current roleplay focus visually stronger than future plans.
+- The old Premium card used mock monthly/yearly prices and a technical "no payment connected" note, which made the MVP feel closer to a paywall/debug surface.
+- The smallest useful fix was to keep the preview in place, remove payment-style copy and make the card feel aspirational but secondary.
+
+What changed:
+
+- Updated `src/components/ui/index.tsx` so `PremiumCard` now has a compact `PRO` badge, `Future upgrade` label, two featured preview tiles, compact benefit rows and a soft "practice now" footer cue.
+- Removed the mock monthly/yearly price boxes and the implementation note from the visible card UI.
+- Updated `src/screens/ProfileScreen.tsx` with shorter `Future Pro` copy and clearer benefit wording.
+
+What went well:
+
+- The change stayed in a shared UI component plus its Profile usage and did not add payments, auth, APIs, backend logic or dependencies.
+- The Profile screen still has one practical learner action above the fold, while Premium now reads as a later unlock.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the two preview tiles should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 98 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Future Pro/Premium previews should avoid visible price mocks until payments are intentionally designed.
+- Keep Premium below the practice habit loop and use it as an aspirational preview, not a decision point.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the Practice path card so the first recommended roleplay shows one clearer unlock payoff before the library toggle.
+
 ## 2026-07-06: Onboarding First-Lesson Preview
 
 Made one focused onboarding improvement: after a learner picks a starting level, onboarding now previews the exact Lesson 1 sentence shape and level-matched example before the first lesson starts.

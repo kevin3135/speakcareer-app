@@ -565,38 +565,59 @@ export function PremiumCard({
   subtitle: string;
   title: string;
 }) {
+  const featuredBenefits = benefits.slice(0, 2);
+  const supportBenefits = benefits.slice(2);
+
   return (
-    <Card tone="dark">
+    <Card style={styles.premiumCard} tone="dark">
       <View style={styles.premiumHeader}>
-        <Text style={styles.premiumKicker}>Premium preview</Text>
-        <Badge label="Coming later" tone="accent" />
+        <View style={styles.premiumHeaderLeft}>
+          <View style={styles.premiumIcon}>
+            <Text style={styles.premiumIconText}>PRO</Text>
+          </View>
+          <View style={styles.premiumHeadingCopy}>
+            <Text style={styles.premiumKicker}>Future upgrade</Text>
+            <Text style={styles.premiumHeaderNote}>Preview only</Text>
+          </View>
+        </View>
+        <Badge label="Later" tone="accent" />
       </View>
       <Text style={styles.premiumTitle}>{title}</Text>
       <Text style={styles.premiumSubtitle}>{subtitle}</Text>
-      <View style={styles.premiumBenefits}>
-        {benefits.map((benefit) => (
-          <View key={benefit} style={styles.premiumBenefitRow}>
-            <View style={styles.premiumBenefitMark} />
-            <Text style={styles.premiumBenefit}>{benefit}</Text>
-          </View>
-        ))}
-      </View>
-      <View style={styles.pricingRow}>
-        <View style={styles.priceBox}>
-          <Text style={styles.priceLabel}>Monthly preview</Text>
-          <Text style={styles.priceValue}>Mock $12</Text>
-        </View>
-        <View style={styles.priceBox}>
-          <Text style={styles.priceLabel}>Yearly preview</Text>
-          <Text style={styles.priceValue}>Mock $89</Text>
-        </View>
-      </View>
-      {onPress ? (
-        <View style={styles.cardAction}>
-          <AppButton label="View benefits" onPress={onPress} variant="secondary" />
+
+      {featuredBenefits.length ? (
+        <View style={styles.premiumPreviewRail}>
+          {featuredBenefits.map((benefit, index) => (
+            <View key={benefit} style={styles.premiumPreviewTile}>
+              <Text style={styles.premiumPreviewNumber}>0{index + 1}</Text>
+              <Text style={styles.premiumPreviewText}>{benefit}</Text>
+            </View>
+          ))}
         </View>
       ) : null}
-      <Text style={styles.premiumNote}>No payment is connected in this MVP.</Text>
+
+      {supportBenefits.length ? (
+        <View style={styles.premiumBenefits}>
+          {supportBenefits.map((benefit) => (
+            <View key={benefit} style={styles.premiumBenefitRow}>
+              <View style={styles.premiumBenefitMark} />
+              <Text style={styles.premiumBenefit}>{benefit}</Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
+
+      <View style={styles.premiumFooterCue}>
+        <Text style={styles.premiumFooterCueText}>
+          Practice now. Unlock deeper coaching later.
+        </Text>
+      </View>
+
+      {onPress ? (
+        <View style={styles.cardAction}>
+          <AppButton label="View future benefits" onPress={onPress} variant="secondary" />
+        </View>
+      ) : null}
     </Card>
   );
 }
@@ -1275,6 +1296,9 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: spacing.xs,
   },
+  premiumCard: {
+    overflow: 'hidden',
+  },
   premiumKicker: {
     color: colors.accent,
     fontFamily: fonts.rounded,
@@ -1286,6 +1310,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     justifyContent: 'space-between',
+  },
+  premiumHeaderLeft: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    minWidth: 0,
+  },
+  premiumIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
+  },
+  premiumIconText: {
+    color: colors.navy,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  premiumHeadingCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  premiumHeaderNote: {
+    color: colors.primarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.xxs,
   },
   premiumTitle: {
     color: colors.white,
@@ -1302,65 +1360,77 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
   },
-  premiumBenefits: {
-    gap: spacing.sm,
+  premiumPreviewRail: {
+    flexDirection: 'row',
+    gap: spacing.md,
     marginTop: spacing.lg,
   },
-  premiumBenefitRow: {
-    alignItems: 'flex-start',
+  premiumPreviewTile: {
     backgroundColor: colors.scrim,
     borderColor: colors.primaryDark,
     borderRadius: radius.lg,
     borderWidth: 1,
+    flex: 1,
+    minHeight: 96,
+    padding: spacing.md,
+  },
+  premiumPreviewNumber: {
+    color: colors.accent,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  premiumPreviewText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  premiumBenefits: {
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  premiumBenefitRow: {
+    alignItems: 'center',
+    backgroundColor: colors.scrim,
+    borderColor: colors.primaryDark,
+    borderRadius: radius.md,
+    borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   premiumBenefitMark: {
     backgroundColor: colors.accent,
     borderRadius: radius.pill,
-    height: 10,
-    marginTop: spacing.xs,
-    width: 10,
+    height: 8,
+    width: 8,
   },
   premiumBenefit: {
     color: colors.white,
     flex: 1,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '800',
-    lineHeight: typography.lineBody,
+    lineHeight: typography.lineSmall,
   },
-  pricingRow: {
-    flexDirection: 'row',
-    gap: spacing.md,
-    marginTop: spacing.lg,
-  },
-  priceBox: {
+  premiumFooterCue: {
     backgroundColor: colors.primarySoft,
-    borderRadius: radius.md,
-    flex: 1,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.lg,
     padding: spacing.md,
   },
-  priceLabel: {
+  premiumFooterCueText: {
     color: colors.primaryDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-  },
-  priceValue: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.h3,
-    fontWeight: '900',
-    marginTop: spacing.xs,
-  },
-  premiumNote: {
-    color: colors.primarySoft,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: spacing.md,
   },
   emptyTitle: {
     color: colors.ink,
