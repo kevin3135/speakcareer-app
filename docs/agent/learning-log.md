@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Inline Answer Starter
+
+Made one focused Roleplay improvement: the answer step now shows one compact inline starter strip before optional help, so the learner sees an immediate first line or warm-up cue without hunting for support.
+
+Why it changed:
+
+- The current English MVP already had good starter content, but most of it lived behind the optional help toggle.
+- That made the first typing moment feel heavier than it should, especially for a first interview answer or a Progress warm-up retry.
+- The smallest useful fix was to surface exactly one starter in the answer area while keeping the rest of the writing support optional.
+
+What changed:
+
+- Added `src/utils/roleplayAnswerStarter.ts` to choose one visible starter source in priority order: warm-up cue, first-interview starter reminder, then quick starter phrase.
+- Updated `src/screens/RoleplayScreen.tsx` to render a compact inline starter strip with the relevant CTA directly above the answer box.
+- Kept the existing optional writing-support panel for the fuller plan and phrase help instead of expanding the main answer area further.
+- Added focused coverage in `tests/practiceContent.test.mjs` for warm-up, starter-reminder, quick-starter and hidden-after-typing states.
+
+What went well:
+
+- The change stayed inside the Roleplay answer step and reused existing starter content, so it did not affect navigation, saved sessions, progress logic, auth, payments, APIs or dependencies.
+- The inline strip should make the first writing action clearer without forcing learners to open optional help first.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new starter strip still needs a narrow-phone check for line wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 100 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a learner needs a first sentence, put one visible starter near the answer box before hiding richer support behind a toggle.
+- Keep exactly one starter source visible at a time so the Roleplay answer step stays calm.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the review step hierarchy so the single best correction stands above optional detail even more clearly.
+
 ## 2026-07-07: Compact Roleplay Back Pill
 
 Made one focused Roleplay UI polish: the source-aware back control is now a compact two-line pill instead of one long label.
