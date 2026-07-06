@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: Roleplay Quiet Save Options
+
+Made one focused Roleplay save-card polish: the optional rewrite/edit actions now read as quiet secondary tools instead of a competing card.
+
+Why it changed:
+
+- The save card now has a stronger daily payoff strip, but the optional rewrite/edit area still had enough visual weight to compete with Save.
+- The user should see Save as the clear primary action, with editing available only as a low-pressure option.
+- The smallest useful fix was to reduce the optional strip's surface weight and make both buttons small quiet controls.
+
+What changed:
+
+- Updated the optional save-card label from `Want one cleaner version first?` to `Optional before saving`.
+- Changed `Try rewrite` to `Use rewrite` and made both optional actions small quiet buttons.
+- Restyled the optional strip in `src/screens/RoleplayScreen.tsx` as a thin divider area instead of a bordered card.
+
+What went well:
+
+- The change stayed inside the Roleplay save-card component group.
+- Save, daily payoff, follow-up, storage and navigation logic stayed unchanged.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the quiet button row should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 93 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Polish the Roleplay feedback details toggle so score/details feel clearly optional after the main correction.
+
 ## 2026-07-06: Roleplay Daily Save Payoff
 
 Made one focused Roleplay save-state polish: the save card now shows a compact `Today after save` payoff strip with the daily target badge, progress bar and after-save progress label.

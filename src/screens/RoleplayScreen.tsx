@@ -1484,14 +1484,15 @@ export function RoleplayScreen({
           ) : null}
           {hasAppliedBetterEnglish ? null : (
             <View style={styles.saveSecondaryActions}>
-              <Text style={styles.saveSecondaryLabel}>Want one cleaner version first?</Text>
+              <Text style={styles.saveSecondaryLabel}>Optional before saving</Text>
               <View style={styles.saveSecondaryButtonRow}>
                 <View style={styles.feedbackActionItem}>
                   <AppButton
                     accessibilityHint="Moves the better English rewrite back into the answer box"
-                    label="Try rewrite"
+                    label="Use rewrite"
                     onPress={useBetterEnglishAnswer}
-                    variant="secondary"
+                    size="small"
+                    variant="quiet"
                   />
                 </View>
                 <View style={styles.feedbackActionItem}>
@@ -1499,6 +1500,7 @@ export function RoleplayScreen({
                     accessibilityHint="Returns to your draft so you can improve it before saving"
                     label="Edit answer"
                     onPress={retryAnswer}
+                    size="small"
                     variant="quiet"
                   />
                 </View>
@@ -2330,14 +2332,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   saveSecondaryActions: {
-    backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    marginTop: spacing.sm,
-    padding: spacing.sm,
+    borderTopWidth: 1,
+    marginTop: spacing.md,
+    paddingTop: spacing.sm,
   },
   saveSecondaryButtonRow: {
+    flexDirection: 'row',
     gap: spacing.sm,
     marginTop: spacing.sm,
   },
