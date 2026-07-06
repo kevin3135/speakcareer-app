@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Foundation Starter Live Checklist
+
+Made one focused practice-flow improvement: the Lesson 1 starter handoff inside the first Job Interview answer now uses a live three-step checklist instead of a static edit list.
+
+Why it changed:
+
+- The first interview screen already auto-loads the level-matched starter, but the old handoff still showed the same three edit bullets no matter what the learner had changed.
+- For the English MVP, the first roleplay should make progress feel obvious: starter loaded, personalize it, then get it ready to check.
+- A live checklist keeps the first interview answer businesslike and guided without adding a new step, new storage, or extra onboarding.
+
+What changed:
+
+- Added `src/utils/foundationStarterChecklist.ts` to derive a compact three-step handoff state from the current draft, the loaded Lesson 1 starter, and live answer readiness.
+- Updated `src/screens/RoleplayScreen.tsx` so the Foundation warmup panel now shows progress as `Step 1 of 3` through `3/3 ready`, with per-step `Do now`, `Done`, and `Next` statuses.
+- Added focused coverage in `tests/practiceContent.test.mjs` for cleared, loaded, edited, and ready starter states.
+
+What went well:
+
+- The change stayed narrow: one new helper, one existing screen, and one existing test file.
+- The checklist reuses the current Lesson 1 starter plus live answer-readiness logic, so there was no new state model or navigation work.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new status pills in the Foundation warmup card should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 88 tests pass.
+- `gh` CLI is still not installed in this environment, so draft PR creation remains blocked unless the GitHub connector permissions change or `gh` is installed for fallback.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a starter answer is auto-loaded, the next guidance should react to the learner's edits instead of staying static.
+- Live step status is a better first-roleplay motivator than extra explanatory copy.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one direct `Continue today` CTA to the first-time Progress empty state so the learner can jump back into the current guided lesson from Wins.
+
 ## 2026-07-06: Home Compact Level Rail
 
 Made one focused Home improvement: the `START` card level progress area is now a slimmer one-row rail instead of a separate boxed footer.

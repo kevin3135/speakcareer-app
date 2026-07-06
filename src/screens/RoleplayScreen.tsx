@@ -50,6 +50,7 @@ import { createPracticeSession } from '../utils/sessionHistory';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { createFoundationWarmupPanel } from '../utils/foundationWarmupPanel';
 import { createFoundationStarterAction } from '../utils/foundationStarterAction';
+import { createFoundationStarterChecklist } from '../utils/foundationStarterChecklist';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayFlowRunway, type RoleplayFlowRunway } from '../utils/roleplayFlowRunway';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
@@ -224,6 +225,14 @@ export function RoleplayScreen({
     ? createFoundationStarterAction({
       draftAnswer,
       starterAnswer: foundationWarmupPanel.starterAnswer,
+    })
+    : null;
+  const foundationStarterChecklist = foundationWarmupPanel
+    ? createFoundationStarterChecklist({
+      draftAnswer,
+      isReadyForFeedback: liveAnswerReview.isReadyForFeedback,
+      starterAnswer: foundationWarmupPanel.starterAnswer,
+      steps: foundationWarmupPanel.editPlanSteps,
     })
     : null;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
@@ -846,7 +855,7 @@ export function RoleplayScreen({
               <Text style={styles.promptText}>{openingLine}</Text>
             </View>
           </View>
-          {foundationWarmupPanel && warmupCue && foundationStarterAction ? (
+          {foundationWarmupPanel && warmupCue && foundationStarterAction && foundationStarterChecklist ? (
             <View style={styles.foundationWarmupBox}>
               <View style={styles.oneThingHeader}>
                 <Text style={styles.foundationWarmupLabel}>{warmupCue.eyebrow}</Text>
@@ -890,12 +899,39 @@ export function RoleplayScreen({
                 </Text>
               </View>
               <View style={styles.foundationWarmupEditBox}>
-                <Text style={styles.foundationWarmupEditLabel}>{foundationWarmupPanel.editPlanLabel}</Text>
+                <View style={styles.foundationWarmupEditHeader}>
+                  <Text style={styles.foundationWarmupEditLabel}>{foundationWarmupPanel.editPlanLabel}</Text>
+                  <Badge label={foundationStarterChecklist.progressLabel} tone="secondary" />
+                </View>
                 <View style={styles.foundationWarmupEditList}>
-                  {foundationWarmupPanel.editPlanSteps.map((step, index) => (
-                    <View key={`${index + 1}-${step}`} style={styles.foundationWarmupEditStep}>
-                      <Text style={styles.foundationWarmupEditStepNumber}>{index + 1}</Text>
-                      <Text style={styles.foundationWarmupEditStepText}>{step}</Text>
+                  {foundationStarterChecklist.items.map((step, index) => (
+                    <View
+                      key={`${index + 1}-${step.text}`}
+                      style={[
+                        styles.foundationWarmupEditStep,
+                        step.state === 'current' && styles.foundationWarmupEditStepCurrent,
+                        step.state === 'done' && styles.foundationWarmupEditStepDone,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.foundationWarmupEditStepNumber,
+                          step.state === 'current' && styles.foundationWarmupEditStepNumberCurrent,
+                          step.state === 'done' && styles.foundationWarmupEditStepNumberDone,
+                        ]}
+                      >
+                        {index + 1}
+                      </Text>
+                      <Text style={styles.foundationWarmupEditStepText}>{step.text}</Text>
+                      <Text
+                        style={[
+                          styles.foundationWarmupEditStepStatus,
+                          step.state === 'current' && styles.foundationWarmupEditStepStatusCurrent,
+                          step.state === 'done' && styles.foundationWarmupEditStepStatusDone,
+                        ]}
+                      >
+                        {step.statusLabel}
+                      </Text>
                     </View>
                   ))}
                 </View>
@@ -1640,19 +1676,41 @@ const styles = StyleSheet.create({
     fontSize: typography.micro,
     fontWeight: '900',
   },
+  foundationWarmupEditHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
   foundationWarmupEditList: {
     gap: spacing.xs,
     marginTop: spacing.xs,
   },
   foundationWarmupEditStep: {
     alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  foundationWarmupEditStepCurrent: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  foundationWarmupEditStepDone: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
   },
   foundationWarmupEditStepNumber: {
-    backgroundColor: colors.secondarySoft,
+    backgroundColor: colors.white,
+    borderColor: colors.border,
     borderRadius: radius.pill,
     color: colors.secondaryDark,
+    borderWidth: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
@@ -1661,6 +1719,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 18,
   },
+  foundationWarmupEditStepNumberCurrent: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
+    color: colors.white,
+  },
+  foundationWarmupEditStepNumberDone: {
+    backgroundColor: colors.success,
+    borderColor: colors.successDark,
+    color: colors.white,
+  },
   foundationWarmupEditStepText: {
     color: colors.ink,
     flex: 1,
@@ -1668,6 +1736,29 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
+  },
+  foundationWarmupEditStepStatus: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+  },
+  foundationWarmupEditStepStatusCurrent: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
+    color: colors.white,
+  },
+  foundationWarmupEditStepStatusDone: {
+    backgroundColor: colors.white,
+    borderColor: colors.success,
+    color: colors.successDark,
   },
   foundationWarmupNote: {
     color: colors.textMuted,

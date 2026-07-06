@@ -965,6 +965,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createRoleplayWarmupCue,
   } = await import('../src/utils/roleplayWarmupCue.ts');
   const { createFoundationStarterAction } = await import('../src/utils/foundationStarterAction.ts');
+  const { createFoundationStarterChecklist } = await import('../src/utils/foundationStarterChecklist.ts');
   const { createFoundationWarmupPanel } = await import('../src/utils/foundationWarmupPanel.ts');
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 
@@ -1015,6 +1016,22 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     },
   );
   assert.deepEqual(
+    createFoundationStarterChecklist({
+      draftAnswer: starterPanel.starterAnswer,
+      isReadyForFeedback: true,
+      starterAnswer: starterPanel.starterAnswer,
+      steps: starterPanel.editPlanSteps,
+    }),
+    {
+      items: [
+        { state: 'done', statusLabel: 'Done', text: 'Keep "I" first.' },
+        { state: 'current', statusLabel: 'Do now', text: 'Swap in your real task.' },
+        { state: 'upcoming', statusLabel: 'Next', text: 'End with one clear result.' },
+      ],
+      progressLabel: 'Step 2 of 3',
+    },
+  );
+  assert.deepEqual(
     createFoundationStarterAction({
       draftAnswer: '',
       starterAnswer: starterPanel.starterAnswer,
@@ -1026,6 +1043,22 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       mode: 'cleared',
       title: 'Starter was cleared',
       tone: 'accent',
+    },
+  );
+  assert.deepEqual(
+    createFoundationStarterChecklist({
+      draftAnswer: '',
+      isReadyForFeedback: false,
+      starterAnswer: starterPanel.starterAnswer,
+      steps: starterPanel.editPlanSteps,
+    }),
+    {
+      items: [
+        { state: 'current', statusLabel: 'Do now', text: 'Keep "I" first.' },
+        { state: 'upcoming', statusLabel: 'Next', text: 'Swap in your real task.' },
+        { state: 'upcoming', statusLabel: 'Next', text: 'End with one clear result.' },
+      ],
+      progressLabel: 'Step 1 of 3',
     },
   );
   assert.deepEqual(
@@ -1041,6 +1074,39 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       mode: 'edited',
       title: 'This answer already sounds more like you',
       tone: 'success',
+    },
+  );
+  assert.deepEqual(
+    createFoundationStarterChecklist({
+      draftAnswer: 'I led onboarding.',
+      isReadyForFeedback: false,
+      starterAnswer: starterPanel.starterAnswer,
+      steps: starterPanel.editPlanSteps,
+    }),
+    {
+      items: [
+        { state: 'done', statusLabel: 'Done', text: 'Keep "I" first.' },
+        { state: 'done', statusLabel: 'Done', text: 'Swap in your real task.' },
+        { state: 'current', statusLabel: 'Do now', text: 'End with one clear result.' },
+      ],
+      progressLabel: 'Step 3 of 3',
+    },
+  );
+  assert.deepEqual(
+    createFoundationStarterChecklist({
+      draftAnswer:
+        'I worked on customer onboarding, and I helped the team reply faster. The result was happier customers.',
+      isReadyForFeedback: true,
+      starterAnswer: starterPanel.starterAnswer,
+      steps: starterPanel.editPlanSteps,
+    }),
+    {
+      items: [
+        { state: 'done', statusLabel: 'Done', text: 'Keep "I" first.' },
+        { state: 'done', statusLabel: 'Done', text: 'Swap in your real task.' },
+        { state: 'done', statusLabel: 'Done', text: 'End with one clear result.' },
+      ],
+      progressLabel: '3/3 ready',
     },
   );
   assert.ok(confidentCue.note.includes('business result'));
