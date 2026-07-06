@@ -322,6 +322,36 @@ test('keeps the Home coach focus short and actionable', async () => {
   );
 });
 
+test('creates a compact Home coach strip state', async () => {
+  const { createHomeCoachCue } = await import('../src/utils/homeCoachFocus.ts');
+
+  assert.equal(createHomeCoachCue(null), null);
+
+  assert.deepEqual(
+    createHomeCoachCue({
+      feedbackSummary: 'Good start. Add one measurable result or business outcome.',
+      nextFocusLabel: 'Vocabulary 62',
+      nextFocusText: 'Add one measurable result or business outcome.',
+    }),
+    {
+      badgeLabel: 'Vocabulary 62',
+      text: 'Next: add one measurable result.',
+    },
+  );
+
+  assert.deepEqual(
+    createHomeCoachCue({
+      feedbackSummary:
+        'Use one stronger career verb such as led, organized or delivered before your result.',
+      nextFocusLabel: 'Coach target for saved answers',
+    }),
+    {
+      badgeLabel: 'Next focus',
+      text: 'Next: use a stronger career verb.',
+    },
+  );
+});
+
 test('creates a live readiness cue for the roleplay draft answer', async () => {
   const { createAnswerReadinessCue } = await import('../src/utils/answerReadinessCue.ts');
   const { summarizePracticeAnswer } = await import('../src/utils/answerReview.ts');

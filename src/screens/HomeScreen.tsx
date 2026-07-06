@@ -14,7 +14,7 @@ import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
 import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
 import { createDailyMission } from '../utils/gamification';
-import { createHomeCoachFocusText } from '../utils/homeCoachFocus';
+import { createHomeCoachCue } from '../utils/homeCoachFocus';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
 import { createHomeRunway } from '../utils/homeRunway';
@@ -130,15 +130,7 @@ export function HomeScreen({
       : null,
   });
   const latestSession = sessions[0];
-  const latestCoachFocusText =
-    createHomeCoachFocusText(latestSession?.nextFocusText) ??
-    createHomeCoachFocusText(latestSession?.feedbackSummary);
-  const latestCoachFocus = latestCoachFocusText
-    ? {
-        label: latestSession?.nextFocusLabel?.trim() || 'Coach focus',
-        text: latestCoachFocusText,
-      }
-    : null;
+  const latestCoachCue = createHomeCoachCue(latestSession);
 
   return (
     <ScreenContainer>
@@ -192,16 +184,12 @@ export function HomeScreen({
         </View>
       </View>
 
-      {latestCoachFocus ? (
+      {latestCoachCue ? (
         <View style={styles.coachCue}>
-          <View style={styles.coachCueBadge}>
-            <Text style={styles.coachCueBadgeText}>SC</Text>
-          </View>
-          <View style={styles.coachCueCopy}>
-            <Text numberOfLines={1} style={styles.coachCueText}>
-              {latestCoachFocus.text}
-            </Text>
-          </View>
+          <Badge label={latestCoachCue.badgeLabel} tone="info" />
+          <Text numberOfLines={1} style={styles.coachCueText}>
+            {latestCoachCue.text}
+          </Text>
         </View>
       ) : null}
 
@@ -368,39 +356,22 @@ const styles = StyleSheet.create({
   coachCue: {
     alignItems: 'center',
     backgroundColor: colors.coachSoft,
-    borderColor: colors.coachSoft,
+    borderColor: colors.primaryGlow,
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
-  coachCueBadge: {
-    alignItems: 'center',
-    backgroundColor: colors.coach,
-    borderColor: colors.primaryGlow,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    height: 32,
-    justifyContent: 'center',
-    width: 32,
-  },
-  coachCueBadgeText: {
-    color: colors.white,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  coachCueCopy: {
-    flex: 1,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
   },
   coachCueText: {
     color: colors.text,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
+    minWidth: 0,
   },
   statusRow: {
     flexDirection: 'row',

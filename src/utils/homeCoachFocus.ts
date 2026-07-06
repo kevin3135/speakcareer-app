@@ -1,4 +1,7 @@
+import type { PracticeSession } from '../types';
+
 const MAX_HOME_COACH_FOCUS_LENGTH = 44;
+const MAX_HOME_COACH_BADGE_LENGTH = 16;
 const ACTION_START_PATTERN =
   /^(add|ask|avoid|connect|include|keep|lead|make|mention|name|replace|show|start|try|use)\b/i;
 
@@ -26,6 +29,23 @@ export function createHomeCoachFocusText(focusText?: string | null) {
   const prefixedAction = addNextPrefix(simplifiedAction);
 
   return ensurePeriod(truncateAtWord(prefixedAction, MAX_HOME_COACH_FOCUS_LENGTH));
+}
+
+export function createHomeCoachCue(
+  session?: Pick<PracticeSession, 'feedbackSummary' | 'nextFocusLabel' | 'nextFocusText'> | null,
+) {
+  const text =
+    createHomeCoachFocusText(session?.nextFocusText) ??
+    createHomeCoachFocusText(session?.feedbackSummary);
+
+  if (!text) {
+    return null;
+  }
+
+  return {
+    badgeLabel: createBadgeLabel(session?.nextFocusLabel),
+    text,
+  };
 }
 
 function pickActionSentence(text: string) {
@@ -62,6 +82,24 @@ function createCompactAction(sentence: string) {
   }
 
   return null;
+}
+
+function createBadgeLabel(label?: string) {
+  const normalized = label?.trim().replace(/\s+/g, ' ');
+
+  if (!normalized) {
+    return 'Next focus';
+  }
+
+  if (normalized.length <= MAX_HOME_COACH_BADGE_LENGTH) {
+    return normalized;
+  }
+
+  const areaLabel = ['Clarity', 'Confidence', 'Structure', 'Vocabulary'].find((area) =>
+    new RegExp(area, 'i').test(normalized),
+  );
+
+  return areaLabel ?? 'Next focus';
 }
 
 function simplifyAction(sentence: string) {

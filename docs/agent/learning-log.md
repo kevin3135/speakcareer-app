@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Home Coach Correction Strip
+
+Made one focused Home improvement: the coach cue under the `START` card is now a slimmer one-line correction strip with a compact focus badge.
+
+Why it changed:
+
+- The Home screen already had a stronger main action and tighter runway, but the coach cue still used a taller badge-and-copy layout below them.
+- On small phones, that extra height made the first viewport feel more stacked than it needed to.
+- The English MVP loop works better when the latest correction stays visible as a quick businesslike reminder, not a second card.
+
+What changed:
+
+- Extended `src/utils/homeCoachFocus.ts` so Home can derive a compact coach strip state with a short badge label and one actionable correction line.
+- Updated `src/screens/HomeScreen.tsx` so the Home cue now renders as a tighter inline strip using a small badge plus one truncated correction line.
+- Added focused coverage in `tests/practiceContent.test.mjs` for badge-label fallback and compact correction copy.
+
+What went well:
+
+- The improvement stayed inside one Home surface, one existing utility file and one existing test file.
+- The strip still reuses saved session feedback data, so there was no new storage, navigation or practice-state complexity.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- The first helper version hit a Node test import-resolution mismatch, so the cue helper was folded back into `homeCoachFocus.ts` to keep both TypeScript and direct test imports simple.
+- This run did not include fresh Expo or browser mobile visual QA, so the slimmer strip should still be checked on a narrow viewport beside the `START` card stack.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 87 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a helper is imported directly by Node-based tests, prefer extending an existing utility over creating a new nested TypeScript dependency that needs different runtime resolution rules.
+- Home reminders are stronger when they read like one fast correction strip instead of a second card with an avatar.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Make the `START` card level-progress box one row lighter so the full Home action stack fits more comfortably above the fold on small phones.
+
 ## 2026-07-06: Home Compact Runway Strip
 
 Made one focused Home improvement: the tall goal and next-unlock trail under the main `START` card is now a compact two-card runway strip.
