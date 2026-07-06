@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-06: Onboarding Collapsed First-Week Summary
+
+Made one focused onboarding improvement: after a learner picks a starting level, onboarding now shows a compact first-week summary first and keeps the fuller pace, loop and starter details behind an explicit `See full first week` toggle.
+
+Why it changed:
+
+- The selected-level onboarding state already had useful guidance, but it revealed too many details at once before the learner could continue.
+- The design audit called out onboarding as too concept-heavy early in the flow.
+- The smallest useful fix was to keep the existing content and daily-target controls, but collapse them behind one clear summary so the next action stays obvious.
+
+What changed:
+
+- Added `src/utils/onboardingPlanSummary.ts` to generate one compact summary from the existing onboarding plan preview.
+- Updated `src/screens/OnboardingScreen.tsx` so the first-path preview now shows a short `Week 1 path` summary plus an explicit details toggle.
+- Kept the existing daily rhythm selector, practice loop and starter answer intact, but only inside the expanded state.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new compact onboarding summary helper.
+
+What went well:
+
+- The change stayed inside onboarding and reused the current plan-preview data instead of inventing a second content path.
+- The primary continue action is now easier to reach because the first selected-level state is shorter by default.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the collapsed and expanded onboarding states should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 93 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Turn the first unlocked Home state into a clearer one-node lesson map so the guided path stays obvious after the first save.
+
 ## 2026-07-06: First Save Primary Card
 
 Made one focused first-save improvement: after the first checked Job Interview answer, the Save card now puts `Save and unlock Home` inside a stronger primary action box before the lock-in details.

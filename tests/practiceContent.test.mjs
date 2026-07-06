@@ -715,6 +715,62 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(confidentPreview.commitmentNote, 'Lesson now. 3 saves today, starting with Job Interview.');
 });
 
+test('creates a compact onboarding first-week summary before showing full details', async () => {
+  const { createOnboardingPlanPreview } = await import('../src/utils/onboardingPlan.ts');
+  const { createOnboardingPlanSummary } = await import('../src/utils/onboardingPlanSummary.ts');
+  const { foundationStart, guidedStart, levelAssessment } = await import('../src/data/guidedIntro.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterChoice = levelAssessment.choices.find((choice) => choice.id === 'starter');
+  const starterProfile = getStartingLevelProfile('starter');
+  const starterSummary = createOnboardingPlanSummary(
+    createOnboardingPlanPreview({
+      coachNote: starterProfile.coachMessage,
+      dailyTarget: 1,
+      firstLessonDetail: starterProfile.foundationRule,
+      firstLessonTitle: foundationStart.title,
+      firstQuestSubtitle: guidedStart.subtitle,
+      firstQuestTitle: guidedStart.title,
+      levelLabel: starterChoice.label,
+      starterAnswer: starterProfile.starterAnswer,
+      starterEditSteps: starterProfile.starterEditSteps,
+    }),
+  );
+
+  assert.equal(starterSummary.pathTitle, 'Learn one clear sentence -> Job Interview');
+  assert.equal(starterSummary.milestoneBadgeLabel, 'After save 1/1');
+  assert.equal(starterSummary.milestoneTitle, 'Day 1 target complete');
+  assert.equal(
+    starterSummary.body,
+    'First save starts your streak, opens Progress, and completes 1 roleplay a day.',
+  );
+  assert.equal(starterSummary.detailsLabel, 'See full first week');
+  assert.equal(starterSummary.detailsBody, 'Daily pace, practice loop, and starter answer.');
+
+  const confidentChoice = levelAssessment.choices.find((choice) => choice.id === 'confident');
+  const confidentProfile = getStartingLevelProfile('confident');
+  const confidentSummary = createOnboardingPlanSummary(
+    createOnboardingPlanPreview({
+      coachNote: confidentProfile.coachMessage,
+      dailyTarget: 3,
+      firstLessonDetail: confidentProfile.foundationRule,
+      firstLessonTitle: foundationStart.title,
+      firstQuestSubtitle: guidedStart.subtitle,
+      firstQuestTitle: guidedStart.title,
+      levelLabel: confidentChoice.label,
+      starterAnswer: confidentProfile.starterAnswer,
+      starterEditSteps: confidentProfile.starterEditSteps,
+    }),
+  );
+
+  assert.equal(confidentSummary.milestoneBadgeLabel, 'After save 1/3');
+  assert.equal(confidentSummary.milestoneTitle, '2 more sprints later today');
+  assert.equal(
+    confidentSummary.body,
+    'First save starts your streak, opens Progress, and moves you to 1/3 today.',
+  );
+});
+
 test('connects the selected onboarding level to the first guided path', async () => {
   const { foundationStart, guidedStart } = await import('../src/data/guidedIntro.ts');
   const { createOnboardingLevelHandoff } = await import('../src/utils/onboardingLevelHandoff.ts');

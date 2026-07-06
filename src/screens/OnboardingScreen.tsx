@@ -18,6 +18,7 @@ import {
 import { createFirstPathCoachCue } from '../utils/firstPathCoachCue';
 import { createOnboardingLevelHandoff } from '../utils/onboardingLevelHandoff';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
+import { createOnboardingPlanSummary } from '../utils/onboardingPlanSummary';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type OnboardingScreenProps = {
@@ -34,6 +35,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
   const [selectedLevelId, setSelectedLevelId] = useState<LevelAssessmentChoice['id'] | null>(null);
   const [selectedDailyTarget, setSelectedDailyTarget] = useState<DailyPracticeTarget>(dailyTarget);
   const [hasManualDailyTargetSelection, setHasManualDailyTargetSelection] = useState(false);
+  const [isPlanDetailsOpen, setIsPlanDetailsOpen] = useState(false);
   const progressWidth = `${levelAssessment.progressPercent}%` as DimensionValue;
   const selectedChoice =
     levelAssessment.choices.find((choice) => choice.id === selectedLevelId) ?? null;
@@ -67,6 +69,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
           starterEditSteps: selectedProfile.starterEditSteps,
         })
       : null;
+  const planSummary = planPreview ? createOnboardingPlanSummary(planPreview) : null;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -103,6 +106,7 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               key={choice.id}
               onPress={() => {
                 setSelectedLevelId(choice.id);
+                setIsPlanDetailsOpen(false);
                 setSelectedDailyTarget(
                   resolveOnboardingDailyTarget(
                     choice.id,
@@ -174,171 +178,212 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             {planPreview.coachNote}
           </Text>
 
-          <View style={styles.targetCard}>
-            <View style={styles.targetHeader}>
-              <Text style={styles.targetLabel}>Daily rhythm</Text>
-              <Text style={styles.targetTitle}>{planPreview.dailyTargetLabel}</Text>
+          {planSummary ? (
+            <View style={styles.planSummaryBox}>
+              <View style={styles.planSummaryHeader}>
+                <Text style={styles.planSummaryLabel}>Week 1 path</Text>
+                <Badge label={planSummary.milestoneBadgeLabel} tone="info" />
+              </View>
+              <Text style={styles.planSummaryTitle}>{planSummary.pathTitle}</Text>
+              <Text style={styles.planSummaryBody}>{planSummary.body}</Text>
+              <View style={styles.planSummaryMilestone}>
+                <Text style={styles.planSummaryMilestoneLabel}>After first save</Text>
+                <Text style={styles.planSummaryMilestoneTitle}>{planSummary.milestoneTitle}</Text>
+              </View>
             </View>
-            <Text numberOfLines={1} style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
-            {dailyTargetGuide ? (
-              <View style={styles.targetGuideBox}>
-                <View style={styles.targetGuideCoachBadge}>
-                  <Text style={styles.targetGuideCoachText}>SC</Text>
+          ) : null}
+
+          <Pressable
+            accessibilityHint="Shows or hides the full first-week onboarding details"
+            accessibilityLabel={isPlanDetailsOpen ? 'Hide full first week' : planSummary?.detailsLabel ?? 'See full first week'}
+            accessibilityRole="button"
+            onPress={() => setIsPlanDetailsOpen((isOpen) => !isOpen)}
+            style={({ pressed }) => [
+              styles.planDetailsToggle,
+              isPlanDetailsOpen && styles.planDetailsToggleOpen,
+              pressed && styles.optionCardPressed,
+            ]}
+          >
+            <View style={styles.planDetailsToggleHeader}>
+              <Text style={styles.planDetailsToggleLabel}>
+                {isPlanDetailsOpen ? 'Hide full first week' : planSummary?.detailsLabel ?? 'See full first week'}
+              </Text>
+              <Text style={styles.planDetailsToggleCta}>{isPlanDetailsOpen ? 'Hide' : 'Open'}</Text>
+            </View>
+            <Text style={styles.planDetailsToggleBody}>
+              {planSummary?.detailsBody ?? 'Daily pace, practice loop, and starter answer.'}
+            </Text>
+          </Pressable>
+
+          {isPlanDetailsOpen ? (
+            <>
+              <View style={styles.targetCard}>
+                <View style={styles.targetHeader}>
+                  <Text style={styles.targetLabel}>Daily rhythm</Text>
+                  <Text style={styles.targetTitle}>{planPreview.dailyTargetLabel}</Text>
                 </View>
-                <View style={styles.targetGuideCopy}>
-                  <View style={styles.targetGuideHeader}>
-                    <Text style={styles.targetGuideLabel}>Coach pick</Text>
-                    <Badge label={dailyTargetGuide.recommendationLabel} tone="accent" />
+                <Text numberOfLines={1} style={styles.targetBody}>{planPreview.dailyTargetNote}</Text>
+                {dailyTargetGuide ? (
+                  <View style={styles.targetGuideBox}>
+                    <View style={styles.targetGuideCoachBadge}>
+                      <Text style={styles.targetGuideCoachText}>SC</Text>
+                    </View>
+                    <View style={styles.targetGuideCopy}>
+                      <View style={styles.targetGuideHeader}>
+                        <Text style={styles.targetGuideLabel}>Coach pick</Text>
+                        <Badge label={dailyTargetGuide.recommendationLabel} tone="accent" />
+                      </View>
+                      <Text numberOfLines={1} style={styles.targetGuideTitle}>
+                        {dailyTargetGuide.recommendationTitle}
+                      </Text>
+                      <Text numberOfLines={2} style={styles.targetGuideBody}>
+                        {dailyTargetGuide.recommendationBody}
+                      </Text>
+                    </View>
                   </View>
-                  <Text numberOfLines={1} style={styles.targetGuideTitle}>
-                    {dailyTargetGuide.recommendationTitle}
+                ) : null}
+                <View style={styles.segmentedControl}>
+                  {dailyTargetOptions.map((target) => {
+                    const isActive = target === selectedDailyTarget;
+                    const isRecommended = target === dailyTargetGuide?.recommendedTarget;
+                    const showRecommendedMarker = isActive && isRecommended;
+
+                    return (
+                      <Pressable
+                        accessibilityHint="Sets how many short roleplays you want each day"
+                        accessibilityLabel={`Set onboarding daily target to ${target} ${target === 1 ? 'roleplay' : 'roleplays'}`}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: isActive }}
+                        key={target}
+                        onPress={() => {
+                          setSelectedDailyTarget(target);
+                          setHasManualDailyTargetSelection(true);
+                        }}
+                        style={({ pressed }) => [
+                          styles.segment,
+                          isActive && styles.segmentActive,
+                          pressed && styles.segmentPressed,
+                        ]}
+                      >
+                        <View style={styles.segmentContent}>
+                          <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
+                            {target}/day
+                          </Text>
+                          {showRecommendedMarker ? (
+                            <Text style={styles.segmentMarker}>Best pick</Text>
+                          ) : null}
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+                {dailyTargetGuide ? (
+                  <View style={styles.targetSelectionBox}>
+                    <View style={styles.targetSelectionHeader}>
+                      <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
+                      <Text numberOfLines={1} style={styles.targetSelectionText}>
+                        {dailyTargetGuide.selectionBody}
+                      </Text>
+                    </View>
+                    <View style={styles.targetPreviewCard}>
+                      <View style={styles.targetPreviewStats}>
+                        {dailyTargetGuide.previewStats.map((stat) => (
+                          <View key={stat.label} style={styles.targetPreviewStat}>
+                            <Text style={styles.targetPreviewStatLabel}>{stat.label}</Text>
+                            <Text style={styles.targetPreviewStatValue}>{stat.value}</Text>
+                          </View>
+                        ))}
+                      </View>
+                      <Text numberOfLines={2} style={styles.targetPreviewBody}>
+                        {dailyTargetGuide.previewBody}
+                      </Text>
+                    </View>
+                  </View>
+                ) : null}
+              </View>
+
+              <View style={styles.planPath}>
+                <View style={styles.planPathBadge}>
+                  <Text style={styles.planPathBadgeText}>1</Text>
+                </View>
+                <View style={styles.planPathCopy}>
+                  <Text style={styles.planPathLabel}>Next path</Text>
+                  <Text numberOfLines={1} style={styles.planPathTitle}>
+                    {planPreview.steps[0].title} then {planPreview.nextQuestTitleShort}
                   </Text>
-                  <Text numberOfLines={2} style={styles.targetGuideBody}>
-                    {dailyTargetGuide.recommendationBody}
+                  <Text numberOfLines={1} style={styles.planPathDetail}>
+                    {planPreview.steps[0].detail}
                   </Text>
                 </View>
               </View>
-            ) : null}
-            <View style={styles.segmentedControl}>
-              {dailyTargetOptions.map((target) => {
-                const isActive = target === selectedDailyTarget;
-                const isRecommended = target === dailyTargetGuide?.recommendedTarget;
-                const showRecommendedMarker = isActive && isRecommended;
 
-                return (
-                  <Pressable
-                    accessibilityHint="Sets how many short roleplays you want each day"
-                    accessibilityLabel={`Set onboarding daily target to ${target} ${target === 1 ? 'roleplay' : 'roleplays'}`}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: isActive }}
-                    key={target}
-                    onPress={() => {
-                      setSelectedDailyTarget(target);
-                      setHasManualDailyTargetSelection(true);
-                    }}
-                    style={({ pressed }) => [
-                      styles.segment,
-                      isActive && styles.segmentActive,
-                      pressed && styles.segmentPressed,
-                    ]}
-                  >
-                    <View style={styles.segmentContent}>
-                      <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
-                        {target}/day
-                      </Text>
-                      {showRecommendedMarker ? (
-                        <Text style={styles.segmentMarker}>Best pick</Text>
-                      ) : null}
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </View>
-            {dailyTargetGuide ? (
-              <View style={styles.targetSelectionBox}>
-                <View style={styles.targetSelectionHeader}>
-                  <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
-                  <Text numberOfLines={1} style={styles.targetSelectionText}>
-                    {dailyTargetGuide.selectionBody}
+              <View style={styles.sessionLoopCard}>
+                <View style={styles.sessionLoopHeader}>
+                  <Text style={styles.sessionLoopLabel}>{planPreview.sessionTitle}</Text>
+                  <Badge label={planPreview.sessionBadgeLabel} tone="info" />
+                </View>
+                <View style={styles.sessionLoopList}>
+                  {planPreview.sessionSteps.map((step, index) => {
+                    const isLastStep = index === planPreview.sessionSteps.length - 1;
+
+                    return (
+                      <View key={step.label} style={styles.sessionLoopRow}>
+                        <View style={styles.sessionLoopRail}>
+                          <View style={styles.sessionLoopBadge}>
+                            <Text style={styles.sessionLoopBadgeText}>{step.label}</Text>
+                          </View>
+                          {!isLastStep ? <View style={styles.sessionLoopLine} /> : null}
+                        </View>
+                        <View style={styles.sessionLoopCopy}>
+                          <Text style={styles.sessionLoopTitle}>{step.title}</Text>
+                          <Text style={styles.sessionLoopDetail}>{step.detail}</Text>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+                <Text style={styles.sessionLoopNote}>{planPreview.sessionNote}</Text>
+                <View style={styles.sessionMilestone}>
+                  <View style={styles.sessionMilestoneHeader}>
+                    <Text style={styles.sessionMilestoneLabel}>After first save</Text>
+                    <Badge
+                      label={planPreview.firstSaveMilestone.badgeLabel}
+                      tone={planPreview.firstSaveMilestone.tone}
+                    />
+                  </View>
+                  <Text style={styles.sessionMilestoneTitle}>{planPreview.firstSaveMilestone.title}</Text>
+                  <Text style={styles.sessionMilestoneBody}>{planPreview.firstSaveMilestone.body}</Text>
+                  <View style={styles.sessionMilestoneProgress}>
+                    <ProgressBar
+                      tone={planPreview.firstSaveMilestone.tone}
+                      value={planPreview.firstSaveMilestone.progressPercent}
+                    />
+                  </View>
+                  <Text style={styles.sessionMilestoneProgressLabel}>
+                    {planPreview.firstSaveMilestone.progressLabel}
                   </Text>
                 </View>
-                <View style={styles.targetPreviewCard}>
-                  <View style={styles.targetPreviewStats}>
-                    {dailyTargetGuide.previewStats.map((stat) => (
-                      <View key={stat.label} style={styles.targetPreviewStat}>
-                        <Text style={styles.targetPreviewStatLabel}>{stat.label}</Text>
-                        <Text style={styles.targetPreviewStatValue}>{stat.value}</Text>
+              </View>
+
+              <View style={styles.planStarter}>
+                <Text style={styles.planStarterLabel}>First interview starter</Text>
+                <Text numberOfLines={2} style={styles.planStarterText}>
+                  {planPreview.starterAnswer}
+                </Text>
+                <View style={styles.planStarterEditBox}>
+                  <Text style={styles.planStarterEditLabel}>Make it yours</Text>
+                  <View style={styles.planStarterEditList}>
+                    {planPreview.starterEditSteps.map((step, index) => (
+                      <View key={`${index + 1}-${step}`} style={styles.planStarterEditStep}>
+                        <Text style={styles.planStarterEditStepNumber}>{index + 1}</Text>
+                        <Text numberOfLines={1} style={styles.planStarterEditStepText}>{step}</Text>
                       </View>
                     ))}
                   </View>
-                  <Text numberOfLines={2} style={styles.targetPreviewBody}>
-                    {dailyTargetGuide.previewBody}
-                  </Text>
                 </View>
               </View>
-            ) : null}
-          </View>
-
-          <View style={styles.planPath}>
-            <View style={styles.planPathBadge}>
-              <Text style={styles.planPathBadgeText}>1</Text>
-            </View>
-            <View style={styles.planPathCopy}>
-              <Text style={styles.planPathLabel}>Next path</Text>
-              <Text numberOfLines={1} style={styles.planPathTitle}>
-                {planPreview.steps[0].title} then {planPreview.nextQuestTitleShort}
-              </Text>
-              <Text numberOfLines={1} style={styles.planPathDetail}>
-                {planPreview.steps[0].detail}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.sessionLoopCard}>
-            <View style={styles.sessionLoopHeader}>
-              <Text style={styles.sessionLoopLabel}>{planPreview.sessionTitle}</Text>
-              <Badge label={planPreview.sessionBadgeLabel} tone="info" />
-            </View>
-            <View style={styles.sessionLoopList}>
-              {planPreview.sessionSteps.map((step, index) => {
-                const isLastStep = index === planPreview.sessionSteps.length - 1;
-
-                return (
-                  <View key={step.label} style={styles.sessionLoopRow}>
-                    <View style={styles.sessionLoopRail}>
-                      <View style={styles.sessionLoopBadge}>
-                        <Text style={styles.sessionLoopBadgeText}>{step.label}</Text>
-                      </View>
-                      {!isLastStep ? <View style={styles.sessionLoopLine} /> : null}
-                    </View>
-                    <View style={styles.sessionLoopCopy}>
-                      <Text style={styles.sessionLoopTitle}>{step.title}</Text>
-                      <Text style={styles.sessionLoopDetail}>{step.detail}</Text>
-                    </View>
-                  </View>
-                );
-              })}
-            </View>
-            <Text style={styles.sessionLoopNote}>{planPreview.sessionNote}</Text>
-            <View style={styles.sessionMilestone}>
-              <View style={styles.sessionMilestoneHeader}>
-                <Text style={styles.sessionMilestoneLabel}>After first save</Text>
-                <Badge
-                  label={planPreview.firstSaveMilestone.badgeLabel}
-                  tone={planPreview.firstSaveMilestone.tone}
-                />
-              </View>
-              <Text style={styles.sessionMilestoneTitle}>{planPreview.firstSaveMilestone.title}</Text>
-              <Text style={styles.sessionMilestoneBody}>{planPreview.firstSaveMilestone.body}</Text>
-              <View style={styles.sessionMilestoneProgress}>
-                <ProgressBar
-                  tone={planPreview.firstSaveMilestone.tone}
-                  value={planPreview.firstSaveMilestone.progressPercent}
-                />
-              </View>
-              <Text style={styles.sessionMilestoneProgressLabel}>
-                {planPreview.firstSaveMilestone.progressLabel}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.planStarter}>
-            <Text style={styles.planStarterLabel}>First interview starter</Text>
-            <Text numberOfLines={2} style={styles.planStarterText}>
-              {planPreview.starterAnswer}
-            </Text>
-            <View style={styles.planStarterEditBox}>
-              <Text style={styles.planStarterEditLabel}>Make it yours</Text>
-              <View style={styles.planStarterEditList}>
-                {planPreview.starterEditSteps.map((step, index) => (
-                  <View key={`${index + 1}-${step}`} style={styles.planStarterEditStep}>
-                    <Text style={styles.planStarterEditStepNumber}>{index + 1}</Text>
-                    <Text numberOfLines={1} style={styles.planStarterEditStepText}>{step}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          </View>
+            </>
+          ) : null}
         </View>
       ) : null}
 
@@ -463,6 +508,101 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.md,
+  },
+  planDetailsToggle: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  planDetailsToggleBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  planDetailsToggleCta: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  planDetailsToggleHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  planDetailsToggleLabel: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  planDetailsToggleOpen: {
+    borderColor: colors.primaryGlow,
+  },
+  planSummaryBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  planSummaryBox: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  planSummaryHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  planSummaryLabel: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  planSummaryMilestone: {
+    backgroundColor: colors.white,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  planSummaryMilestoneLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  planSummaryMilestoneTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  planSummaryTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   targetCard: {
     backgroundColor: colors.surface,
