@@ -919,6 +919,39 @@ test('stores the daily practice target in local storage', async () => {
   );
 });
 
+test('turns the profile daily target into a clear weekly pace summary', async () => {
+  const { createProfileDailyTargetPlan } = await import(
+    '../src/utils/profileDailyTargetPlan.ts'
+  );
+
+  const lightPlan = createProfileDailyTargetPlan(1);
+  assert.equal(lightPlan.badgeLabel, 'Steady streak');
+  assert.equal(lightPlan.title, '1 roleplay a day');
+  assert.equal(lightPlan.optionPaceLabel, 'Light');
+  assert.deepEqual(lightPlan.stats, [
+    { label: 'This week', value: '7 reps' },
+    { label: 'Daily time', value: '5 min' },
+    { label: 'Rhythm', value: 'Light' },
+  ]);
+  assert.ok(lightPlan.body.includes('professional English active'));
+  assert.ok(lightPlan.note.includes('five-minute rep'));
+
+  const balancedPlan = createProfileDailyTargetPlan(2);
+  assert.equal(balancedPlan.badgeLabel, 'Balanced pace');
+  assert.equal(balancedPlan.optionPaceLabel, 'Balanced');
+  assert.equal(balancedPlan.stats[0].value, '14 reps');
+  assert.equal(balancedPlan.stats[1].value, '10 min');
+  assert.ok(balancedPlan.body.includes('normal workday'));
+
+  const focusedPlan = createProfileDailyTargetPlan(3);
+  assert.equal(focusedPlan.badgeLabel, 'Focused push');
+  assert.equal(focusedPlan.title, '3 roleplays a day');
+  assert.equal(focusedPlan.optionPaceLabel, 'Focused');
+  assert.equal(focusedPlan.stats[0].value, '21 reps');
+  assert.equal(focusedPlan.stats[1].value, '15 min');
+  assert.ok(focusedPlan.note.includes('interview, meeting, or presentation'));
+});
+
 test('personalizes the first lesson and answer starter by starting level', async () => {
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 

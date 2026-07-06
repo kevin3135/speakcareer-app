@@ -12,6 +12,7 @@ import {
 import { practiceContent } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget } from '../types';
+import { createProfileDailyTargetPlan } from '../utils/profileDailyTargetPlan';
 
 type ProfileScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -26,17 +27,23 @@ export function ProfileScreen({
   onBackToLearn,
   onChangeDailyTarget,
 }: ProfileScreenProps) {
+  const dailyTargetPlans = dailyTargetOptions.map((target) => ({
+    target,
+    plan: createProfileDailyTargetPlan(target),
+  }));
+  const activeTargetPlan = dailyTargetPlans.find(({ target }) => target === dailyTarget)?.plan;
+
   return (
     <ScreenContainer
       overline="Me"
-      subtitle="Your practice rhythm, language focus and private preview settings."
-      title="English Career Learner"
+      subtitle="Choose a daily English pace you can repeat. Language and preview settings stay below."
+      title="Practice rhythm"
     >
       <GradientHero
-        overline="Goal"
-        subtitle="Practice job interviews, meetings and professional conversations with AI."
-        title="Confident professional English"
-        tone="purple"
+        overline="English MVP"
+        subtitle="Short professional reps beat long rare sessions. Set a pace you can actually keep this week."
+        title="Keep the streak realistic"
+        tone="primary"
       >
         <View style={styles.heroAction}>
           <AppButton
@@ -48,12 +55,27 @@ export function ProfileScreen({
         </View>
       </GradientHero>
 
-      <Card>
-        <Text style={styles.cardKicker}>Daily target</Text>
-        <Text style={styles.cardTitle}>How hard should today feel?</Text>
-        <Text style={styles.cardBody}>Keep it light and consistent. You can change this anytime.</Text>
+      <Card tone="strong">
+        <View style={styles.dailyTargetHeader}>
+          <Text style={styles.cardKicker}>Daily target</Text>
+          {activeTargetPlan ? <Badge label={activeTargetPlan.badgeLabel} tone="success" /> : null}
+        </View>
+        <Text style={styles.cardTitle}>{activeTargetPlan?.title ?? 'Pick your pace'}</Text>
+        <Text style={styles.cardBody}>
+          {activeTargetPlan?.body ?? 'Choose a short English routine you can repeat this week.'}
+        </Text>
+        {activeTargetPlan ? (
+          <View style={styles.targetSummaryRow}>
+            {activeTargetPlan.stats.map((stat) => (
+              <View key={stat.label} style={styles.targetSummaryStat}>
+                <Text style={styles.targetSummaryLabel}>{stat.label}</Text>
+                <Text style={styles.targetSummaryValue}>{stat.value}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
         <View style={styles.segmentedControl}>
-          {dailyTargetOptions.map((target) => {
+          {dailyTargetPlans.map(({ plan, target }) => {
             const isActive = target === dailyTarget;
 
             return (
@@ -76,13 +98,25 @@ export function ProfileScreen({
                 <Text style={[styles.segmentLabel, isActive && styles.segmentLabelActive]}>
                   {target === 1 ? 'roleplay' : 'roleplays'}
                 </Text>
+                <Text style={[styles.segmentHint, isActive && styles.segmentHintActive]}>
+                  {plan.optionPaceLabel}
+                </Text>
               </Pressable>
             );
           })}
         </View>
+        {activeTargetPlan ? (
+          <View style={styles.targetNoteBox}>
+            <Text style={styles.targetNoteLabel}>Why this pace works</Text>
+            <Text style={styles.targetNoteText}>{activeTargetPlan.note}</Text>
+          </View>
+        ) : null}
       </Card>
 
-      <SectionHeader title="Language plan" />
+      <SectionHeader
+        subtitle="English first. Other languages stay out of the way until the core practice loop is stronger."
+        title="Language plan"
+      />
       <Card>
         <View style={styles.languageRow}>
           <Text style={styles.languageName}>{practiceContent.firstTargetLanguage}</Text>
@@ -96,6 +130,10 @@ export function ProfileScreen({
         ))}
       </Card>
 
+      <SectionHeader
+        subtitle="Private local preview now. Deeper plans stay secondary."
+        title="Preview"
+      />
       <PremiumCard
         benefits={[
           'Unlimited AI roleplays',
@@ -123,6 +161,12 @@ export function ProfileScreen({
 const styles = StyleSheet.create({
   heroAction: {
     marginTop: spacing.md,
+  },
+  dailyTargetHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
   },
   cardKicker: {
     color: colors.primary,
@@ -159,7 +203,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: radius.md,
     flex: 1,
-    minHeight: 62,
+    minHeight: 72,
     justifyContent: 'center',
   },
   segmentActive: {
@@ -187,6 +231,16 @@ const styles = StyleSheet.create({
   segmentLabelActive: {
     color: colors.white,
   },
+  segmentHint: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.xxs,
+  },
+  segmentHintActive: {
+    color: colors.white,
+  },
   languageRow: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -210,5 +264,56 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     justifyContent: 'space-between',
+  },
+  targetNoteBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  targetNoteLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  targetNoteText: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  targetSummaryLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  targetSummaryRow: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.lg,
+  },
+  targetSummaryStat: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  targetSummaryValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
   },
 });

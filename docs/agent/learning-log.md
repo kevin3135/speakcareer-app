@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Profile Daily Target Main Card
+
+Made one focused Profile habit-loop improvement: the Me screen now treats the daily target as the main learner control, with a clearer weekly payoff and calmer supporting hierarchy.
+
+Why it changed:
+
+- The Profile tab already let the learner change the daily target, but it read like a generic settings card instead of a practice-rhythm decision.
+- The product direction calls for a repeatable, businesslike loop with one clear daily pace and quieter secondary settings.
+- The smallest useful fix was to keep the same local target setting and make its payoff, time cost and pace visible before premium or privacy notes.
+
+What changed:
+
+- Added `src/utils/profileDailyTargetPlan.ts` so the three supported daily targets now map to consistent weekly reps, daily minutes, pace labels and short habit-loop copy.
+- Updated `src/screens/ProfileScreen.tsx` so the main card now shows the active pace badge, a compact three-stat weekly summary, clearer target option labels and a `Why this pace works` note.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the light, balanced and focused daily-target plan states.
+
+What went well:
+
+- The change stayed inside the existing Profile flow and did not affect storage behavior, navigation, auth, payments, analytics or backend work.
+- The new helper keeps the pace-copy logic testable instead of burying it inside the screen.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the three-stat summary row and taller target buttons should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 95 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Profile works better as a calm practice-control page when daily pace explains weekly payoff directly.
+- Keep premium and privacy notes visibly secondary to the repeatable English habit loop.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a compact `Current focus` handoff on Profile that points back to today's recommended roleplay so the settings screen still ends with one clear next action.
+
 ## 2026-07-06: Mistake Bank Drill Card
 
 Made one focused Wins/Progress polish: the active Mistake Bank correction now reads as one compact drill instead of a small feedback list.
