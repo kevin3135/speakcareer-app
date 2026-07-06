@@ -44,6 +44,8 @@ export type FirstQuestSaveRecap = {
     label: string;
     value: string;
   }[];
+  primaryBody: string;
+  primaryTitle: string;
 };
 
 export type NextPracticeRecommendation = {
@@ -233,6 +235,8 @@ export function createFirstQuestSaveRecap({
         value: `Bank +${safeXpReward} XP`,
       },
     ],
+    primaryBody: `One tap banks +${safeXpReward} XP, starts today and opens the guided app.`,
+    primaryTitle: `Save opens ${unlockValue}`,
   };
 }
 

@@ -1797,6 +1797,11 @@ test('creates a rewarding roleplay completion summary', async () => {
 
   assert.equal(firstQuestRecap.ctaLabel, 'Save and unlock Home');
   assert.equal(firstQuestRecap.eyebrow, 'Unlocks');
+  assert.equal(firstQuestRecap.primaryTitle, 'Save opens Home and Progress');
+  assert.equal(
+    firstQuestRecap.primaryBody,
+    'One tap banks +55 XP, starts today and opens the guided app.',
+  );
   assert.deepEqual(firstQuestRecap.items, [
     { label: 'App', value: 'Home and Progress' },
     { label: 'Today', value: 'Completes 1/1 today' },

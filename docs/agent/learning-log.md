@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: First Save Primary Card
+
+Made one focused first-save improvement: after the first checked Job Interview answer, the Save card now puts `Save and unlock Home` inside a stronger primary action box before the lock-in details.
+
+Why it changed:
+
+- The previous Save card had the right unlock details, but the main action came after the `Unlocks` recap.
+- A new learner should feel that the review is done and one tap now opens the guided app loop.
+- The smallest useful fix was to reorder and restyle the existing first-save UI without changing save logic, storage or navigation.
+
+What changed:
+
+- Added primary first-save title/body copy to `createFirstQuestSaveRecap`.
+- Updated `RoleplayScreen` so first-quest saves show a compact primary action card with `Save and unlock Home` above the details.
+- Extended the existing completion helper test to cover the new first-save copy.
+
+What went well:
+
+- The change stayed inside the existing first-save completion surface and touched only one screen, one helper and one test.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The primary CTA is now visually stronger while the lock-in details still confirm Home, Progress, today and XP.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the first-save card should still be checked on a narrow viewport after tapping Check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Capture a mobile screenshot of the first-review to first-save flow and tune spacing if the new primary action card pushes the lock-in details too low.
+
 ## 2026-07-06: First Review Unlock Handoff
 
 Made one focused first-review improvement: after the first Job Interview answer is checked, the review card now shows a compact `Next unlock` handoff that makes Save the obvious next step.

@@ -1405,8 +1405,25 @@ export function RoleplayScreen({
             <Text style={styles.cardKicker}>{savePrompt.eyebrow}</Text>
             <XPBadge label={savePrompt.xpLabel} />
           </View>
-          <Text style={styles.cardTitle}>{savePrompt.title}</Text>
-          <Text style={styles.followUpBody}>{savePrompt.body}</Text>
+          <Text style={styles.cardTitle}>
+            {firstQuestSaveRecap?.primaryTitle ?? savePrompt.title}
+          </Text>
+          <Text style={styles.followUpBody}>
+            {firstQuestSaveRecap?.primaryBody ?? savePrompt.body}
+          </Text>
+          {firstQuestSaveRecap ? (
+            <View style={styles.firstQuestSavePrimaryBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.firstQuestSavePrimaryLabel}>Primary next step</Text>
+                <Badge label="One tap" tone="accent" />
+              </View>
+              <AppButton
+                accessibilityHint="Saves this answer and unlocks the guided Home and Progress areas"
+                label={firstQuestSaveRecap.ctaLabel}
+                onPress={saveSession}
+              />
+            </View>
+          ) : null}
           {firstQuestSaveRecap ? (
             <View style={styles.saveLockInBox}>
               <Text style={styles.saveLockInLabel}>{firstQuestSaveRecap.eyebrow}</Text>
@@ -1428,14 +1445,16 @@ export function RoleplayScreen({
               ))}
             </View>
           ) : null}
-          <View style={styles.feedbackActions}>
-            <View style={styles.feedbackActionItem}>
-              <AppButton
-                label={firstQuestSaveRecap?.ctaLabel ?? savePrompt.ctaLabel}
-                onPress={saveSession}
-              />
+          {!firstQuestSaveRecap ? (
+            <View style={styles.feedbackActions}>
+              <View style={styles.feedbackActionItem}>
+                <AppButton
+                  label={savePrompt.ctaLabel}
+                  onPress={saveSession}
+                />
+              </View>
             </View>
-          </View>
+          ) : null}
           {hasAppliedBetterEnglish ? null : (
             <View style={styles.saveSecondaryActions}>
               <Text style={styles.saveSecondaryLabel}>Want one cleaner version first?</Text>
@@ -2596,6 +2615,24 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
+  },
+  firstQuestSavePrimaryBox: {
+    ...shadows.soft,
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 2,
+    gap: spacing.md,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  firstQuestSavePrimaryLabel: {
+    color: colors.accentDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
   },
   saveLockInBox: {
     backgroundColor: colors.white,
