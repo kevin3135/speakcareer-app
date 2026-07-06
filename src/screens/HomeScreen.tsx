@@ -17,6 +17,7 @@ import { createDailyMission } from '../utils/gamification';
 import { createHomeCoachFocusText } from '../utils/homeCoachFocus';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
+import { createHomeStartPreview } from '../utils/homeStartPreview';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
@@ -109,6 +110,15 @@ export function HomeScreen({
   const startCardXpLabel = resumeRoleplay
     ? `+${resumeRoleplay.durationMinutes * 4} XP`
     : activeLesson.xpLabel;
+  const startPreview = createHomeStartPreview({
+    currentTitle: startCardTitle,
+    dailyTarget,
+    hasCompletedFoundation,
+    hasResumeDraft: Boolean(resumeRoleplay),
+    isMissionComplete,
+    nextUnlockTitle: nextUnlock?.title ?? null,
+    targetSessionsCompleted: localProgress.targetSessionsCompleted,
+  });
   const latestSession = sessions[0];
   const latestCoachFocusText =
     createHomeCoachFocusText(latestSession?.nextFocusText) ??
@@ -139,6 +149,7 @@ export function HomeScreen({
           pathBadgeTone={startCardPathTone}
           pathKickerLabel={startCardKickerLabel}
           pathLabel={startCardPathLabel}
+          preview={startPreview}
           title={startCardTitle}
           xpLabel={startCardXpLabel}
         />
@@ -233,6 +244,7 @@ function AnimatedStartCard({
   pathBadgeTone,
   pathKickerLabel,
   pathLabel,
+  preview,
   title,
   xpLabel,
 }: {
@@ -246,6 +258,11 @@ function AnimatedStartCard({
   pathBadgeTone: 'accent' | 'secondary';
   pathKickerLabel: string;
   pathLabel: string;
+  preview: {
+    body: string;
+    eyebrow: string;
+    title: string;
+  };
   title: string;
   xpLabel: string;
 }) {
@@ -338,6 +355,15 @@ function AnimatedStartCard({
         <Text style={styles.startHabitLabel}>{habitLabel}</Text>
         <Text numberOfLines={1} style={styles.startHabitValue}>
           {habitValue}
+        </Text>
+      </View>
+      <View style={styles.startPreviewBox}>
+        <Text style={styles.startPreviewEyebrow}>{preview.eyebrow}</Text>
+        <Text numberOfLines={1} style={styles.startPreviewTitle}>
+          {preview.title}
+        </Text>
+        <Text numberOfLines={2} style={styles.startPreviewBody}>
+          {preview.body}
         </Text>
       </View>
       <View style={styles.startLevelBox}>
@@ -608,6 +634,35 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  startPreviewBody: {
+    color: colors.primarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  startPreviewBox: {
+    backgroundColor: 'rgba(8, 26, 18, 0.28)',
+    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.xs,
+    padding: spacing.sm,
+  },
+  startPreviewEyebrow: {
+    color: colors.secondarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  startPreviewTitle: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
   },
   startLevelBox: {
     backgroundColor: colors.successDark,

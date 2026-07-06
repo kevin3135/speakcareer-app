@@ -2226,6 +2226,70 @@ test('creates one clear Home daily mission card', async () => {
   assert.equal(completeMission.progressPercent, 100);
 });
 
+test('creates a clear Home start payoff preview', async () => {
+  const { createHomeStartPreview } = await import('../src/utils/homeStartPreview.ts');
+
+  const foundationPreview = createHomeStartPreview({
+    currentTitle: 'Clear sentence',
+    dailyTarget: 2,
+    hasCompletedFoundation: false,
+    hasResumeDraft: false,
+    isMissionComplete: false,
+    nextUnlockTitle: 'Job Interview',
+    targetSessionsCompleted: 0,
+  });
+
+  assert.equal(foundationPreview.eyebrow, 'After lesson');
+  assert.equal(foundationPreview.title, 'Job Interview unlocks');
+  assert.ok(foundationPreview.body.includes('gets you to 1/2 today'));
+
+  const firstSavePreview = createHomeStartPreview({
+    currentTitle: 'Job Interview',
+    dailyTarget: 1,
+    hasCompletedFoundation: true,
+    hasResumeDraft: false,
+    isMissionComplete: false,
+    nextUnlockTitle: 'Meeting Practice',
+    targetSessionsCompleted: 0,
+  });
+
+  assert.equal(firstSavePreview.eyebrow, 'After save');
+  assert.equal(firstSavePreview.title, 'Meeting Practice unlocks');
+  assert.ok(firstSavePreview.body.includes('starts your streak'));
+  assert.ok(firstSavePreview.body.includes('opens Progress'));
+  assert.ok(firstSavePreview.body.includes('1/1 today'));
+
+  const resumePreview = createHomeStartPreview({
+    currentTitle: 'Resume Job Interview',
+    dailyTarget: 3,
+    hasCompletedFoundation: true,
+    hasResumeDraft: true,
+    isMissionComplete: false,
+    nextUnlockTitle: 'Meeting Practice',
+    targetSessionsCompleted: 1,
+  });
+
+  assert.equal(resumePreview.eyebrow, 'After save');
+  assert.equal(resumePreview.title, 'Meeting Practice unlocks');
+  assert.ok(resumePreview.body.includes('Finishing this draft moves you to 2/3 today'));
+  assert.ok(resumePreview.body.includes('1 more later'));
+
+  const bonusPreview = createHomeStartPreview({
+    currentTitle: 'Sales Call',
+    dailyTarget: 1,
+    hasCompletedFoundation: true,
+    hasResumeDraft: false,
+    isMissionComplete: true,
+    nextUnlockTitle: 'Workplace Small Talk',
+    targetSessionsCompleted: 1,
+  });
+
+  assert.equal(bonusPreview.eyebrow, 'Bonus after this');
+  assert.equal(bonusPreview.title, 'Workplace Small Talk stays ready');
+  assert.ok(bonusPreview.body.includes("target is already done"));
+  assert.ok(bonusPreview.body.includes('bonus XP'));
+});
+
 test('guides roleplay practice through one simple step at a time', async () => {
   const { createRoleplayGuideState } = await import('../src/utils/roleplayGuide.ts');
   const firstStep = createRoleplayGuideState({

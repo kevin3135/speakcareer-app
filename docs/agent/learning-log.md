@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-06: Home Start Payoff Preview
+
+Made one focused Home improvement: the main `START` card now shows a compact payoff preview that explains what happens after the current lesson or save.
+
+Why it changed:
+
+- The Home screen already had one clear primary action, but the reward and next unlock still lived in separate rows lower on the page.
+- For the English MVP loop, the first visible card should explain both the next action and the near-term payoff without making the user scan the rest of the map first.
+- A compact preview supports the businesslike habit loop: start, save, unlock, repeat.
+
+What changed:
+
+- Added `src/utils/homeStartPreview.ts` to generate short `After lesson`, `After save`, and `Bonus after this` preview copy from existing local progress data.
+- Updated `src/screens/HomeScreen.tsx` so the main `START` card now renders that preview between the pace pill and level progress box.
+- Added focused coverage in `tests/practiceContent.test.mjs` for foundation, first-save, resume-draft, and bonus-practice preview states.
+
+What went well:
+
+- The improvement stayed inside one screen, one small helper and one existing test file.
+- The new copy reuses current daily target, unlock and draft state instead of introducing any new storage or progress model.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- The first test run failed on one awkward foundation-state phrase; tightening the wording fixed it quickly.
+- This run did not include fresh Expo or browser mobile visual QA, so the taller Home start card should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 85 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Compact the Home goal and next-unlock rows so the full start-action loop still fits more comfortably above the fold on small phones.
+
 ## 2026-07-06: Saved Path Runway Density
 
 Made one focused Roleplay completion polish: the saved-path roadmap now uses slimmer status chips and one short support line per step so the completion box feels lighter on small mobile screens.
