@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Shared Quest 1 Coach Cue
+
+Made one focused first-roleplay improvement: the first Job Interview warm-up now repeats the same selected-level path coach cue used in onboarding and Foundation, so the first English path feels continuous all the way into Quest 1.
+
+Why it changed:
+
+- The onboarding and Foundation screens already reused one shared coach identity, but the first Job Interview warm-up still fell back to a generic Lesson 1 handoff.
+- That made the first career practice step feel slightly disconnected from the guided path the learner had just followed.
+- The smallest useful fix was to reuse the existing shared coach cue inside the current warm-up panel instead of adding another explainer or navigation step.
+
+What changed:
+
+- Updated `src/utils/foundationWarmupPanel.ts` so the warm-up panel can carry the shared path coach label and message.
+- Updated `src/screens/RoleplayScreen.tsx` so the first auto-loaded Job Interview starter now shows the same selected-level coach cue used in onboarding and Foundation.
+- Added focused coverage in `tests/practiceContent.test.mjs` to verify the first Quest 1 warm-up keeps the shared path coach cue for starter and confident learners.
+
+What went well:
+
+- The improvement stayed narrow: one existing screen, one existing helper, and one existing test file.
+- The Quest 1 warm-up now reuses the same `createFirstPathCoachCue` helper instead of introducing another copy path.
+- `npm.cmd run typecheck`, `npm.cmd run test`, and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new coach cue box should still be checked on a narrow viewport inside the first Job Interview warm-up panel.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+- Draft PR creation may still be blocked in this environment if `gh` is missing or GitHub auth is unavailable.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a shared coach identity is introduced in onboarding, the first live roleplay should repeat it before the learner starts typing.
+- Reusing one existing cue across screens is better than inventing another first-run explanation layer.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add the `0/1 saved` first-quest unlock progress back into the first Job Interview warm-up so the learner still sees what the first save unlocks.
+
 ## 2026-07-06: Shared Coach Path Cue
 
 Made one focused onboarding improvement: the same selected-level coach cue now appears in onboarding and at the top of Lesson 1, so the first English path reads like one guided flow instead of two disconnected screens.

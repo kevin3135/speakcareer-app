@@ -11,7 +11,7 @@ import {
   XPBadge,
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
-import { guidedStart } from '../data/guidedIntro';
+import { foundationStart, guidedStart, levelAssessment } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type {
   DailyPracticeTarget,
@@ -29,6 +29,7 @@ import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerRevie
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
 import { createFeedbackMomentumRecap } from '../utils/feedbackMomentum';
+import { createFirstPathCoachCue } from '../utils/firstPathCoachCue';
 import { createFirstQuestFeedbackState } from '../utils/firstQuestFeedback';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
 import { createFollowUpReadinessCue } from '../utils/followUpReadinessCue';
@@ -172,6 +173,8 @@ export function RoleplayScreen({
     }
     : null;
   const levelProfile = getStartingLevelProfile(startingLevelId);
+  const levelLabel =
+    levelAssessment.choices.find((choice) => choice.id === startingLevelId)?.label ?? 'B1';
   const starterReminder = createRoleplayStarterReminder({
     roleplayId: roleplay.id,
     sessions,
@@ -214,8 +217,20 @@ export function RoleplayScreen({
   const isAutoWarmupCue = Boolean(warmupCue?.autoApplyStarter);
   const hasRestoredDraft = Boolean(savedDraft?.draftAnswer) && !isAutoWarmupCue;
   const restoredDraftCue = hasRestoredDraft ? createRoleplayResumeCue(liveAnswerReview) : null;
+  const foundationWarmupCoachCue = isAutoWarmupCue && warmupCue
+    ? createFirstPathCoachCue({
+      coachNote: levelProfile.coachMessage,
+      firstLessonTitle: foundationStart.title,
+      firstQuestTitle: guidedStart.title,
+      levelLabel,
+    })
+    : null;
   const foundationWarmupPanel = isAutoWarmupCue && warmupCue
     ? createFoundationWarmupPanel({
+      coachCueLabel: foundationWarmupCoachCue?.label ?? `${levelLabel} path coach`,
+      coachCueMessage:
+        foundationWarmupCoachCue?.message ??
+        `We start with ${foundationStart.title}, then move into Job Interview.`,
       editPlanSteps: levelProfile.starterEditSteps,
       note: warmupCue.note,
       starterAnswer: warmupCue.starterAnswer,
@@ -863,6 +878,19 @@ export function RoleplayScreen({
               </View>
               <Text style={styles.foundationWarmupTitle}>{foundationWarmupPanel.title}</Text>
               <Text style={styles.foundationWarmupBody}>{foundationWarmupPanel.body}</Text>
+              <View style={styles.foundationWarmupCoachCue}>
+                <View style={styles.foundationWarmupCoachBadge}>
+                  <Text style={styles.foundationWarmupCoachBadgeText}>SC</Text>
+                </View>
+                <View style={styles.foundationWarmupCoachCopy}>
+                  <Text style={styles.foundationWarmupCoachLabel}>
+                    {foundationWarmupPanel.coachCueLabel}
+                  </Text>
+                  <Text style={styles.foundationWarmupCoachText}>
+                    {foundationWarmupPanel.coachCueMessage}
+                  </Text>
+                </View>
+              </View>
               <View style={styles.foundationWarmupStarterBox}>
                 <View style={styles.foundationWarmupStarterHeader}>
                   <Text style={styles.foundationWarmupStarterLabel}>
@@ -936,13 +964,6 @@ export function RoleplayScreen({
                   ))}
                 </View>
               </View>
-              <Text style={styles.foundationWarmupNote}>
-                <Text style={styles.foundationWarmupNoteLabel}>
-                  {foundationWarmupPanel.coachLabel}
-                  {': '}
-                </Text>
-                {warmupCue.note}
-              </Text>
             </View>
           ) : null}
           {hasRestoredDraft ? (
@@ -1634,6 +1655,48 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
   },
+  foundationWarmupCoachCue: {
+    alignItems: 'flex-start',
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    padding: spacing.sm,
+  },
+  foundationWarmupCoachBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.secondaryDark,
+    borderRadius: radius.md,
+    height: 34,
+    justifyContent: 'center',
+    width: 34,
+  },
+  foundationWarmupCoachBadgeText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  foundationWarmupCoachCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  foundationWarmupCoachLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  foundationWarmupCoachText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
   foundationWarmupStarterBox: {
     backgroundColor: colors.white,
     borderColor: colors.secondary,
@@ -1759,18 +1822,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderColor: colors.success,
     color: colors.successDark,
-  },
-  foundationWarmupNote: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-  },
-  foundationWarmupNoteLabel: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
   },
   restoredDraftBox: {
     alignItems: 'center',

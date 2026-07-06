@@ -1,6 +1,7 @@
 export type FoundationWarmupPanel = {
   body: string;
-  coachLabel: string;
+  coachCueLabel: string;
+  coachCueMessage: string;
   editPlanLabel: string;
   editPlanSteps: [string, string, string];
   starterAnswer: string;
@@ -9,12 +10,16 @@ export type FoundationWarmupPanel = {
 };
 
 type FoundationWarmupPanelInput = {
+  coachCueLabel: string;
+  coachCueMessage: string;
   editPlanSteps: [string, string, string];
   note: string;
   starterAnswer: string;
 };
 
 export function createFoundationWarmupPanel({
+  coachCueLabel,
+  coachCueMessage,
   editPlanSteps,
   note,
   starterAnswer,
@@ -25,7 +30,8 @@ export function createFoundationWarmupPanel({
     body: hasCoachNote
       ? 'Your Lesson 1 starter is already loaded below. Change the task and result, then check.'
       : 'Your starter is already loaded below. Make it yours, then check.',
-    coachLabel: 'Coach note',
+    coachCueLabel,
+    coachCueMessage,
     editPlanLabel: 'Make it yours',
     editPlanSteps,
     starterAnswer,

@@ -992,6 +992,8 @@ test('shows a starter reminder only on the first Job Interview answer card', asy
 });
 
 test('creates a foundation handoff cue for the first interview answer', async () => {
+  const { foundationStart, guidedStart, levelAssessment } = await import('../src/data/guidedIntro.ts');
+  const { createFirstPathCoachCue } = await import('../src/utils/firstPathCoachCue.ts');
   const {
     createFoundationWarmupCue,
     createRoleplayWarmupCue,
@@ -1003,6 +1005,8 @@ test('creates a foundation handoff cue for the first interview answer', async ()
 
   const starterProfile = getStartingLevelProfile('starter');
   const confidentProfile = getStartingLevelProfile('confident');
+  const starterLevelLabel = levelAssessment.choices.find((choice) => choice.id === 'starter')?.label;
+  const confidentLevelLabel = levelAssessment.choices.find((choice) => choice.id === 'confident')?.label;
   const starterCue = createFoundationWarmupCue({
     coachNote: starterProfile.coachMessage,
     starterAnswer: starterProfile.starterAnswer,
@@ -1019,12 +1023,23 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.equal(starterCue.autoApplyStarter, true);
   assert.ok(starterCue.note.includes('Keep it simple'));
   assert.ok(starterCue.starterAnswer.includes('The result was'));
+  const starterPathCoachCue = createFirstPathCoachCue({
+    coachNote: starterProfile.coachMessage,
+    firstLessonTitle: foundationStart.title,
+    firstQuestTitle: guidedStart.title,
+    levelLabel: starterLevelLabel,
+  });
   const starterPanel = createFoundationWarmupPanel({
+    coachCueLabel: starterPathCoachCue.label,
+    coachCueMessage: starterPathCoachCue.message,
     editPlanSteps: starterProfile.starterEditSteps,
     note: starterCue.note,
     starterAnswer: starterCue.starterAnswer,
   });
   assert.equal(starterPanel.title, 'Lesson 1 starter is ready');
+  assert.equal(starterPanel.coachCueLabel, 'A1-A2 path coach');
+  assert.ok(starterPanel.coachCueMessage.includes(foundationStart.title));
+  assert.ok(starterPanel.coachCueMessage.includes('Job Interview'));
   assert.equal(starterPanel.starterLabel, 'Loaded starter');
   assert.equal(starterPanel.editPlanLabel, 'Make it yours');
   assert.deepEqual(starterPanel.editPlanSteps, starterProfile.starterEditSteps);
@@ -1143,11 +1158,21 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   );
   assert.ok(confidentCue.note.includes('business result'));
   assert.ok(confidentCue.starterAnswer.includes('As a result'));
+  const confidentPathCoachCue = createFirstPathCoachCue({
+    coachNote: confidentProfile.coachMessage,
+    firstLessonTitle: foundationStart.title,
+    firstQuestTitle: guidedStart.title,
+    levelLabel: confidentLevelLabel,
+  });
   const confidentPanel = createFoundationWarmupPanel({
+    coachCueLabel: confidentPathCoachCue.label,
+    coachCueMessage: confidentPathCoachCue.message,
     editPlanSteps: confidentProfile.starterEditSteps,
     note: confidentCue.note,
     starterAnswer: confidentCue.starterAnswer,
   });
+  assert.equal(confidentPanel.coachCueLabel, 'B2 path coach');
+  assert.ok(confidentPanel.coachCueMessage.includes('business result'));
   assert.ok(confidentPanel.starterAnswer.includes('As a result'));
 
   const progressCue = createRoleplayWarmupCue({
