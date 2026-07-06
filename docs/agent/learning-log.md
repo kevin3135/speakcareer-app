@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Onboarding First-Lesson Preview
+
+Made one focused onboarding improvement: after a learner picks a starting level, onboarding now previews the exact Lesson 1 sentence shape and level-matched example before the first lesson starts.
+
+Why it changed:
+
+- The onboarding path already explained the first week, but it still leaned on titles, milestones and daily-target language more than the actual English step.
+- The product direction says the English MVP should feel concrete fast: one clear lesson, one clear next action, then career practice.
+- The smallest useful fix was to reuse the existing foundation lesson data and show the sentence shape directly inside the selected onboarding plan.
+
+What changed:
+
+- Added `src/utils/onboardingLessonPreview.ts` to generate a compact onboarding preview from the existing foundation structure and level-specific example sentence parts.
+- Updated `src/screens/OnboardingScreen.tsx` so the selected plan now shows a `Lesson 1 preview` card with the `I -> action -> result` structure, level-matched sentence parts and the full example sentence.
+- Added focused coverage in `tests/practiceContent.test.mjs` for starter and confident onboarding lesson-preview states.
+
+What went well:
+
+- The change stayed inside onboarding and reused existing foundation and starting-level content instead of adding new product logic.
+- The preview makes the first English step more concrete without adding another onboarding screen or expanding the hidden details panel.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the three token cards should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 98 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Onboarding is stronger when it previews the exact English step, not only the lesson name or milestone.
+- Reuse level-specific foundation examples to keep onboarding and Lesson 1 aligned.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the Practice path card so the first recommended roleplay shows one clearer unlock payoff before the library toggle.
+
 ## 2026-07-06: Profile Privacy Reassurance
 
 Made one focused Profile/Me polish: the privacy/local-data section now feels like a friendly reassurance card instead of technical preview copy.

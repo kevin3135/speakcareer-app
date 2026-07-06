@@ -17,6 +17,7 @@ import {
 } from '../utils/onboardingDailyTargetGuide';
 import { createFirstPathCoachCue } from '../utils/firstPathCoachCue';
 import { createOnboardingLevelHandoff } from '../utils/onboardingLevelHandoff';
+import { createOnboardingLessonPreview } from '../utils/onboardingLessonPreview';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
 import { createOnboardingPlanSummary } from '../utils/onboardingPlanSummary';
 import { getStartingLevelProfile } from '../utils/startingLevel';
@@ -70,6 +71,13 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
         })
       : null;
   const planSummary = planPreview ? createOnboardingPlanSummary(planPreview) : null;
+  const lessonPreview = selectedProfile
+    ? createOnboardingLessonPreview({
+        exampleParts: selectedProfile.foundationExampleParts,
+        nextQuestTitle: guidedStart.title,
+        structure: foundationStart.structure,
+      })
+    : null;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -190,6 +198,28 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                 <Text style={styles.planSummaryMilestoneLabel}>After first save</Text>
                 <Text style={styles.planSummaryMilestoneTitle}>{planSummary.milestoneTitle}</Text>
               </View>
+            </View>
+          ) : null}
+
+          {lessonPreview ? (
+            <View style={styles.lessonPreviewBox}>
+              <View style={styles.lessonPreviewHeader}>
+                <Text style={styles.lessonPreviewLabel}>Lesson 1 preview</Text>
+                <Badge label={lessonPreview.badgeLabel} tone="secondary" />
+              </View>
+              <Text style={styles.lessonPreviewTitle}>{lessonPreview.title}</Text>
+              <View style={styles.lessonPreviewParts}>
+                {lessonPreview.parts.map((part) => (
+                  <View key={part.label} style={styles.lessonPreviewPart}>
+                    <Text style={styles.lessonPreviewPartLabel}>{part.label}</Text>
+                    <Text numberOfLines={2} style={styles.lessonPreviewPartValue}>
+                      {part.value}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.lessonPreviewExample}>{lessonPreview.exampleSentence}</Text>
+              <Text style={styles.lessonPreviewBody}>{lessonPreview.body}</Text>
             </View>
           ) : null}
 
@@ -597,6 +627,80 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   planSummaryTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  lessonPreviewBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  lessonPreviewBox: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  lessonPreviewExample: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  lessonPreviewHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  lessonPreviewLabel: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  lessonPreviewPart: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 84,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  lessonPreviewPartLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  lessonPreviewParts: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  lessonPreviewPartValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  lessonPreviewTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.body,

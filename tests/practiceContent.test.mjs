@@ -807,6 +807,42 @@ test('creates a compact onboarding first-week summary before showing full detail
   );
 });
 
+test('previews the exact first lesson sentence during onboarding', async () => {
+  const { foundationStart, guidedStart } = await import('../src/data/guidedIntro.ts');
+  const { createOnboardingLessonPreview } = await import('../src/utils/onboardingLessonPreview.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const starterPreview = createOnboardingLessonPreview({
+    exampleParts: starterProfile.foundationExampleParts,
+    nextQuestTitle: guidedStart.title,
+    structure: foundationStart.structure,
+  });
+
+  assert.equal(starterPreview.badgeLabel, '3 taps');
+  assert.equal(starterPreview.title, 'I -> action -> result');
+  assert.equal(starterPreview.exampleSentence, starterProfile.foundationExample);
+  assert.equal(
+    starterPreview.body,
+    'Tap these parts in Lesson 1, then use the same shape in Job Interview.',
+  );
+  assert.deepEqual(starterPreview.parts, [
+    { label: 'I', value: 'I' },
+    { label: 'action', value: 'organized the weekly report' },
+    { label: 'result', value: 'and sent it on time.' },
+  ]);
+
+  const confidentProfile = getStartingLevelProfile('confident');
+  const confidentPreview = createOnboardingLessonPreview({
+    exampleParts: confidentProfile.foundationExampleParts,
+    nextQuestTitle: guidedStart.title,
+    structure: foundationStart.structure,
+  });
+
+  assert.equal(confidentPreview.exampleSentence, confidentProfile.foundationExample);
+  assert.ok(confidentPreview.parts[2].value.includes('reduced delays'));
+});
+
 test('connects the selected onboarding level to the first guided path', async () => {
   const { foundationStart, guidedStart } = await import('../src/data/guidedIntro.ts');
   const { createOnboardingLevelHandoff } = await import('../src/utils/onboardingLevelHandoff.ts');
