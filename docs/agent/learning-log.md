@@ -1,5 +1,46 @@
 # Agent Learning Log
 
+## 2026-07-06: First Quest Warm-Up Sequence
+
+Made one focused Roleplay visual polish: the first Job Interview warm-up now groups the coach cue, unlock cue and loaded starter into one compact sequence panel.
+
+Why it changed:
+
+- The first-quest warm-up had the right guidance, but the coach cue, `0/1 saved` unlock strip and starter box looked like three separate cards.
+- On mobile, that made the warm-up feel denser than necessary before the learner reached the answer box.
+- The smallest useful fix was to keep the same content and make it scan as one sequence: coach, unlock, starter.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the coach cue, unlock progress and starter answer sit inside one shared sequence panel with subtle dividers.
+- Reduced visual weight by removing nested borders from the individual warm-up rows and tightening the coach badge.
+- Shortened the `foundationWarmupPanel` helper body copy in `src/utils/foundationWarmupPanel.ts`.
+- Updated `tests/practiceContent.test.mjs` for the shorter helper copy.
+
+What went well:
+
+- The change stayed inside the first-quest warm-up component group and did not change roleplay logic, storage or navigation.
+- The answer input and Check action remain untouched.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the grouped panel should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Polish the first answer input area so the loaded starter feels editable and the `Check` action remains visually stronger than helper controls.
+
 ## 2026-07-06: First Quest Unlock Cue
 
 Made one focused first-roleplay improvement: the auto-loaded Job Interview warm-up now shows the `0/1 saved` unlock progress again.

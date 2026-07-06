@@ -883,53 +883,55 @@ export function RoleplayScreen({
                 <Badge label={warmupCue.badgeLabel} tone="secondary" />
               </View>
               <Text style={styles.foundationWarmupTitle}>{foundationWarmupPanel.title}</Text>
-              <Text style={styles.foundationWarmupBody}>{foundationWarmupPanel.body}</Text>
-              <View style={styles.foundationWarmupCoachCue}>
-                <View style={styles.foundationWarmupCoachBadge}>
-                  <Text style={styles.foundationWarmupCoachBadgeText}>SC</Text>
-                </View>
-                <View style={styles.foundationWarmupCoachCopy}>
-                  <Text style={styles.foundationWarmupCoachLabel}>
-                    {foundationWarmupPanel.coachCueLabel}
-                  </Text>
-                  <Text style={styles.foundationWarmupCoachText}>
-                    {foundationWarmupPanel.coachCueMessage}
-                  </Text>
-                </View>
-              </View>
-              {foundationWarmupPanel.unlockProgress ? (
-                <View style={styles.foundationWarmupUnlockStrip}>
-                  <View style={styles.foundationWarmupUnlockCopy}>
-                    <Text numberOfLines={1} style={styles.foundationWarmupUnlockLabel}>
-                      {foundationWarmupPanel.unlockProgress.unlockLabel}
+              <Text numberOfLines={2} style={styles.foundationWarmupBody}>{foundationWarmupPanel.body}</Text>
+              <View style={styles.foundationWarmupSequence}>
+                <View style={styles.foundationWarmupCoachCue}>
+                  <View style={styles.foundationWarmupCoachBadge}>
+                    <Text style={styles.foundationWarmupCoachBadgeText}>SC</Text>
+                  </View>
+                  <View style={styles.foundationWarmupCoachCopy}>
+                    <Text style={styles.foundationWarmupCoachLabel}>
+                      {foundationWarmupPanel.coachCueLabel}
                     </Text>
-                    <Text numberOfLines={2} style={styles.foundationWarmupUnlockBody}>
-                      {foundationWarmupPanel.unlockProgress.body}
+                    <Text style={styles.foundationWarmupCoachText}>
+                      {foundationWarmupPanel.coachCueMessage}
                     </Text>
                   </View>
-                  <Badge label={foundationWarmupPanel.unlockProgress.progressLabel} tone="accent" />
                 </View>
-              ) : null}
-              <View style={styles.foundationWarmupStarterBox}>
-                <View style={styles.foundationWarmupStarterHeader}>
-                  <Text style={styles.foundationWarmupStarterLabel}>
-                    {foundationWarmupPanel.starterLabel}
+                {foundationWarmupPanel.unlockProgress ? (
+                  <View style={styles.foundationWarmupUnlockStrip}>
+                    <View style={styles.foundationWarmupUnlockCopy}>
+                      <Text numberOfLines={1} style={styles.foundationWarmupUnlockLabel}>
+                        {foundationWarmupPanel.unlockProgress.unlockLabel}
+                      </Text>
+                      <Text numberOfLines={2} style={styles.foundationWarmupUnlockBody}>
+                        {foundationWarmupPanel.unlockProgress.body}
+                      </Text>
+                    </View>
+                    <Badge label={foundationWarmupPanel.unlockProgress.progressLabel} tone="accent" />
+                  </View>
+                ) : null}
+                <View style={styles.foundationWarmupStarterBox}>
+                  <View style={styles.foundationWarmupStarterHeader}>
+                    <Text style={styles.foundationWarmupStarterLabel}>
+                      {foundationWarmupPanel.starterLabel}
+                    </Text>
+                    <AppButton
+                      accessibilityHint={
+                        foundationStarterAction.mode === 'loaded'
+                          ? 'Moves focus to the answer box so you can edit the starter'
+                          : 'Loads the original Lesson 1 starter into the answer box again'
+                      }
+                      label={foundationStarterAction.ctaLabel}
+                      onPress={runFoundationStarterAction}
+                      size="small"
+                      variant="quiet"
+                    />
+                  </View>
+                  <Text numberOfLines={3} style={styles.foundationWarmupStarterText}>
+                    {foundationWarmupPanel.starterAnswer}
                   </Text>
-                  <AppButton
-                    accessibilityHint={
-                      foundationStarterAction.mode === 'loaded'
-                        ? 'Moves focus to the answer box so you can edit the starter'
-                        : 'Loads the original Lesson 1 starter into the answer box again'
-                    }
-                    label={foundationStarterAction.ctaLabel}
-                    onPress={runFoundationStarterAction}
-                    size="small"
-                    variant="quiet"
-                  />
                 </View>
-                <Text style={styles.foundationWarmupStarterText}>
-                  {foundationWarmupPanel.starterAnswer}
-                </Text>
               </View>
               <View style={styles.foundationWarmupActionBox}>
                 <View style={styles.oneThingHeader}>
@@ -1674,12 +1676,17 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
   },
-  foundationWarmupCoachCue: {
-    alignItems: 'flex-start',
+  foundationWarmupSequence: {
     backgroundColor: colors.white,
     borderColor: colors.secondary,
     borderRadius: radius.md,
     borderWidth: 1,
+    overflow: 'hidden',
+  },
+  foundationWarmupCoachCue: {
+    alignItems: 'flex-start',
+    borderBottomColor: colors.border,
+    borderBottomWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
     padding: spacing.sm,
@@ -1687,10 +1694,10 @@ const styles = StyleSheet.create({
   foundationWarmupCoachBadge: {
     alignItems: 'center',
     backgroundColor: colors.secondaryDark,
-    borderRadius: radius.md,
-    height: 34,
+    borderRadius: radius.pill,
+    height: 28,
     justifyContent: 'center',
-    width: 34,
+    width: 28,
   },
   foundationWarmupCoachBadgeText: {
     color: colors.white,
@@ -1714,14 +1721,13 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
+    marginTop: spacing.xxs,
   },
   foundationWarmupUnlockStrip: {
     alignItems: 'center',
     backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-    borderRadius: radius.md,
-    borderWidth: 1,
+    borderBottomColor: colors.border,
+    borderBottomWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
     paddingHorizontal: spacing.sm,
@@ -1747,9 +1753,6 @@ const styles = StyleSheet.create({
   },
   foundationWarmupStarterBox: {
     backgroundColor: colors.white,
-    borderColor: colors.secondary,
-    borderRadius: radius.md,
-    borderWidth: 1,
     padding: spacing.sm,
   },
   foundationWarmupStarterHeader: {

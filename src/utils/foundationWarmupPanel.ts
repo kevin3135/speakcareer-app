@@ -41,8 +41,8 @@ export function createFoundationWarmupPanel({
 
   return {
     body: hasCoachNote
-      ? 'Your Lesson 1 starter is already loaded below. Change the task and result, then check.'
-      : 'Your starter is already loaded below. Make it yours, then check.',
+      ? 'Lesson 1 starter is loaded. Edit the task and result, then check.'
+      : 'Starter is loaded. Make it yours, then check.',
     coachCueLabel,
     coachCueMessage,
     editPlanLabel: 'Make it yours',

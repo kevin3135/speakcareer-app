@@ -1061,7 +1061,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   });
   assert.equal(
     starterPanel.body,
-    'Your Lesson 1 starter is already loaded below. Change the task and result, then check.',
+    'Lesson 1 starter is loaded. Edit the task and result, then check.',
   );
   assert.ok(starterPanel.starterAnswer.includes('The result was'));
   assert.deepEqual(
