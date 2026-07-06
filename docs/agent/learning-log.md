@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Onboarding Selected-Level Handoff
+
+Made one focused onboarding improvement: the selected level card now shows a compact first-path handoff so the learner can see `Lesson 1 -> Job Interview` directly inside the choice they just picked.
+
+Why it changed:
+
+- The onboarding plan preview below the choices already explained the first English path, but the selected level card still stopped at self-assessment.
+- The design audit explicitly called out that the selected level was not visually connected to the first lesson.
+- The smallest useful fix was to add one compact selected-state path cue instead of another onboarding step or modal.
+
+What changed:
+
+- Added `src/utils/onboardingLevelHandoff.ts` to generate a small selected-level path summary from the existing guided lesson and first quest titles.
+- Updated `src/screens/OnboardingScreen.tsx` so the chosen level card now reveals a compact `We start simple` handoff with the first lesson, the first quest, and a short transition line.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new onboarding handoff helper.
+
+What went well:
+
+- The improvement stayed narrow: one new helper, one existing screen, and one existing test file.
+- The new cue reuses the current Foundation and first-quest titles, so it stays aligned with the existing English MVP path.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- The first patch used a raw `->` token in JSX, which broke parsing; wrapping it as a string literal fixed typecheck and lint immediately.
+- This run did not include fresh Expo or browser mobile visual QA, so the selected-card expansion should still be checked on a narrow viewport.
+- Draft PR creation is still blocked in this environment because `gh` CLI is not installed, so GitHub auth could not be verified and no draft PR could be opened.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When onboarding asks for a self-assessment choice, the selected state should also show the immediate guided path, not only the level label.
+- Small onboarding connection cues are better inside the selected card than as another separate explainer block.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one stronger shared coach identity cue between onboarding and Foundation so the first-run path feels like one guided flow.
+
 ## 2026-07-06: Home First-Win Tomorrow Preview
 
 Made one focused Home improvement: after exactly one saved answer, the `START` card preview now switches to a compact `Return tomorrow` cue so Home explains the next-day rep before the learner opens Wins.

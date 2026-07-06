@@ -707,6 +707,21 @@ test('creates a personalized onboarding first-path preview from the selected lev
   assert.equal(confidentPreview.commitmentNote, 'Lesson now. 3 saves today, starting with Job Interview.');
 });
 
+test('connects the selected onboarding level to the first guided path', async () => {
+  const { foundationStart, guidedStart } = await import('../src/data/guidedIntro.ts');
+  const { createOnboardingLevelHandoff } = await import('../src/utils/onboardingLevelHandoff.ts');
+
+  const handoff = createOnboardingLevelHandoff(foundationStart.title, guidedStart.title);
+
+  assert.equal(handoff.title, 'We start simple');
+  assert.equal(handoff.primaryStepLabel, 'Lesson 1');
+  assert.equal(handoff.primaryStepTitle, 'Learn one clear sentence');
+  assert.equal(handoff.secondaryStepLabel, 'Quest 1');
+  assert.equal(handoff.secondaryStepTitle, 'Job Interview');
+  assert.ok(handoff.body.includes('Learn one clear sentence'));
+  assert.ok(handoff.body.includes('Job Interview'));
+});
+
 test('recommends a starting daily target based on onboarding level', async () => {
   const { createOnboardingDailyTargetGuide, resolveOnboardingDailyTarget } = await import(
     '../src/utils/onboardingDailyTargetGuide.ts'

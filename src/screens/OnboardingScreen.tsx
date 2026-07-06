@@ -15,6 +15,7 @@ import {
   createOnboardingDailyTargetGuide,
   resolveOnboardingDailyTarget,
 } from '../utils/onboardingDailyTargetGuide';
+import { createOnboardingLevelHandoff } from '../utils/onboardingLevelHandoff';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
@@ -38,6 +39,9 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
   const selectedProfile = selectedLevelId ? getStartingLevelProfile(selectedLevelId) : null;
   const dailyTargetGuide = selectedLevelId
     ? createOnboardingDailyTargetGuide(selectedLevelId, selectedDailyTarget)
+    : null;
+  const selectedLevelHandoff = selectedChoice
+    ? createOnboardingLevelHandoff(foundationStart.title, guidedStart.title)
     : null;
   const planPreview =
     selectedChoice && selectedProfile
@@ -108,6 +112,35 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               <View style={styles.optionCopy}>
                 <Text style={styles.optionTitle}>{choice.title}</Text>
                 <Text style={styles.optionBody}>{choice.body}</Text>
+                {isSelected && selectedLevelHandoff ? (
+                  <View style={styles.optionSelectedPath}>
+                    <View style={styles.optionSelectedPathHeader}>
+                      <Text style={styles.optionSelectedPathLabel}>
+                        {selectedLevelHandoff.title}
+                      </Text>
+                      <Badge label={selectedLevelHandoff.primaryStepLabel} tone="secondary" />
+                    </View>
+                    <Text style={styles.optionSelectedPathBody}>
+                      {selectedLevelHandoff.body}
+                    </Text>
+                    <View style={styles.optionSelectedPathSteps}>
+                      <View style={styles.optionSelectedPathStep}>
+                        <Text style={styles.optionSelectedPathStepTitle}>
+                          {selectedLevelHandoff.primaryStepTitle}
+                        </Text>
+                      </View>
+                      <Text style={styles.optionSelectedPathArrow}>{'->'}</Text>
+                      <View style={styles.optionSelectedPathStep}>
+                        <Text style={styles.optionSelectedPathStepLabel}>
+                          {selectedLevelHandoff.secondaryStepLabel}
+                        </Text>
+                        <Text style={styles.optionSelectedPathStepTitle}>
+                          {selectedLevelHandoff.secondaryStepTitle}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ) : null}
               </View>
             </Pressable>
           );
@@ -922,6 +955,71 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  optionSelectedPath: {
+    backgroundColor: colors.white,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  optionSelectedPathArrow: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  optionSelectedPathBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  optionSelectedPathHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  optionSelectedPathLabel: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  optionSelectedPathStep: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  optionSelectedPathStepLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  optionSelectedPathStepTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
+  optionSelectedPathSteps: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.sm,
   },
   footer: {
     marginTop: 'auto',
