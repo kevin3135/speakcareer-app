@@ -1001,6 +1001,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   const { createFoundationStarterAction } = await import('../src/utils/foundationStarterAction.ts');
   const { createFoundationStarterChecklist } = await import('../src/utils/foundationStarterChecklist.ts');
   const { createFoundationWarmupPanel } = await import('../src/utils/foundationWarmupPanel.ts');
+  const { createRoleplayFirstQuestState } = await import('../src/utils/roleplayFirstQuest.ts');
   const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
 
   const starterProfile = getStartingLevelProfile('starter');
@@ -1011,10 +1012,16 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     coachNote: starterProfile.coachMessage,
     starterAnswer: starterProfile.starterAnswer,
   });
+  const firstQuestState = createRoleplayFirstQuestState({
+    guidedStart,
+    roleplayId: guidedStart.roleplayId,
+    sessions: [],
+  });
   const confidentCue = createFoundationWarmupCue({
     coachNote: confidentProfile.coachMessage,
     starterAnswer: confidentProfile.starterAnswer,
   });
+  assert.ok(firstQuestState);
 
   assert.equal(starterCue.cueId, 'foundation-starter');
   assert.equal(starterCue.eyebrow, 'Foundation handoff');
@@ -1035,6 +1042,10 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     editPlanSteps: starterProfile.starterEditSteps,
     note: starterCue.note,
     starterAnswer: starterCue.starterAnswer,
+    unlockProgress: {
+      progressLabel: firstQuestState.progressLabel,
+      unlockLabel: firstQuestState.unlockLabel,
+    },
   });
   assert.equal(starterPanel.title, 'Lesson 1 starter is ready');
   assert.equal(starterPanel.coachCueLabel, 'A1-A2 path coach');
@@ -1043,6 +1054,11 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   assert.equal(starterPanel.starterLabel, 'Loaded starter');
   assert.equal(starterPanel.editPlanLabel, 'Make it yours');
   assert.deepEqual(starterPanel.editPlanSteps, starterProfile.starterEditSteps);
+  assert.deepEqual(starterPanel.unlockProgress, {
+    body: 'Save this edited answer to unlock Home and Progress.',
+    progressLabel: '0/1 saved',
+    unlockLabel: 'Unlock Home and Progress',
+  });
   assert.equal(
     starterPanel.body,
     'Your Lesson 1 starter is already loaded below. Change the task and result, then check.',
@@ -1170,9 +1186,14 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     editPlanSteps: confidentProfile.starterEditSteps,
     note: confidentCue.note,
     starterAnswer: confidentCue.starterAnswer,
+    unlockProgress: {
+      progressLabel: firstQuestState.progressLabel,
+      unlockLabel: firstQuestState.unlockLabel,
+    },
   });
   assert.equal(confidentPanel.coachCueLabel, 'B2 path coach');
   assert.ok(confidentPanel.coachCueMessage.includes('business result'));
+  assert.equal(confidentPanel.unlockProgress?.progressLabel, '0/1 saved');
   assert.ok(confidentPanel.starterAnswer.includes('As a result'));
 
   const progressCue = createRoleplayWarmupCue({

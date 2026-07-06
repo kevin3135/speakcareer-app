@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: First Quest Unlock Cue
+
+Made one focused first-roleplay improvement: the auto-loaded Job Interview warm-up now shows the `0/1 saved` unlock progress again.
+
+Why it changed:
+
+- The shared coach cue made onboarding, Foundation and Quest 1 feel continuous, but it pushed the first-save unlock signal out of the warm-up.
+- A new learner should still see that saving the edited interview answer unlocks Home and Progress.
+- The smallest useful fix was to reuse the existing first-quest progress data inside the current warm-up panel instead of adding another banner or step.
+
+What changed:
+
+- Updated `src/utils/foundationWarmupPanel.ts` with an optional `unlockProgress` strip derived from existing first-quest labels.
+- Updated `src/screens/RoleplayScreen.tsx` so the first Job Interview warm-up renders `Unlock Home and Progress` with a `0/1 saved` badge.
+- Added focused coverage in `tests/practiceContent.test.mjs` for starter and confident learner warm-up unlock progress.
+
+What went well:
+
+- The change stayed narrow: one existing helper, one existing screen and one existing test area.
+- The cue uses existing accent theme tokens and does not add storage, navigation or backend logic.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new strip should still be checked inside the first Job Interview warm-up on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Polish the first Job Interview warm-up density so the coach cue, unlock strip and starter box scan as one clear sequence on mobile.
+
 ## 2026-07-06: Shared Quest 1 Coach Cue
 
 Made one focused first-roleplay improvement: the first Job Interview warm-up now repeats the same selected-level path coach cue used in onboarding and Foundation, so the first English path feels continuous all the way into Quest 1.

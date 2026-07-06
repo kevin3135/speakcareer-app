@@ -7,6 +7,11 @@ export type FoundationWarmupPanel = {
   starterAnswer: string;
   starterLabel: string;
   title: string;
+  unlockProgress: {
+    body: string;
+    progressLabel: string;
+    unlockLabel: string;
+  } | null;
 };
 
 type FoundationWarmupPanelInput = {
@@ -15,6 +20,10 @@ type FoundationWarmupPanelInput = {
   editPlanSteps: [string, string, string];
   note: string;
   starterAnswer: string;
+  unlockProgress?: {
+    progressLabel: string;
+    unlockLabel: string;
+  } | null;
 };
 
 export function createFoundationWarmupPanel({
@@ -23,8 +32,12 @@ export function createFoundationWarmupPanel({
   editPlanSteps,
   note,
   starterAnswer,
+  unlockProgress,
 }: FoundationWarmupPanelInput): FoundationWarmupPanel {
   const hasCoachNote = note.trim().length > 0;
+  const unlockBody = unlockProgress
+    ? createUnlockProgressBody(unlockProgress.unlockLabel)
+    : null;
 
   return {
     body: hasCoachNote
@@ -37,5 +50,18 @@ export function createFoundationWarmupPanel({
     starterAnswer,
     starterLabel: 'Loaded starter',
     title: 'Lesson 1 starter is ready',
+    unlockProgress: unlockProgress && unlockBody
+      ? {
+        body: unlockBody,
+        progressLabel: unlockProgress.progressLabel,
+        unlockLabel: unlockProgress.unlockLabel,
+      }
+      : null,
   };
+}
+
+function createUnlockProgressBody(unlockLabel: string) {
+  const unlockAction = unlockLabel.replace(/^Unlock\s+/i, 'unlock ');
+
+  return `Save this edited answer to ${unlockAction}.`;
 }

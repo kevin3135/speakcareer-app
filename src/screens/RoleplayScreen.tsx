@@ -234,6 +234,12 @@ export function RoleplayScreen({
       editPlanSteps: levelProfile.starterEditSteps,
       note: warmupCue.note,
       starterAnswer: warmupCue.starterAnswer,
+      unlockProgress: firstQuestState
+        ? {
+          progressLabel: firstQuestState.progressLabel,
+          unlockLabel: firstQuestState.unlockLabel,
+        }
+        : null,
     })
     : null;
   const foundationStarterAction = foundationWarmupPanel
@@ -891,6 +897,19 @@ export function RoleplayScreen({
                   </Text>
                 </View>
               </View>
+              {foundationWarmupPanel.unlockProgress ? (
+                <View style={styles.foundationWarmupUnlockStrip}>
+                  <View style={styles.foundationWarmupUnlockCopy}>
+                    <Text numberOfLines={1} style={styles.foundationWarmupUnlockLabel}>
+                      {foundationWarmupPanel.unlockProgress.unlockLabel}
+                    </Text>
+                    <Text numberOfLines={2} style={styles.foundationWarmupUnlockBody}>
+                      {foundationWarmupPanel.unlockProgress.body}
+                    </Text>
+                  </View>
+                  <Badge label={foundationWarmupPanel.unlockProgress.progressLabel} tone="accent" />
+                </View>
+              ) : null}
               <View style={styles.foundationWarmupStarterBox}>
                 <View style={styles.foundationWarmupStarterHeader}>
                   <Text style={styles.foundationWarmupStarterLabel}>
@@ -1696,6 +1715,35 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  foundationWarmupUnlockStrip: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  foundationWarmupUnlockCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  foundationWarmupUnlockLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  foundationWarmupUnlockBody: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
   },
   foundationWarmupStarterBox: {
     backgroundColor: colors.white,
