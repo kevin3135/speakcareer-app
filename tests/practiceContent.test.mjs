@@ -999,6 +999,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createRoleplayWarmupCue,
   } = await import('../src/utils/roleplayWarmupCue.ts');
   const { createFoundationStarterAction } = await import('../src/utils/foundationStarterAction.ts');
+  const { createFoundationAnswerBoxCue } = await import('../src/utils/foundationAnswerBoxCue.ts');
   const { createFoundationStarterChecklist } = await import('../src/utils/foundationStarterChecklist.ts');
   const { createFoundationWarmupPanel } = await import('../src/utils/foundationWarmupPanel.ts');
   const { createRoleplayFirstQuestState } = await import('../src/utils/roleplayFirstQuest.ts');
@@ -1079,6 +1080,19 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     },
   );
   assert.deepEqual(
+    createFoundationAnswerBoxCue({
+      draftAnswer: starterPanel.starterAnswer,
+      isReadyForFeedback: true,
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Edit first',
+      body: 'Replace the task and result with your own work example in the answer box.',
+      title: 'Edit the loaded starter below',
+      tone: 'secondary',
+    },
+  );
+  assert.deepEqual(
     createFoundationStarterChecklist({
       draftAnswer: starterPanel.starterAnswer,
       isReadyForFeedback: true,
@@ -1105,6 +1119,19 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       ctaLabel: 'Reload starter',
       mode: 'cleared',
       title: 'Starter was cleared',
+      tone: 'accent',
+    },
+  );
+  assert.deepEqual(
+    createFoundationAnswerBoxCue({
+      draftAnswer: '',
+      isReadyForFeedback: false,
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Write now',
+      body: 'Reload the starter or write your own version below before you check.',
+      title: 'Answer box is empty',
       tone: 'accent',
     },
   );
@@ -1140,6 +1167,19 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     },
   );
   assert.deepEqual(
+    createFoundationAnswerBoxCue({
+      draftAnswer: 'I led onboarding.',
+      isReadyForFeedback: false,
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Add detail',
+      body: 'Keep editing below. Add one clearer result or next step before you check.',
+      title: 'Your answer is moving in the right direction',
+      tone: 'accent',
+    },
+  );
+  assert.deepEqual(
     createFoundationStarterChecklist({
       draftAnswer: 'I led onboarding.',
       isReadyForFeedback: false,
@@ -1170,6 +1210,20 @@ test('creates a foundation handoff cue for the first interview answer', async ()
         { state: 'done', statusLabel: 'Done', text: 'End with one clear result.' },
       ],
       progressLabel: '3/3 ready',
+    },
+  );
+  assert.deepEqual(
+    createFoundationAnswerBoxCue({
+      draftAnswer:
+        'I worked on customer onboarding, and I helped the team reply faster. The result was happier customers.',
+      isReadyForFeedback: true,
+      starterAnswer: starterPanel.starterAnswer,
+    }),
+    {
+      badgeLabel: 'Ready to check',
+      body: 'Your answer already sounds personal. Do one quick clarity pass, then check it.',
+      title: 'Your edit is ready for feedback',
+      tone: 'success',
     },
   );
   assert.ok(confidentCue.note.includes('business result'));

@@ -52,6 +52,7 @@ import { getStartingLevelProfile } from '../utils/startingLevel';
 import { createFoundationWarmupPanel } from '../utils/foundationWarmupPanel';
 import { createFoundationStarterAction } from '../utils/foundationStarterAction';
 import { createFoundationStarterChecklist } from '../utils/foundationStarterChecklist';
+import { createFoundationAnswerBoxCue } from '../utils/foundationAnswerBoxCue';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayFlowRunway, type RoleplayFlowRunway } from '../utils/roleplayFlowRunway';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
@@ -254,6 +255,13 @@ export function RoleplayScreen({
       isReadyForFeedback: liveAnswerReview.isReadyForFeedback,
       starterAnswer: foundationWarmupPanel.starterAnswer,
       steps: foundationWarmupPanel.editPlanSteps,
+    })
+    : null;
+  const foundationAnswerBoxCue = foundationWarmupPanel
+    ? createFoundationAnswerBoxCue({
+      draftAnswer,
+      isReadyForFeedback: liveAnswerReview.isReadyForFeedback,
+      starterAnswer: foundationWarmupPanel.starterAnswer,
     })
     : null;
   const shouldPulseAnswer = !isReviewStep && !hasDraftAnswer && !isAnswerFocused;
@@ -1006,12 +1014,46 @@ export function RoleplayScreen({
           <Text style={styles.answerSectionLabel}>
             {hasRestoredDraft ? 'Finish your answer' : 'Your answer'}
           </Text>
-          <View style={styles.answerInputShell}>
+          {foundationAnswerBoxCue ? (
+            <View
+              style={[
+                styles.answerInputCueBox,
+                foundationAnswerBoxCue.tone === 'accent' && styles.answerInputCueBoxAccent,
+                foundationAnswerBoxCue.tone === 'success' && styles.answerInputCueBoxSuccess,
+              ]}
+            >
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.answerInputCueLabel}>Edit in the answer box</Text>
+                <Badge label={foundationAnswerBoxCue.badgeLabel} tone={foundationAnswerBoxCue.tone} />
+              </View>
+              <Text style={styles.answerInputCueTitle}>{foundationAnswerBoxCue.title}</Text>
+              <Text style={styles.answerInputCueBody}>{foundationAnswerBoxCue.body}</Text>
+            </View>
+          ) : null}
+          <View
+            style={[
+              styles.answerInputShell,
+              foundationAnswerBoxCue && styles.answerInputShellGuided,
+              foundationAnswerBoxCue?.tone === 'success' && styles.answerInputShellGuidedSuccess,
+            ]}
+          >
             {shouldPulseAnswer ? (
               <Animated.View
                 pointerEvents="none"
                 style={[styles.answerPulseRing, answerPulseStyle]}
               />
+            ) : null}
+            {foundationAnswerBoxCue ? (
+              <View style={styles.answerInputFrameHeader}>
+                <Text style={styles.answerInputFrameLabel}>
+                  {foundationStarterAction?.mode === 'loaded' ? 'Loaded starter' : 'Your editable draft'}
+                </Text>
+                <Text style={styles.answerInputFrameMeta}>
+                  {foundationStarterAction?.mode === 'loaded'
+                    ? 'Tap into the text below and replace it with your own example.'
+                    : 'Keep shaping the answer directly here before you check.'}
+                </Text>
+              </View>
             ) : null}
             <TextInput
               accessibilityHint="Type your roleplay answer"
@@ -1030,23 +1072,45 @@ export function RoleplayScreen({
               placeholder={levelProfile.answerPlaceholder}
               placeholderTextColor={colors.textMuted}
               ref={answerInputRef}
-              style={[styles.answerInput, (isAnswerFocused || hasDraftAnswer) && styles.answerInputActive]}
+              style={[
+                styles.answerInput,
+                foundationAnswerBoxCue && styles.answerInputGuided,
+                (isAnswerFocused || hasDraftAnswer) && styles.answerInputActive,
+                foundationAnswerBoxCue?.tone === 'success' && styles.answerInputGuidedSuccess,
+              ]}
               textAlignVertical="top"
               value={draftAnswer}
             />
           </View>
-          <View style={styles.answerAction}>
-            <AppButton
-              disabled={draftAnswer.trim().length === 0}
-              label="Check"
-              onPress={reviewAnswer}
-            />
-          </View>
-          <View style={styles.answerReadinessBox}>
-            <Text numberOfLines={1} style={styles.answerReadinessTitle}>
-              {answerReadinessCue.title}
+          <View
+            style={[
+              styles.answerPrimaryActionBox,
+              answerReadinessCue.tone === 'accent' && styles.answerPrimaryActionBoxAccent,
+              answerReadinessCue.tone === 'success' && styles.answerPrimaryActionBoxSuccess,
+            ]}
+          >
+            <View style={styles.oneThingHeader}>
+              <Text style={styles.answerPrimaryActionLabel}>Primary next step</Text>
+              <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
+            </View>
+            <Text style={styles.answerPrimaryActionTitle}>
+              {foundationAnswerBoxCue
+                ? foundationAnswerBoxCue.tone === 'success'
+                  ? 'Check your edited answer'
+                  : 'Finish editing, then check'
+                : answerReadinessCue.title}
             </Text>
-            <Badge label={answerReadinessCue.badgeLabel} tone={answerReadinessCue.tone} />
+            <Text style={styles.answerPrimaryActionBody}>
+              {foundationAnswerBoxCue?.body ?? answerReadinessCue.note}
+            </Text>
+            <View style={styles.answerAction}>
+              <AppButton
+                disabled={draftAnswer.trim().length === 0}
+                label="Check"
+                onPress={reviewAnswer}
+              />
+            </View>
+            <Text style={styles.answerPrimaryActionMeta}>{answerReadinessCue.progressLabel}</Text>
           </View>
           <Pressable
             accessibilityHint="Shows or hides optional writing support before you check the answer"
@@ -1634,6 +1698,42 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: spacing.md,
   },
+  answerInputCueBox: {
+    backgroundColor: colors.secondarySoft,
+    borderColor: colors.secondary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  answerInputCueBoxAccent: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  answerInputCueBoxSuccess: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  answerInputCueLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  answerInputCueTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  answerInputCueBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
   promptText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
@@ -1911,6 +2011,14 @@ const styles = StyleSheet.create({
     minHeight: 120,
     padding: spacing.md,
   },
+  answerInputGuided: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondary,
+    borderStyle: 'dashed',
+  },
+  answerInputGuidedSuccess: {
+    borderColor: colors.success,
+  },
   answerInputActive: {
     backgroundColor: colors.white,
     borderColor: colors.primary,
@@ -1918,6 +2026,33 @@ const styles = StyleSheet.create({
   answerInputShell: {
     marginTop: spacing.sm,
     position: 'relative',
+  },
+  answerInputShellGuided: {
+    backgroundColor: colors.surface,
+    borderColor: colors.secondary,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    padding: spacing.sm,
+  },
+  answerInputShellGuidedSuccess: {
+    borderColor: colors.success,
+  },
+  answerInputFrameHeader: {
+    gap: spacing.xxs,
+    marginBottom: spacing.sm,
+  },
+  answerInputFrameLabel: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  answerInputFrameMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
   },
   answerPulseRing: {
     backgroundColor: colors.primarySoft,
@@ -1931,26 +2066,50 @@ const styles = StyleSheet.create({
     top: -4,
   },
   answerAction: {
-    marginTop: spacing.md,
-  },
-  answerReadinessBox: {
-    alignItems: 'center',
-    backgroundColor: colors.surfaceMuted,
-    borderRadius: radius.pill,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     marginTop: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
   },
-  answerReadinessTitle: {
+  answerPrimaryActionBox: {
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  answerPrimaryActionBoxAccent: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  answerPrimaryActionBoxSuccess: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  answerPrimaryActionLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  answerPrimaryActionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  answerPrimaryActionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  answerPrimaryActionMeta: {
     color: colors.textMuted,
-    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    marginRight: spacing.sm,
   },
   writingSupportToggle: {
     alignSelf: 'flex-start',

@@ -1,5 +1,53 @@
 # Agent Learning Log
 
+## 2026-07-06: First Answer Edit Cue
+
+Made one focused first-roleplay improvement: the first Job Interview answer area now tells the learner to edit the loaded starter directly in the answer box, and the `Check` action now sits inside a clearer primary-next-step panel.
+
+Why it changed:
+
+- The Lesson 1 starter already loaded correctly, but the answer area still looked like a generic text box after the warm-up panel above it.
+- That made the starter feel more like reference copy than an editable first draft.
+- The smallest useful fix was to connect the warm-up state to the answer box and `Check` area instead of adding new steps or controls.
+
+What changed:
+
+- Added `src/utils/foundationAnswerBoxCue.ts` to generate one tested cue for the first answer box across loaded, cleared, in-progress and ready-to-check states.
+- Updated `src/screens/RoleplayScreen.tsx` so the first auto-loaded Job Interview answer now shows an `Edit in the answer box` cue, a framed editable draft surface, and a clearer `Primary next step` treatment around `Check`.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new answer-box cue states.
+
+What went well:
+
+- The improvement stayed narrow: one new helper, one existing screen and one existing test file.
+- The change reuses the current starter, readiness and first-quest state instead of adding more storage, navigation or onboarding logic.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new answer-box frame and primary action card should still be checked on a narrow viewport.
+- The branch was created from `codex/first-quest-coach-cue`, which is still two commits ahead of its remote, so isolated review depends on pushing that parent branch first.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+- Draft PR creation may still be blocked in this environment because `gh` CLI is not installed.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a starter answer is auto-loaded, the answer box itself should visually confirm that it is the place to edit, not just the helper panel above it.
+- The main `Check` action is clearer when readiness guidance is grouped with it instead of separated into a weaker status row.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one clearer first-review handoff after `Check` so the learner sees immediately that saving is the next unlock step.
+
 ## 2026-07-06: First Quest Warm-Up Sequence
 
 Made one focused Roleplay visual polish: the first Job Interview warm-up now groups the coach cue, unlock cue and loaded starter into one compact sequence panel.
