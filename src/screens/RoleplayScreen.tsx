@@ -1424,6 +1424,33 @@ export function RoleplayScreen({
               />
             </View>
           ) : null}
+          <View
+            style={[
+              styles.savePayoffStrip,
+              targetPreview.tone === 'success'
+                ? styles.savePayoffStripSuccess
+                : styles.savePayoffStripInfo,
+            ]}
+          >
+            <View style={styles.oneThingHeader}>
+              <Text
+                style={[
+                  styles.savePayoffLabel,
+                  targetPreview.tone === 'success'
+                    ? styles.savePayoffLabelSuccess
+                    : styles.savePayoffLabelInfo,
+                ]}
+              >
+                Today after save
+              </Text>
+              <Badge label={targetPreview.badgeLabel} tone={targetPreview.tone} />
+            </View>
+            <Text style={styles.savePayoffTitle}>{targetPreview.title}</Text>
+            <ProgressBar tone={targetPreview.tone} value={targetPreview.progressPercent} />
+            <Text numberOfLines={1} style={styles.savePayoffProgressLabel}>
+              {targetPreview.progressLabel}
+            </Text>
+          </View>
           {firstQuestSaveRecap ? (
             <View style={styles.saveLockInBox}>
               <Text style={styles.saveLockInLabel}>{firstQuestSaveRecap.eyebrow}</Text>
@@ -2633,6 +2660,47 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     marginRight: spacing.sm,
+  },
+  savePayoffLabel: {
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  savePayoffLabelInfo: {
+    color: colors.infoDark,
+  },
+  savePayoffLabelSuccess: {
+    color: colors.successDark,
+  },
+  savePayoffProgressLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  savePayoffStrip: {
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.sm,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  savePayoffStripInfo: {
+    backgroundColor: colors.infoSoft,
+    borderColor: colors.info,
+  },
+  savePayoffStripSuccess: {
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+  },
+  savePayoffTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   saveLockInBox: {
     backgroundColor: colors.white,

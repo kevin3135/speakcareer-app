@@ -1,5 +1,45 @@
 # Agent Learning Log
 
+## 2026-07-06: Roleplay Daily Save Payoff
+
+Made one focused Roleplay save-state polish: the save card now shows a compact `Today after save` payoff strip with the daily target badge, progress bar and after-save progress label.
+
+Why it changed:
+
+- The Roleplay save step already had XP and lock-in details, but the daily target payoff was not visual enough before saving.
+- A learner should understand that saving this answer moves today's streak/target forward.
+- The smallest useful fix was to reuse the existing `targetPreview` state in the current save card instead of adding new reward logic.
+
+What changed:
+
+- Added a compact payoff strip to `src/screens/RoleplayScreen.tsx`.
+- Used the existing `targetPreview` badge, title, progress percent and progress label.
+- Kept save, follow-up, navigation, storage and XP logic unchanged.
+
+What went well:
+
+- The change stayed in one screen and used existing helper data.
+- The strip changes tone automatically between info and success using existing theme tokens.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the save-card stack should still be checked on a narrow viewport after feedback.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 93 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Make the Roleplay save-card secondary actions visually quieter so `Save` and the daily payoff stay dominant.
+
 ## 2026-07-06: Practice Compact Path Preview
 
 Made one focused Practice flow improvement: the Practice path card now opens as a compact `now / next unlock` preview, and the fuller guided path stays behind an explicit `See full path` toggle.
