@@ -15,6 +15,7 @@ import {
   createOnboardingDailyTargetGuide,
   resolveOnboardingDailyTarget,
 } from '../utils/onboardingDailyTargetGuide';
+import { createFirstPathCoachCue } from '../utils/firstPathCoachCue';
 import { createOnboardingLevelHandoff } from '../utils/onboardingLevelHandoff';
 import { createOnboardingPlanPreview } from '../utils/onboardingPlan';
 import { getStartingLevelProfile } from '../utils/startingLevel';
@@ -43,6 +44,15 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
   const selectedLevelHandoff = selectedChoice
     ? createOnboardingLevelHandoff(foundationStart.title, guidedStart.title)
     : null;
+  const firstPathCoachCue =
+    selectedChoice && selectedProfile
+      ? createFirstPathCoachCue({
+          coachNote: selectedProfile.coachMessage,
+          firstLessonTitle: foundationStart.title,
+          firstQuestTitle: guidedStart.title,
+          levelLabel: selectedChoice.label,
+        })
+      : null;
   const planPreview =
     selectedChoice && selectedProfile
       ? createOnboardingPlanPreview({
@@ -67,8 +77,11 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
       </View>
 
       <CoachBubble
-        label="SpeakCareer coach"
-        message="First I need your starting level. Then I will guide the first English step."
+        label={firstPathCoachCue?.label ?? 'SpeakCareer coach'}
+        message={
+          firstPathCoachCue?.message ??
+          'First I need your starting level. Then I will guide the first English step.'
+        }
       />
 
       <View style={styles.hero}>

@@ -1,5 +1,53 @@
 # Agent Learning Log
 
+## 2026-07-06: Shared Coach Path Cue
+
+Made one focused onboarding improvement: the same selected-level coach cue now appears in onboarding and at the top of Lesson 1, so the first English path reads like one guided flow instead of two disconnected screens.
+
+Why it changed:
+
+- The onboarding level choice already personalized the first path, but the coach identity disappeared when the learner entered Foundation.
+- The learning log from the previous run called out that the first-run experience still needed a stronger shared coach identity between onboarding and Foundation.
+- The smallest useful fix was to reuse one short path cue in both places instead of adding another onboarding step or a larger tutorial.
+
+What changed:
+
+- Added `src/utils/firstPathCoachCue.ts` to generate one compact level-based coach label and message from the existing Lesson 1, Quest 1 and starting-level guidance.
+- Updated `src/screens/OnboardingScreen.tsx` so the top coach bubble switches from generic setup copy to the selected path cue as soon as a learner picks a level.
+- Updated `src/screens/FoundationScreen.tsx` so Lesson 1 now opens with the same path coach bubble before the sentence-building card.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new shared coach cue helper.
+
+What went well:
+
+- The improvement stayed narrow: one new helper, two existing screens and one existing test file.
+- The cue reuses the existing starting-level coach message, so the selected level now feels consistent across the first two screens without adding new state.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the repeated coach bubble should still be checked on a narrow viewport in both onboarding and Foundation.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 92 tests pass.
+- Draft PR creation may still hit the same GitHub integration permission blocker or missing `gh` fallback seen in earlier runs.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If onboarding personalizes a path, the first in-app lesson should reuse the same coach voice immediately instead of resetting to generic guidance.
+- A repeated coach cue across consecutive screens is enough to create continuity without another tutorial layer.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Reuse the same selected-level coach path cue once more in the first Job Interview warmup so onboarding, Foundation and Quest 1 feel fully connected.
+
 ## 2026-07-06: Onboarding Selected-Level Handoff
 
 Made one focused onboarding improvement: the selected level card now shows a compact first-path handoff so the learner can see `Lesson 1 -> Job Interview` directly inside the choice they just picked.

@@ -5,14 +5,16 @@ import {
   AppButton,
   Badge,
   Card,
+  CoachBubble,
   ProgressBar,
   ScreenContainer,
 } from '../components/ui';
-import { foundationStart, guidedStart } from '../data/guidedIntro';
+import { foundationStart, guidedStart, levelAssessment } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, StartingLevelId } from '../types';
 import { createFoundationHandoff } from '../utils/foundationHandoff';
 import { createFoundationSentenceBuilderState } from '../utils/foundationSentenceBuilder';
+import { createFirstPathCoachCue } from '../utils/firstPathCoachCue';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 
 type FoundationScreenProps = {
@@ -50,6 +52,14 @@ export function FoundationScreen({
     starterAnswer: levelProfile.starterAnswer,
     starterEditSteps: levelProfile.starterEditSteps,
   });
+  const levelLabel =
+    levelAssessment.choices.find((choice) => choice.id === startingLevelId)?.label ?? 'B1';
+  const firstPathCoachCue = createFirstPathCoachCue({
+    coachNote: levelProfile.coachMessage,
+    firstLessonTitle: foundationStart.title,
+    firstQuestTitle: guidedStart.title,
+    levelLabel,
+  });
   const continueLabel = isComplete ? 'Continue to interview' : `Tap ${activePart} first`;
 
   function selectStructurePart(index: number) {
@@ -78,6 +88,11 @@ export function FoundationScreen({
       >
         <Text style={styles.backText}>Back</Text>
       </Pressable>
+
+      <CoachBubble
+        label={firstPathCoachCue.label}
+        message={firstPathCoachCue.message}
+      />
 
       <Card tone="strong">
         <View style={styles.stepHeader}>

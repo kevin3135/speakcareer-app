@@ -722,6 +722,23 @@ test('connects the selected onboarding level to the first guided path', async ()
   assert.ok(handoff.body.includes('Job Interview'));
 });
 
+test('reuses the same coach path cue in onboarding and Foundation', async () => {
+  const { foundationStart, guidedStart } = await import('../src/data/guidedIntro.ts');
+  const { createFirstPathCoachCue } = await import('../src/utils/firstPathCoachCue.ts');
+
+  const cue = createFirstPathCoachCue({
+    coachNote: 'Build the sentence, then use the same shape in your interview answer.',
+    firstLessonTitle: foundationStart.title,
+    firstQuestTitle: guidedStart.title,
+    levelLabel: 'B1',
+  });
+
+  assert.equal(cue.label, 'B1 path coach');
+  assert.ok(cue.message.includes(foundationStart.title));
+  assert.ok(cue.message.includes('Job Interview'));
+  assert.ok(cue.message.includes('same shape'));
+});
+
 test('recommends a starting daily target based on onboarding level', async () => {
   const { createOnboardingDailyTargetGuide, resolveOnboardingDailyTarget } = await import(
     '../src/utils/onboardingDailyTargetGuide.ts'
