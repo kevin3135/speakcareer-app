@@ -17,6 +17,7 @@ import { createDailyMission } from '../utils/gamification';
 import { createHomeCoachCue } from '../utils/homeCoachFocus';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
+import { createHomeLevelRail, type HomeLevelRail } from '../utils/homeLevelRail';
 import { createHomeRunway } from '../utils/homeRunway';
 import { createHomeStartPreview } from '../utils/homeStartPreview';
 import { createLevelProgress } from '../utils/levelProgress';
@@ -52,6 +53,7 @@ export function HomeScreen({
     sessions,
   });
   const levelProgress = createLevelProgress(mission.xpTotal);
+  const levelRail = createHomeLevelRail(levelProgress);
   const learnState = createHomeLearnState({
     foundationCtaLabel: foundationStart.ctaLabel,
     foundationCompletedSteps,
@@ -144,9 +146,7 @@ export function HomeScreen({
           ctaLabel={startCardCtaLabel}
           habitLabel={startCardHabitLabel}
           habitValue={startCardHabitValue}
-          levelLabel={levelProgress.currentLevelLabel}
-          levelProgressLabel={levelProgress.progressLabel}
-          levelProgressPercent={levelProgress.progressPercent}
+          levelRail={levelRail}
           onPress={startActiveLesson}
           pathBadgeTone={startCardPathTone}
           pathKickerLabel={startCardKickerLabel}
@@ -201,9 +201,7 @@ function AnimatedStartCard({
   ctaLabel,
   habitLabel,
   habitValue,
-  levelLabel,
-  levelProgressLabel,
-  levelProgressPercent,
+  levelRail,
   onPress,
   pathBadgeTone,
   pathKickerLabel,
@@ -215,9 +213,7 @@ function AnimatedStartCard({
   ctaLabel: string;
   habitLabel: string;
   habitValue: string;
-  levelLabel: string;
-  levelProgressLabel: string;
-  levelProgressPercent: number;
+  levelRail: HomeLevelRail;
   onPress: () => void;
   pathBadgeTone: 'accent' | 'secondary';
   pathKickerLabel: string;
@@ -330,23 +326,31 @@ function AnimatedStartCard({
           {preview.body}
         </Text>
       </View>
-      <View style={styles.startLevelBox}>
-        <View style={styles.startLevelHeader}>
-          <View style={styles.startLevelPill}>
-            <Text style={styles.startLevelPillText}>{levelLabel}</Text>
-          </View>
-          <Text numberOfLines={1} style={styles.startLevelMeta}>
-            {levelProgressLabel}
-          </Text>
+      <View
+        accessibilityLabel={`${levelRail.badgeLabel}. ${levelRail.progressLabel}. ${levelRail.remainingLabel}.`}
+        accessibilityRole="progressbar"
+        accessibilityValue={{
+          max: 100,
+          min: 0,
+          now: levelRail.progressPercent,
+          text: levelRail.progressLabel,
+        }}
+        style={styles.startLevelRail}
+      >
+        <View style={styles.startLevelPill}>
+          <Text style={styles.startLevelPillText}>{levelRail.badgeLabel}</Text>
         </View>
         <View style={styles.startLevelTrack}>
           <View
             style={[
               styles.startLevelFill,
-              { width: `${Math.max(0, Math.min(levelProgressPercent, 100))}%` },
+              { width: `${Math.max(0, Math.min(levelRail.progressPercent, 100))}%` },
             ]}
           />
         </View>
+        <Text numberOfLines={1} style={styles.startLevelMeta}>
+          {levelRail.remainingLabel}
+        </Text>
       </View>
     </Pressable>
   );
@@ -522,39 +526,37 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.xxs,
   },
-  startLevelBox: {
-    backgroundColor: colors.successDark,
-    borderColor: colors.success,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.sm,
-  },
   startLevelFill: {
     backgroundColor: colors.accentSoft,
     borderRadius: radius.pill,
     height: '100%',
   },
-  startLevelHeader: {
+  startLevelRail: {
     alignItems: 'center',
+    backgroundColor: 'rgba(8, 26, 18, 0.18)',
+    borderColor: 'rgba(255, 255, 255, 0.18)',
+    borderRadius: radius.pill,
+    borderWidth: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+    minWidth: 0,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   startLevelMeta: {
     color: colors.white,
-    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
-    fontWeight: '800',
-    marginLeft: spacing.sm,
-    textAlign: 'right',
+    fontWeight: '900',
+    minWidth: 0,
   },
   startLevelPill: {
-    backgroundColor: colors.success,
+    backgroundColor: colors.successDark,
     borderColor: colors.secondarySoft,
     borderRadius: radius.pill,
     borderWidth: 1,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
   },
   startLevelPillText: {
@@ -564,10 +566,11 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   startLevelTrack: {
-    backgroundColor: colors.success,
+    backgroundColor: colors.successDark,
     borderRadius: radius.pill,
+    flex: 1,
     height: 8,
-    marginTop: spacing.sm,
+    minWidth: 0,
     overflow: 'hidden',
   },
   runwayBox: {

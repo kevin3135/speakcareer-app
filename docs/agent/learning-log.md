@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Home Compact Level Rail
+
+Made one focused Home improvement: the `START` card level progress area is now a slimmer one-row rail instead of a separate boxed footer.
+
+Why it changed:
+
+- The Home card already carries the main CTA, pace cue, payoff preview and runway strip, so the older level box added extra vertical weight at the bottom.
+- On small phones, that extra height made the first action stack harder to keep above the fold.
+- The English MVP habit loop works better when level progress stays visible but reads like a compact progress rail, not another card inside the card.
+
+What changed:
+
+- Added `src/utils/homeLevelRail.ts` to convert the existing level-progress state into a compact Home rail with a short `XP left` label.
+- Updated `src/screens/HomeScreen.tsx` so the Home `START` card now renders level progress as a single inline rail with a level pill, progress bar and short remaining-XP label.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the compact Home level rail state.
+
+What went well:
+
+- The change stayed focused on one existing Home surface, one small helper and one existing test file.
+- The lighter rail still reuses the existing XP and level model, so there was no new progress logic or storage work.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new inline rail should still be checked on a narrow viewport beside the rest of the Home action stack.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 88 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When the Home hero already explains the next action and payoff, supporting progress should compress into inline rails instead of nested boxes.
+- Small layout polish is easier to test when copy-shaping stays in a tiny helper instead of growing JSX conditionals.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Give the Progress empty state one direct `Continue today` CTA that returns the learner to the current guided lesson.
+
 ## 2026-07-06: Home Coach Correction Strip
 
 Made one focused Home improvement: the coach cue under the `START` card is now a slimmer one-line correction strip with a compact focus badge.

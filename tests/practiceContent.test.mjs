@@ -3401,6 +3401,25 @@ test('creates level progress labels from total XP', async () => {
   });
 });
 
+test('creates a compact Home level rail state', async () => {
+  const { createHomeLevelRail } = await import('../src/utils/homeLevelRail.ts');
+  const { createLevelProgress } = await import('../src/utils/levelProgress.ts');
+
+  assert.deepEqual(createHomeLevelRail(createLevelProgress(0)), {
+    badgeLabel: 'Level 1',
+    progressLabel: '0/180 XP',
+    progressPercent: 0,
+    remainingLabel: '180 XP left',
+  });
+
+  assert.deepEqual(createHomeLevelRail(createLevelProgress(218)), {
+    badgeLabel: 'Level 2',
+    progressLabel: '38/180 XP',
+    progressPercent: 21,
+    remainingLabel: '142 XP left',
+  });
+});
+
 test('creates a level runway for the Progress screen', async () => {
   const { createLevelProgress } = await import('../src/utils/levelProgress.ts');
   const { createProgressLevelRunway } = await import('../src/utils/progressLevelRunway.ts');
