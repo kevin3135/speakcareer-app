@@ -122,6 +122,31 @@ export function PracticeScreen({
         xp={libraryState.recommendedCard.xp}
       />
 
+      <View style={styles.recommendedPayoffStrip}>
+        <View style={styles.recommendedPayoffIcon}>
+          <Text style={styles.recommendedPayoffIconText}>
+            {libraryState.recommendedPayoff.iconLabel}
+          </Text>
+        </View>
+        <View style={styles.recommendedPayoffCopy}>
+          <View style={styles.recommendedPayoffHeader}>
+            <Text style={styles.recommendedPayoffEyebrow}>
+              {libraryState.recommendedPayoff.eyebrow}
+            </Text>
+            <Badge label={libraryState.recommendedPayoff.badgeLabel} tone="accent" />
+          </View>
+          <Text numberOfLines={1} style={styles.recommendedPayoffTitle}>
+            {libraryState.recommendedPayoff.title}
+          </Text>
+          <Text numberOfLines={2} style={styles.recommendedPayoffBody}>
+            {libraryState.recommendedPayoff.body}
+          </Text>
+          <Text style={styles.recommendedPayoffProgress}>
+            {libraryState.recommendedPayoff.progressLabel}
+          </Text>
+        </View>
+      </View>
+
       {libraryState.runway ? (
         <Card tone="muted">
           <View style={styles.runwayHeader}>
@@ -312,8 +337,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   heroProgressCard: {
-    backgroundColor: 'rgba(12, 26, 42, 0.38)',
-    borderColor: 'rgba(255, 255, 255, 0.18)',
+    backgroundColor: colors.scrim,
+    borderColor: colors.primaryGlow,
     padding: spacing.md,
   },
   heroProgressHeader: {
@@ -358,7 +383,7 @@ const styles = StyleSheet.create({
   libraryPreviewPill: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     borderWidth: 1,
     maxWidth: '48%',
     paddingHorizontal: spacing.sm,
@@ -393,7 +418,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.white,
     borderColor: colors.border,
-    borderRadius: 16,
+    borderRadius: radius.md,
     borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
@@ -442,7 +467,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.primarySoft,
     borderColor: colors.primary,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     borderWidth: 1,
     height: 40,
     justifyContent: 'center',
@@ -469,6 +494,72 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   runwayTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
+  },
+  recommendedPayoffBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  recommendedPayoffCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  recommendedPayoffEyebrow: {
+    color: colors.accentDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  recommendedPayoffHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  recommendedPayoffIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    height: 48,
+    justifyContent: 'center',
+    width: 48,
+  },
+  recommendedPayoffIconText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  recommendedPayoffProgress: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.sm,
+  },
+  recommendedPayoffStrip: {
+    alignItems: 'center',
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.md,
+    padding: spacing.md,
+  },
+  recommendedPayoffTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.h3,

@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: Practice Unlock Payoff Strip
+
+Made one focused Practice screen polish: the recommended roleplay now has a compact unlock payoff strip directly underneath it.
+
+Why it changed:
+
+- Practice already had a guided path, but the "save this to unlock the next step" payoff was split between the daily sprint card, the roleplay copy and the runway.
+- The design direction says the app should feel app-led and answer what to do now plus what unlocks next.
+- The smallest useful fix was to keep the existing path logic and surface one clearer payoff before the optional library toggle.
+
+What changed:
+
+- Added `recommendedPayoff` to `src/utils/practiceLibraryState.ts` with focused first-run, active-path and saved-draft states.
+- Updated `src/screens/PracticeScreen.tsx` to render a compact accent unlock strip after the recommended roleplay and before the runway/library area.
+- Tokenized the touched Practice screen colors/radii that were still hardcoded in the same visual group.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new payoff copy and sequence labels.
+
+What went well:
+
+- The change stayed inside Practice path UI/state and did not add navigation, backend logic, auth, payments, APIs or dependencies.
+- The recommended roleplay now explains the unlock reward in the same visual area as the current action.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new strip should still be checked around 390px width for text wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 98 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Practice should keep the recommended sprint visually dominant and explain the unlock before showing optional library choices.
+- Use tested state helpers for learner-facing payoff copy instead of embedding path decisions in the screen.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Preview the Practice screen on a narrow mobile viewport and tighten the payoff strip if the badge/title wraps too much.
+
 ## 2026-07-06: Premium Preview Card Hierarchy
 
 Made one focused Profile/Me polish: the Premium preview card now feels like a future coaching unlock instead of a mock pricing strip.

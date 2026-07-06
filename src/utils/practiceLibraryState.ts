@@ -38,6 +38,14 @@ export type PracticeLibraryState = {
   progressLabel: string;
   progressPercent: number;
   recommendedCard: PracticeLibraryCard;
+  recommendedPayoff: {
+    badgeLabel: string;
+    body: string;
+    eyebrow: string;
+    iconLabel: string;
+    progressLabel: string;
+    title: string;
+  };
   runway: PracticeRunwayState | null;
   subtitle: string;
   title: string;
@@ -59,14 +67,14 @@ export function createPracticeLibraryState({
     roleplays.map((roleplay) => [roleplay.id, createBaseCard(roleplay)]),
   );
   const activeStep = path.steps.find((step) => step.state === 'active') ?? path.steps[0];
-  const nextLockedStepTitle = activeStep ? getNextLockedStepTitle(path.steps, activeStep.id) : null;
+  const nextLockedStep = activeStep ? getNextLockedStep(path.steps, activeStep.id) : null;
   const savedDraftRoleplay = draft
     ? roleplays.find((roleplay) => roleplay.id === draft.roleplayId) ?? null
     : null;
   const recommendedCard = savedDraftRoleplay && draft
     ? createSavedDraftCard(savedDraftRoleplay, draft)
     : activeStep
-    ? createMappedCard(activeStep.roleplayId, cardMap, activeStep.state, nextLockedStepTitle)
+    ? createMappedCard(activeStep.roleplayId, cardMap, activeStep.state, nextLockedStep?.title)
     : createFallbackCard();
   const browseCards = path.steps
     .filter((step) => step.roleplayId !== recommendedCard.roleplayId)
@@ -74,6 +82,13 @@ export function createPracticeLibraryState({
   const draftReview = draft ? summarizePracticeAnswer(draft.draftAnswer) : null;
   const isResumeMode = Boolean(savedDraftRoleplay && draftReview);
   const closedPreview = createClosedPreview(browseCards, isResumeMode);
+  const recommendedPayoff = createRecommendedPayoff({
+    isResumeMode,
+    nextLockedStep,
+    progressLabel: path.progressLabel,
+    progressPercent: path.progressPercent,
+    recommendedTitle: recommendedCard.title,
+  });
 
   return {
     browseCards,
@@ -84,6 +99,7 @@ export function createPracticeLibraryState({
     progressLabel: path.progressLabel,
     progressPercent: path.progressPercent,
     recommendedCard,
+    recommendedPayoff,
     runway: isResumeMode ? null : createPracticeRunway(path),
     subtitle: isResumeMode && savedDraftRoleplay && draftReview
       ? createSavedDraftSubtitle(savedDraftRoleplay.title, draftReview.wordCount)
@@ -181,14 +197,71 @@ function createCtaLabel(state: 'done' | 'active' | 'locked') {
   return 'Open anyway';
 }
 
-function getNextLockedStepTitle(
+function getNextLockedStep(
   steps: { id: string; state: 'done' | 'active' | 'locked'; title: string }[],
   activeStepId: string,
 ) {
   const activeIndex = steps.findIndex((step) => step.id === activeStepId);
-  const laterLockedStep = steps.slice(activeIndex + 1).find((step) => step.state === 'locked');
+  const laterLockedStepIndex = steps
+    .slice(activeIndex + 1)
+    .findIndex((step) => step.state === 'locked');
 
-  return laterLockedStep?.title ?? null;
+  if (laterLockedStepIndex === -1) {
+    return null;
+  }
+
+  const stepIndex = activeIndex + 1 + laterLockedStepIndex;
+  const step = steps[stepIndex];
+
+  return {
+    sequenceLabel: String(stepIndex + 1).padStart(2, '0'),
+    title: step.title,
+  };
+}
+
+function createRecommendedPayoff({
+  isResumeMode,
+  nextLockedStep,
+  progressLabel,
+  progressPercent,
+  recommendedTitle,
+}: {
+  isResumeMode: boolean;
+  nextLockedStep: { sequenceLabel: string; title: string } | null;
+  progressLabel: string;
+  progressPercent: number;
+  recommendedTitle: string;
+}) {
+  if (isResumeMode) {
+    return {
+      badgeLabel: 'Draft first',
+      body: 'Check the saved answer, save XP, then return to the guided path.',
+      eyebrow: 'Stay focused',
+      iconLabel: 'GO',
+      progressLabel: 'Draft waiting',
+      title: 'Finish this answer first',
+    };
+  }
+
+  if (nextLockedStep) {
+    return {
+      badgeLabel: 'After save',
+      body: `Save ${recommendedTitle}, then ${nextLockedStep.title} becomes the next guided sprint.`,
+      eyebrow: 'Next unlock',
+      iconLabel: nextLockedStep.sequenceLabel,
+      progressLabel,
+      title: `${nextLockedStep.title} unlocks`,
+    };
+  }
+
+  return {
+    badgeLabel: progressPercent >= 100 ? 'Path ready' : 'After save',
+    body: `Save ${recommendedTitle} for XP and keep your career English streak moving.`,
+    eyebrow: progressPercent >= 100 ? 'Keep momentum' : 'Next win',
+    iconLabel: 'XP',
+    progressLabel,
+    title: progressPercent >= 100 ? 'Full path ready' : 'Save this sprint',
+  };
 }
 
 function createActiveRecommendedCardCopy(nextLockedStepTitle?: string | null) {

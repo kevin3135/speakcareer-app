@@ -4202,6 +4202,14 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
     firstRunState.recommendedCard.description,
     'Check it, earn XP, then open the next career step.',
   );
+  assert.deepEqual(firstRunState.recommendedPayoff, {
+    badgeLabel: 'After save',
+    body: 'Save Job Interview, then Meeting Practice becomes the next guided sprint.',
+    eyebrow: 'Next unlock',
+    iconLabel: '02',
+    progressLabel: '0 of 5 complete',
+    title: 'Meeting Practice unlocks',
+  });
   assert.equal(firstRunState.browseCards.length, 4);
   assert.equal(firstRunState.browseCards[0].categoryLabel, 'Later');
   assert.equal(firstRunState.browseLabel, '4 more roleplays');
@@ -4236,6 +4244,9 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
     activeState.recommendedCard.focus,
     'Next sprint: save one answer to unlock Sales Call.',
   );
+  assert.equal(activeState.recommendedPayoff.title, 'Sales Call unlocks');
+  assert.equal(activeState.recommendedPayoff.iconLabel, '04');
+  assert.ok(activeState.recommendedPayoff.body.includes('Presentation Practice'));
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').categoryLabel, 'Completed');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'job-interview').ctaLabel, 'Practice again');
   assert.equal(activeState.browseCards.find((card) => card.roleplayId === 'sales-call').categoryLabel, 'Later');
@@ -4267,6 +4278,14 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   assert.equal(resumeState.recommendedCard.ctaLabel, 'Finish now');
   assert.equal(resumeState.recommendedCard.focus, 'Resume sprint: add one result or next step.');
   assert.ok(resumeState.recommendedCard.description.includes('Check it, save XP'));
+  assert.deepEqual(resumeState.recommendedPayoff, {
+    badgeLabel: 'Draft first',
+    body: 'Check the saved answer, save XP, then return to the guided path.',
+    eyebrow: 'Stay focused',
+    iconLabel: 'GO',
+    progressLabel: 'Draft waiting',
+    title: 'Finish this answer first',
+  });
   assert.equal(resumeState.browseCards.some((card) => card.roleplayId === 'meeting-practice'), false);
   assert.equal(resumeState.closedPreview.title, '4 other roleplays stay hidden');
   assert.deepEqual(resumeState.closedPreview.previewTitles, [
