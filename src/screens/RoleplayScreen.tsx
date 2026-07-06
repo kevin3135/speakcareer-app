@@ -63,6 +63,7 @@ import { createReviewDecisionCue } from '../utils/reviewDecisionCue';
 import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
+  backLabel: string;
   dailyTarget: DailyPracticeTarget;
   onBack: () => void;
   onClearDraft: () => void;
@@ -86,6 +87,7 @@ type LevelUpMoment = {
 };
 
 export function RoleplayScreen({
+  backLabel,
   dailyTarget,
   onBack,
   onClearDraft,
@@ -129,6 +131,7 @@ export function RoleplayScreen({
   const followUpReview = followUpAnswer.trim().length > 0
     ? summarizePracticeAnswer(followUpAnswer)
     : null;
+  const backTargetLabel = backLabel.replace(/^Back to\s+/i, '');
   const includedFollowUp = Boolean(followUpReview?.isReadyForFeedback);
   const totalXpReward = baseXpReward + (includedFollowUp ? FOLLOW_UP_BONUS_XP : 0);
   const savedPathProgress = savedSession
@@ -682,13 +685,13 @@ export function RoleplayScreen({
     return (
       <ScreenContainer>
         <Pressable
-          accessibilityHint="Go back to Learn"
-          accessibilityLabel="Back to Learn"
+          accessibilityHint={`Return to ${backTargetLabel}`}
+          accessibilityLabel={backLabel}
           accessibilityRole="button"
           onPress={onBack}
           style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
         >
-          <Text style={styles.backText}>Back</Text>
+          <Text numberOfLines={1} style={styles.backText}>{backLabel}</Text>
         </Pressable>
 
         <GradientHero
@@ -873,13 +876,13 @@ export function RoleplayScreen({
       title={isReviewStep ? 'Better English' : 'Your turn'}
     >
       <Pressable
-        accessibilityHint="Go back to Learn"
-        accessibilityLabel="Back to Learn"
+        accessibilityHint={`Return to ${backTargetLabel}`}
+        accessibilityLabel={backLabel}
         accessibilityRole="button"
         onPress={onBack}
         style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
       >
-        <Text style={styles.backText}>Back</Text>
+        <Text numberOfLines={1} style={styles.backText}>{backLabel}</Text>
       </Pressable>
 
       {!feedbackResult ? (

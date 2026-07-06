@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Source-Aware Back Label
+
+Made one focused Roleplay navigation polish: the back control now says where it returns, such as `Back to Practice`, `Back to Wins` or `Back to Lesson 1`.
+
+Why it changed:
+
+- The previous run made Roleplay return to the correct source screen, but the visible label still read like a generic back action.
+- Learners opening Roleplay from Practice, Wins, Profile or Lesson 1 should not have to guess where the back button goes.
+- The smallest useful fix was to keep the same navigation behavior and make the button label source-aware.
+
+What changed:
+
+- Added `createRoleplayBackLabel` to `src/utils/roleplayReturnScreen.ts`.
+- Updated `src/navigation/AppNavigator.tsx` to pass the source-aware label into `RoleplayScreen`.
+- Updated both Roleplay back controls in `src/screens/RoleplayScreen.tsx` so visual text and accessibility labels match the true return target.
+- Added focused coverage in `tests/practiceContent.test.mjs` for Practice, Wins, Lesson 1, Learn and Me labels.
+
+What went well:
+
+- The change stayed in navigation/UI copy only and did not touch roleplay scoring, saved sessions, storage, backend logic, auth, payments or dependencies.
+- The label now matches the source-preserving behavior, making the focused practice flow feel more reliable.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the longer `Back to Lesson 1` label should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 99 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Navigation copy should match actual destination whenever Roleplay can be opened from multiple app areas.
+- Keep source-aware navigation as a tiny helper; no larger routing layer is needed for this MVP.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Preview Roleplay from Practice, Wins and Lesson 1 on mobile and tighten the back pill if `Back to Lesson 1` feels too wide.
+
 ## 2026-07-07: Roleplay Back Returns To Source
 
 Made one focused MVP usability improvement: leaving a roleplay with `Back` now returns the learner to the screen they opened it from instead of always jumping to Home.

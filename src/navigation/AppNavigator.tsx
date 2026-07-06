@@ -37,7 +37,10 @@ import {
   saveRoleplayDraft,
 } from '../utils/roleplayDraftStorage';
 import { createFoundationWarmupCue } from '../utils/roleplayWarmupCue';
-import { resolveRoleplayReturnScreen } from '../utils/roleplayReturnScreen';
+import {
+  createRoleplayBackLabel,
+  resolveRoleplayReturnScreen,
+} from '../utils/roleplayReturnScreen';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { readStartingLevel, saveStartingLevel } from '../utils/startingLevelStorage';
 
@@ -247,6 +250,7 @@ export function AppNavigator() {
         {activeScreen === 'Roleplay' ? (
           <RoleplayScreen
             key={`${selectedRoleplay.id}:${roleplayWarmupCue?.cueId ?? 'default'}`}
+            backLabel={createRoleplayBackLabel(roleplayReturnScreen)}
             dailyTarget={dailyTarget}
             onBack={() => setActiveScreen(roleplayReturnScreen)}
             onClearDraft={clearSavedRoleplayDraft}

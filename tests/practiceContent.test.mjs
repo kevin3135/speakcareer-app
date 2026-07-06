@@ -4369,7 +4369,10 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
 });
 
 test('preserves the correct return screen for roleplay navigation', async () => {
-  const { resolveRoleplayReturnScreen } = await import('../src/utils/roleplayReturnScreen.ts');
+  const {
+    createRoleplayBackLabel,
+    resolveRoleplayReturnScreen,
+  } = await import('../src/utils/roleplayReturnScreen.ts');
 
   assert.equal(
     resolveRoleplayReturnScreen({
@@ -4394,6 +4397,12 @@ test('preserves the correct return screen for roleplay navigation', async () => 
     }),
     'Progress',
   );
+
+  assert.equal(createRoleplayBackLabel('Practice'), 'Back to Practice');
+  assert.equal(createRoleplayBackLabel('Progress'), 'Back to Wins');
+  assert.equal(createRoleplayBackLabel('Foundation'), 'Back to Lesson 1');
+  assert.equal(createRoleplayBackLabel('Home'), 'Back to Learn');
+  assert.equal(createRoleplayBackLabel('Profile'), 'Back to Me');
 });
 
 test('creates a compact practice runway around the active path step', async () => {
