@@ -404,6 +404,15 @@ export function ProgressScreen({
                         {session.nextFocusText}
                       </Text>
                     </View>
+                    <View style={styles.recentSessionAction}>
+                      <AppButton
+                        accessibilityHint={`Open ${session.roleplayTitle} again from your earlier wins`}
+                        label={session.replayLabel}
+                        onPress={() => onOpenRoleplay(session.roleplayId)}
+                        size="small"
+                        variant="quiet"
+                      />
+                    </View>
                   </View>
                 ))}
                 {recentSessions.footerLabel ? (
@@ -943,6 +952,10 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
+  },
+  recentSessionAction: {
+    alignSelf: 'flex-start',
+    marginTop: spacing.sm,
   },
   recentSessionsFooter: {
     color: colors.textMuted,

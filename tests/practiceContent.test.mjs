@@ -2732,7 +2732,9 @@ test('creates a compact earlier-save history for returning progress users', asyn
   assert.equal(firstEarlierSave.countLabel, '1 earlier save');
   assert.ok(firstEarlierSave.body.includes('second save'));
   assert.equal(firstEarlierSave.items.length, 1);
+  assert.equal(firstEarlierSave.items[0].roleplayId, 'job-interview');
   assert.equal(firstEarlierSave.items[0].roleplayTitle, 'Job Interview');
+  assert.equal(firstEarlierSave.items[0].replayLabel, 'Replay now');
   assert.equal(firstEarlierSave.footerLabel, null);
 
   const history = createProgressRecentSessions([
@@ -2808,6 +2810,7 @@ test('creates a compact earlier-save history for returning progress users', asyn
   assert.ok(history.body.includes('coaching target'));
   assert.equal(history.items.length, 3);
   assert.equal(history.items[0].roleplayTitle, 'Meeting Practice');
+  assert.equal(history.items[0].roleplayId, 'meeting-practice');
   assert.ok(history.items[0].metaLabel.includes('31 words'));
   assert.equal(history.items[0].nextFocusLabel, 'Structure 68');
   assert.equal(history.items[0].xpLabel, '+44 XP');

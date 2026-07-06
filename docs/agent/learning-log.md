@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Progress Earlier Win Replay CTA
+
+Made one focused Progress improvement: each earlier saved win in Wins now includes a compact replay CTA so the learner can reopen that scenario straight from the coaching history.
+
+Why it changed:
+
+- The earlier-wins card already surfaced useful saved corrections, but it still stopped short of the next action.
+- For the English MVP habit loop, a visible correction should turn into the next practice rep without forcing the learner to detour through Home or Practice first.
+- A small replay button keeps the app professional and habit-forming: review the correction, run the scenario again, bank a better answer.
+
+What changed:
+
+- Updated `src/utils/progressRecentSessions.ts` so earlier saved sessions now carry replay metadata alongside their saved coaching target.
+- Updated `src/screens/ProgressScreen.tsx` so each earlier win renders a small `Replay now` action under the saved correction box.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the new replay metadata in singular and multi-save Progress states.
+
+What went well:
+
+- The improvement stayed narrow: one existing Progress helper, one screen, and one existing test file.
+- The replay CTA reuses the existing roleplay-open path, so there was no new storage, navigation state, or backend work.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new small replay button should still be checked on a narrow viewport inside the recent-wins cards.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 88 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If Progress exposes a saved correction, it should also expose the shortest path back into that exact practice rep.
+- Small replay actions are enough when the surrounding card already provides the why and what to improve.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one direct `Continue today` CTA to the first-time Progress empty state so the learner can jump back into the guided first lesson from Wins.
+
 ## 2026-07-06: Progress Earlier Win Preview
 
 Made one focused Progress improvement: after the second saved answer, Wins now surfaces one earlier coaching target immediately instead of waiting until the third save.

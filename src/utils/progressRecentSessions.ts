@@ -7,6 +7,8 @@ export type ProgressRecentSessionItem = {
   metaLabel: string;
   nextFocusLabel: string;
   nextFocusText: string;
+  replayLabel: string;
+  roleplayId: PracticeSession['roleplayId'];
   roleplayTitle: string;
   xpLabel: string;
 };
@@ -46,6 +48,8 @@ export function createProgressRecentSessions(
       metaLabel: createMetaLabel(session),
       nextFocusLabel: session.nextFocusLabel?.trim() || 'Coach target',
       nextFocusText: session.nextFocusText?.trim() || session.feedbackSummary,
+      replayLabel: 'Replay now',
+      roleplayId: session.roleplayId,
       roleplayTitle: session.roleplayTitle,
       xpLabel: `+${session.xpReward} XP`,
     })),
