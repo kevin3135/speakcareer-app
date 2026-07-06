@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: First-Win Return-Tomorrow Cue
+
+Made one focused Progress improvement: after the first saved answer, the `Latest win` card now adds a compact `Return tomorrow` cue so Wins explains the next rep and why coming back matters.
+
+Why it changed:
+
+- The first saved win already showed what was banked, but it still stopped short of explaining the next-day habit value.
+- For the English MVP loop, the first save should not feel like an endpoint; it should point to the next professional rep that keeps the streak and correction alive.
+- The smallest useful fix was to keep the existing latest-win recap and add one narrow tomorrow-handoff inside the same card.
+
+What changed:
+
+- Added `src/utils/progressFirstWinReturnCue.ts` to generate a compact next-day return cue from the current streak, today-complete state, and existing guided next action.
+- Updated `src/screens/ProgressScreen.tsx` so the first saved `Latest win` now renders a `Return tomorrow` box with the next recommended rep and a concrete reason to come back.
+- Added focused assertions in `tests/practiceContent.test.mjs` for both complete-today and stop-here-first-win states.
+
+What went well:
+
+- The improvement stayed narrow: one new Progress helper, one existing screen, and one existing test file.
+- The return cue reuses the existing guided next action instead of inventing another navigation path or progress model.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new `Return tomorrow` box should still be checked on a narrow viewport under the saved-answer recap.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 90 tests pass.
+- Draft PR creation may still hit the same GitHub auth or integration blocker seen in earlier runs.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first saved win should explain why to come back, not only what was stored.
+- When a motivation cue depends on an existing guided action, reuse that action label instead of creating a second next-step model.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one compact first-win follow-up cue on Home so the next-day reason to return is visible before the learner opens Wins.
+
 ## 2026-07-06: Progress Empty-State Continue CTA
 
 Made one focused Progress improvement: the locked first-time `Wins` state now includes a direct `Continue today` CTA that opens the current guided next step instead of leaving the learner at a dead end.

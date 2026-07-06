@@ -3648,6 +3648,33 @@ test('creates a more motivational latest-win recap for Progress', async () => {
   assert.ok(coreWin.recapText.includes('streak, XP and coach history'));
 });
 
+test('creates a first-win return cue for the next day', async () => {
+  const { createProgressFirstWinReturnCue } = await import('../src/utils/progressFirstWinReturnCue.ts');
+
+  const completedTargetCue = createProgressFirstWinReturnCue({
+    ctaLabel: 'Start Meeting Practice',
+    isDailyTargetComplete: true,
+    streakDays: 5,
+  });
+
+  assert.equal(completedTargetCue.label, 'Return tomorrow');
+  assert.equal(completedTargetCue.badgeLabel, '5 day streak');
+  assert.equal(completedTargetCue.title, 'Start Meeting Practice first');
+  assert.ok(completedTargetCue.body.includes("Today's target is complete."));
+  assert.ok(completedTargetCue.body.includes('reuse today\'s correction'));
+
+  const unfinishedTargetCue = createProgressFirstWinReturnCue({
+    ctaLabel: 'Replay Job Interview',
+    isDailyTargetComplete: false,
+    streakDays: 1,
+  });
+
+  assert.equal(unfinishedTargetCue.badgeLabel, '1 day streak');
+  assert.equal(unfinishedTargetCue.title, 'Replay Job Interview first');
+  assert.ok(unfinishedTargetCue.body.includes('If you stop here today'));
+  assert.ok(unfinishedTargetCue.body.includes('Replay Job Interview tomorrow'));
+});
+
 test('creates a guided practice career path for first-time users', async () => {
   const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
   const path = createPracticeCareerPath({

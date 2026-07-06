@@ -24,6 +24,7 @@ import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
+import { createProgressFirstWinReturnCue } from '../utils/progressFirstWinReturnCue';
 import { createProgressLevelRunway } from '../utils/progressLevelRunway';
 import { createProgressLatestWinState } from '../utils/progressLatestWin';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
@@ -93,6 +94,13 @@ export function ProgressScreen({
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const firstWinReturnCue = sessions.length === 1
+    ? createProgressFirstWinReturnCue({
+      ctaLabel: nextStepGuide.ctaLabel,
+      isDailyTargetComplete,
+      streakDays: mission.streakDays,
+    })
+    : null;
   const primaryGuideStep = nextStepGuide.steps[0];
   const hasCompletedFoundation = foundationCompletedSteps >= FOUNDATION_TOTAL_STEPS;
   const emptyState = isFirstSaveLocked
@@ -173,6 +181,16 @@ export function ProgressScreen({
           {latestSession.answerPreview}
         </Text>
       </View>
+      {firstWinReturnCue ? (
+        <View style={styles.firstWinReturnBox}>
+          <View style={styles.rowBetween}>
+            <Text style={styles.firstWinReturnLabel}>{firstWinReturnCue.label}</Text>
+            <Badge label={firstWinReturnCue.badgeLabel} tone="info" />
+          </View>
+          <Text style={styles.firstWinReturnTitle}>{firstWinReturnCue.title}</Text>
+          <Text style={styles.firstWinReturnBody}>{firstWinReturnCue.body}</Text>
+        </View>
+      ) : null}
       <View style={styles.cardAction}>
         <AppButton
           label="Practice this scenario again"
@@ -940,6 +958,35 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '700',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  firstWinReturnBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  firstWinReturnLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  firstWinReturnTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
+  },
+  firstWinReturnBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
