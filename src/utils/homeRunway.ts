@@ -33,7 +33,7 @@ export function createHomeRunway({
       {
         body: isMissionComplete
           ? `${missionCard.rewardLabel} locked in.`
-          : `${missionCard.meta} • ${missionCard.rewardLabel}`,
+          : `${missionCard.meta}, ${missionCard.rewardLabel}`,
         eyebrow: isMissionComplete ? 'Today done' : 'Today',
         progressLabel: missionCard.progressLabel,
         progressPercent: missionCard.progressPercent,

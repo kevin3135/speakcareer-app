@@ -2632,7 +2632,7 @@ test('creates a compact Home runway under the start card', async () => {
   assert.equal(firstRunRunway.badgeLabel, 'Today + next');
   assert.equal(firstRunRunway.cards[0].eyebrow, 'Today');
   assert.equal(firstRunRunway.cards[0].title, '0/1 saved');
-  assert.equal(firstRunRunway.cards[0].body, '5-minute sprint • +60 XP');
+  assert.equal(firstRunRunway.cards[0].body, '5-minute sprint, +60 XP');
   assert.equal(firstRunRunway.cards[0].progressPercent, 0);
   assert.equal(firstRunRunway.cards[1].eyebrow, 'Next unlock');
   assert.equal(firstRunRunway.cards[1].title, 'Job Interview');
@@ -2652,7 +2652,7 @@ test('creates a compact Home runway under the start card', async () => {
     },
   });
 
-  assert.equal(progressRunway.cards[0].body, '1 left • +120 XP');
+  assert.equal(progressRunway.cards[0].body, '1 left, +120 XP');
   assert.equal(progressRunway.cards[0].progressPercent, 50);
   assert.equal(progressRunway.cards[1].title, 'Sales Call');
 

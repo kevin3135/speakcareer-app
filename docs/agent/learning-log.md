@@ -1,5 +1,44 @@
 # Agent Learning Log
 
+## 2026-07-06: Home Runway Payoff Copy
+
+Made one focused Home polish: the compact runway under the START card now uses clean payoff copy instead of a bullet separator that could render inconsistently in test output.
+
+Why it changed:
+
+- The Home runway is part of the first visible Learn path, so tiny copy glitches make the app feel less premium.
+- The old separator could show as garbled text in some outputs, which weakens trust in the guided path.
+- The smallest useful fix was to keep the same meaning and replace it with a simple comma-based phrase.
+
+What changed:
+
+- Updated `src/utils/homeRunway.ts` so today's payoff reads like `5-minute sprint, +60 XP`.
+- Updated the existing Home runway test assertions in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- The change stayed in one helper and one test file.
+- No navigation, storage, backend, payment or auth logic changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the exact runway text spacing should still be checked in the live Home preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 93 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Next suggested task:
+
+- Turn the first unlocked Home state into a clearer one-node lesson map so the active lesson and next unlock feel visually connected.
+
 ## 2026-07-06: Onboarding Collapsed First-Week Summary
 
 Made one focused onboarding improvement: after a learner picks a starting level, onboarding now shows a compact first-week summary first and keeps the fuller pace, loop and starter details behind an explicit `See full first week` toggle.
