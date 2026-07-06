@@ -519,47 +519,57 @@ export function ProgressScreen({
           ) : null}
 
           {mistakeDrill ? (
-            <Card tone="accent">
-              <View style={styles.rowBetween}>
-                <View style={styles.flexOne}>
-                  <Text style={styles.cardKicker}>{mistakeDrill.eyebrow}</Text>
-                  <Text style={styles.cardTitle}>{mistakeDrill.title}</Text>
+            <Card style={styles.mistakeDrillCard} tone="accent">
+              <View style={styles.mistakeDrillHeader}>
+                <View style={styles.mistakeDrillIcon}>
+                  <Text style={styles.mistakeDrillIconText}>FIX</Text>
                 </View>
-                <Badge label={mistakeDrill.mistake.category} tone="secondary" />
+                <View style={styles.mistakeDrillHeaderCopy}>
+                  <Text style={styles.mistakeDrillEyebrow}>{mistakeDrill.eyebrow}</Text>
+                  <Text numberOfLines={1} style={styles.mistakeDrillTitle}>
+                    {mistakeDrill.title}
+                  </Text>
+                </View>
+                <Badge label={mistakeDrill.mistake.priority} tone="accent" />
               </View>
-              <Text style={styles.cardBody}>{mistakeDrill.body}</Text>
-              <View style={styles.mistakeCorrection}>
-                <Text style={styles.mistakeLabelStrong}>Say this next time</Text>
-                <Text style={styles.mistakeText}>{mistakeDrill.mistake.correction}</Text>
-              </View>
-              <View style={styles.guideSteps}>
-                {mistakeDrill.steps.map((step, index) => (
-                  <View key={step} style={styles.guideStepRow}>
-                    <View style={styles.guideStepIndex}>
-                      <Text style={styles.guideStepIndexText}>{index + 1}</Text>
-                    </View>
-                    <Text style={styles.guideStepText}>{step}</Text>
-                  </View>
-                ))}
+              <Text numberOfLines={2} style={styles.mistakeDrillBody}>{mistakeDrill.body}</Text>
+              <View style={styles.mistakeCorrectionHero}>
+                <Text style={styles.mistakeCorrectionLabel}>{mistakeDrill.correctionLabel}</Text>
+                <Text style={styles.mistakeCorrectionText}>{mistakeDrill.mistake.correction}</Text>
               </View>
               {mistakePracticeStatus ? (
-                <View style={styles.practiceStatusBox}>
-                  <View style={styles.rowBetween}>
-                    <Text style={styles.mistakeLabelStrong}>{mistakePracticeStatus.label}</Text>
-                    <Badge
-                      label={isTopMistakePracticed ? 'Saved locally' : '1 quick repeat'}
-                      tone={isTopMistakePracticed ? 'success' : 'info'}
-                    />
+                <View style={styles.mistakeRepeatBox}>
+                  <View style={styles.mistakeRepeatNumber}>
+                    <Text style={styles.mistakeRepeatNumberText}>1</Text>
                   </View>
-                  <Text style={styles.practiceStatusBody}>{mistakePracticeStatus.body}</Text>
-                  <View style={styles.practiceStatusAction}>
-                    <AppButton
-                      disabled={isTopMistakePracticed}
-                      label={mistakePracticeStatus.ctaLabel}
-                      onPress={() => onMarkMistakePracticed(mistakeDrill.mistake.id)}
-                      variant={isTopMistakePracticed ? 'quiet' : 'secondary'}
-                    />
+                  <View style={styles.mistakeRepeatCopy}>
+                    <View style={styles.mistakeRepeatHeader}>
+                      <Text style={styles.mistakeRepeatLabel}>{mistakePracticeStatus.label}</Text>
+                      <Badge
+                        label={isTopMistakePracticed ? 'Saved locally' : mistakeDrill.repeatBadgeLabel}
+                        tone={isTopMistakePracticed ? 'success' : 'info'}
+                      />
+                    </View>
+                    <Text style={styles.mistakeRepeatInstruction}>
+                      {isTopMistakePracticed
+                        ? mistakePracticeStatus.body
+                        : mistakeDrill.repeatInstruction}
+                    </Text>
                   </View>
+                </View>
+              ) : null}
+              {mistakePracticeStatus ? (
+                <View style={styles.practiceStatusAction}>
+                  <AppButton
+                    disabled={isTopMistakePracticed}
+                    label={mistakePracticeStatus.ctaLabel}
+                    onPress={() => onMarkMistakePracticed(mistakeDrill.mistake.id)}
+                    size="small"
+                    variant={isTopMistakePracticed ? 'quiet' : 'secondary'}
+                  />
+                  {isTopMistakePracticed ? null : (
+                    <Text style={styles.practiceStatusHint}>{mistakePracticeStatus.body}</Text>
+                  )}
                 </View>
               ) : null}
               <View style={styles.cardAction}>
@@ -589,7 +599,10 @@ export function ProgressScreen({
                       <Text style={styles.cardKicker}>{mistakeQueue.eyebrow}</Text>
                       <Text style={styles.cardTitle}>{mistakeQueue.title}</Text>
                     </View>
-                    <Badge label={mistakeQueue.progressLabel} tone="info" />
+                    <Badge
+                      label={mistakeQueue.progressLabel}
+                      tone="info"
+                    />
                   </View>
                   <Text numberOfLines={2} style={styles.cardBody}>{mistakeQueue.body}</Text>
                   {mistakeQueue.items.length > 0 ? (
@@ -833,37 +846,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginLeft: spacing.md,
     textAlign: 'right',
-  },
-  guideSteps: {
-    gap: spacing.sm,
-    marginTop: spacing.lg,
-  },
-  guideStepRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  guideStepIndex: {
-    alignItems: 'center',
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.pill,
-    height: 28,
-    justifyContent: 'center',
-    marginRight: spacing.sm,
-    width: 28,
-  },
-  guideStepIndexText: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  guideStepText: {
-    color: colors.text,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
-    lineHeight: typography.lineSmall,
   },
   cardAction: {
     marginTop: spacing.lg,
@@ -1231,45 +1213,140 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: spacing.xs,
   },
-  mistakeCorrection: {
-    backgroundColor: colors.secondarySoft,
-    borderColor: colors.secondary,
+  mistakeDrillCard: {
+    borderColor: colors.accent,
+  },
+  mistakeDrillHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  mistakeDrillIcon: {
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
     borderRadius: radius.md,
     borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
+    height: 44,
+    justifyContent: 'center',
+    width: 44,
   },
-  mistakeLabelStrong: {
-    color: colors.secondaryDark,
+  mistakeDrillIconText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  mistakeDrillHeaderCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  mistakeDrillEyebrow: {
+    color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  mistakeText: {
+  mistakeDrillTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
+  },
+  mistakeDrillBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.md,
+  },
+  mistakeCorrectionHero: {
+    backgroundColor: colors.correctionSoft,
+    borderColor: colors.correction,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.md,
+  },
+  mistakeCorrectionLabel: {
+    color: colors.correction,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  mistakeCorrectionText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
-    fontWeight: '800',
+    fontWeight: '900',
     lineHeight: typography.lineBody,
     marginTop: spacing.xs,
   },
-  practiceStatusBox: {
+  mistakeRepeatBox: {
+    alignItems: 'flex-start',
     backgroundColor: colors.white,
-    borderColor: colors.accent,
-    borderRadius: radius.md,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.lg,
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginTop: spacing.md,
     padding: spacing.md,
   },
-  practiceStatusBody: {
+  mistakeRepeatNumber: {
+    alignItems: 'center',
+    backgroundColor: colors.infoSoft,
+    borderColor: colors.info,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 34,
+    justifyContent: 'center',
+    width: 34,
+  },
+  mistakeRepeatNumberText: {
+    color: colors.infoDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  mistakeRepeatCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  mistakeRepeatHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  mistakeRepeatLabel: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  mistakeRepeatInstruction: {
     color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   practiceStatusAction: {
+    alignItems: 'flex-start',
     marginTop: spacing.md,
+  },
+  practiceStatusHint: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   skillGrid: {
     flexDirection: 'row',

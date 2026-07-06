@@ -8,11 +8,13 @@ type RoleplayLink = {
 
 export type MistakePracticeDrill = {
   body: string;
+  correctionLabel: string;
   ctaLabel: string;
   eyebrow: string;
   mistake: MistakeItem;
+  repeatBadgeLabel: string;
+  repeatInstruction: string;
   roleplayId: RoleplayId;
-  steps: string[];
   title: string;
 };
 
@@ -54,31 +56,29 @@ export function createMistakePracticeDrill(
   const roleplayLink = getRoleplayLink(mistake.category);
 
   return {
-    body: `Train this pattern before your next ${roleplayLink.roleplayTitle} sprint.`,
+    body: `Repeat the better sentence once before your next ${roleplayLink.roleplayTitle} sprint.`,
+    correctionLabel: 'Better English',
     ctaLabel: `Practice ${roleplayLink.roleplayTitle}`,
-    eyebrow: `${mistake.priority} priority`,
+    eyebrow: 'One correction drill',
     mistake,
+    repeatBadgeLabel: '1 quick repeat',
+    repeatInstruction: 'Say it once without looking, then use the same pattern in your next answer.',
     roleplayId: roleplayLink.roleplayId,
-    steps: [
-      'Read the better sentence once.',
-      'Say it out loud without looking at the original.',
-      'Use the same pattern in your next answer.',
-    ],
-    title: `Practice this correction: ${mistake.category}`,
+    title: mistake.category,
   };
 }
 
 export function createMistakePracticeStatus(isPracticed: boolean): MistakePracticeStatus {
   if (isPracticed) {
     return {
-      body: 'Nice. Use this same pattern in one short roleplay sprint while it is fresh.',
+      body: 'Saved. Open the roleplay while this correction is fresh.',
       ctaLabel: 'Practiced once',
       label: 'Practice win',
     };
   }
 
   return {
-    body: 'Say the better sentence out loud once, then mark it as practiced.',
+    body: 'Tap after one clean repeat.',
     ctaLabel: 'Mark practiced',
     label: 'Ready to repeat',
   };

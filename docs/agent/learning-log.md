@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Mistake Bank Drill Card
+
+Made one focused Wins/Progress polish: the active Mistake Bank correction now reads as one compact drill instead of a small feedback list.
+
+Why it changed:
+
+- The Mistake Bank card already picked the right correction, but it showed a title, body, three steps, a status box and two actions with too much similar weight.
+- The design principles say Wins should show one mistake to fix and hide lists until needed.
+- The smallest useful fix was to keep the same local correction logic and simplify the active card hierarchy.
+
+What changed:
+
+- Updated `src/utils/mistakePracticeDrill.ts` so the active correction has short drill copy, a `Better English` label and one repeat instruction.
+- Updated `src/screens/ProgressScreen.tsx` so the active Mistake Bank card has a stronger correction panel, one numbered repeat cue, a smaller mark-practiced control and the roleplay CTA as the strongest action.
+- Updated `tests/practiceContent.test.mjs` to cover the new drill copy and practiced status states.
+
+What went well:
+
+- The change stayed inside the existing Wins/Progress mistake-bank flow.
+- No saved data, navigation, backend, auth, payments or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the compact drill card should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 94 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Mistake Bank should feel like one active correction drill first, not a full review dashboard.
+- Keep `Better English` visually stronger than category metadata.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Give the Profile/Me screen a quieter learner-focused hierarchy by making the daily target the main card and moving premium/privacy notes lower.
+
 ## 2026-07-06: Progress Speaking Focus Cue
 
 Made one focused Progress/Wins polish: the screen now surfaces the latest saved correction as a compact AI coach cue directly under the main progress action card.

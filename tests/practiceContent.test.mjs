@@ -3191,14 +3191,13 @@ test('creates an actionable mistake practice drill', async () => {
 
   assert.equal(interviewDrill.roleplayId, 'job-interview');
   assert.equal(interviewDrill.ctaLabel, 'Practice Job Interview');
-  assert.equal(interviewDrill.eyebrow, 'High priority');
+  assert.equal(interviewDrill.correctionLabel, 'Better English');
+  assert.equal(interviewDrill.eyebrow, 'One correction drill');
+  assert.equal(interviewDrill.repeatBadgeLabel, '1 quick repeat');
+  assert.ok(interviewDrill.repeatInstruction.includes('same pattern'));
   assert.ok(interviewDrill.title.includes('Interview Structure'));
+  assert.ok(interviewDrill.body.includes('Job Interview sprint'));
   assert.ok(interviewDrill.mistake.correction.includes('customer feedback analysis'));
-  assert.deepEqual(interviewDrill.steps, [
-    'Read the better sentence once.',
-    'Say it out loud without looking at the original.',
-    'Use the same pattern in your next answer.',
-  ]);
 
   const salesDrill = createMistakePracticeDrill([
     {
@@ -3219,6 +3218,7 @@ test('creates an actionable mistake practice drill', async () => {
   assert.equal(nextDrill.roleplayId, 'meeting-practice');
   assert.equal(nextDrill.ctaLabel, 'Practice Meeting Practice');
   assert.ok(nextDrill.title.includes('Meeting Clarity'));
+  assert.ok(nextDrill.body.includes('Meeting Practice sprint'));
 
   const warmupCue = createRoleplayWarmupCue(interviewDrill.mistake);
   assert.equal(warmupCue.cueId, interviewDrill.mistake.id);
@@ -3230,12 +3230,12 @@ test('creates an actionable mistake practice drill', async () => {
   const readyStatus = createMistakePracticeStatus(false);
   assert.equal(readyStatus.label, 'Ready to repeat');
   assert.equal(readyStatus.ctaLabel, 'Mark practiced');
-  assert.ok(readyStatus.body.includes('out loud'));
+  assert.ok(readyStatus.body.includes('clean repeat'));
 
   const practicedStatus = createMistakePracticeStatus(true);
   assert.equal(practicedStatus.label, 'Practice win');
   assert.equal(practicedStatus.ctaLabel, 'Practiced once');
-  assert.ok(practicedStatus.body.includes('fresh'));
+  assert.ok(practicedStatus.body.includes('roleplay'));
 });
 
 test('adds saved sessions to local progress and daily mission', async () => {
