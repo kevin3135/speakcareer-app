@@ -9,6 +9,7 @@ export type HomeStartPreview = {
 type CreateHomeStartPreviewInput = {
   currentTitle: string;
   dailyTarget: DailyPracticeTarget;
+  firstWinTomorrowPreview?: HomeStartPreview | null;
   hasCompletedFoundation: boolean;
   hasResumeDraft: boolean;
   isMissionComplete: boolean;
@@ -19,6 +20,7 @@ type CreateHomeStartPreviewInput = {
 export function createHomeStartPreview({
   currentTitle,
   dailyTarget,
+  firstWinTomorrowPreview,
   hasCompletedFoundation,
   hasResumeDraft,
   isMissionComplete,
@@ -40,6 +42,10 @@ export function createHomeStartPreview({
       eyebrow: 'After lesson',
       title: `${firstUnlockTitle} unlocks`,
     };
+  }
+
+  if (firstWinTomorrowPreview && !hasResumeDraft) {
+    return firstWinTomorrowPreview;
   }
 
   if (isMissionComplete) {

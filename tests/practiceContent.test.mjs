@@ -2328,6 +2328,7 @@ test('creates a clear Home start payoff preview', async () => {
   const foundationPreview = createHomeStartPreview({
     currentTitle: 'Clear sentence',
     dailyTarget: 2,
+    firstWinTomorrowPreview: null,
     hasCompletedFoundation: false,
     hasResumeDraft: false,
     isMissionComplete: false,
@@ -2342,6 +2343,7 @@ test('creates a clear Home start payoff preview', async () => {
   const firstSavePreview = createHomeStartPreview({
     currentTitle: 'Job Interview',
     dailyTarget: 1,
+    firstWinTomorrowPreview: null,
     hasCompletedFoundation: true,
     hasResumeDraft: false,
     isMissionComplete: false,
@@ -2358,6 +2360,7 @@ test('creates a clear Home start payoff preview', async () => {
   const resumePreview = createHomeStartPreview({
     currentTitle: 'Resume Job Interview',
     dailyTarget: 3,
+    firstWinTomorrowPreview: null,
     hasCompletedFoundation: true,
     hasResumeDraft: true,
     isMissionComplete: false,
@@ -2373,6 +2376,7 @@ test('creates a clear Home start payoff preview', async () => {
   const bonusPreview = createHomeStartPreview({
     currentTitle: 'Sales Call',
     dailyTarget: 1,
+    firstWinTomorrowPreview: null,
     hasCompletedFoundation: true,
     hasResumeDraft: false,
     isMissionComplete: true,
@@ -2384,6 +2388,26 @@ test('creates a clear Home start payoff preview', async () => {
   assert.equal(bonusPreview.title, 'Workplace Small Talk stays ready');
   assert.ok(bonusPreview.body.includes("target is already done"));
   assert.ok(bonusPreview.body.includes('bonus XP'));
+
+  const firstWinTomorrowPreview = createHomeStartPreview({
+    currentTitle: 'Meeting Practice',
+    dailyTarget: 3,
+    firstWinTomorrowPreview: {
+      body: 'If you stop here today, Start Meeting Practice tomorrow to keep the streak active and reuse today\'s correction in a fresh work rep.',
+      eyebrow: 'Return tomorrow',
+      title: 'Start Meeting Practice first',
+    },
+    hasCompletedFoundation: true,
+    hasResumeDraft: false,
+    isMissionComplete: false,
+    nextUnlockTitle: 'Presentation Practice',
+    targetSessionsCompleted: 1,
+  });
+
+  assert.equal(firstWinTomorrowPreview.eyebrow, 'Return tomorrow');
+  assert.equal(firstWinTomorrowPreview.title, 'Start Meeting Practice first');
+  assert.ok(firstWinTomorrowPreview.body.includes('If you stop here today'));
+  assert.ok(firstWinTomorrowPreview.body.includes('reuse today\'s correction'));
 });
 
 test('creates a compact Home runway under the start card', async () => {
@@ -3649,9 +3673,9 @@ test('creates a more motivational latest-win recap for Progress', async () => {
 });
 
 test('creates a first-win return cue for the next day', async () => {
-  const { createProgressFirstWinReturnCue } = await import('../src/utils/progressFirstWinReturnCue.ts');
+  const { createFirstWinReturnCue } = await import('../src/utils/firstWinReturnCue.ts');
 
-  const completedTargetCue = createProgressFirstWinReturnCue({
+  const completedTargetCue = createFirstWinReturnCue({
     ctaLabel: 'Start Meeting Practice',
     isDailyTargetComplete: true,
     streakDays: 5,
@@ -3663,7 +3687,7 @@ test('creates a first-win return cue for the next day', async () => {
   assert.ok(completedTargetCue.body.includes("Today's target is complete."));
   assert.ok(completedTargetCue.body.includes('reuse today\'s correction'));
 
-  const unfinishedTargetCue = createProgressFirstWinReturnCue({
+  const unfinishedTargetCue = createFirstWinReturnCue({
     ctaLabel: 'Replay Job Interview',
     isDailyTargetComplete: false,
     streakDays: 1,

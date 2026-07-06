@@ -1,5 +1,54 @@
 # Agent Learning Log
 
+## 2026-07-06: Home First-Win Tomorrow Preview
+
+Made one focused Home improvement: after exactly one saved answer, the `START` card preview now switches to a compact `Return tomorrow` cue so Home explains the next-day rep before the learner opens Wins.
+
+Why it changed:
+
+- The first saved answer already unlocked the next guided sprint on Home, but the preview area still described immediate payoff instead of the next-day habit value.
+- Wins already had a good tomorrow-return cue, but the main Home screen is the stronger place to reinforce the businesslike daily loop.
+- The smallest useful fix was to keep the current Home layout and reuse the same tomorrow-return language inside the existing `START` preview block.
+
+What changed:
+
+- Added `src/utils/firstWinReturnCue.ts` as a shared helper for the first-win next-day message.
+- Updated `src/screens/HomeScreen.tsx` so Home now computes that cue after exactly one saved answer and injects it into the existing `START` preview box.
+- Updated `src/utils/homeStartPreview.ts` to accept an optional injected first-win tomorrow preview without adding another nested runtime dependency to a directly imported test helper.
+- Updated `src/screens/ProgressScreen.tsx` to use the new shared helper and kept focused coverage in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- The improvement stayed narrow: one new shared helper, two existing screens, one existing preview helper and one existing test file.
+- The Home change reuses the existing `START` preview surface instead of adding another card below the fold.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- The first implementation added a nested runtime import inside `homeStartPreview.ts`, which broke the Node-based direct `.ts` test path; the fix was to inject the computed tomorrow preview from `HomeScreen` instead.
+- This run did not include fresh Expo or browser mobile visual QA, so the new `Return tomorrow` copy should still be checked on a narrow viewport inside the green `START` card.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 90 tests pass.
+- Draft PR creation may still hit the same GitHub connector permission blocker or missing `gh` fallback seen in earlier runs.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- For helpers imported directly by Node tests, avoid new nested runtime `.ts` dependencies; inject shared state from the caller or extend the same file instead.
+- The first saved answer should shift Home from payoff language to return-tomorrow language once the immediate unlock is already visible elsewhere.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one compact replay action to the Home coach cue after the first save so the learner can reopen the saved correction from the first viewport.
+
 ## 2026-07-06: First-Win Return-Tomorrow Cue
 
 Made one focused Progress improvement: after the first saved answer, the `Latest win` card now adds a compact `Return tomorrow` cue so Wins explains the next rep and why coming back matters.

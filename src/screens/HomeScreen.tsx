@@ -13,6 +13,7 @@ import { foundationStart } from '../data/guidedIntro';
 import { colors, fonts, radius, shadows, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
 import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
+import { createFirstWinReturnCue } from '../utils/firstWinReturnCue';
 import { createDailyMission } from '../utils/gamification';
 import { createHomeCoachCue } from '../utils/homeCoachFocus';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
@@ -113,9 +114,23 @@ export function HomeScreen({
   const startCardXpLabel = resumeRoleplay
     ? `+${resumeRoleplay.durationMinutes * 4} XP`
     : activeLesson.xpLabel;
+  const firstWinTomorrowCue = sessions.length === 1 && !resumeRoleplay
+    ? createFirstWinReturnCue({
+      ctaLabel: `Start ${startCardTitle}`,
+      isDailyTargetComplete: isMissionComplete,
+      streakDays: mission.streakDays,
+    })
+    : null;
   const startPreview = createHomeStartPreview({
     currentTitle: startCardTitle,
     dailyTarget,
+    firstWinTomorrowPreview: firstWinTomorrowCue
+      ? {
+        body: firstWinTomorrowCue.body,
+        eyebrow: firstWinTomorrowCue.label,
+        title: firstWinTomorrowCue.title,
+      }
+      : null,
     hasCompletedFoundation,
     hasResumeDraft: Boolean(resumeRoleplay),
     isMissionComplete,

@@ -19,12 +19,12 @@ import { foundationStart, guidedStart } from '../data/guidedIntro';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayWarmupCue } from '../types';
 import { FOUNDATION_TOTAL_STEPS } from '../utils/foundationProgressStorage';
+import { createFirstWinReturnCue } from '../utils/firstWinReturnCue';
 import { createDailyMission } from '../utils/gamification';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
-import { createProgressFirstWinReturnCue } from '../utils/progressFirstWinReturnCue';
 import { createProgressLevelRunway } from '../utils/progressLevelRunway';
 import { createProgressLatestWinState } from '../utils/progressLatestWin';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
@@ -95,7 +95,7 @@ export function ProgressScreen({
     sessions,
   });
   const firstWinReturnCue = sessions.length === 1
-    ? createProgressFirstWinReturnCue({
+    ? createFirstWinReturnCue({
       ctaLabel: nextStepGuide.ctaLabel,
       isDailyTargetComplete,
       streakDays: mission.streakDays,
