@@ -691,7 +691,10 @@ export function RoleplayScreen({
           onPress={onBack}
           style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
         >
-          <Text numberOfLines={1} style={styles.backText}>{backLabel}</Text>
+          <View style={styles.backCopy}>
+            <Text style={styles.backHintText}>Back to</Text>
+            <Text numberOfLines={1} style={styles.backTargetText}>{backTargetLabel}</Text>
+          </View>
         </Pressable>
 
         <GradientHero
@@ -882,7 +885,10 @@ export function RoleplayScreen({
         onPress={onBack}
         style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
       >
-        <Text numberOfLines={1} style={styles.backText}>{backLabel}</Text>
+        <View style={styles.backCopy}>
+          <Text style={styles.backHintText}>Back to</Text>
+          <Text numberOfLines={1} style={styles.backTargetText}>{backTargetLabel}</Text>
+        </View>
       </Pressable>
 
       {!feedbackResult ? (
@@ -1595,14 +1601,28 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 36,
+    minHeight: 44,
+    maxWidth: 150,
     paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
-  backText: {
+  backCopy: {
+    alignItems: 'center',
+    minWidth: 0,
+  },
+  backHintText: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+  },
+  backTargetText: {
     color: colors.primaryDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   cardKicker: {
     color: colors.primary,

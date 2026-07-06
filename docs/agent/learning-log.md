@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Compact Roleplay Back Pill
+
+Made one focused Roleplay UI polish: the source-aware back control is now a compact two-line pill instead of one long label.
+
+Why it changed:
+
+- The previous run made the back label truthful, but `Back to Lesson 1` could feel wide on a narrow phone.
+- Roleplay should keep the first viewport calm and let the coach prompt plus answer action stay visually dominant.
+- The smallest useful fix was to preserve the existing source-aware behavior and tighten only the visible pill layout.
+
+What changed:
+
+- Updated both Roleplay back controls in `src/screens/RoleplayScreen.tsx` to show a small `Back to` kicker over the destination label.
+- Kept the existing accessibility label and hint tied to the full source-aware destination.
+- Increased the tap target to a comfortable compact pill while capping visual width for mobile.
+
+What went well:
+
+- The change stayed inside one Roleplay screen style/markup group and did not touch navigation behavior, saved sessions, scoring, auth, payments, APIs or dependencies.
+- `Back to Lesson 1`, `Back to Practice` and shorter destinations should now read clearly without becoming the dominant control.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the compact pill still needs a real 390px mobile check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 99 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Source-aware navigation labels work better as compact UI when the destination can be longer than one word.
+- Keep Roleplay chrome small so the coach prompt, answer field and primary CTA remain the center of the screen.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the Roleplay answer field visual hierarchy so the input area feels even more central than optional help.
+
 ## 2026-07-07: Roleplay Source-Aware Back Label
 
 Made one focused Roleplay navigation polish: the back control now says where it returns, such as `Back to Practice`, `Back to Wins` or `Back to Lesson 1`.
