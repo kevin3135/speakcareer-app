@@ -17,6 +17,7 @@ import { createDailyMission } from '../utils/gamification';
 import { createHomeCoachFocusText } from '../utils/homeCoachFocus';
 import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
+import { createHomeRunway } from '../utils/homeRunway';
 import { createHomeStartPreview } from '../utils/homeStartPreview';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
@@ -119,6 +120,15 @@ export function HomeScreen({
     nextUnlockTitle: nextUnlock?.title ?? null,
     targetSessionsCompleted: localProgress.targetSessionsCompleted,
   });
+  const runway = createHomeRunway({
+    missionCard,
+    nextUnlock: nextUnlock
+      ? {
+          state: nextUnlock.state,
+          title: nextUnlock.title,
+        }
+      : null,
+  });
   const latestSession = sessions[0];
   const latestCoachFocusText =
     createHomeCoachFocusText(latestSession?.nextFocusText) ??
@@ -153,66 +163,32 @@ export function HomeScreen({
           title={startCardTitle}
           xpLabel={startCardXpLabel}
         />
-
-        <View style={styles.mapTrail}>
-          <View style={styles.mapRail} />
-          <View style={[styles.mapStep, isMissionComplete && styles.mapStepComplete]}>
-            <View style={[styles.mapNode, isMissionComplete && styles.mapNodeComplete]}>
-              <Text style={[styles.mapNodeText, isMissionComplete && styles.mapNodeTextComplete]}>
-                {isMissionComplete ? 'Done' : 'Goal'}
-              </Text>
-            </View>
-            <View style={styles.mapStepCopy}>
-              <View style={styles.mapStepHeader}>
-                <Text style={styles.mapStepKicker}>
-                  {isMissionComplete ? 'Mission complete' : 'Daily goal'}
-                </Text>
-                <Badge label={missionCard.rewardLabel} tone="accent" />
-              </View>
-              <Text numberOfLines={1} style={styles.mapStepTitle}>
-                {missionCard.targetLabel}
-              </Text>
-              <View style={styles.mapStepProgress}>
-                <ProgressBar tone="success" value={missionCard.progressPercent} />
-              </View>
-            </View>
+        <View style={styles.runwayBox}>
+          <View style={styles.runwayHeader}>
+            <Text style={styles.runwayTitle}>{runway.title}</Text>
+            <Badge label={runway.badgeLabel} tone={isMissionComplete ? 'success' : 'accent'} />
           </View>
-
-          {nextUnlock ? (
-            <View
-              style={[
-                styles.mapStep,
-                styles.mapStepLocked,
-                nextUnlock.state === 'completed' && styles.mapStepComplete,
-              ]}
-            >
-              <View
-                style={[
-                  styles.mapNode,
-                  styles.mapNodeLocked,
-                  nextUnlock.state === 'completed' && styles.mapNodeComplete,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.mapNodeText,
-                    styles.mapNodeTextLocked,
-                    nextUnlock.state === 'completed' && styles.mapNodeTextComplete,
-                  ]}
-                >
-                  {nextUnlock.state === 'completed' ? 'Done' : 'Next'}
+          <View style={styles.runwayCardRow}>
+            {runway.cards.map((card) => (
+              <View key={`${card.eyebrow}-${card.title}`} style={styles.runwayCard}>
+                <Text style={styles.runwayEyebrow}>{card.eyebrow}</Text>
+                <Text numberOfLines={1} style={styles.runwayCardTitle}>
+                  {card.title}
                 </Text>
+                <Text numberOfLines={2} style={styles.runwayCardBody}>
+                  {card.body}
+                </Text>
+                {typeof card.progressPercent === 'number' ? (
+                  <View style={styles.runwayProgressBox}>
+                    <ProgressBar tone="success" value={card.progressPercent} />
+                    <Text numberOfLines={1} style={styles.runwayProgressLabel}>
+                      {card.progressLabel}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
-              <View style={styles.mapStepCopy}>
-                <Text style={styles.mapStepKicker}>
-                  {nextUnlock.state === 'completed' ? 'Completed' : 'Unlock next'}
-                </Text>
-                <Text numberOfLines={1} style={styles.mapStepTitle}>
-                  {nextUnlock.title}
-                </Text>
-              </View>
-            </View>
-          ) : null}
+            ))}
+          </View>
         </View>
       </View>
 
@@ -434,95 +410,6 @@ const styles = StyleSheet.create({
   lessonMap: {
     gap: spacing.md,
   },
-  mapNode: {
-    alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    height: 52,
-    justifyContent: 'center',
-    width: 52,
-  },
-  mapNodeComplete: {
-    backgroundColor: colors.successSoft,
-    borderColor: colors.success,
-  },
-  mapNodeLocked: {
-    backgroundColor: colors.lockedSoft,
-    borderColor: colors.locked,
-  },
-  mapNodeText: {
-    color: colors.accentDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  mapNodeTextComplete: {
-    color: colors.successDark,
-  },
-  mapNodeTextLocked: {
-    color: colors.textMuted,
-  },
-  mapRail: {
-    backgroundColor: colors.borderStrong,
-    borderRadius: radius.pill,
-    bottom: spacing.xl,
-    left: 32,
-    position: 'absolute',
-    top: -spacing.md,
-    width: 4,
-  },
-  mapStep: {
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-    ...shadows.soft,
-  },
-  mapStepComplete: {
-    backgroundColor: colors.successSoft,
-    borderColor: colors.success,
-  },
-  mapStepCopy: {
-    flex: 1,
-  },
-  mapStepHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  mapStepKicker: {
-    color: colors.textMuted,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  mapStepLocked: {
-    backgroundColor: colors.lockedSoft,
-  },
-  mapStepProgress: {
-    marginTop: spacing.sm,
-  },
-  mapStepTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
-  },
-  mapTrail: {
-    gap: spacing.md,
-    paddingLeft: spacing.sm,
-    position: 'relative',
-  },
   startCard: {
     backgroundColor: colors.success,
     borderColor: colors.successDark,
@@ -711,6 +598,73 @@ const styles = StyleSheet.create({
     height: 8,
     marginTop: spacing.sm,
     overflow: 'hidden',
+  },
+  runwayBox: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.sm,
+    padding: spacing.sm,
+    ...shadows.soft,
+  },
+  runwayCard: {
+    backgroundColor: colors.surfaceElevated,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    padding: spacing.sm,
+  },
+  runwayCardBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  runwayCardRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  runwayCardTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  runwayEyebrow: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  runwayHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  runwayProgressBox: {
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  runwayProgressLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '800',
+  },
+  runwayTitle: {
+    color: colors.ink,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
   },
   pressed: {
     opacity: 0.9,

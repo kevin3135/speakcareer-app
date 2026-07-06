@@ -2290,6 +2290,74 @@ test('creates a clear Home start payoff preview', async () => {
   assert.ok(bonusPreview.body.includes('bonus XP'));
 });
 
+test('creates a compact Home runway under the start card', async () => {
+  const { createHomeRunway } = await import('../src/utils/homeRunway.ts');
+
+  const firstRunRunway = createHomeRunway({
+    missionCard: {
+      meta: '5-minute sprint',
+      progressLabel: 'Mission progress',
+      progressPercent: 0,
+      rewardLabel: '+60 XP',
+      targetLabel: '0/1 saved',
+    },
+    nextUnlock: {
+      state: 'locked',
+      title: 'Job Interview',
+    },
+  });
+
+  assert.equal(firstRunRunway.title, 'See the next payoff');
+  assert.equal(firstRunRunway.badgeLabel, 'Today + next');
+  assert.equal(firstRunRunway.cards[0].eyebrow, 'Today');
+  assert.equal(firstRunRunway.cards[0].title, '0/1 saved');
+  assert.equal(firstRunRunway.cards[0].body, '5-minute sprint • +60 XP');
+  assert.equal(firstRunRunway.cards[0].progressPercent, 0);
+  assert.equal(firstRunRunway.cards[1].eyebrow, 'Next unlock');
+  assert.equal(firstRunRunway.cards[1].title, 'Job Interview');
+  assert.ok(firstRunRunway.cards[1].body.includes('Save the current sprint'));
+
+  const progressRunway = createHomeRunway({
+    missionCard: {
+      meta: '1 left',
+      progressLabel: 'Mission progress',
+      progressPercent: 50,
+      rewardLabel: '+120 XP',
+      targetLabel: '1/2 saved',
+    },
+    nextUnlock: {
+      state: 'locked',
+      title: 'Sales Call',
+    },
+  });
+
+  assert.equal(progressRunway.cards[0].body, '1 left • +120 XP');
+  assert.equal(progressRunway.cards[0].progressPercent, 50);
+  assert.equal(progressRunway.cards[1].title, 'Sales Call');
+
+  const replayRunway = createHomeRunway({
+    missionCard: {
+      meta: 'Done today',
+      progressLabel: 'Mission complete',
+      progressPercent: 100,
+      rewardLabel: '+60 XP',
+      targetLabel: '1/1 saved',
+    },
+    nextUnlock: {
+      state: 'completed',
+      title: 'Meeting Practice',
+    },
+  });
+
+  assert.equal(replayRunway.title, 'Keep the streak warm');
+  assert.equal(replayRunway.badgeLabel, 'Bonus loop');
+  assert.equal(replayRunway.cards[0].eyebrow, 'Today done');
+  assert.equal(replayRunway.cards[0].body, '+60 XP locked in.');
+  assert.equal(replayRunway.cards[1].eyebrow, 'Replay next');
+  assert.equal(replayRunway.cards[1].title, 'Meeting Practice');
+  assert.ok(replayRunway.cards[1].body.includes('extra reps and XP'));
+});
+
 test('guides roleplay practice through one simple step at a time', async () => {
   const { createRoleplayGuideState } = await import('../src/utils/roleplayGuide.ts');
   const firstStep = createRoleplayGuideState({

@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Home Compact Runway Strip
+
+Made one focused Home improvement: the tall goal and next-unlock trail under the main `START` card is now a compact two-card runway strip.
+
+Why it changed:
+
+- The previous Home layout already had a strong primary action, but the follow-up goal and next path step still took extra vertical space on small screens.
+- For the English MVP, the first viewport should show one clear start action plus the immediate payoff and next unlock without making the user scan a mini map.
+- A tighter runway better supports the businesslike habit loop: start, save, unlock, repeat.
+
+What changed:
+
+- Added `src/utils/homeRunway.ts` to generate a compact `Today` and `Next unlock` state from existing mission and path data.
+- Updated `src/screens/HomeScreen.tsx` to replace the taller vertical trail with a slimmer two-card runway box under the `START` card.
+- Added focused coverage in `tests/practiceContent.test.mjs` for first-run, in-progress and replay-ready runway states.
+
+What went well:
+
+- The improvement stayed focused on one Home surface, one small helper and one existing test file.
+- The new strip reuses current daily mission and unlock data instead of introducing new storage or progress rules.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new two-card strip should still be checked on a narrow viewport for wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 86 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When the Home screen already has a strong main CTA, nearby progress context should compress into short companion cards instead of a taller roadmap.
+- Reusing mission and unlock labels through a helper keeps layout polish testable and reduces JSX-only logic.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Compact the Home coach cue into a slimmer single-line correction strip so the first viewport stays tighter on small phones.
+
 ## 2026-07-06: Home Start Payoff Preview
 
 Made one focused Home improvement: the main `START` card now shows a compact payoff preview that explains what happens after the current lesson or save.
