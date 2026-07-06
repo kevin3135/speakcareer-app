@@ -376,7 +376,7 @@ export function ProgressScreen({
             </Card>
           ) : null}
 
-          {hasDetailedProgressUnlocked && recentSessions ? (
+          {recentSessions ? (
             <Card tone="muted">
               <View style={styles.rowBetween}>
                 <View style={styles.flexOne}>

@@ -2669,7 +2669,11 @@ test('keeps deeper progress insights locked until three saved sessions', async (
   assert.equal(secondSaveUnlock.progressLabel, '2/3 saved');
   assert.equal(secondSaveUnlock.progressPercent, 67);
   assert.equal(secondSaveUnlock.title, 'One more save unlocks deeper wins');
-  assert.ok(secondSaveUnlock.body.includes('One more saved answer'));
+  assert.ok(secondSaveUnlock.body.includes('already live below'));
+  assert.deepEqual(secondSaveUnlock.items, [
+    'Skill trend and weekly rhythm',
+    'Full correction queue',
+  ]);
 });
 
 test('creates a compact earlier-save history for returning progress users', async () => {
@@ -2692,6 +2696,44 @@ test('creates a compact earlier-save history for returning progress users', asyn
     ]),
     null,
   );
+
+  const firstEarlierSave = createProgressRecentSessions([
+    {
+      id: 'meeting-practice-2',
+      roleplayId: 'meeting-practice',
+      roleplayTitle: 'Meeting Practice',
+      completedAt: '2026-06-27T09:00:00.000Z',
+      answerPreview: 'I shared the blocker and the next owner.',
+      wordCount: 31,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Clear update with a useful next step.',
+      nextFocusLabel: 'Structure 68',
+      nextFocusText: 'Name the owner earlier so the update sounds more direct.',
+      includedFollowUp: false,
+      xpReward: 44,
+    },
+    {
+      id: 'job-interview-1',
+      roleplayId: 'job-interview',
+      roleplayTitle: 'Job Interview',
+      completedAt: '2026-06-26T10:00:00.000Z',
+      answerPreview: 'I improved onboarding handoffs.',
+      wordCount: 36,
+      readinessLabel: 'Ready for feedback',
+      feedbackSummary: 'Clear answer with useful detail.',
+      nextFocusLabel: 'Vocabulary 62',
+      nextFocusText: 'Add one stronger action verb and one business result.',
+      includedFollowUp: true,
+      xpReward: 50,
+    },
+  ]);
+
+  assert.equal(firstEarlierSave.title, 'Keep your first win in play');
+  assert.equal(firstEarlierSave.countLabel, '1 earlier save');
+  assert.ok(firstEarlierSave.body.includes('second save'));
+  assert.equal(firstEarlierSave.items.length, 1);
+  assert.equal(firstEarlierSave.items[0].roleplayTitle, 'Job Interview');
+  assert.equal(firstEarlierSave.footerLabel, null);
 
   const history = createProgressRecentSessions([
     {

@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Progress Earlier Win Preview
+
+Made one focused Progress improvement: after the second saved answer, Wins now surfaces one earlier coaching target immediately instead of waiting until the third save.
+
+Why it changed:
+
+- The second saved answer is a meaningful habit-loop moment, but the old Progress screen still hid earlier coaching context until the deeper three-save unlock.
+- That made the second save feel less useful than it should for the English MVP.
+- Showing one earlier win sooner keeps the practice loop concrete: save, review the new correction, keep the previous correction in play.
+
+What changed:
+
+- Updated `src/screens/ProgressScreen.tsx` so the existing earlier-saves card now appears as soon as there is one older saved session, not only after the deeper analytics unlock.
+- Updated `src/utils/progressRecentSessions.ts` so the two-save state gets a tighter singular title and body: one earlier win, one visible coaching target.
+- Updated `src/utils/progressMomentumUnlock.ts` so the `2/3 saved` unlock card no longer claims earlier coaching targets are still locked once that preview is already visible.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new two-save earlier-win state and the revised unlock messaging.
+
+What went well:
+
+- The improvement stayed narrow: one existing screen, two small Progress helpers and one existing test file.
+- It increases motivation without adding new storage, navigation, data models or backend work.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the earlier-win card should still be checked on a narrow viewport between the unlock and deeper progress cards.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 88 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The second save should already feel like meaningful momentum, not a partial unlock with hidden context.
+- If a staged unlock exposes one piece of a feature early, the surrounding copy must stop describing that piece as still locked.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one compact replay CTA inside the earlier-wins card so a learner can reopen that scenario directly from Wins.
+
 ## 2026-07-06: Foundation Starter Live Checklist
 
 Made one focused practice-flow improvement: the Lesson 1 starter handoff inside the first Job Interview answer now uses a live three-step checklist instead of a static edit list.

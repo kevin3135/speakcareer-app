@@ -32,9 +32,12 @@ export function createProgressRecentSessions(
   const earlierSessions = sessions.slice(1);
   const visibleSessions = earlierSessions.slice(0, MAX_VISIBLE_RECENT_SESSIONS);
   const hiddenCount = Math.max(earlierSessions.length - visibleSessions.length, 0);
+  const hasSingleEarlierSave = earlierSessions.length === 1;
 
   return {
-    body: 'Keep one earlier coaching target visible so each new answer builds on real practice.',
+    body: hasSingleEarlierSave
+      ? 'Keep your first coaching target visible so the second save builds on a real correction.'
+      : 'Keep one earlier coaching target visible so each new answer builds on real practice.',
     countLabel: `${visibleSessions.length} earlier save${visibleSessions.length === 1 ? '' : 's'}`,
     footerLabel: hiddenCount > 0 ? `${hiddenCount} older save${hiddenCount === 1 ? '' : 's'} still stored locally` : null,
     eyebrow: 'Recent saves',
@@ -46,7 +49,7 @@ export function createProgressRecentSessions(
       roleplayTitle: session.roleplayTitle,
       xpLabel: `+${session.xpReward} XP`,
     })),
-    title: 'Earlier wins still count',
+    title: hasSingleEarlierSave ? 'Keep your first win in play' : 'Earlier wins still count',
   };
 }
 
