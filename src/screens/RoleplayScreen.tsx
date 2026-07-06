@@ -1341,6 +1341,19 @@ export function RoleplayScreen({
               ) : null}
             </View>
           ) : null}
+          <View style={styles.betterEnglishBox}>
+            <View style={styles.betterEnglishHeader}>
+              <View style={styles.betterEnglishCoachBadge}>
+                <Text style={styles.betterEnglishCoachBadgeText}>SC</Text>
+              </View>
+              <View style={styles.betterEnglishHeaderCopy}>
+                <Text style={styles.betterEnglishLabel}>Best fix</Text>
+                <Text style={styles.betterEnglishHint}>Say this instead</Text>
+              </View>
+              <Badge label="Use this" tone="info" />
+            </View>
+            <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
+          </View>
           {feedbackSnapshot ? null : (
             <Text style={styles.feedbackSummaryText}>{feedbackResult.feedback.summary}</Text>
           )}
@@ -1383,10 +1396,6 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
-          <View style={styles.betterEnglishBox}>
-            <Text style={styles.betterEnglishLabel}>Better English</Text>
-            <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
-          </View>
           {reviewDecisionCue ? (
             <View style={styles.reviewDecisionBox}>
               <View style={styles.oneThingHeader}>
@@ -2346,28 +2355,59 @@ const styles = StyleSheet.create({
   },
   betterEnglishBox: {
     backgroundColor: colors.correctionSoft,
-    borderColor: colors.correctionSoft,
+    borderColor: colors.correction,
     borderLeftColor: colors.correction,
-    borderLeftWidth: 4,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.md,
+    borderLeftWidth: 6,
+    borderRadius: radius.xl,
+    borderWidth: 2,
+    marginTop: spacing.lg,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.md,
+  },
+  betterEnglishCoachBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.correction,
+    borderRadius: radius.pill,
+    height: 32,
+    justifyContent: 'center',
+    width: 32,
+  },
+  betterEnglishCoachBadgeText: {
+    color: colors.white,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  betterEnglishHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  betterEnglishHeaderCopy: {
+    flex: 1,
+    minWidth: 0,
   },
   betterEnglishLabel: {
     color: colors.infoDark,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
-  betterEnglishText: {
-    color: colors.text,
+  betterEnglishHint: {
+    color: colors.ink,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '800',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
+  betterEnglishText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.md,
   },
   feedbackChecklist: {
     gap: spacing.md,

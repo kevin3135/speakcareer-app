@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Best Fix Card
+
+Made one focused Roleplay review polish: the suggested rewrite now appears as a stronger `Best fix` coach card before the recap and optional detail.
+
+Why it changed:
+
+- The latest Roleplay answer flow was clearer, but the review step still made the score, coach recap and rewrite feel too equal.
+- The user should immediately see the one sentence to copy or learn from after tapping Check.
+- The smallest useful fix was to lift the existing rewrite higher and give it a stronger visual treatment without changing feedback logic.
+
+What changed:
+
+- Moved the `Better English` rewrite above the feedback recap in `src/screens/RoleplayScreen.tsx`.
+- Reframed the visible label to `Best fix` with a short `Say this instead` cue and a compact `Use this` badge.
+- Strengthened the rewrite card with the existing correction color role, coach initials and larger readable type.
+
+What went well:
+
+- The change stayed inside the Roleplay review UI and did not touch saved sessions, scoring rules, navigation, auth, payments, APIs or dependencies.
+- Optional score bars and coach notes remain behind the existing details toggle.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the larger rewrite card still needs a narrow-phone check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 100 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In review states, the correction to say next should appear before diagnostics.
+- `Best fix` is a clearer first-scan label than a generic feedback section title.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Preview the Roleplay review step on a 390px mobile viewport and tighten the rewrite card if the `Use this` badge wraps awkwardly.
+
 ## 2026-07-07: Roleplay Inline Answer Starter
 
 Made one focused Roleplay improvement: the answer step now shows one compact inline starter strip before optional help, so the learner sees an immediate first line or warm-up cue without hunting for support.
@@ -139,7 +185,6 @@ Next suggested task:
 
 - Preview Roleplay from Practice, Wins and Lesson 1 on mobile and tighten the back pill if `Back to Lesson 1` feels too wide.
 
->>>>>>> 8d621f5 (Add roleplay inline answer starter)
 ## 2026-07-07: Roleplay Back Returns To Source
 
 Made one focused MVP usability improvement: leaving a roleplay with `Back` now returns the learner to the screen they opened it from instead of always jumping to Home.
