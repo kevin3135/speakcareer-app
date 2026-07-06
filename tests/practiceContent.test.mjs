@@ -248,6 +248,42 @@ test('creates a balanced coach recap for the review step', async () => {
   );
 });
 
+test('keeps roleplay feedback details clearly optional', async () => {
+  const { createFeedbackDetailsToggleState } = await import(
+    '../src/utils/feedbackDetailsToggle.ts'
+  );
+
+  assert.deepEqual(
+    createFeedbackDetailsToggleState({
+      improvementCount: 2,
+      isOpen: false,
+      scoreCount: 4,
+      strengthCount: 2,
+    }),
+    {
+      badgeLabel: 'Optional',
+      meta: '4 score bars and 4 coach notes.',
+      title: 'Optional coach details',
+      tone: 'accent',
+    },
+  );
+
+  assert.deepEqual(
+    createFeedbackDetailsToggleState({
+      improvementCount: 2,
+      isOpen: true,
+      scoreCount: 4,
+      strengthCount: 2,
+    }),
+    {
+      badgeLabel: 'Expanded',
+      meta: 'Main correction stays above.',
+      title: 'Hide coach details',
+      tone: 'info',
+    },
+  );
+});
+
 test('creates a clear save-versus-retry cue in the review step', async () => {
   const { createReviewDecisionCue } = await import('../src/utils/reviewDecisionCue.ts');
 
