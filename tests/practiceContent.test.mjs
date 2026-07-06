@@ -1215,6 +1215,89 @@ test('shows a starter reminder only on the first Job Interview answer card', asy
   );
 });
 
+test('chooses one visible inline answer starter before optional help', async () => {
+  const { createRoleplayAnswerStarterState } = await import(
+    '../src/utils/roleplayAnswerStarter.ts'
+  );
+  const { createRoleplayStarterReminder } = await import('../src/utils/roleplayStarterReminder.ts');
+  const { createRoleplayWarmupCue } = await import('../src/utils/roleplayWarmupCue.ts');
+  const { getStartingLevelProfile } = await import('../src/utils/startingLevel.ts');
+
+  const starterProfile = getStartingLevelProfile('starter');
+  const starterReminder = createRoleplayStarterReminder({
+    roleplayId: 'job-interview',
+    sessions: [],
+    starterAnswer: starterProfile.starterAnswer,
+  });
+  const warmupCue = createRoleplayWarmupCue({
+    correction: 'I organized the handoff and confirmed the next step with the client.',
+    id: 'mistake-1',
+    note: 'Say the action first, then the next step.',
+    original: 'I do handoff with client.',
+    priority: 'High',
+    category: 'Clarity',
+  });
+
+  const warmupStarter = createRoleplayAnswerStarterState({
+    hasDraftAnswer: false,
+    quickStartPhrase: 'I can give a short update on that.',
+    starterReminder,
+    warmupCue,
+  });
+
+  assert.deepEqual(warmupStarter, {
+    badgeLabel: 'From Progress',
+    body: 'I organized the handoff and confirmed the next step with the client.',
+    ctaLabel: 'Use this line',
+    eyebrow: 'Warm-up cue',
+    note: 'Say the action first, then the next step.',
+    source: 'warmup',
+    tone: 'info',
+  });
+
+  const reminderStarter = createRoleplayAnswerStarterState({
+    hasDraftAnswer: false,
+    quickStartPhrase: 'I can give a short update on that.',
+    starterReminder,
+    warmupCue: null,
+  });
+
+  assert.equal(reminderStarter.eyebrow, 'Starter reminder');
+  assert.equal(reminderStarter.badgeLabel, 'First answer');
+  assert.equal(reminderStarter.ctaLabel, 'Use starter');
+  assert.equal(reminderStarter.source, 'starter-reminder');
+  assert.equal(reminderStarter.tone, 'secondary');
+  assert.ok(reminderStarter.body.includes('The result was'));
+
+  assert.deepEqual(
+    createRoleplayAnswerStarterState({
+      hasDraftAnswer: false,
+      quickStartPhrase: ' I can give a short update on that. ',
+      starterReminder: null,
+      warmupCue: null,
+    }),
+    {
+      badgeLabel: 'Quick line',
+      body: 'I can give a short update on that.',
+      ctaLabel: 'Use starter',
+      eyebrow: 'Quick starter',
+      note: 'Use one short first line, then make the rest your own.',
+      source: 'quick-start',
+      tone: 'accent',
+    },
+  );
+
+  assert.equal(
+    createRoleplayAnswerStarterState({
+      hasDraftAnswer: true,
+      quickStartPhrase: 'I can give a short update on that.',
+      starterReminder,
+      warmupCue,
+    }),
+    null,
+  );
+});
+
 test('creates a foundation handoff cue for the first interview answer', async () => {
   const { foundationStart, guidedStart, levelAssessment } = await import('../src/data/guidedIntro.ts');
   const { createFirstPathCoachCue } = await import('../src/utils/firstPathCoachCue.ts');

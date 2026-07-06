@@ -57,6 +57,7 @@ import { createFoundationAnswerBoxCue } from '../utils/foundationAnswerBoxCue';
 import { createRoleplayFirstQuestState } from '../utils/roleplayFirstQuest';
 import { createRoleplayFlowRunway, type RoleplayFlowRunway } from '../utils/roleplayFlowRunway';
 import { createRoleplayPhraseHelperState } from '../utils/roleplayPhraseHelper';
+import { createRoleplayAnswerStarterState } from '../utils/roleplayAnswerStarter';
 import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
 import { createReviewDecisionCue } from '../utils/reviewDecisionCue';
@@ -217,6 +218,12 @@ export function RoleplayScreen({
   const visibleFirstQuestState = warmupCue ? null : firstQuestState;
   const isReviewStep = Boolean(feedbackResult);
   const hasDraftAnswer = draftAnswer.trim().length > 0;
+  const answerStarter = createRoleplayAnswerStarterState({
+    hasDraftAnswer,
+    quickStartPhrase: writingSupportQuickStart,
+    starterReminder,
+    warmupCue,
+  });
   const isAutoWarmupCue = Boolean(warmupCue?.autoApplyStarter);
   const hasRestoredDraft = Boolean(savedDraft?.draftAnswer) && !isAutoWarmupCue;
   const restoredDraftCue = hasRestoredDraft ? createRoleplayResumeCue(liveAnswerReview) : null;
@@ -530,7 +537,7 @@ export function RoleplayScreen({
     onOpenProgress();
   }
 
-  function useStarterAnswer() {
+  function applyStarterReminder() {
     if (!starterReminder) {
       return;
     }
@@ -598,6 +605,24 @@ export function RoleplayScreen({
     setIsFeedbackDetailsOpen(false);
     setLevelUpMoment(null);
     answerInputRef.current?.focus();
+  }
+
+  function useAnswerStarter() {
+    if (!answerStarter) {
+      return;
+    }
+
+    if (answerStarter.source === 'warmup') {
+      applyWarmupStarter();
+      return;
+    }
+
+    if (answerStarter.source === 'starter-reminder') {
+      applyStarterReminder();
+      return;
+    }
+
+    addWritingSupportText(answerStarter.body);
   }
 
   function startFreshAnswer() {
@@ -1040,6 +1065,27 @@ export function RoleplayScreen({
               <Text style={styles.answerInputCueBody}>{foundationAnswerBoxCue.body}</Text>
             </View>
           ) : null}
+          {answerStarter ? (
+            <View style={styles.answerStarterBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.answerStarterLabel}>{answerStarter.eyebrow}</Text>
+                <View style={styles.answerStarterHeaderActions}>
+                  <Badge label={answerStarter.badgeLabel} tone={answerStarter.tone} />
+                  <AppButton
+                    accessibilityHint="Adds a starter line to the answer box"
+                    label={answerStarter.ctaLabel}
+                    onPress={useAnswerStarter}
+                    size="small"
+                    variant="quiet"
+                  />
+                </View>
+              </View>
+              <Text numberOfLines={2} style={styles.answerStarterText}>
+                {answerStarter.body}
+              </Text>
+              <Text style={styles.answerStarterNote}>{answerStarter.note}</Text>
+            </View>
+          ) : null}
           <View
             style={[
               styles.answerInputShell,
@@ -1171,7 +1217,7 @@ export function RoleplayScreen({
                       accessibilityHint="Adds a simple starter answer to the answer box"
                       accessibilityLabel="Use starter answer"
                       label={starterReminder.ctaLabel}
-                      onPress={useStarterAnswer}
+                      onPress={applyStarterReminder}
                       size="small"
                       variant="quiet"
                     />
@@ -2078,6 +2124,39 @@ const styles = StyleSheet.create({
   answerInputShell: {
     marginTop: spacing.sm,
     position: 'relative',
+  },
+  answerStarterBox: {
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+    padding: spacing.md,
+  },
+  answerStarterHeaderActions: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  answerStarterLabel: {
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  answerStarterText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+  },
+  answerStarterNote: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
   },
   answerInputShellGuided: {
     backgroundColor: colors.surface,

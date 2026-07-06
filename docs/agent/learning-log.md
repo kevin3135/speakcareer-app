@@ -1,5 +1,145 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Inline Answer Starter
+
+Made one focused Roleplay improvement: the answer step now shows one compact inline starter strip before optional help, so the learner sees an immediate first line or warm-up cue without hunting for support.
+
+Why it changed:
+
+- The current English MVP already had good starter content, but most of it lived behind the optional help toggle.
+- That made the first typing moment feel heavier than it should, especially for a first interview answer or a Progress warm-up retry.
+- The smallest useful fix was to surface exactly one starter in the answer area while keeping the rest of the writing support optional.
+
+What changed:
+
+- Added `src/utils/roleplayAnswerStarter.ts` to choose one visible starter source in priority order: warm-up cue, first-interview starter reminder, then quick starter phrase.
+- Updated `src/screens/RoleplayScreen.tsx` to render a compact inline starter strip with the relevant CTA directly above the answer box.
+- Kept the existing optional writing-support panel for the fuller plan and phrase help instead of expanding the main answer area further.
+- Added focused coverage in `tests/practiceContent.test.mjs` for warm-up, starter-reminder, quick-starter and hidden-after-typing states.
+
+What went well:
+
+- The change stayed inside the Roleplay answer step and reused existing starter content, so it did not affect navigation, saved sessions, progress logic, auth, payments, APIs or dependencies.
+- The inline strip should make the first writing action clearer without forcing learners to open optional help first.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new starter strip still needs a narrow-phone check for line wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 100 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a learner needs a first sentence, put one visible starter near the answer box before hiding richer support behind a toggle.
+- Keep exactly one starter source visible at a time so the Roleplay answer step stays calm.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the review step hierarchy so the single best correction stands above optional detail even more clearly.
+## 2026-07-07: Compact Roleplay Back Pill
+
+Made one focused Roleplay UI polish: the source-aware back control is now a compact two-line pill instead of one long label.
+
+Why it changed:
+
+- The previous run made the back label truthful, but `Back to Lesson 1` could feel wide on a narrow phone.
+- Roleplay should keep the first viewport calm and let the coach prompt plus answer action stay visually dominant.
+- The smallest useful fix was to preserve the existing source-aware behavior and tighten only the visible pill layout.
+
+What changed:
+
+- Updated both Roleplay back controls in `src/screens/RoleplayScreen.tsx` to show a small `Back to` kicker over the destination label.
+- Kept the existing accessibility label and hint tied to the full source-aware destination.
+- Increased the tap target to a comfortable compact pill while capping visual width for mobile.
+
+What went well:
+
+- The change stayed inside one Roleplay screen style/markup group and did not touch navigation behavior, saved sessions, scoring, auth, payments, APIs or dependencies.
+- `Back to Lesson 1`, `Back to Practice` and shorter destinations should now read clearly without becoming the dominant control.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the compact pill still needs a real 390px mobile check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 99 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Source-aware navigation labels work better as compact UI when the destination can be longer than one word.
+- Keep Roleplay chrome small so the coach prompt, answer field and primary CTA remain the center of the screen.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the Roleplay answer field visual hierarchy so the input area feels even more central than optional help.
+
+## 2026-07-07: Roleplay Source-Aware Back Label
+
+Made one focused Roleplay navigation polish: the back control now says where it returns, such as `Back to Practice`, `Back to Wins` or `Back to Lesson 1`.
+
+Why it changed:
+
+- The previous run made Roleplay return to the correct source screen, but the visible label still read like a generic back action.
+- Learners opening Roleplay from Practice, Wins, Profile or Lesson 1 should not have to guess where the back button goes.
+- The smallest useful fix was to keep the same navigation behavior and make the button label source-aware.
+
+What changed:
+
+- Added `createRoleplayBackLabel` to `src/utils/roleplayReturnScreen.ts`.
+- Updated `src/navigation/AppNavigator.tsx` to pass the source-aware label into `RoleplayScreen`.
+- Updated both Roleplay back controls in `src/screens/RoleplayScreen.tsx` so visual text and accessibility labels match the true return target.
+- Added focused coverage in `tests/practiceContent.test.mjs` for Practice, Wins, Lesson 1, Learn and Me labels.
+
+What went well:
+
+- The change stayed in navigation/UI copy only and did not touch roleplay scoring, saved sessions, storage, backend logic, auth, payments or dependencies.
+- The label now matches the source-preserving behavior, making the focused practice flow feel more reliable.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the longer `Back to Lesson 1` label should still be checked on a narrow phone viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 99 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Navigation copy should match actual destination whenever Roleplay can be opened from multiple app areas.
+- Keep source-aware navigation as a tiny helper; no larger routing layer is needed for this MVP.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Preview Roleplay from Practice, Wins and Lesson 1 on mobile and tighten the back pill if `Back to Lesson 1` feels too wide.
+
+>>>>>>> 8d621f5 (Add roleplay inline answer starter)
 ## 2026-07-07: Roleplay Back Returns To Source
 
 Made one focused MVP usability improvement: leaving a roleplay with `Back` now returns the learner to the screen they opened it from instead of always jumping to Home.
