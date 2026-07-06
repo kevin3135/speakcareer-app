@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-06: Practice Compact Path Preview
+
+Made one focused Practice flow improvement: the Practice path card now opens as a compact `now / next unlock` preview, and the fuller guided path stays behind an explicit `See full path` toggle.
+
+Why it changed:
+
+- The Practice screen already had the right recommended roleplay, daily sprint and runway data, but the full three-item path list appeared immediately and competed with the main next action.
+- The product direction calls for a businesslike guided loop with one clear recommended step first.
+- The smallest useful fix was to keep the same practice-path logic and make the runway progressively disclosed instead of always expanded.
+
+What changed:
+
+- Extended `src/utils/practiceRunway.ts` with a compact runway body and preview items for the active step plus the next unlock.
+- Updated `src/screens/PracticeScreen.tsx` so the path card now shows a short preview by default and reveals the existing fuller path list only when the learner taps `See full path`.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the new compact Practice runway states.
+
+What went well:
+
+- The change stayed focused on the Practice flow and reused the current career-path and runway helpers instead of adding another data model.
+- The recommended roleplay remains the primary action while the unlock path is still visible.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the two-card compact preview should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 93 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Practice path guidance is clearer when only the active step and next unlock are visible first.
+- Keep the full guided path available, but hide it until the learner explicitly asks for more context.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a compact daily-target payoff strip in Roleplay so the learner sees how the current save advances today's streak before reaching the save step.
+
 ## 2026-07-06: Home Connected Lesson Nodes
 
 Made one focused Home/Learn polish: the START card now visually connects to the compact Today / Next unlock runway with a small connector and node-style cards.

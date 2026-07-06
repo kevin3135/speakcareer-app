@@ -12,8 +12,10 @@ export type PracticeRunwayItem = {
 
 export type PracticeRunwayState = {
   body: string;
+  collapsedBody: string;
   eyebrow: string;
   items: PracticeRunwayItem[];
+  previewItems: PracticeRunwayItem[];
   progressLabel: string;
   title: string;
 };
@@ -37,6 +39,11 @@ export function createPracticeRunway(path: PracticeCareerPath): PracticeRunwaySt
       isPathComplete,
       nextUnlockStep,
     }),
+    collapsedBody: createCollapsedRunwayBody({
+      activeStep,
+      isPathComplete,
+      nextUnlockStep,
+    }),
     eyebrow: 'What unlocks next',
     items: visibleSteps.map(({ index, step }) => ({
       id: step.id,
@@ -47,6 +54,7 @@ export function createPracticeRunway(path: PracticeCareerPath): PracticeRunwaySt
       title: step.title,
       xpLabel: step.xpLabel,
     })),
+    previewItems: createPreviewItems(path.steps, activeStep, nextUnlockStep, isPathComplete),
     progressLabel: path.progressLabel,
     title: isPathComplete ? 'Full path complete' : `After ${activeStep.title}`,
   };
@@ -98,4 +106,53 @@ function createRunwayBody({
   }
 
   return `Save ${activeStep.title} now to unlock ${nextUnlockStep.title} and keep Practice app-led instead of browse-led.`;
+}
+
+function createCollapsedRunwayBody({
+  activeStep,
+  isPathComplete,
+  nextUnlockStep,
+}: {
+  activeStep: PracticeCareerPathStep;
+  isPathComplete: boolean;
+  nextUnlockStep: PracticeCareerPathStep | null;
+}) {
+  if (isPathComplete) {
+    return `Path complete. Replay ${activeStep.title} when you want one more sharp English rep.`;
+  }
+
+  if (!nextUnlockStep) {
+    return `Do ${activeStep.title} now to keep the guided path moving.`;
+  }
+
+  return `Do ${activeStep.title} now. ${nextUnlockStep.title} unlocks after save.`;
+}
+
+function createPreviewItems(
+  steps: PracticeCareerPathStep[],
+  activeStep: PracticeCareerPathStep,
+  nextUnlockStep: PracticeCareerPathStep | null,
+  isPathComplete: boolean,
+): PracticeRunwayItem[] {
+  const previewSteps = isPathComplete || !nextUnlockStep
+    ? [activeStep]
+    : [activeStep, nextUnlockStep];
+
+  return previewSteps.map((step) => {
+    const index = steps.findIndex((candidate) => candidate.id === step.id);
+
+    return {
+      id: step.id,
+      metaLabel: step.caption,
+      sequenceLabel: String(index + 1).padStart(2, '0'),
+      state: step.state,
+      statusLabel: step.state === 'active'
+        ? isPathComplete
+          ? 'Replay now'
+          : 'Do now'
+        : 'Unlock next',
+      title: step.title,
+      xpLabel: step.xpLabel,
+    };
+  });
 }

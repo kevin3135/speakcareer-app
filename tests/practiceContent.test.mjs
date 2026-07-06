@@ -4018,7 +4018,15 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
   ]);
   assert.ok(firstRunState.closedPreview.body.includes('recommended sprint first'));
   assert.equal(firstRunState.runway?.title, 'After Job Interview');
+  assert.equal(firstRunState.runway?.collapsedBody, 'Do Job Interview now. Meeting Practice unlocks after save.');
   assert.equal(firstRunState.runway?.items.length, 3);
+  assert.deepEqual(
+    firstRunState.runway?.previewItems.map((item) => `${item.sequenceLabel}:${item.title}:${item.statusLabel}`),
+    [
+      '01:Job Interview:Do now',
+      '02:Meeting Practice:Unlock next',
+    ],
+  );
   assert.deepEqual(
     firstRunState.runway?.items.map((item) => item.statusLabel),
     ['Do now', 'Unlock next', 'Later'],
@@ -4168,7 +4176,18 @@ test('creates a compact practice runway around the active path step', async () =
 
   assert.equal(activeRunway?.eyebrow, 'What unlocks next');
   assert.equal(activeRunway?.title, 'After Presentation Practice');
+  assert.equal(
+    activeRunway?.collapsedBody,
+    'Do Presentation Practice now. Sales Call unlocks after save.',
+  );
   assert.equal(activeRunway?.progressLabel, '2 of 5 complete');
+  assert.deepEqual(
+    activeRunway?.previewItems.map((item) => `${item.sequenceLabel}:${item.title}:${item.statusLabel}`),
+    [
+      '03:Presentation Practice:Do now',
+      '04:Sales Call:Unlock next',
+    ],
+  );
   assert.deepEqual(
     activeRunway?.items.map((item) => item.state),
     ['done', 'active', 'locked'],
@@ -4182,6 +4201,14 @@ test('creates a compact practice runway around the active path step', async () =
   const completeRunway = createPracticeRunway(completePath);
 
   assert.equal(completeRunway?.title, 'Full path complete');
+  assert.equal(
+    completeRunway?.collapsedBody,
+    'Path complete. Replay Meeting Practice when you want one more sharp English rep.',
+  );
+  assert.deepEqual(
+    completeRunway?.previewItems.map((item) => `${item.sequenceLabel}:${item.title}:${item.statusLabel}`),
+    ['02:Meeting Practice:Replay now'],
+  );
   assert.equal(
     completeRunway?.items.find((item) => item.state === 'active')?.statusLabel,
     'Replay now',

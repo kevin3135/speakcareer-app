@@ -32,6 +32,7 @@ export function PracticeScreen({
   sessions,
 }: PracticeScreenProps) {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+  const [isRunwayOpen, setIsRunwayOpen] = useState(false);
   const libraryState = createPracticeLibraryState({
     draft,
     roleplays: practiceContent.roleplays,
@@ -131,57 +132,117 @@ export function PracticeScreen({
             </View>
             <Badge label={libraryState.runway.progressLabel} tone="info" />
           </View>
-          <Text style={styles.runwayBody}>{libraryState.runway.body}</Text>
-          <View style={styles.runwayList}>
-            {libraryState.runway.items.map((item) => (
+          <Text style={styles.runwayBody}>
+            {isRunwayOpen ? libraryState.runway.body : libraryState.runway.collapsedBody}
+          </Text>
+          <View style={styles.runwayPreviewRow}>
+            {libraryState.runway.previewItems.map((item) => (
               <View
                 key={item.id}
                 style={[
-                  styles.runwayItem,
-                  item.state === 'active' && styles.runwayItemActive,
-                  item.state === 'locked' && styles.runwayItemLocked,
+                  styles.runwayPreviewCard,
+                  item.state === 'active' && styles.runwayPreviewCardActive,
+                  item.state === 'locked' && styles.runwayPreviewCardLocked,
                 ]}
               >
-                <View
-                  style={[
-                    styles.runwaySequence,
-                    item.state === 'active' && styles.runwaySequenceActive,
-                    item.state === 'locked' && styles.runwaySequenceLocked,
-                  ]}
-                >
-                  <Text
+                <View style={styles.runwayPreviewHeader}>
+                  <View
                     style={[
-                      styles.runwaySequenceText,
-                      item.state === 'active' && styles.runwaySequenceTextActive,
-                      item.state === 'locked' && styles.runwaySequenceTextLocked,
+                      styles.runwaySequence,
+                      item.state === 'active' && styles.runwaySequenceActive,
+                      item.state === 'locked' && styles.runwaySequenceLocked,
                     ]}
                   >
-                    {item.sequenceLabel}
-                  </Text>
-                </View>
-                <View style={styles.flexOne}>
-                  <View style={styles.runwayItemHeader}>
-                    <Text numberOfLines={1} style={styles.runwayItemTitle}>
-                      {item.title}
+                    <Text
+                      style={[
+                        styles.runwaySequenceText,
+                        item.state === 'active' && styles.runwaySequenceTextActive,
+                        item.state === 'locked' && styles.runwaySequenceTextLocked,
+                      ]}
+                    >
+                      {item.sequenceLabel}
                     </Text>
-                    <Badge
-                      label={item.statusLabel}
-                      tone={
-                        item.state === 'done'
-                          ? 'success'
-                          : item.state === 'active'
-                            ? 'accent'
-                            : 'secondary'
-                      }
-                    />
                   </View>
-                  <Text numberOfLines={1} style={styles.runwayItemMeta}>
-                    {item.metaLabel}
-                  </Text>
+                  <Badge
+                    label={item.statusLabel}
+                    tone={item.state === 'active' ? 'accent' : 'secondary'}
+                  />
                 </View>
-                <XPBadge label={item.xpLabel} />
+                <Text numberOfLines={1} style={styles.runwayPreviewTitle}>
+                  {item.title}
+                </Text>
+                <Text numberOfLines={2} style={styles.runwayPreviewMeta}>
+                  {item.metaLabel}
+                </Text>
+                <View style={styles.runwayPreviewFooter}>
+                  <XPBadge label={item.xpLabel} />
+                </View>
               </View>
             ))}
+          </View>
+          {isRunwayOpen ? (
+            <View style={styles.runwayList}>
+              {libraryState.runway.items.map((item) => (
+                <View
+                  key={item.id}
+                  style={[
+                    styles.runwayItem,
+                    item.state === 'active' && styles.runwayItemActive,
+                    item.state === 'locked' && styles.runwayItemLocked,
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.runwaySequence,
+                      item.state === 'active' && styles.runwaySequenceActive,
+                      item.state === 'locked' && styles.runwaySequenceLocked,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.runwaySequenceText,
+                        item.state === 'active' && styles.runwaySequenceTextActive,
+                        item.state === 'locked' && styles.runwaySequenceTextLocked,
+                      ]}
+                    >
+                      {item.sequenceLabel}
+                    </Text>
+                  </View>
+                  <View style={styles.flexOne}>
+                    <View style={styles.runwayItemHeader}>
+                      <Text numberOfLines={1} style={styles.runwayItemTitle}>
+                        {item.title}
+                      </Text>
+                      <Badge
+                        label={item.statusLabel}
+                        tone={
+                          item.state === 'done'
+                            ? 'success'
+                            : item.state === 'active'
+                              ? 'accent'
+                              : 'secondary'
+                        }
+                      />
+                    </View>
+                    <Text numberOfLines={1} style={styles.runwayItemMeta}>
+                      {item.metaLabel}
+                    </Text>
+                  </View>
+                  <XPBadge label={item.xpLabel} />
+                </View>
+              ))}
+            </View>
+          ) : null}
+          <View style={styles.runwayToggleAction}>
+            <AppButton
+              accessibilityHint={isRunwayOpen
+                ? 'Hide the full guided practice path'
+                : 'Show the full guided practice path'}
+              label={isRunwayOpen ? 'Hide full path' : 'See full path'}
+              onPress={() => setIsRunwayOpen((isOpen) => !isOpen)}
+              size="small"
+              variant="quiet"
+            />
           </View>
         </Card>
       ) : null}
@@ -438,6 +499,54 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     marginTop: spacing.md,
   },
+  runwayPreviewCard: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    padding: spacing.md,
+  },
+  runwayPreviewCardActive: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  runwayPreviewCardLocked: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+  },
+  runwayPreviewFooter: {
+    alignItems: 'flex-start',
+    marginTop: spacing.md,
+  },
+  runwayPreviewHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: spacing.sm,
+  },
+  runwayPreviewMeta: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  runwayPreviewRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  runwayPreviewTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.md,
+  },
   runwaySequence: {
     alignItems: 'center',
     backgroundColor: colors.primarySoft,
@@ -467,6 +576,10 @@ const styles = StyleSheet.create({
   },
   runwaySequenceTextLocked: {
     color: colors.textMuted,
+  },
+  runwayToggleAction: {
+    alignSelf: 'center',
+    marginTop: spacing.sm,
   },
   runwayTitle: {
     color: colors.ink,
