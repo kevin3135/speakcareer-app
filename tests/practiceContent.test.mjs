@@ -4368,6 +4368,34 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.ok(bonusSprint.body.includes('extra XP'));
 });
 
+test('preserves the correct return screen for roleplay navigation', async () => {
+  const { resolveRoleplayReturnScreen } = await import('../src/utils/roleplayReturnScreen.ts');
+
+  assert.equal(
+    resolveRoleplayReturnScreen({
+      currentScreen: 'Practice',
+      existingReturnScreen: 'Home',
+    }),
+    'Practice',
+  );
+
+  assert.equal(
+    resolveRoleplayReturnScreen({
+      currentScreen: 'Foundation',
+      existingReturnScreen: 'Home',
+    }),
+    'Foundation',
+  );
+
+  assert.equal(
+    resolveRoleplayReturnScreen({
+      currentScreen: 'Roleplay',
+      existingReturnScreen: 'Progress',
+    }),
+    'Progress',
+  );
+});
+
 test('creates a compact practice runway around the active path step', async () => {
   const { createPracticeCareerPath } = await import('../src/utils/practiceCareerPath.ts');
   const { createPracticeRunway } = await import('../src/utils/practiceRunway.ts');

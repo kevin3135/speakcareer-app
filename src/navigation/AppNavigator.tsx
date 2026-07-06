@@ -37,6 +37,7 @@ import {
   saveRoleplayDraft,
 } from '../utils/roleplayDraftStorage';
 import { createFoundationWarmupCue } from '../utils/roleplayWarmupCue';
+import { resolveRoleplayReturnScreen } from '../utils/roleplayReturnScreen';
 import { getStartingLevelProfile } from '../utils/startingLevel';
 import { readStartingLevel, saveStartingLevel } from '../utils/startingLevelStorage';
 
@@ -52,6 +53,7 @@ export function AppNavigator() {
   const [foundationCompletedSteps, setFoundationCompletedSteps] = useState(0);
   const [roleplayDraft, setRoleplayDraft] = useState<RoleplayDraft | null>(null);
   const [roleplayWarmupCue, setRoleplayWarmupCue] = useState<RoleplayWarmupCue | null>(null);
+  const [roleplayReturnScreen, setRoleplayReturnScreen] = useState<Exclude<MainScreen, 'Roleplay'>>('Home');
 
   const selectedRoleplay = useMemo(
     () => practiceContent.roleplays.find((roleplay) => roleplay.id === selectedRoleplayId) ?? practiceContent.roleplays[0],
@@ -120,6 +122,12 @@ export function AppNavigator() {
 
     setSelectedRoleplayId(roleplayId);
     setRoleplayWarmupCue(nextWarmupCue);
+    setRoleplayReturnScreen(
+      resolveRoleplayReturnScreen({
+        currentScreen: activeScreen,
+        existingReturnScreen: roleplayReturnScreen,
+      }),
+    );
     setActiveScreen('Roleplay');
   }
 
@@ -240,7 +248,7 @@ export function AppNavigator() {
           <RoleplayScreen
             key={`${selectedRoleplay.id}:${roleplayWarmupCue?.cueId ?? 'default'}`}
             dailyTarget={dailyTarget}
-            onBack={() => setActiveScreen('Home')}
+            onBack={() => setActiveScreen(roleplayReturnScreen)}
             onClearDraft={clearSavedRoleplayDraft}
             onDraftChange={updateRoleplayDraft}
             onOpenProgress={() => setActiveScreen('Progress')}

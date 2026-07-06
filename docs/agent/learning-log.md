@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Back Returns To Source
+
+Made one focused MVP usability improvement: leaving a roleplay with `Back` now returns the learner to the screen they opened it from instead of always jumping to Home.
+
+Why it changed:
+
+- The English MVP already lets learners open roleplays from Home, Practice, Progress, Profile and Foundation, but `Back` from Roleplay always sent them to Home.
+- That broke the expected flow for learners who wanted to resume a Practice sprint, retry from Wins, or return to Lesson 1 after checking the first interview.
+- The smallest useful fix was to preserve the source screen when opening a roleplay and reuse it for the Roleplay `Back` action.
+
+What changed:
+
+- Added `src/utils/roleplayReturnScreen.ts` with one small helper that keeps the existing return target during roleplay-to-roleplay continuation and otherwise uses the current source screen.
+- Updated `src/navigation/AppNavigator.tsx` to store the roleplay return screen whenever a roleplay opens, then send `onBack` to that stored screen instead of hardcoding Home.
+- Added focused coverage in `tests/practiceContent.test.mjs` for Practice-origin, Foundation-origin and nested Roleplay continuation cases.
+
+What went well:
+
+- The fix stayed inside navigation state and did not change roleplay content, storage rules, XP, streak logic, backend plans, auth, payments or dependencies.
+- The behavior now matches user expectation across the main MVP loop without adding new screens or navigation complexity.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser visual QA, so the Roleplay back button should still be tapped manually from Practice, Progress and Foundation once on-device.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 99 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Roleplay navigation should preserve the learner's source context; forcing every exit back to Home makes the guided loop feel less reliable.
+- A tiny pure helper is enough when navigation behavior needs test coverage without adding a larger routing layer.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a small source-aware label on the Roleplay back control so learners can see whether it returns to Practice, Wins or Lesson 1.
+
 ## 2026-07-07: Practice Unlock Payoff Strip
 
 Made one focused Practice screen polish: the recommended roleplay now has a compact unlock payoff strip directly underneath it.
