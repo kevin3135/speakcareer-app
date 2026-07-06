@@ -3857,7 +3857,10 @@ test('creates a level runway for the Progress screen', async () => {
 });
 
 test('creates a more motivational latest-win recap for Progress', async () => {
-  const { createProgressLatestWinState } = await import('../src/utils/progressLatestWin.ts');
+  const {
+    createProgressLatestWinState,
+    createProgressSpeakingFocusCue,
+  } = await import('../src/utils/progressLatestWin.ts');
 
   const completedTargetWin = createProgressLatestWinState({
     isDailyTargetComplete: true,
@@ -3907,6 +3910,39 @@ test('creates a more motivational latest-win recap for Progress', async () => {
     'Good start. Add one result or next step to make it stronger.',
   );
   assert.ok(coreWin.recapText.includes('streak, XP and coach history'));
+
+  const activeFocusCue = createProgressSpeakingFocusCue({
+    isDailyTargetComplete: false,
+    session: {
+      feedbackSummary: 'Good start. Add one measurable result before the final sentence.',
+      nextFocusLabel: 'Structure 68',
+      nextFocusText: 'Add one measurable result before the final sentence.',
+      roleplayTitle: 'Job Interview',
+    },
+  });
+
+  assert.equal(activeFocusCue?.eyebrow, "Today's speaking focus");
+  assert.equal(activeFocusCue?.badgeLabel, 'Structure 68');
+  assert.equal(
+    activeFocusCue?.text,
+    'Next: add one measurable result before the final sentence.',
+  );
+  assert.equal(activeFocusCue?.metaText, 'Use it in Job Interview.');
+
+  const reviewFocusCue = createProgressSpeakingFocusCue({
+    isDailyTargetComplete: true,
+    session: {
+      feedbackSummary: 'Clear structure. Next: use First, then explain the result.',
+      nextFocusLabel: '   ',
+      nextFocusText: '   ',
+      roleplayTitle: 'Meeting Practice',
+    },
+  });
+
+  assert.equal(reviewFocusCue?.eyebrow, 'Review before bonus');
+  assert.equal(reviewFocusCue?.badgeLabel, 'Coach cue');
+  assert.equal(reviewFocusCue?.text, 'Next: use First, then explain the result.');
+  assert.equal(reviewFocusCue?.metaText, 'Repeat once, then stop or continue.');
 });
 
 test('creates a first-win return cue for the next day', async () => {

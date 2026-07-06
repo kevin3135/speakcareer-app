@@ -11,6 +11,13 @@ export type ProgressLatestWinState = {
   recapText: string;
 };
 
+export type ProgressSpeakingFocusCue = {
+  badgeLabel: string;
+  eyebrow: string;
+  metaText: string;
+  text: string;
+};
+
 type CreateProgressLatestWinStateInput = {
   isDailyTargetComplete: boolean;
   session: Pick<
@@ -24,6 +31,21 @@ type CreateProgressLatestWinStateInput = {
     | 'wordCount'
   >;
 };
+
+type CreateProgressSpeakingFocusCueInput = {
+  isDailyTargetComplete: boolean;
+  session: Pick<
+    PracticeSession,
+    | 'feedbackSummary'
+    | 'nextFocusLabel'
+    | 'nextFocusText'
+    | 'roleplayTitle'
+  >;
+};
+
+const MAX_SPEAKING_FOCUS_LENGTH = 72;
+const ACTION_START_PATTERN =
+  /^(add|ask|avoid|connect|include|keep|lead|make|mention|name|replace|show|start|try|use)\b/i;
 
 export function createProgressLatestWinState({
   isDailyTargetComplete,
@@ -48,6 +70,26 @@ export function createProgressLatestWinState({
     eyebrow: isDailyTargetComplete ? 'Review this win first' : 'Saved today',
     recapLabel: 'Why it counts',
     recapText: createRecapText(session),
+  };
+}
+
+export function createProgressSpeakingFocusCue({
+  isDailyTargetComplete,
+  session,
+}: CreateProgressSpeakingFocusCueInput): ProgressSpeakingFocusCue | null {
+  const focusText = session.nextFocusText?.trim() || session.feedbackSummary.trim();
+
+  if (!focusText) {
+    return null;
+  }
+
+  return {
+    badgeLabel: createCoachCueBadgeLabel(session.nextFocusLabel),
+    eyebrow: isDailyTargetComplete ? 'Review before bonus' : "Today's speaking focus",
+    metaText: isDailyTargetComplete
+      ? 'Repeat once, then stop or continue.'
+      : `Use it in ${session.roleplayTitle}.`,
+    text: createSpeakingFocusText(focusText),
   };
 }
 
@@ -107,4 +149,68 @@ function createRecapText(
   }
 
   return 'Short saved answers still grow your streak, XP and coach history.';
+}
+
+function createSpeakingFocusText(text: string) {
+  const actionSentence = pickActionSentence(text).replace(/[.!?]+$/, '').trim();
+  const normalizedAction = actionSentence.replace(/^next:\s*/i, '');
+
+  if (!isActionSentence(actionSentence)) {
+    return 'Next: repeat this correction once.';
+  }
+
+  const prefixedAction = /^next:/i.test(actionSentence)
+    ? actionSentence
+    : `Next: ${normalizedAction.charAt(0).toLowerCase()}${normalizedAction.slice(1)}`;
+
+  return ensurePeriod(truncateAtWord(prefixedAction, MAX_SPEAKING_FOCUS_LENGTH));
+}
+
+function pickActionSentence(text: string) {
+  const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)
+    ?.map((sentence) => sentence.trim())
+    .filter(Boolean) ?? [text.trim()];
+
+  return sentences.find(isActionSentence) ?? sentences[0] ?? '';
+}
+
+function isActionSentence(sentence: string) {
+  return ACTION_START_PATTERN.test(sentence.replace(/^next:\s*/i, '').trim());
+}
+
+function createCoachCueBadgeLabel(label?: string) {
+  const normalized = label?.trim().replace(/\s+/g, ' ');
+
+  if (!normalized) {
+    return 'Coach cue';
+  }
+
+  if (normalized.length <= 18) {
+    return normalized;
+  }
+
+  const areaLabel = ['Clarity', 'Confidence', 'Structure', 'Vocabulary'].find((area) =>
+    new RegExp(area, 'i').test(normalized),
+  );
+
+  return areaLabel ?? 'Coach cue';
+}
+
+function truncateAtWord(text: string, maxLength: number) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  const shortened = text.slice(0, maxLength - 1);
+  const lastSpaceIndex = shortened.lastIndexOf(' ');
+
+  if (lastSpaceIndex <= 0) {
+    return shortened;
+  }
+
+  return shortened.slice(0, lastSpaceIndex);
+}
+
+function ensurePeriod(text: string) {
+  return /[.!?]$/.test(text) ? text : `${text}.`;
 }

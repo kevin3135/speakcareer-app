@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Progress Speaking Focus Cue
+
+Made one focused Progress/Wins polish: the screen now surfaces the latest saved correction as a compact AI coach cue directly under the main progress action card.
+
+Why it changed:
+
+- Wins already tracked XP, streak and the latest saved answer, but the most useful next correction was still buried inside the latest-win card.
+- The product direction asks Progress to feel motivating without becoming a dense dashboard.
+- The smallest useful fix was to reuse the latest-session data and add one concise, visual focus row instead of adding another feature.
+
+What changed:
+
+- Added a tested `createProgressSpeakingFocusCue` helper in `src/utils/progressLatestWin.ts`.
+- Updated `src/screens/ProgressScreen.tsx` with a compact coach-colored `AI` cue that shows one short `Next:` instruction and a small badge.
+- Replaced the older daily-target-only review strip so the cue is visible after any saved session without duplicating the same correction.
+- Removed a stray conflict-marker line that had been left as plain text in this learning log.
+
+What went well:
+
+- The change stayed inside Progress/Wins and the latest-win utility.
+- The cue uses existing `coach` theme tokens and does not add dependencies, storage, APIs or navigation logic.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the new compact cue should still be checked on a narrow viewport.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 94 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress is clearest when it turns the latest correction into one concrete next speaking action.
+- Keep coach cues short, visual and secondary to the main start/continue action.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Polish the Mistake Bank active correction card so it feels like one focused drill instead of a feedback list.
+
 ## 2026-07-06: Roleplay Optional Coach Details
 
 Made one focused AI feedback UI polish: the Roleplay review step now keeps the rewrite visible before the detailed breakdown, and the score/notes toggle now reads as explicitly optional coach detail.
@@ -93,7 +140,6 @@ Next suggested task:
 
 - Add a compact daily-target payoff strip in Roleplay so the learner sees how the current save advances today's streak before reaching the save step.
 
->>>>>>> 7e3ee3a (design: clarify optional feedback details)
 ## 2026-07-06: Home Connected Lesson Nodes
 
 Made one focused Home/Learn polish: the START card now visually connects to the compact Today / Next unlock runway with a small connector and node-style cards.

@@ -26,7 +26,10 @@ import { createLocalProgressStats } from '../utils/localProgress';
 import { createMistakePracticeDrill, createMistakePracticeStatus } from '../utils/mistakePracticeDrill';
 import { createProgressEmptyState } from '../utils/progressEmptyState';
 import { createProgressLevelRunway } from '../utils/progressLevelRunway';
-import { createProgressLatestWinState } from '../utils/progressLatestWin';
+import {
+  createProgressLatestWinState,
+  createProgressSpeakingFocusCue,
+} from '../utils/progressLatestWin';
 import { createProgressMistakeBankQueue } from '../utils/progressMistakeBankQueue';
 import { createProgressMistakeBankPreview } from '../utils/progressMistakeBankPreview';
 import {
@@ -73,10 +76,6 @@ export function ProgressScreen({
   });
   const latestSession = sessions[0];
   const latestSessionFocusText = latestSession?.nextFocusText?.trim() ?? '';
-  const latestReviewText = latestSessionFocusText || latestSession?.feedbackSummary?.trim() || '';
-  const latestReviewLabel = latestSessionFocusText
-    ? latestSession?.nextFocusLabel?.trim() || 'Coach target'
-    : 'Latest feedback';
   const recentSessions = createProgressRecentSessions(sessions);
   const isFirstSaveLocked = sessions.length === 0;
   const isDailyTargetComplete =
@@ -87,7 +86,12 @@ export function ProgressScreen({
       session: latestSession,
     })
     : null;
-  const showDailyTargetReviewCue = isDailyTargetComplete && latestReviewText.length > 0;
+  const speakingFocusCue = latestSession
+    ? createProgressSpeakingFocusCue({
+      isDailyTargetComplete,
+      session: latestSession,
+    })
+    : null;
   const mistakesFixed = sessions.length > 0 ? Math.min(mistakeBank.length, sessions.length + 1) : 0;
   const nextStepGuide = createProgressNextStepGuide({
     dailyTarget,
@@ -285,15 +289,6 @@ export function ProgressScreen({
             </View>
           </View>
         ) : null}
-        {showDailyTargetReviewCue ? (
-          <View style={styles.completeReviewCue}>
-            <View style={styles.rowBetween}>
-              <Text style={styles.completeReviewLabel}>Review first</Text>
-              <Badge label={latestReviewLabel} tone="success" />
-            </View>
-            <Text numberOfLines={2} style={styles.completeReviewText}>{latestReviewText}</Text>
-          </View>
-        ) : null}
         {!isFirstSaveLocked ? (
           <View style={styles.progressWrap}>
             <ProgressBar
@@ -312,6 +307,26 @@ export function ProgressScreen({
           />
         </View>
       </Card>
+
+      {speakingFocusCue ? (
+        <Card style={styles.speakingFocusCard} tone="muted">
+          <View style={styles.speakingFocusRow}>
+            <View style={styles.speakingFocusAvatar}>
+              <Text style={styles.speakingFocusAvatarText}>AI</Text>
+            </View>
+            <View style={styles.speakingFocusCopy}>
+              <View style={styles.speakingFocusHeader}>
+                <Text style={styles.speakingFocusLabel}>{speakingFocusCue.eyebrow}</Text>
+                <Badge label={speakingFocusCue.badgeLabel} tone="purple" />
+              </View>
+              <Text numberOfLines={2} style={styles.speakingFocusText}>
+                {speakingFocusCue.text}
+              </Text>
+              <Text style={styles.speakingFocusMeta}>{speakingFocusCue.metaText}</Text>
+            </View>
+          </View>
+        </Card>
+      ) : null}
 
       {isDailyTargetComplete ? latestWinCard : null}
       {levelRunwayCard}
@@ -700,27 +715,64 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
   },
-  completeReviewCue: {
-    backgroundColor: colors.white,
-    borderColor: colors.success,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    marginTop: spacing.md,
-    padding: spacing.md,
+  speakingFocusCard: {
+    backgroundColor: colors.coachSoft,
+    borderColor: colors.coach,
+    padding: spacing.lg,
   },
-  completeReviewLabel: {
-    color: colors.successDark,
+  speakingFocusRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  speakingFocusAvatar: {
+    alignItems: 'center',
+    backgroundColor: colors.coach,
+    borderColor: colors.white,
+    borderRadius: radius.pill,
+    borderWidth: 2,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  speakingFocusAvatarText: {
+    color: colors.white,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  completeReviewText: {
+  speakingFocusCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  speakingFocusHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  speakingFocusLabel: {
+    color: colors.coach,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  speakingFocusText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
+  },
+  speakingFocusMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
   },
   progressWrap: {
     marginTop: spacing.lg,
