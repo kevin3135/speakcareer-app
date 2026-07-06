@@ -29,6 +29,7 @@ import { summarizePracticeAnswer, type AnswerReview } from '../utils/answerRevie
 import { createFeedbackScoreSummary } from '../utils/feedbackScoreSummary';
 import { createFeedbackSnapshot } from '../utils/feedbackSnapshot';
 import { createFeedbackMomentumRecap } from '../utils/feedbackMomentum';
+import { createFeedbackDetailsToggleState } from '../utils/feedbackDetailsToggle';
 import { createFirstPathCoachCue } from '../utils/firstPathCoachCue';
 import { createFirstQuestFeedbackState } from '../utils/firstQuestFeedback';
 import { createAdaptiveFollowUpPrompt } from '../utils/followUpPrompt';
@@ -280,6 +281,14 @@ export function RoleplayScreen({
     ? createFeedbackMomentumRecap({
       improvements: feedbackResult.feedback.improvements,
       summary: feedbackScoreSummary,
+    })
+    : null;
+  const feedbackDetailsToggle = feedbackResult
+    ? createFeedbackDetailsToggleState({
+      improvementCount: feedbackResult.feedback.improvements.length,
+      isOpen: isFeedbackDetailsOpen,
+      scoreCount: feedbackResult.feedback.scores.length,
+      strengthCount: feedbackResult.feedback.strengths.length,
     })
     : null;
   const reviewDecisionCue = feedbackResult && answerReview
@@ -1328,6 +1337,10 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
+          <View style={styles.betterEnglishBox}>
+            <Text style={styles.betterEnglishLabel}>Better English</Text>
+            <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
+          </View>
           {reviewDecisionCue ? (
             <View style={styles.reviewDecisionBox}>
               <View style={styles.oneThingHeader}>
@@ -1338,18 +1351,28 @@ export function RoleplayScreen({
               <Text style={styles.reviewDecisionBody}>{reviewDecisionCue.body}</Text>
             </View>
           ) : null}
-          <Pressable
-            accessibilityHint="Shows or hides score bars and detailed coach notes"
-            accessibilityLabel={isFeedbackDetailsOpen ? 'Hide coach details' : 'Show coach details'}
-            accessibilityRole="button"
-            onPress={() => setIsFeedbackDetailsOpen((isOpen) => !isOpen)}
-            style={({ pressed }) => [styles.feedbackDetailsToggle, pressed && styles.pressed]}
-          >
-            <Text style={styles.feedbackDetailsToggleLabel}>
-              {isFeedbackDetailsOpen ? 'Hide details' : 'Show details'}
-            </Text>
-            <Text style={styles.feedbackDetailsToggleMeta}>Scores and notes</Text>
-          </Pressable>
+          {feedbackDetailsToggle ? (
+            <Pressable
+              accessibilityHint={
+                isFeedbackDetailsOpen
+                  ? 'Hides the optional score bars and coach notes'
+                  : 'Opens the optional score bars and coach notes'
+              }
+              accessibilityLabel={feedbackDetailsToggle.title}
+              accessibilityRole="button"
+              onPress={() => setIsFeedbackDetailsOpen((isOpen) => !isOpen)}
+              style={({ pressed }) => [styles.feedbackDetailsToggle, pressed && styles.pressed]}
+            >
+              <View style={styles.feedbackDetailsToggleCopy}>
+                <Text style={styles.feedbackDetailsToggleLabel}>{feedbackDetailsToggle.title}</Text>
+                <Text style={styles.feedbackDetailsToggleMeta}>{feedbackDetailsToggle.meta}</Text>
+              </View>
+              <Badge
+                label={feedbackDetailsToggle.badgeLabel}
+                tone={feedbackDetailsToggle.tone}
+              />
+            </Pressable>
+          ) : null}
           {isFeedbackDetailsOpen ? (
             <>
               <View style={styles.feedbackScores}>
@@ -1379,10 +1402,6 @@ export function RoleplayScreen({
               </View>
             </>
           ) : null}
-          <View style={styles.betterEnglishBox}>
-            <Text style={styles.betterEnglishLabel}>Better English</Text>
-            <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
-          </View>
           {answerReview && !answerReview.isReadyForFeedback ? (
             <View style={styles.feedbackActions}>
               <View style={styles.feedbackActionItem}>
@@ -2416,6 +2435,10 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
+  },
+  feedbackDetailsToggleCopy: {
+    flex: 1,
+    marginRight: spacing.sm,
   },
   feedbackDetailsToggleLabel: {
     color: colors.primaryDark,

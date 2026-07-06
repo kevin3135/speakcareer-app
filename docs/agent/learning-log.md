@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-06: Roleplay Optional Coach Details
+
+Made one focused AI feedback UI polish: the Roleplay review step now keeps the rewrite visible before the detailed breakdown, and the score/notes toggle now reads as explicitly optional coach detail.
+
+Why it changed:
+
+- The main learner payoff in review is the corrected phrasing and the save-or-retry decision, not the full scoring breakdown.
+- The previous `Show details` row was accurate, but it did not clearly signal that scores and notes are secondary.
+- The smallest useful fix was to keep the existing feedback logic and change the review hierarchy plus toggle copy.
+
+What changed:
+
+- Added `src/utils/feedbackDetailsToggle.ts` to generate a compact optional-details state for the review toggle.
+- Updated `src/screens/RoleplayScreen.tsx` so `Better English` appears before the detailed breakdown toggle.
+- Restyled the toggle content in `RoleplayScreen` to use explicit optional copy plus an `Optional`/`Expanded` badge.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new feedback-details helper.
+
+What went well:
+
+- The change stayed inside the existing Roleplay feedback surface and did not alter scoring, save, follow-up or storage behavior.
+- The new helper keeps the optional-details copy testable instead of burying it in JSX.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo or browser mobile visual QA, so the revised review stack should still be checked on a narrow viewport after tapping Check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 94 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the rewrite and next action ahead of analytic detail in the Roleplay review stack.
+- Optional coach breakdowns should say they are optional in plain language instead of relying on placement alone.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add one compact Progress cue that surfaces the latest saved correction as today's next speaking focus.
+
 ## 2026-07-06: Roleplay Quiet Save Options
 
 Made one focused Roleplay save-card polish: the optional rewrite/edit actions now read as quiet secondary tools instead of a competing card.
