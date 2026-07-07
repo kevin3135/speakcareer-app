@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Profile Privacy Cards Wrap Better
+
+Made one focused Profile/Me mobile polish: the privacy preview cards now wrap cleanly on narrow screens instead of being forced into an overly tight two-column row.
+
+Why it changed:
+
+- The previous premium polish called out phone-width Profile QA as the next best task.
+- Browser QA could not attach to the local webview in time, so the safest useful fix was a code-level mobile resilience pass on the Profile screen.
+- The privacy card is part of the Profile trust moment and should feel calm, readable and polished on small phones.
+
+What changed:
+
+- Updated `src/screens/ProfileScreen.tsx` so the privacy item row can wrap.
+- Gave each privacy item a stable readable minimum width and flexible growth.
+- Prevented the small `OK` marker from shrinking when text wraps.
+
+What went well:
+
+- The change stayed inside Profile styles only; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The card remains compact on normal mobile widths but is safer on narrower viewports.
+
+What went wrong:
+
+- The in-app browser connection timed out while waiting for the local webview to attach, so this run did not capture a fresh screenshot.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 3
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Profile trust/privacy cards should wrap instead of squeezing copy on small widths.
+- The browser viewport was reset after the failed QA attempt.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Retry mobile browser QA on Profile/Me when the in-app browser webview is responsive, then inspect Premium and Privacy card spacing together.
+
 ## 2026-07-07: Premium Preview Feels Calmer
 
 Made one focused Profile/Me polish: the Future Pro preview now feels more like calm career momentum and less like a static feature list.
