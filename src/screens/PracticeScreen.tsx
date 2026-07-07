@@ -16,6 +16,8 @@ import { practiceContent, progressData } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
 import { createDailyMission } from '../utils/gamification';
+import { createPracticeAfterSavePreview } from '../utils/practiceAfterSavePreview';
+import { createPracticeTargetPreview } from '../utils/practiceCompletion';
 import { createPracticeDailySprint } from '../utils/practiceDailySprint';
 import { createPracticeLibraryState } from '../utils/practiceLibraryState';
 import { createPracticeLevelPayoff } from '../utils/practiceLevelPayoff';
@@ -56,6 +58,16 @@ export function PracticeScreen({
   const levelPayoff = createPracticeLevelPayoff({
     currentTotalXp: mission.xpTotal,
     xpReward: recommendedRoleplay.durationMinutes * 4,
+  });
+  const targetPreview = createPracticeTargetPreview({
+    completedSessions: sessions.length,
+    dailyTarget,
+  });
+  const afterSavePreview = createPracticeAfterSavePreview({
+    isResumeMode: libraryState.isResumeMode,
+    levelPayoff,
+    recommendedPayoff: libraryState.recommendedPayoff,
+    targetPreview,
   });
   const sprintProgressTone = dailySprint.statusTone === 'success' ? 'success' : 'secondary';
 
@@ -133,65 +145,25 @@ export function PracticeScreen({
         xp={libraryState.recommendedCard.xp}
       />
 
-      <View style={styles.recommendedPayoffStrip}>
-        <View style={styles.recommendedPayoffIcon}>
-          <Text style={styles.recommendedPayoffIconText}>
-            {libraryState.recommendedPayoff.iconLabel}
-          </Text>
-        </View>
-        <View style={styles.recommendedPayoffCopy}>
-          <View style={styles.recommendedPayoffHeader}>
-            <Text style={styles.recommendedPayoffEyebrow}>
-              {libraryState.recommendedPayoff.eyebrow}
-            </Text>
-            <Badge label={libraryState.recommendedPayoff.badgeLabel} tone="accent" />
-          </View>
-          <Text numberOfLines={1} style={styles.recommendedPayoffTitle}>
-            {libraryState.recommendedPayoff.title}
-          </Text>
-          <Text numberOfLines={2} style={styles.recommendedPayoffBody}>
-            {libraryState.recommendedPayoff.body}
-          </Text>
-          <Text style={styles.recommendedPayoffProgress}>
-            {libraryState.recommendedPayoff.progressLabel}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.levelPayoffBox}>
-        <View style={styles.levelPayoffHeader}>
+      <Card tone="strong">
+        <View style={styles.afterSaveHeader}>
           <View style={styles.flexOne}>
-            <Text style={styles.levelPayoffEyebrow}>Level payoff</Text>
-            <Text style={styles.levelPayoffTitle}>{levelPayoff.title}</Text>
+            <Text style={styles.afterSaveEyebrow}>{afterSavePreview.eyebrow}</Text>
+            <Text style={styles.afterSaveTitle}>{afterSavePreview.title}</Text>
           </View>
-          <XPBadge label={levelPayoff.badgeLabel} />
+          <XPBadge label={afterSavePreview.badgeLabel} />
         </View>
-        <Text style={styles.levelPayoffBody}>{levelPayoff.body}</Text>
-        <View style={styles.levelPayoffStats}>
-          <View style={styles.levelPayoffStat}>
-            <Text style={styles.levelPayoffStatLabel}>Now</Text>
-            <Text style={styles.levelPayoffStatTitle}>{levelPayoff.currentLevelLabel}</Text>
-            <Text style={styles.levelPayoffStatMeta}>{levelPayoff.currentProgressLabel}</Text>
-            <Text style={styles.levelPayoffStatSubtle}>{levelPayoff.currentTotalXpLabel}</Text>
-          </View>
-          <View style={styles.levelPayoffArrow}>
-            <Text style={styles.levelPayoffArrowText}>{'->'}</Text>
-          </View>
-          <View style={[styles.levelPayoffStat, styles.levelPayoffStatAccent]}>
-            <Text style={styles.levelPayoffStatLabel}>After save</Text>
-            <Text style={styles.levelPayoffStatTitle}>{levelPayoff.afterSaveLevelLabel}</Text>
-            <Text style={styles.levelPayoffStatMeta}>{levelPayoff.afterSaveProgressLabel}</Text>
-            <Text style={styles.levelPayoffStatSubtle}>{levelPayoff.afterSaveTotalXpLabel}</Text>
-          </View>
+        <View style={styles.afterSaveRows}>
+          {afterSavePreview.rows.map((row) => (
+            <View key={row.label} style={styles.afterSaveRow}>
+              <Text style={styles.afterSaveRowLabel}>{row.label}</Text>
+              <Text numberOfLines={1} style={styles.afterSaveRowValue}>
+                {row.value}
+              </Text>
+            </View>
+          ))}
         </View>
-        <View style={styles.levelPayoffProgress}>
-          <ProgressBar
-            label={levelPayoff.progressLabel}
-            tone="accent"
-            value={levelPayoff.progressPercent}
-          />
-        </View>
-      </View>
+      </Card>
 
       {libraryState.runway ? (
         <Card tone="muted">
@@ -399,93 +371,49 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
-  levelPayoffArrow: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  levelPayoffArrowText: {
-    color: colors.primaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-  },
-  levelPayoffBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
-  },
-  levelPayoffBox: {
-    backgroundColor: colors.surface,
-    borderColor: colors.borderStrong,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    padding: spacing.md,
-  },
-  levelPayoffEyebrow: {
+  afterSaveEyebrow: {
     color: colors.primary,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  levelPayoffHeader: {
+  afterSaveHeader: {
     alignItems: 'center',
     flexDirection: 'row',
     gap: spacing.md,
   },
-  levelPayoffProgress: {
-    marginTop: spacing.md,
-  },
-  levelPayoffStat: {
+  afterSaveRow: {
+    alignItems: 'center',
     backgroundColor: colors.white,
     borderColor: colors.border,
     borderRadius: radius.md,
     borderWidth: 1,
-    flex: 1,
-    minWidth: 0,
-    padding: spacing.sm,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
-  levelPayoffStatAccent: {
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-  },
-  levelPayoffStatLabel: {
+  afterSaveRowLabel: {
     color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  levelPayoffStatMeta: {
-    color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xxs,
   },
-  levelPayoffStatSubtle: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '800',
-    marginTop: spacing.xs,
-  },
-  levelPayoffStats: {
-    alignItems: 'center',
-    flexDirection: 'row',
+  afterSaveRows: {
     gap: spacing.sm,
     marginTop: spacing.md,
   },
-  levelPayoffStatTitle: {
+  afterSaveRowValue: {
     color: colors.ink,
+    flex: 1,
     fontFamily: fonts.rounded,
-    fontSize: typography.body,
+    fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineBody,
-    marginTop: spacing.xs,
+    marginLeft: spacing.md,
+    textAlign: 'right',
   },
-  levelPayoffTitle: {
+  afterSaveTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.h3,
@@ -634,72 +562,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   runwayTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.h3,
-    fontWeight: '900',
-    lineHeight: typography.lineH3,
-    marginTop: spacing.xs,
-  },
-  recommendedPayoffBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
-  },
-  recommendedPayoffCopy: {
-    flex: 1,
-    minWidth: 0,
-  },
-  recommendedPayoffEyebrow: {
-    color: colors.accentDark,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  recommendedPayoffHeader: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  recommendedPayoffIcon: {
-    alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderColor: colors.accentDark,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    height: 48,
-    justifyContent: 'center',
-    width: 48,
-  },
-  recommendedPayoffIconText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  recommendedPayoffProgress: {
-    color: colors.textMuted,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-    marginTop: spacing.sm,
-  },
-  recommendedPayoffStrip: {
-    alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-  },
-  recommendedPayoffTitle: {
     color: colors.ink,
     fontFamily: fonts.rounded,
     fontSize: typography.h3,

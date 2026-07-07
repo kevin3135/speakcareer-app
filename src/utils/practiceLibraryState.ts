@@ -24,6 +24,15 @@ export type PracticeLibraryCard = {
   xp: string;
 };
 
+export type PracticeRecommendedPayoffState = {
+  badgeLabel: string;
+  body: string;
+  eyebrow: string;
+  iconLabel: string;
+  progressLabel: string;
+  title: string;
+};
+
 export type PracticeLibraryState = {
   browseCards: PracticeLibraryCard[];
   browseLabel: string;
@@ -38,14 +47,7 @@ export type PracticeLibraryState = {
   progressLabel: string;
   progressPercent: number;
   recommendedCard: PracticeLibraryCard;
-  recommendedPayoff: {
-    badgeLabel: string;
-    body: string;
-    eyebrow: string;
-    iconLabel: string;
-    progressLabel: string;
-    title: string;
-  };
+  recommendedPayoff: PracticeRecommendedPayoffState;
   runway: PracticeRunwayState | null;
   subtitle: string;
   title: string;

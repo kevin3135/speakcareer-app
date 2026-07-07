@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: Practice After-Save Outcome Preview
+
+Made one focused Practice-flow improvement: the Practice screen now uses one compact `After this save` preview under the recommended roleplay instead of separate unlock and level payoff blocks.
+
+Why it changed:
+
+- The previous Practice screen showed the same payoff in two different cards, which made the next action feel more detailed than decisive.
+- This loop should feel habit-forming but still professional: start one roleplay, see the concrete payoff, move on.
+- The smallest useful fix was to combine today progress, path unlock, and level movement into one short outcome preview tied to the recommended save.
+
+What changed:
+
+- Added `src/utils/practiceAfterSavePreview.ts` to compose one deterministic Practice payoff state from the existing target, path and level helpers.
+- Exported a shared `PracticeRecommendedPayoffState` type from `src/utils/practiceLibraryState.ts`.
+- Updated `src/screens/PracticeScreen.tsx` to replace the old unlock strip plus level-payoff card with one compact `After this save` card showing `Today`, `Path` and `Level` rows.
+- Added focused coverage in `tests/practiceContent.test.mjs` for both the normal unlock case and the resume-plus-level-up case.
+
+What went well:
+
+- The change stayed inside the Practice screen and pure helpers, so it did not touch roleplay save logic, storage, navigation, auth, payments, APIs or dependencies.
+- The new card keeps the payoff concrete while reducing visual repetition below the main recommended action.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new single-line outcome rows still need a narrow-phone check for wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When one screen already has a clear recommended action, keep the payoff in one compact card instead of splitting it across multiple summaries.
+- Reuse the existing target/path/level helpers to keep motivational UI deterministic and easy to test.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Give the saved Roleplay completion state the same compact `Today / Path / Level` outcome treatment so the loop stays consistent after save.
+
 ## 2026-07-07: Roleplay Save Compact Cue
 
 Made one focused Roleplay save-step polish: regular saves now use a shorter coach-style cue above the primary Save CTA instead of repeating the full progress payoff sentence.

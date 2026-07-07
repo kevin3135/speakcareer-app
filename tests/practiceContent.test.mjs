@@ -4044,6 +4044,98 @@ test('creates a concrete Practice level payoff before save', async () => {
   });
 });
 
+test('creates one compact Practice after-save preview', async () => {
+  const { createPracticeAfterSavePreview } = await import(
+    '../src/utils/practiceAfterSavePreview.ts'
+  );
+
+  const firstUnlockPreview = createPracticeAfterSavePreview({
+    isResumeMode: false,
+    levelPayoff: {
+      afterSaveLevelLabel: 'Level 2',
+      afterSaveProgressLabel: '86/180 XP',
+      afterSaveTotalXpLabel: '266 total XP',
+      badgeLabel: '+48 XP',
+      body: 'Save this sprint to move from 38/180 XP to 86/180 XP toward Level 3.',
+      currentLevelLabel: 'Level 2',
+      currentProgressLabel: '38/180 XP',
+      currentTotalXpLabel: '218 total XP',
+      progressLabel: '86/180 XP after save',
+      progressPercent: 48,
+      title: 'Move closer to Level 3',
+    },
+    recommendedPayoff: {
+      badgeLabel: 'After save',
+      body: 'Save Job Interview, then Meeting Practice becomes the next guided sprint.',
+      eyebrow: 'Next unlock',
+      iconLabel: '02',
+      progressLabel: '0 of 5 complete',
+      title: 'Meeting Practice unlocks',
+    },
+    targetPreview: {
+      badgeLabel: 'After save 1/2',
+      progressLabel: 'After save: 1/2 roleplays today',
+      progressPercent: 50,
+      title: 'One more sprint after this',
+      tone: 'info',
+    },
+  });
+
+  assert.deepEqual(firstUnlockPreview, {
+    badgeLabel: '+48 XP',
+    eyebrow: 'After this save',
+    rows: [
+      { label: 'Today', value: '1/2 roleplays today' },
+      { label: 'Path', value: 'Meeting Practice unlocks' },
+      { label: 'Level', value: '86/180 XP on Level 2' },
+    ],
+    title: 'Meeting Practice unlocks',
+  });
+
+  const resumeLevelUpPreview = createPracticeAfterSavePreview({
+    isResumeMode: true,
+    levelPayoff: {
+      afterSaveLevelLabel: 'Level 3',
+      afterSaveProgressLabel: '38/180 XP',
+      afterSaveTotalXpLabel: '398 total XP',
+      badgeLabel: '+48 XP',
+      body: 'Save this sprint to move from Level 2 at 170/180 XP to Level 3 at 38/180 XP.',
+      currentLevelLabel: 'Level 2',
+      currentProgressLabel: '170/180 XP',
+      currentTotalXpLabel: '350 total XP',
+      progressLabel: 'Level 3 unlocked',
+      progressPercent: 100,
+      title: 'Reach Level 3 with this save',
+    },
+    recommendedPayoff: {
+      badgeLabel: 'Draft first',
+      body: 'Check the saved answer, save XP, then return to the guided path.',
+      eyebrow: 'Stay focused',
+      iconLabel: 'GO',
+      progressLabel: 'Draft waiting',
+      title: 'Finish this answer first',
+    },
+    targetPreview: {
+      badgeLabel: 'After save 2/3',
+      progressLabel: 'After save: 2/3 roleplays today',
+      progressPercent: 67,
+      title: 'One more sprint after this',
+      tone: 'info',
+    },
+  });
+
+  assert.deepEqual(resumeLevelUpPreview, {
+    badgeLabel: '+48 XP',
+    eyebrow: 'After this save',
+    rows: [
+      { label: 'Today', value: '2/3 roleplays today' },
+      { label: 'Path', value: 'Guided path active again' },
+      { label: 'Level', value: 'Level 3 unlocked' },
+    ],
+    title: 'Reach Level 3 with this save',
+  });
+});
+
 test('creates a compact Home level rail state', async () => {
   const { createHomeLevelRail } = await import('../src/utils/homeLevelRail.ts');
   const { createLevelProgress } = await import('../src/utils/levelProgress.ts');
