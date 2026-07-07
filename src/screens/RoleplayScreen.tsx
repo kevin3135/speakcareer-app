@@ -794,9 +794,7 @@ export function RoleplayScreen({
               {savedOutcomeRows.map((row) => (
                 <View key={row.label} style={styles.savedOutcomeRow}>
                   <Text style={styles.savedOutcomeRowLabel}>{row.label}</Text>
-                  <Text numberOfLines={1} style={styles.savedOutcomeRowValue}>
-                    {row.value}
-                  </Text>
+                  <Text style={styles.savedOutcomeRowValue}>{row.value}</Text>
                 </View>
               ))}
             </View>
@@ -3179,12 +3177,13 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   savedOutcomeRow: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: colors.successSoft,
     borderColor: colors.success,
     borderRadius: radius.md,
     borderWidth: 1,
     flexDirection: 'row',
+    gap: spacing.md,
     justifyContent: 'space-between',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -3194,6 +3193,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    minWidth: 52,
   },
   savedOutcomeRows: {
     gap: spacing.sm,
@@ -3203,10 +3203,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    flexShrink: 1,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    marginLeft: spacing.md,
-    textAlign: 'right',
+    minWidth: 0,
   },
   savedOutcomeTitle: {
     color: colors.ink,

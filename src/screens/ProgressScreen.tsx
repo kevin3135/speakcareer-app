@@ -874,9 +874,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    flexShrink: 1,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    textAlign: 'right',
+    minWidth: 0,
   },
   latestWinSavedNote: {
     color: colors.textMuted,

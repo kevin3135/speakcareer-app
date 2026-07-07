@@ -157,9 +157,7 @@ export function PracticeScreen({
           {afterSavePreview.rows.map((row) => (
             <View key={row.label} style={styles.afterSaveRow}>
               <Text style={styles.afterSaveRowLabel}>{row.label}</Text>
-              <Text numberOfLines={1} style={styles.afterSaveRowValue}>
-                {row.value}
-              </Text>
+              <Text style={styles.afterSaveRowValue}>{row.value}</Text>
             </View>
           ))}
         </View>
@@ -383,12 +381,13 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   afterSaveRow: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: colors.white,
     borderColor: colors.border,
     borderRadius: radius.md,
     borderWidth: 1,
     flexDirection: 'row',
+    gap: spacing.md,
     justifyContent: 'space-between',
     marginTop: spacing.md,
     paddingHorizontal: spacing.md,
@@ -399,6 +398,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+    minWidth: 52,
   },
   afterSaveRows: {
     gap: spacing.sm,
@@ -409,9 +409,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    flexShrink: 1,
     fontWeight: '900',
-    marginLeft: spacing.md,
-    textAlign: 'right',
+    lineHeight: typography.lineSmall,
+    minWidth: 0,
   },
   afterSaveTitle: {
     color: colors.ink,

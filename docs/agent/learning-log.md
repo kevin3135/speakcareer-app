@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: Reward Row Mobile Wrapping
+
+Made one focused visual polish across the compact reward rows: outcome values can now wrap cleanly instead of being clipped or right-wrapped on narrow screens.
+
+Why it changed:
+
+- Home, Practice, Roleplay completion and Progress now all use compact reward/outcome rows.
+- Several row values can be longer than a small phone width, especially next-practice titles and path payoff copy.
+- The smallest useful fix was style-only: keep the same UI and let value text wrap inside a stable value column.
+
+What changed:
+
+- Updated `src/screens/HomeScreen.tsx` start-card outcome row value styling.
+- Updated `src/screens/PracticeScreen.tsx` after-save row values to wrap instead of truncating.
+- Updated `src/screens/RoleplayScreen.tsx` saved-outcome row values to wrap instead of truncating.
+- Updated `src/screens/ProgressScreen.tsx` latest-win reward row value styling.
+
+What went well:
+
+- The change stayed purely visual and did not touch content helpers, save logic, storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The row hierarchy remains compact: fixed labels, flexible payoff values.
+
+What went wrong:
+
+- The in-app browser connection timed out during setup, so this run used code review rather than fresh screenshot QA.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Outcome rows should avoid `numberOfLines={1}` for payoff values because career-path labels can be longer than expected.
+- Fixed labels plus flexible wrapping values are safer on mobile than right-aligned truncating values.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Retry a browser/screenshot QA pass on the reward rows once the in-app browser connection is responsive.
+
 ## 2026-07-07: Home Start Outcome Rows
 
 Made one focused Home-screen practice-flow improvement: the main `Start` card now shows a compact outcome panel with scan-friendly rows instead of one paragraph under the CTA.
