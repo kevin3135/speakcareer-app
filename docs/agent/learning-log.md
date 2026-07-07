@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Home Start Outcome Rows
+
+Made one focused Home-screen practice-flow improvement: the main `Start` card now shows a compact outcome panel with scan-friendly rows instead of one paragraph under the CTA.
+
+Why it changed:
+
+- Home is the app's primary habit-loop entry, but its payoff area still read like explanatory copy while Practice, Roleplay and Progress had already moved toward compact reward summaries.
+- The next action should feel immediate: start one rep, see today's payoff, understand the path, move forward.
+- The smallest useful fix was to keep the same Home flow and refactor only the start-card preview into a deterministic structured state.
+
+What changed:
+
+- Updated `src/utils/homeStartPreview.ts` so the Home CTA preview now returns compact rows for `Today`, `Path`, and a context-specific reward/next cue.
+- Updated `src/screens/HomeScreen.tsx` to render those rows inside the existing start card with tighter visual hierarchy.
+- Added focused assertions in `tests/practiceContent.test.mjs` for foundation, first-save, resume, bonus, and tomorrow-return Home preview states.
+
+What went well:
+
+- The change stayed inside the Home start card and one pure helper; no storage, navigation, auth, payments, APIs or dependencies changed.
+- The main Home action now matches the clearer payoff language direction already used on Practice, Roleplay completion and Progress.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new Home outcome rows still need a narrow-phone wrap check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The Home start card should summarize payoff in the same compact scan pattern as other screens instead of using a paragraph.
+- Context-specific third rows work better than forcing one label for every save state.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Do a narrow mobile visual QA pass on Home, Practice and Roleplay outcome rows and tighten any wrap-heavy values before adding more reward polish.
+
 ## 2026-07-07: Progress Latest-Win Reward Rows
 
 Made one focused Progress polish: the latest-win card now shows a compact reward panel with `Today`, `Practice` and `Coach` rows before the detailed recap.

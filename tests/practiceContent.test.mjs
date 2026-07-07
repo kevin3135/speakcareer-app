@@ -2782,7 +2782,11 @@ test('creates a clear Home start payoff preview', async () => {
 
   assert.equal(foundationPreview.eyebrow, 'After lesson');
   assert.equal(foundationPreview.title, 'Job Interview unlocks');
-  assert.ok(foundationPreview.body.includes('gets you to 1/2 today'));
+  assert.deepEqual(foundationPreview.rows, [
+    { label: 'Today', value: '1/2 after first save' },
+    { label: 'Path', value: 'Job Interview unlocks' },
+    { label: 'Reward', value: 'Starts your streak and opens Progress' },
+  ]);
 
   const firstSavePreview = createHomeStartPreview({
     currentTitle: 'Job Interview',
@@ -2797,9 +2801,11 @@ test('creates a clear Home start payoff preview', async () => {
 
   assert.equal(firstSavePreview.eyebrow, 'After save');
   assert.equal(firstSavePreview.title, 'Meeting Practice unlocks');
-  assert.ok(firstSavePreview.body.includes('starts your streak'));
-  assert.ok(firstSavePreview.body.includes('opens Progress'));
-  assert.ok(firstSavePreview.body.includes('1/1 today'));
+  assert.deepEqual(firstSavePreview.rows, [
+    { label: 'Today', value: '1/1 today complete' },
+    { label: 'Path', value: 'Meeting Practice unlocks' },
+    { label: 'Reward', value: 'Starts your streak and opens Progress' },
+  ]);
 
   const resumePreview = createHomeStartPreview({
     currentTitle: 'Resume Job Interview',
@@ -2814,8 +2820,11 @@ test('creates a clear Home start payoff preview', async () => {
 
   assert.equal(resumePreview.eyebrow, 'After save');
   assert.equal(resumePreview.title, 'Meeting Practice unlocks');
-  assert.ok(resumePreview.body.includes('Finishing this draft moves you to 2/3 today'));
-  assert.ok(resumePreview.body.includes('1 more later'));
+  assert.deepEqual(resumePreview.rows, [
+    { label: 'Today', value: '2/3 today after save' },
+    { label: 'Path', value: 'Meeting Practice unlocks' },
+    { label: 'Reward', value: '1 more later' },
+  ]);
 
   const bonusPreview = createHomeStartPreview({
     currentTitle: 'Sales Call',
@@ -2830,8 +2839,11 @@ test('creates a clear Home start payoff preview', async () => {
 
   assert.equal(bonusPreview.eyebrow, 'Bonus after this');
   assert.equal(bonusPreview.title, 'Workplace Small Talk stays ready');
-  assert.ok(bonusPreview.body.includes("target is already done"));
-  assert.ok(bonusPreview.body.includes('bonus XP'));
+  assert.deepEqual(bonusPreview.rows, [
+    { label: 'Today', value: '1/1 complete' },
+    { label: 'Path', value: 'Workplace Small Talk stays ready' },
+    { label: 'Reward', value: 'Bonus XP only' },
+  ]);
 
   const firstWinTomorrowPreview = createHomeStartPreview({
     currentTitle: 'Meeting Practice',
@@ -2850,8 +2862,11 @@ test('creates a clear Home start payoff preview', async () => {
 
   assert.equal(firstWinTomorrowPreview.eyebrow, 'Return tomorrow');
   assert.equal(firstWinTomorrowPreview.title, 'Start Meeting Practice first');
-  assert.ok(firstWinTomorrowPreview.body.includes('If you stop here today'));
-  assert.ok(firstWinTomorrowPreview.body.includes('reuse today\'s correction'));
+  assert.deepEqual(firstWinTomorrowPreview.rows, [
+    { label: 'Today', value: '1/3 saved' },
+    { label: 'Tomorrow', value: 'Start Meeting Practice first' },
+    { label: 'Coach', value: 'Reuse today\'s correction' },
+  ]);
 });
 
 test('creates a compact Home runway under the start card', async () => {

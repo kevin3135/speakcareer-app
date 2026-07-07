@@ -1,15 +1,20 @@
 import type { DailyPracticeTarget } from '../types';
 
 export type HomeStartPreview = {
-  body: string;
   eyebrow: string;
+  rows: HomeStartPreviewRow[];
   title: string;
+};
+
+export type HomeStartPreviewRow = {
+  label: string;
+  value: string;
 };
 
 type CreateHomeStartPreviewInput = {
   currentTitle: string;
   dailyTarget: DailyPracticeTarget;
-  firstWinTomorrowPreview?: HomeStartPreview | null;
+  firstWinTomorrowPreview?: Pick<HomeStartPreview, 'eyebrow' | 'title'> | null;
   hasCompletedFoundation: boolean;
   hasResumeDraft: boolean;
   isMissionComplete: boolean;
@@ -31,41 +36,91 @@ export function createHomeStartPreview({
   const nextSavedCount = Math.min(targetSessionsCompleted + 1, safeDailyTarget);
   const remainingAfterSave = Math.max(safeDailyTarget - nextSavedCount, 0);
   const afterSaveLabel = `${nextSavedCount}/${safeDailyTarget} today`;
+  const currentProgressLabel = `${Math.min(targetSessionsCompleted, safeDailyTarget)}/${safeDailyTarget} saved`;
   const firstUnlockTitle = nextUnlockTitle ?? 'Job Interview';
-  const saveSubject = hasResumeDraft ? 'Finishing this draft' : 'This save';
 
   if (!hasCompletedFoundation) {
     return {
-      body: safeDailyTarget === 1
-        ? 'Then one saved answer starts your streak and completes 1/1 today.'
-        : `Then one saved answer gets you to ${afterSaveLabel} and opens the daily habit.`,
       eyebrow: 'After lesson',
+      rows: [
+        {
+          label: 'Today',
+          value: safeDailyTarget === 1 ? '1/1 after first save' : `1/${safeDailyTarget} after first save`,
+        },
+        {
+          label: 'Path',
+          value: `${firstUnlockTitle} unlocks`,
+        },
+        {
+          label: 'Reward',
+          value: 'Starts your streak and opens Progress',
+        },
+      ],
       title: `${firstUnlockTitle} unlocks`,
     };
   }
 
   if (firstWinTomorrowPreview && !hasResumeDraft) {
-    return firstWinTomorrowPreview;
+    return {
+      eyebrow: firstWinTomorrowPreview.eyebrow,
+      rows: [
+        {
+          label: 'Today',
+          value: currentProgressLabel,
+        },
+        {
+          label: 'Tomorrow',
+          value: firstWinTomorrowPreview.title,
+        },
+        {
+          label: 'Coach',
+          value: 'Reuse today\'s correction',
+        },
+      ],
+      title: firstWinTomorrowPreview.title,
+    };
   }
 
   if (isMissionComplete) {
     return {
-      body: nextUnlockTitle
-        ? `Today's target is already done. This extra save adds bonus XP while ${nextUnlockTitle} stays ready next.`
-        : `Today's target is already done. This extra save adds bonus XP and keeps ${currentTitle} warm.`,
       eyebrow: 'Bonus after this',
+      rows: [
+        {
+          label: 'Today',
+          value: `${safeDailyTarget}/${safeDailyTarget} complete`,
+        },
+        {
+          label: 'Path',
+          value: nextUnlockTitle ? `${nextUnlockTitle} stays ready` : `${currentTitle} stays warm`,
+        },
+        {
+          label: 'Reward',
+          value: 'Bonus XP only',
+        },
+      ],
       title: nextUnlockTitle ? `${nextUnlockTitle} stays ready` : 'Bonus XP banked',
     };
   }
 
   if (remainingAfterSave === 0) {
     return {
-      body: targetSessionsCompleted === 0
-        ? `Your first save starts your streak, opens Progress, and finishes ${afterSaveLabel}.`
-        : nextUnlockTitle
-          ? `${saveSubject} finishes ${afterSaveLabel} and unlocks ${nextUnlockTitle}.`
-          : `${saveSubject} finishes ${afterSaveLabel} and locks in today's practice.`,
       eyebrow: 'After save',
+      rows: [
+        {
+          label: 'Today',
+          value: `${afterSaveLabel} complete`,
+        },
+        {
+          label: 'Path',
+          value: nextUnlockTitle ? `${nextUnlockTitle} unlocks` : 'Today closes',
+        },
+        {
+          label: 'Reward',
+          value: targetSessionsCompleted === 0
+            ? 'Starts your streak and opens Progress'
+            : 'Locks in today\'s practice',
+        },
+      ],
       title: nextUnlockTitle ? `${nextUnlockTitle} unlocks` : 'Today closes',
     };
   }
@@ -75,10 +130,23 @@ export function createHomeStartPreview({
     : `${remainingAfterSave} more later`;
 
   return {
-    body: targetSessionsCompleted === 0
-      ? `Your first save starts your streak, opens Progress, and moves you to ${afterSaveLabel}. ${remainingLabel}.`
-      : `${saveSubject} moves you to ${afterSaveLabel}. ${remainingLabel}.`,
     eyebrow: 'After save',
+    rows: [
+      {
+        label: 'Today',
+        value: `${afterSaveLabel} after save`,
+      },
+      {
+        label: 'Path',
+        value: nextUnlockTitle ? `${nextUnlockTitle} unlocks` : 'Path stays ready',
+      },
+      {
+        label: 'Reward',
+        value: targetSessionsCompleted === 0
+          ? 'Starts your streak and opens Progress'
+          : remainingLabel,
+      },
+    ],
     title: nextUnlockTitle ? `${nextUnlockTitle} unlocks` : `${afterSaveLabel} saved`,
   };
 }

@@ -20,7 +20,7 @@ import { createHomeDailyMissionCard } from '../utils/homeDailyMission';
 import { createHomeLearnState } from '../utils/homeLearnState';
 import { createHomeLevelRail, type HomeLevelRail } from '../utils/homeLevelRail';
 import { createHomeRunway } from '../utils/homeRunway';
-import { createHomeStartPreview } from '../utils/homeStartPreview';
+import { createHomeStartPreview, type HomeStartPreview } from '../utils/homeStartPreview';
 import { createLevelProgress } from '../utils/levelProgress';
 import { createLocalProgressStats } from '../utils/localProgress';
 import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
@@ -126,7 +126,6 @@ export function HomeScreen({
     dailyTarget,
     firstWinTomorrowPreview: firstWinTomorrowCue
       ? {
-        body: firstWinTomorrowCue.body,
         eyebrow: firstWinTomorrowCue.label,
         title: firstWinTomorrowCue.title,
       }
@@ -269,11 +268,7 @@ function AnimatedStartCard({
   pathBadgeTone: 'accent' | 'secondary';
   pathKickerLabel: string;
   pathLabel: string;
-  preview: {
-    body: string;
-    eyebrow: string;
-    title: string;
-  };
+  preview: HomeStartPreview;
   title: string;
   xpLabel: string;
 }) {
@@ -373,9 +368,14 @@ function AnimatedStartCard({
         <Text numberOfLines={1} style={styles.startPreviewTitle}>
           {preview.title}
         </Text>
-        <Text numberOfLines={2} style={styles.startPreviewBody}>
-          {preview.body}
-        </Text>
+        <View style={styles.startPreviewRows}>
+          {preview.rows.map((row) => (
+            <View key={row.label} style={styles.startPreviewRow}>
+              <Text style={styles.startPreviewRowLabel}>{row.label}</Text>
+              <Text style={styles.startPreviewRowValue}>{row.value}</Text>
+            </View>
+          ))}
+        </View>
       </View>
       <View
         accessibilityLabel={`${levelRail.badgeLabel}. ${levelRail.progressLabel}. ${levelRail.remainingLabel}.`}
@@ -567,13 +567,6 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
   },
-  startPreviewBody: {
-    color: colors.primarySoft,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
-  },
   startPreviewBox: {
     backgroundColor: 'rgba(8, 26, 18, 0.28)',
     borderColor: 'rgba(255, 255, 255, 0.18)',
@@ -595,6 +588,35 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xxs,
+  },
+  startPreviewRow: {
+    alignItems: 'flex-start',
+    borderTopColor: 'rgba(255, 255, 255, 0.12)',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+    paddingTop: spacing.sm,
+  },
+  startPreviewRowLabel: {
+    color: colors.secondarySoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    minWidth: 54,
+  },
+  startPreviewRows: {
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  startPreviewRowValue: {
+    color: colors.white,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    textAlign: 'right',
   },
   startLevelFill: {
     backgroundColor: colors.accentSoft,
