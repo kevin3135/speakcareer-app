@@ -369,8 +369,16 @@ export function RoleplayScreen({
       xpReward: totalXpReward,
     })
     : null;
+  const saveStepTitle = firstQuestSaveRecap?.primaryTitle
+    ?? reviewDecisionCue?.title
+    ?? savePrompt?.title
+    ?? '';
   const saveStepBody = firstQuestSaveRecap?.primaryBody
-    ?? (savePrompt ? `Bank this win now. ${savePrompt.followUpLabel}.` : '');
+    ?? (savePrompt && reviewDecisionCue
+      ? `${reviewDecisionCue.body} ${savePrompt.followUpLabel}.`
+      : savePrompt
+        ? `Bank this win now. ${savePrompt.followUpLabel}.`
+        : '');
   const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
   const answerRunway = createRoleplayFlowRunway('answer');
   const reviewRunway = createRoleplayFlowRunway('review');
@@ -1432,7 +1440,7 @@ export function RoleplayScreen({
               </View>
             </View>
           ) : null}
-          {reviewDecisionCue ? (
+          {reviewDecisionCue && !answerReview?.isReadyForFeedback ? (
             <View style={styles.reviewDecisionBox}>
               <View style={styles.oneThingHeader}>
                 <Text style={styles.reviewDecisionLabel}>Your call</Text>
@@ -1508,7 +1516,7 @@ export function RoleplayScreen({
         </Card>
       ) : null}
 
-      {feedbackResult && answerReview?.isReadyForFeedback && savePrompt ? (
+          {feedbackResult && answerReview?.isReadyForFeedback && savePrompt ? (
         <Card tone="accent">
           {renderFlowRunway(saveRunway, saveRunway.currentStepLabel)}
           <View style={styles.oneThingHeader}>
@@ -1516,7 +1524,7 @@ export function RoleplayScreen({
             <XPBadge label={savePrompt.xpLabel} />
           </View>
           <Text style={styles.cardTitle}>
-            {firstQuestSaveRecap?.primaryTitle ?? savePrompt.title}
+            {saveStepTitle}
           </Text>
           <Text style={styles.followUpBody}>{saveStepBody}</Text>
           {!firstQuestSaveRecap ? (

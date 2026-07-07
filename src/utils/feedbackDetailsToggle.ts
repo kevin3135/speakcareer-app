@@ -23,9 +23,9 @@ export function createFeedbackDetailsToggleState({
 
   if (isOpen) {
     return {
-      badgeLabel: 'Expanded',
+      badgeLabel: 'Open',
       meta: 'Main correction stays above.',
-      title: 'Hide coach details',
+      title: 'Hide deeper notes',
       tone: 'info',
     };
   }
@@ -34,9 +34,9 @@ export function createFeedbackDetailsToggleState({
   const noteLabel = safeNoteCount === 1 ? '1 coach note' : `${safeNoteCount} coach notes`;
 
   return {
-    badgeLabel: 'Optional',
+    badgeLabel: 'Later',
     meta: `${scoreLabel} and ${noteLabel}.`,
-    title: 'Optional coach details',
+    title: 'Why this works',
     tone: 'accent',
   };
 }

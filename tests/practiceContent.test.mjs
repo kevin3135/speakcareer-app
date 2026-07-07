@@ -261,9 +261,9 @@ test('keeps roleplay feedback details clearly optional', async () => {
       strengthCount: 2,
     }),
     {
-      badgeLabel: 'Optional',
+      badgeLabel: 'Later',
       meta: '4 score bars and 4 coach notes.',
-      title: 'Optional coach details',
+      title: 'Why this works',
       tone: 'accent',
     },
   );
@@ -276,9 +276,9 @@ test('keeps roleplay feedback details clearly optional', async () => {
       strengthCount: 2,
     }),
     {
-      badgeLabel: 'Expanded',
+      badgeLabel: 'Open',
       meta: 'Main correction stays above.',
-      title: 'Hide coach details',
+      title: 'Hide deeper notes',
       tone: 'info',
     },
   );

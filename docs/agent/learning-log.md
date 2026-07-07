@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Save Step Owns The Feedback Decision
+
+Made one focused AI feedback UI improvement: the save-versus-retry verdict now lives in the save step itself, so the review card stays centered on the rewrite and recap instead of adding another decision panel before save.
+
+Why it changed:
+
+- The current Roleplay flow already hides score bars behind an optional details toggle, but the ready-to-save state still repeated guidance across the review card and the save card.
+- The design audit calls out feedback that can feel analytical instead of one clear correction and one obvious next action.
+- The safest useful fix was to move the ready-to-save decision copy into the save step and make the optional details wording calmer.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so ready answers now use the save card title/body for the coach decision instead of showing a separate `Your call` panel above.
+- Kept the retry cue for not-ready answers in the review card, where it still helps before save is available.
+- Updated `src/utils/feedbackDetailsToggle.ts` and focused assertions in `tests/practiceContent.test.mjs` so the optional drawer now reads `Why this works` / `Hide deeper notes` instead of report-like details wording.
+
+What went well:
+
+- The change stayed local to the Roleplay feedback/save flow and did not touch storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The pre-save feedback path should now read more like one reward moment with one next action.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the revised review/save spacing still needs a quick phone-width check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the ready-to-save verdict inside the save step when the learner already has a usable rewrite.
+- Optional feedback details should sound like coaching context, not score-report chrome.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run a phone-width QA pass on the review and save steps and decide whether the save lock-in rows can collapse into one calmer summary line.
+
 ## 2026-07-07: Roleplay Coach Prompt Is Lighter
 
 Made one focused Roleplay viewport polish: the coach prompt bubble keeps the same question hierarchy, but uses less surrounding chrome before the answer box.
