@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Save Lock-In Summary Is Calmer
+
+Made one focused Roleplay save-step polish: the save card now shows one compact lock-in summary instead of three stacked reward rows.
+
+Why it changed:
+
+- The current branch is focused on making feedback and save feel like one clear reward moment.
+- The save card already owns the save decision, but the `Locks in` block still looked like a mini report after the primary CTA.
+- The smallest useful fix was to keep the same helper data and collapse only the screen presentation.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so first-quest and regular save lock-in data share one summary renderer.
+- Replaced the three mapped lock-in rows with one two-line summary such as `Save this answer to Progress / Reaches 1/2 today / Bank +55 XP`.
+- Removed the old row-specific lock-in styles and added a single summary text style.
+
+What went well:
+
+- The save card now keeps the primary save CTA visually dominant while still showing progress, today and XP payoff.
+- The change stayed inside the Roleplay save-step presentation and did not touch content data, storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the compact save summary still needs a phone-width screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Save-step payoff should read as one calm reward summary, not several equal report rows.
+- Keep the Save CTA dominant in the reward moment.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the review/save flow and check whether the optional follow-up collapsed chip needs a softer secondary style.
+
 ## 2026-07-07: Save Step Owns The Feedback Decision
 
 Made one focused AI feedback UI improvement: the save-versus-retry verdict now lives in the save step itself, so the review card stays centered on the rewrite and recap instead of adding another decision panel before save.
@@ -13,6 +59,7 @@ Why it changed:
 What changed:
 
 - Updated `src/screens/RoleplayScreen.tsx` so ready answers now use the save card title/body for the coach decision instead of showing a separate `Your call` panel above.
+- Collapsed the save lock-in preview into one calmer summary line inside the same save card instead of three separate rows.
 - Kept the retry cue for not-ready answers in the review card, where it still helps before save is available.
 - Updated `src/utils/feedbackDetailsToggle.ts` and focused assertions in `tests/practiceContent.test.mjs` so the optional drawer now reads `Why this works` / `Hide deeper notes` instead of report-like details wording.
 

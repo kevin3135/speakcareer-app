@@ -379,6 +379,11 @@ export function RoleplayScreen({
       : savePrompt
         ? `Bank this win now. ${savePrompt.followUpLabel}.`
         : '');
+  const saveLockInItems = firstQuestSaveRecap?.items ?? saveLockInPreview?.items ?? null;
+  const saveLockInEyebrow = firstQuestSaveRecap?.eyebrow ?? saveLockInPreview?.eyebrow ?? null;
+  const saveLockInSummary = saveLockInItems
+    ? saveLockInItems.map((item) => item.value).join(' / ')
+    : null;
   const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
   const answerRunway = createRoleplayFlowRunway('answer');
   const reviewRunway = createRoleplayFlowRunway('review');
@@ -1552,25 +1557,10 @@ export function RoleplayScreen({
               />
             </View>
           ) : null}
-          {firstQuestSaveRecap ? (
+          {saveLockInEyebrow && saveLockInSummary ? (
             <View style={styles.saveLockInBox}>
-              <Text style={styles.saveLockInLabel}>{firstQuestSaveRecap.eyebrow}</Text>
-              {firstQuestSaveRecap.items.map((item) => (
-                <View key={item.label} style={styles.saveLockInRow}>
-                  <Text style={styles.saveLockInItemLabel}>{item.label}</Text>
-                  <Text numberOfLines={1} style={styles.saveLockInItemValue}>{item.value}</Text>
-                </View>
-              ))}
-            </View>
-          ) : saveLockInPreview ? (
-            <View style={styles.saveLockInBox}>
-              <Text style={styles.saveLockInLabel}>{saveLockInPreview.eyebrow}</Text>
-              {saveLockInPreview.items.map((item) => (
-                <View key={item.label} style={styles.saveLockInRow}>
-                  <Text style={styles.saveLockInItemLabel}>{item.label}</Text>
-                  <Text numberOfLines={1} style={styles.saveLockInItemValue}>{item.value}</Text>
-                </View>
-              ))}
+              <Text style={styles.saveLockInLabel}>{saveLockInEyebrow}</Text>
+              <Text numberOfLines={2} style={styles.saveLockInSummary}>{saveLockInSummary}</Text>
             </View>
           ) : null}
           {hasAppliedBetterEnglish ? null : (
@@ -2804,37 +2794,23 @@ const styles = StyleSheet.create({
     borderColor: colors.accent,
     borderRadius: radius.lg,
     borderWidth: 1,
-    gap: spacing.xs,
     marginTop: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
-  saveLockInItemLabel: {
-    color: colors.textMuted,
+  saveLockInLabel: {
+    color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
   },
-  saveLockInItemValue: {
+  saveLockInSummary: {
     color: colors.ink,
-    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    marginLeft: spacing.sm,
-    textAlign: 'right',
-  },
-  saveLockInLabel: {
-    color: colors.accentDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-  },
-  saveLockInRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    minHeight: 24,
+    marginTop: spacing.xxs,
   },
   savePrimaryBox: {
     ...shadows.soft,
