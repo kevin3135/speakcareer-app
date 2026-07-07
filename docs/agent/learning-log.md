@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Optional Follow-Up Labels Wrap Better
+
+Made one focused Roleplay save-step polish: the optional follow-up label and collapsed chip now have safer wrapping for longer persona-based follow-up names.
+
+Why it changed:
+
+- The previous run made follow-up labels more specific with names like `Hiring Manager follow-up`.
+- On small phone widths, those more specific labels need room to wrap cleanly beside the XP reward pill.
+- The smallest useful fix was to adjust only the follow-up chip/header layout, not change the save flow or helper copy again.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the expanded follow-up header gives the label flexible space before the badge.
+- Let the collapsed follow-up title use up to two lines instead of forcing a single-line truncation.
+- Aligned the optional XP pill to the top and used row gap spacing so the chip stays stable when copy wraps.
+
+What went well:
+
+- The optional turn keeps its specific career context without feeling cramped.
+- Save remains the dominant action, while the optional follow-up still reads as a neat secondary choice.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the wrapping should still be checked on a real 390px-wide preview.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Persona-specific microcopy is useful, but every longer label needs a mobile wrapping check.
+- Keep optional save-step controls secondary and resilient before adding more reward detail.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run a mobile screenshot pass on the Roleplay save step and verify the optional follow-up chip, expanded box and Save CTA on 390px width.
+
 ## 2026-07-07: Optional Follow-Up Box Is Clearer
 
 Made one focused Roleplay save-step polish: the optional follow-up turn now feels more specific and secondary when it is expanded.

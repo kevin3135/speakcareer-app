@@ -1590,7 +1590,7 @@ export function RoleplayScreen({
           {followUpPrompt ? (
             isFollowUpExpanded ? (
               <View style={styles.followUpPromptBox}>
-                <View style={styles.oneThingHeader}>
+                <View style={[styles.oneThingHeader, styles.followUpPromptHeader]}>
                   <Text style={styles.followUpPromptLabel}>{followUpPrompt.stepLabel}</Text>
                   <Badge
                     label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpReadinessCue?.badgeLabel ?? followUpPrompt.focusLabel}
@@ -1651,7 +1651,7 @@ export function RoleplayScreen({
               >
                 <View style={styles.followUpBonusCopy}>
                   <Text style={styles.followUpSummaryLabel}>Optional turn</Text>
-                  <Text numberOfLines={1} style={styles.followUpBonusTitle}>
+                  <Text numberOfLines={2} style={styles.followUpBonusTitle}>
                     {followUpReadinessCue?.title ?? followUpPrompt.stepLabel}
                   </Text>
                   <Text numberOfLines={2} style={styles.followUpBonusFocus}>
@@ -2854,11 +2854,19 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     padding: spacing.sm,
   },
+  followUpPromptHeader: {
+    alignItems: 'flex-start',
+    gap: spacing.xs,
+  },
   followUpPromptLabel: {
     color: colors.textMuted,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginRight: spacing.sm,
+    minWidth: 0,
   },
   followUpDecisionBox: {
     backgroundColor: colors.white,
@@ -2901,13 +2909,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   followUpBonusChip: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: colors.surfaceMuted,
     borderColor: colors.border,
     borderRadius: radius.lg,
     borderStyle: 'dashed',
     borderWidth: 1,
     flexDirection: 'row',
+    gap: spacing.sm,
     justifyContent: 'space-between',
     marginTop: spacing.sm,
     minWidth: 0,
@@ -2921,7 +2930,6 @@ const styles = StyleSheet.create({
   followUpBonusCopy: {
     flex: 1,
     minWidth: 0,
-    paddingRight: spacing.sm,
   },
   followUpBonusCta: {
     color: colors.textMuted,
@@ -2939,10 +2947,12 @@ const styles = StyleSheet.create({
   },
   followUpBonusReward: {
     alignItems: 'center',
+    alignSelf: 'flex-start',
     backgroundColor: colors.white,
     borderColor: colors.border,
     borderWidth: 1,
     borderRadius: radius.md,
+    flexShrink: 0,
     justifyContent: 'center',
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
