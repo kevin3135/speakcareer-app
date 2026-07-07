@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Warmup Cue Is More Compact
+
+Made one focused first-roleplay viewport polish: the Lesson 1 warmup keeps its coach identity, but the coach cue and starter hint now take less vertical space before the answer box.
+
+Why it changed:
+
+- The design audit still flags Roleplay as having too much visible content before the answer box.
+- The previous run shortened the warmup title/body, but the coach cue and starter hint could still stretch the first card on small phones.
+- The safest useful fix was to cap existing warmup text and tighten spacing, not change the lesson flow.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the warmup coach cue is capped at two lines.
+- Changed the loaded-starter hint to one compact line and reduced the hint/unlock spacing.
+- Kept the same starter action, progress badge, answer-box cue and save flow.
+
+What went well:
+
+- The change stayed inside one visible component group and did not touch storage, navigation, auth, payments, APIs, dependencies or content data.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The first Job Interview screen should now bring the answer box closer to the first viewport while preserving the coach handoff.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the exact 390x844 viewport result still needs a screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first-roleplay warmup should stay compact enough that the answer box feels like the main object, not a later section.
+- Keep coach copy visible, but cap long coach notes in the first viewport.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run mobile visual QA on the first-roleplay viewport at 390x844 and decide whether the full three-step runway above the coach prompt should become a compact progress pill.
+
 ## 2026-07-07: First Roleplay Warmup Copy Is Shorter
 
 Made one focused first-roleplay visual simplification: the Lesson 1 warmup now uses one short headline above the guided sequence instead of a title plus body paragraph.

@@ -974,7 +974,7 @@ export function RoleplayScreen({
                         <Badge label={foundationWarmupPanel.unlockProgress.progressLabel} tone="accent" />
                       ) : null}
                     </View>
-                    <Text style={styles.foundationWarmupCoachText}>
+                    <Text numberOfLines={2} style={styles.foundationWarmupCoachText}>
                       {foundationWarmupPanel.coachCueMessage}
                     </Text>
                     {foundationWarmupPanel.unlockProgress ? (
@@ -1001,7 +1001,7 @@ export function RoleplayScreen({
                       variant="quiet"
                     />
                   </View>
-                  <Text numberOfLines={2} style={styles.foundationWarmupStarterHint}>
+                  <Text numberOfLines={1} style={styles.foundationWarmupStarterHint}>
                     {foundationStarterAction.mode === 'loaded'
                       ? 'Starter is in the answer box below. Edit the task and result there.'
                       : 'Reload the Lesson 1 starter into the answer box below.'}
@@ -1911,7 +1911,7 @@ const styles = StyleSheet.create({
     fontSize: typography.micro,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
+    marginTop: spacing.xxs,
   },
   foundationWarmupStarterBox: {
     backgroundColor: colors.white,
@@ -1933,10 +1933,10 @@ const styles = StyleSheet.create({
   foundationWarmupStarterHint: {
     color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '800',
     lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
+    marginTop: spacing.xxs,
   },
   foundationWarmupEditLabel: {
     color: colors.secondaryDark,
