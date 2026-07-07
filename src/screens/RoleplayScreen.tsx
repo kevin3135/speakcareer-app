@@ -342,6 +342,8 @@ export function RoleplayScreen({
       xpReward: totalXpReward,
     })
     : null;
+  const saveStepBody = firstQuestSaveRecap?.primaryBody
+    ?? (savePrompt ? `Bank this win now. ${savePrompt.followUpLabel}.` : '');
   const isFollowUpExpanded = isFollowUpOpen || includedFollowUp;
   const answerRunway = createRoleplayFlowRunway('answer');
   const reviewRunway = createRoleplayFlowRunway('review');
@@ -1486,9 +1488,7 @@ export function RoleplayScreen({
           <Text style={styles.cardTitle}>
             {firstQuestSaveRecap?.primaryTitle ?? savePrompt.title}
           </Text>
-          <Text style={styles.followUpBody}>
-            {firstQuestSaveRecap?.primaryBody ?? savePrompt.body}
-          </Text>
+          <Text style={styles.followUpBody}>{saveStepBody}</Text>
           {!firstQuestSaveRecap ? (
             <View style={styles.savePrimaryBox}>
               <View style={styles.oneThingHeader}>

@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Save Compact Cue
+
+Made one focused Roleplay save-step polish: regular saves now use a shorter coach-style cue above the primary Save CTA instead of repeating the full progress payoff sentence.
+
+Why it changed:
+
+- The previous run moved the Save CTA into a stronger `Main win` box, but the copy above it still repeated progress and bonus information already shown in the title, XP badge and lock-in rows.
+- The save step should feel decisive: read one short cue, tap Save, then review detail if needed.
+- The smallest useful fix was to shorten only the normal save body while preserving the first-quest unlock copy.
+
+What changed:
+
+- Added a local `saveStepBody` in `src/screens/RoleplayScreen.tsx`.
+- Kept first-quest save copy unchanged.
+- Changed regular save body copy to a compact `Bank this win now` cue that still reflects whether the bonus turn is optional or added.
+
+What went well:
+
+- The change stayed inside Roleplay UI copy and did not touch session creation, progress calculations, storage, navigation, auth, payments, APIs or dependencies.
+- The concrete save payoff remains visible in the title, XP badge and `Locks in` rows.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the save-step text still needs a live narrow-phone scan.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 101 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a card already has title, XP badge and lock-in rows, the body should be a short cue rather than another full explanation.
+- Keep first-quest unlock copy richer because it explains the first major app unlock.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Polish the Progress latest-win card so it feels more like a motivational reward and less like a saved-session report.
+
 ## 2026-07-07: Roleplay Save Main Win CTA
 
 Made one focused Roleplay save-step polish: normal saves now get a compact `Main win` CTA box before the lock-in details.
