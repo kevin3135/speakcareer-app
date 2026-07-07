@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Premium Preview Feels Calmer
+
+Made one focused Profile/Me polish: the Future Pro preview now feels more like calm career momentum and less like a static feature list.
+
+Why it changed:
+
+- The design audit still flags Profile/Me as lower emotional value than the main learning loop.
+- Premium should feel professional and optional, not salesy, childish or casino-like.
+- The smallest safe fix was to improve the existing shared `PremiumCard` and the Profile copy without adding payment logic, routes or new systems.
+
+What changed:
+
+- Updated `src/components/ui/index.tsx` so `PremiumCard` uses a stronger `Career momentum` header, preview badge, compact anchor pills and richer feature tiles.
+- Adjusted the premium footer copy to keep the core free practice path first and frame Pro as a later coaching layer.
+- Updated `src/screens/ProfileScreen.tsx` with shorter career-focused Future Pro copy for interviews, meetings, rewrites and saved mistake patterns.
+
+What went well:
+
+- The change stayed inside the shared UI component and Profile screen; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The preview now has clearer hierarchy while keeping the main Learn/practice loop dominant.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the Profile premium card still needs a phone-width spacing check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep premium language calm and future-facing; it should support career confidence without pulling attention away from Learn.
+- `PremiumCard` is currently only used on Profile, so small shared-component polish is low risk.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run a phone-width visual QA pass on Profile/Me and tune the premium tile wrapping if needed.
+
 ## 2026-07-07: First Interview Answer Surfaces Sooner
 
 Made one focused first-roleplay flow improvement: the Lesson 1 starter checklist is now moved into optional writing support, so the first Job Interview answer box appears sooner on the screen.

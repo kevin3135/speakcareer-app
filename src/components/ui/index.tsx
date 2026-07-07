@@ -576,20 +576,32 @@ export function PremiumCard({
             <Text style={styles.premiumIconText}>PRO</Text>
           </View>
           <View style={styles.premiumHeadingCopy}>
-            <Text style={styles.premiumKicker}>Future upgrade</Text>
-            <Text style={styles.premiumHeaderNote}>Preview only</Text>
+            <Text style={styles.premiumKicker}>Career momentum</Text>
+            <Text style={styles.premiumHeaderNote}>Practice first</Text>
           </View>
         </View>
-        <Badge label="Later" tone="accent" />
+        <Badge label="Preview" tone="accent" />
       </View>
       <Text style={styles.premiumTitle}>{title}</Text>
       <Text style={styles.premiumSubtitle}>{subtitle}</Text>
+
+      <View style={styles.premiumAnchorRow}>
+        <View style={styles.premiumAnchorPill}>
+          <Text style={styles.premiumAnchorText}>Core path now</Text>
+        </View>
+        <View style={styles.premiumAnchorPill}>
+          <Text style={styles.premiumAnchorText}>Deeper coach later</Text>
+        </View>
+      </View>
 
       {featuredBenefits.length ? (
         <View style={styles.premiumPreviewRail}>
           {featuredBenefits.map((benefit, index) => (
             <View key={benefit} style={styles.premiumPreviewTile}>
-              <Text style={styles.premiumPreviewNumber}>0{index + 1}</Text>
+              <View style={styles.premiumPreviewTileHeader}>
+                <Text style={styles.premiumPreviewNumber}>0{index + 1}</Text>
+                <View style={styles.premiumPreviewSignal} />
+              </View>
               <Text style={styles.premiumPreviewText}>{benefit}</Text>
             </View>
           ))}
@@ -609,7 +621,7 @@ export function PremiumCard({
 
       <View style={styles.premiumFooterCue}>
         <Text style={styles.premiumFooterCueText}>
-          Practice now. Unlock deeper coaching later.
+          Free practice stays first. Pro stays a later coaching layer.
         </Text>
       </View>
 
@@ -1360,8 +1372,29 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
   },
+  premiumAnchorRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  premiumAnchorPill: {
+    backgroundColor: colors.scrim,
+    borderColor: colors.primaryDark,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  premiumAnchorText: {
+    color: colors.accentSoft,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
   premiumPreviewRail: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.md,
     marginTop: spacing.lg,
   },
@@ -1370,15 +1403,28 @@ const styles = StyleSheet.create({
     borderColor: colors.primaryDark,
     borderRadius: radius.lg,
     borderWidth: 1,
-    flex: 1,
+    flexBasis: '48%',
+    flexGrow: 1,
     minHeight: 96,
+    minWidth: 136,
     padding: spacing.md,
+  },
+  premiumPreviewTileHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   premiumPreviewNumber: {
     color: colors.accent,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  premiumPreviewSignal: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.pill,
+    height: 10,
+    width: 34,
   },
   premiumPreviewText: {
     color: colors.white,

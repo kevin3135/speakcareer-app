@@ -173,19 +173,19 @@ export function ProfileScreen({
       </Card>
 
       <SectionHeader
-        subtitle="A quiet look at deeper coaching later. Today's practice stays first."
+        subtitle="A calm preview of deeper coaching later. Today's practice stays first."
         title="Future Pro"
       />
       <PremiumCard
         benefits={[
-          'Unlimited career roleplay reps',
-          'Sharper feedback and rewrites',
-          'Full mistake bank history',
-          'Interview and meeting packs',
-          'More languages later',
+          'Interview answers with stronger structure',
+          'Meeting updates with sharper wording',
+          'Pattern review from saved mistakes',
+          'Deeper rewrites for confidence',
+          'More career packs later',
         ]}
-        subtitle="A later practice layer for learners who want deeper career English coaching."
-        title="Pro practice layer"
+        subtitle="A future coaching layer for sharper interviews, meetings and mistake drills after the core loop feels strong."
+        title="Career momentum layer"
       />
 
       <Card style={styles.privacyCard} tone="muted">
