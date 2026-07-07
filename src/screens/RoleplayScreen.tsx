@@ -204,9 +204,11 @@ export function RoleplayScreen({
   const levelLabel =
     levelAssessment.choices.find((choice) => choice.id === startingLevelId)?.label ?? 'B1';
   const starterReminder = createRoleplayStarterReminder({
+    levelLabel,
     roleplayId: roleplay.id,
     sessions,
     starterAnswer: levelProfile.starterAnswer,
+    starterEditSteps: levelProfile.starterEditSteps,
   });
   const suggestedPhrases = activeVariant?.suggestedPhrases?.length
     ? activeVariant.suggestedPhrases
@@ -1088,6 +1090,24 @@ export function RoleplayScreen({
                 {answerStarter.body}
               </Text>
               <Text style={styles.answerStarterNote}>{answerStarter.note}</Text>
+              {answerStarter.source === 'starter-reminder' && starterReminder ? (
+                <View style={styles.answerStarterPlanBox}>
+                  <View style={styles.answerStarterPlanHeader}>
+                    <Text style={styles.answerStarterPlanPath}>{starterReminder.pathLabel}</Text>
+                    <Badge label={starterReminder.editPlanLabel} tone="secondary" />
+                  </View>
+                  <View style={styles.answerStarterPlanSteps}>
+                    {starterReminder.editPlanSteps.map((step, index) => (
+                      <View key={`${index + 1}-${step}`} style={styles.answerStarterPlanStep}>
+                        <Text style={styles.answerStarterPlanStepNumber}>{index + 1}</Text>
+                        <Text numberOfLines={1} style={styles.answerStarterPlanStepText}>
+                          {step}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ) : null}
             </View>
           ) : null}
           <View
@@ -1253,21 +1273,6 @@ export function RoleplayScreen({
                   </View>
                   <Text style={styles.writingSupportSectionText}>{warmupCue.correction}</Text>
                   <Text style={styles.writingSupportSectionMeta}>{warmupCue.note}</Text>
-                </View>
-              ) : null}
-              {starterReminder && !warmupCue && !hasDraftAnswer ? (
-                <View style={styles.writingSupportSection}>
-                  <View style={styles.oneThingHeader}>
-                    <Text style={styles.writingSupportSectionLabel}>{starterReminder.eyebrow}</Text>
-                    <AppButton
-                      accessibilityHint="Adds a simple starter answer to the answer box"
-                      accessibilityLabel="Use starter answer"
-                      label={starterReminder.ctaLabel}
-                      onPress={applyStarterReminder}
-                      size="small"
-                      variant="quiet"
-                    />
-                  </View>
                 </View>
               ) : null}
               <Text style={styles.writingSupportCoachNote}>
@@ -2181,6 +2186,66 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+  },
+  answerStarterPlanBox: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    marginTop: spacing.xs,
+    padding: spacing.sm,
+  },
+  answerStarterPlanHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  answerStarterPlanPath: {
+    color: colors.accentDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    minWidth: 0,
+  },
+  answerStarterPlanSteps: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  answerStarterPlanStep: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.xs,
+    maxWidth: '100%',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  answerStarterPlanStepNumber: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: radius.pill,
+    color: colors.accentDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    height: 18,
+    lineHeight: 18,
+    textAlign: 'center',
+    width: 18,
+  },
+  answerStarterPlanStepText: {
+    color: colors.ink,
+    flexShrink: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
     lineHeight: typography.lineSmall,
   },
   answerInputShellGuided: {

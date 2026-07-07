@@ -1,5 +1,53 @@
 # Agent Learning Log
 
+## 2026-07-07: First Interview Starter Kit Is Inline
+
+Made one focused practice-flow improvement: the first Job Interview answer step now shows a level-matched starter kit inline, so onboarding/Foundation guidance carries directly into the first career answer instead of being split across multiple areas.
+
+Why it changed:
+
+- The app already had level-matched starter answers, but the first interview handoff still felt fragmented.
+- The visible starter showed the example answer, while the actual edit steps lived in earlier screens and the Optional help area repeated a separate starter row.
+- The smallest useful fix was to keep the same first-quest flow and make the inline starter feel more like one calm continuation of the selected path.
+
+What changed:
+
+- Updated `src/utils/roleplayStarterReminder.ts` so the first Job Interview starter reminder also carries the learner path label and starter edit steps.
+- Updated `src/screens/RoleplayScreen.tsx` so the visible starter card now includes a compact `Make it yours` plan with the level-matched edit steps.
+- Removed the duplicate starter-only section from Optional help, since the starter now lives clearly on the answer step itself.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new starter path label and edit-plan data.
+
+What went well:
+
+- The first interview starter now feels more connected to the onboarding/Foundation path instead of looking like a generic extra hint.
+- The answer step keeps one visible starter decision above the text box while Optional help stays for phrases and structure only.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the new starter plan chips still need a quick 390px-width check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+- Opening a draft PR is currently blocked because `gh` is not installed in this environment.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When a starter answer is already visible, keep its edit plan beside it instead of repeating the same affordance in secondary help.
+- First-run roleplay guidance feels stronger when the selected level path remains visible through the first answer action.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a compact first-draft resume strip on Home or Practice so unfinished first-quest answers are one tap away.
+
 ## 2026-07-07: Optional Follow-Up Labels Wrap Better
 
 Made one focused Roleplay save-step polish: the optional follow-up label and collapsed chip now have safer wrapping for longer persona-based follow-up names.

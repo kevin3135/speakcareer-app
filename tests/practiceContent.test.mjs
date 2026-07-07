@@ -1198,35 +1198,47 @@ test('shows a starter reminder only on the first Job Interview answer card', asy
   const starterProfile = getStartingLevelProfile('starter');
   const confidentProfile = getStartingLevelProfile('confident');
   const starterReminder = createRoleplayStarterReminder({
+    levelLabel: 'A1-A2',
     roleplayId: 'job-interview',
     sessions: [],
     starterAnswer: starterProfile.starterAnswer,
+    starterEditSteps: starterProfile.starterEditSteps,
   });
   const confidentReminder = createRoleplayStarterReminder({
+    levelLabel: 'B2',
     roleplayId: 'job-interview',
     sessions: [],
     starterAnswer: confidentProfile.starterAnswer,
+    starterEditSteps: confidentProfile.starterEditSteps,
   });
 
   assert.equal(starterReminder.eyebrow, 'Starter reminder');
   assert.equal(starterReminder.ctaLabel, 'Use starter');
   assert.ok(starterReminder.body.includes('faster first answer'));
+  assert.equal(starterReminder.pathLabel, 'From your A1-A2 path');
+  assert.equal(starterReminder.editPlanLabel, 'Make it yours');
+  assert.deepEqual(starterReminder.editPlanSteps, starterProfile.starterEditSteps);
   assert.ok(starterReminder.starterAnswer.includes('The result was'));
+  assert.equal(confidentReminder.pathLabel, 'From your B2 path');
   assert.ok(confidentReminder.starterAnswer.includes('As a result'));
 
   assert.equal(
     createRoleplayStarterReminder({
+      levelLabel: 'A1-A2',
       roleplayId: 'meeting-practice',
       sessions: [],
       starterAnswer: starterProfile.starterAnswer,
+      starterEditSteps: starterProfile.starterEditSteps,
     }),
     null,
   );
   assert.equal(
     createRoleplayStarterReminder({
+      levelLabel: 'A1-A2',
       roleplayId: 'job-interview',
       sessions: [{ roleplayId: 'job-interview' }],
       starterAnswer: starterProfile.starterAnswer,
+      starterEditSteps: starterProfile.starterEditSteps,
     }),
     null,
   );
@@ -1242,9 +1254,11 @@ test('chooses one visible inline answer starter before optional help', async () 
 
   const starterProfile = getStartingLevelProfile('starter');
   const starterReminder = createRoleplayStarterReminder({
+    levelLabel: 'A1-A2',
     roleplayId: 'job-interview',
     sessions: [],
     starterAnswer: starterProfile.starterAnswer,
+    starterEditSteps: starterProfile.starterEditSteps,
   });
   const warmupCue = createRoleplayWarmupCue({
     correction: 'I organized the handoff and confirmed the next step with the client.',
