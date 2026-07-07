@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Warmup Is More Compact
+
+Made one focused first-roleplay visual simplification: the Lesson 1 warmup now combines the coach cue and unlock progress into one calmer summary row.
+
+Why it changed:
+
+- The previous run identified the remaining warmup card as the next place to reduce pre-answer clutter.
+- The Roleplay screen should show the answer box early and avoid stacking multiple equal guidance blocks.
+- The smallest useful fix was to keep the same coach and unlock information, but remove the separate unlock strip.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the warmup coach cue includes the progress badge and one-line unlock reminder.
+- Removed the separate unlock strip styles that created an extra visual row before the starter answer.
+- Kept the starter preview, reload action and answer-box handoff unchanged.
+
+What went well:
+
+- The change stayed inside one screen and only adjusted the first-roleplay warmup layout; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The warmup now preserves momentum while taking less vertical space before the learner edits their answer.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the first-roleplay warmup still needs a live phone-width screenshot pass.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- First-roleplay warmup should keep unlock momentum visible without creating a separate card row before the starter.
+- Keep the answer box as the clear next action in the first Job Interview flow.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run mobile visual QA on the first-roleplay warmup and answer box to confirm the answer input appears early enough.
+
 ## 2026-07-07: First Roleplay Uses One Edit Handoff
 
 Made one focused first-roleplay practice-flow improvement: the auto-loaded Lesson 1 interview answer now uses one compact edit handoff inside the answer box instead of repeating the same instruction in multiple separate panels.

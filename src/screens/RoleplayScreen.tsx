@@ -966,27 +966,24 @@ export function RoleplayScreen({
                     <Text style={styles.foundationWarmupCoachBadgeText}>SC</Text>
                   </View>
                   <View style={styles.foundationWarmupCoachCopy}>
-                    <Text style={styles.foundationWarmupCoachLabel}>
-                      {foundationWarmupPanel.coachCueLabel}
-                    </Text>
+                    <View style={styles.foundationWarmupCoachHeader}>
+                      <Text style={styles.foundationWarmupCoachLabel}>
+                        {foundationWarmupPanel.coachCueLabel}
+                      </Text>
+                      {foundationWarmupPanel.unlockProgress ? (
+                        <Badge label={foundationWarmupPanel.unlockProgress.progressLabel} tone="accent" />
+                      ) : null}
+                    </View>
                     <Text style={styles.foundationWarmupCoachText}>
                       {foundationWarmupPanel.coachCueMessage}
                     </Text>
-                  </View>
-                </View>
-                {foundationWarmupPanel.unlockProgress ? (
-                  <View style={styles.foundationWarmupUnlockStrip}>
-                    <View style={styles.foundationWarmupUnlockCopy}>
-                      <Text numberOfLines={1} style={styles.foundationWarmupUnlockLabel}>
-                        {foundationWarmupPanel.unlockProgress.unlockLabel}
-                      </Text>
-                      <Text numberOfLines={2} style={styles.foundationWarmupUnlockBody}>
+                    {foundationWarmupPanel.unlockProgress ? (
+                      <Text numberOfLines={1} style={styles.foundationWarmupUnlockBody}>
                         {foundationWarmupPanel.unlockProgress.body}
                       </Text>
-                    </View>
-                    <Badge label={foundationWarmupPanel.unlockProgress.progressLabel} tone="accent" />
+                    ) : null}
                   </View>
-                ) : null}
+                </View>
                 <View style={styles.foundationWarmupStarterBox}>
                   <View style={styles.foundationWarmupStarterHeader}>
                     <Text style={styles.foundationWarmupStarterLabel}>
@@ -1887,8 +1884,15 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
   },
+  foundationWarmupCoachHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
   foundationWarmupCoachLabel: {
     color: colors.secondaryDark,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
@@ -1901,33 +1905,13 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.xxs,
   },
-  foundationWarmupUnlockStrip: {
-    alignItems: 'center',
-    backgroundColor: colors.accentSoft,
-    borderBottomColor: colors.border,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-  },
-  foundationWarmupUnlockCopy: {
-    flex: 1,
-    minWidth: 0,
-  },
-  foundationWarmupUnlockLabel: {
+  foundationWarmupUnlockBody: {
     color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
-  },
-  foundationWarmupUnlockBody: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '800',
     lineHeight: typography.lineSmall,
-    marginTop: spacing.xxs,
+    marginTop: spacing.sm,
   },
   foundationWarmupStarterBox: {
     backgroundColor: colors.white,
