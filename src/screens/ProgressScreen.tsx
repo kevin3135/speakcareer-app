@@ -151,19 +151,16 @@ export function ProgressScreen({
       </View>
       <Text style={styles.cardTitle}>{latestSession.roleplayTitle}</Text>
       <Text style={styles.cardBody}>{latestWin.body}</Text>
-      <View style={styles.latestWinMetaRow}>
-        <View style={styles.latestWinMetaChip}>
-          <Text style={styles.latestWinMetaLabel}>Saved</Text>
-          <Text style={styles.latestWinMetaValue}>{formatSessionDate(latestSession.completedAt)}</Text>
-        </View>
-        <View style={styles.latestWinMetaChip}>
-          <Text style={styles.latestWinMetaLabel}>Length</Text>
-          <Text style={styles.latestWinMetaValue}>{latestSession.wordCount} words</Text>
-        </View>
-        <View style={styles.latestWinMetaChip}>
-          <Text style={styles.latestWinMetaLabel}>Reward</Text>
-          <Text style={styles.latestWinMetaValue}>+{latestSession.xpReward} XP</Text>
-        </View>
+      <View style={styles.latestWinRewardPanel}>
+        {latestWin.rewardRows.map((row) => (
+          <View key={row.label} style={styles.latestWinRewardRow}>
+            <Text style={styles.latestWinRewardLabel}>{row.label}</Text>
+            <Text style={styles.latestWinRewardValue}>{row.value}</Text>
+          </View>
+        ))}
+        <Text style={styles.latestWinSavedNote}>
+          Saved {formatSessionDate(latestSession.completedAt)}
+        </Text>
       </View>
       <View style={styles.latestWinRecapBox}>
         <Text style={styles.latestWinRecapLabel}>{latestWin.recapLabel}</Text>
@@ -850,32 +847,44 @@ const styles = StyleSheet.create({
   cardAction: {
     marginTop: spacing.lg,
   },
-  latestWinMetaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  latestWinRewardPanel: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 1,
     gap: spacing.sm,
     marginTop: spacing.md,
+    padding: spacing.md,
   },
-  latestWinMetaChip: {
-    backgroundColor: colors.surfaceMuted,
-    borderColor: colors.border,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+  latestWinRewardRow: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: spacing.md,
+    justifyContent: 'space-between',
   },
-  latestWinMetaLabel: {
-    color: colors.textMuted,
+  latestWinRewardLabel: {
+    color: colors.accentDark,
     fontFamily: fonts.rounded,
     fontSize: typography.micro,
     fontWeight: '900',
+    minWidth: 58,
   },
-  latestWinMetaValue: {
+  latestWinRewardValue: {
     color: colors.ink,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-    marginTop: spacing.xxs,
+    lineHeight: typography.lineSmall,
+    textAlign: 'right',
+  },
+  latestWinSavedNote: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+    textAlign: 'right',
   },
   latestWinRecapBox: {
     backgroundColor: colors.successSoft,

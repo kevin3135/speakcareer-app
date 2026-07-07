@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Progress Latest-Win Reward Rows
+
+Made one focused Progress polish: the latest-win card now shows a compact reward panel with `Today`, `Practice` and `Coach` rows before the detailed recap.
+
+Why it changed:
+
+- The previous latest-win card was useful, but `Saved / Length / Reward` felt closer to a session report than a small win.
+- Progress should feel like career momentum after a save, while still staying professional and calm.
+- The smallest useful fix was to keep the existing card and make its first detail block more reward-led.
+
+What changed:
+
+- Added deterministic `rewardRows` to `src/utils/progressLatestWin.ts`.
+- Updated `src/screens/ProgressScreen.tsx` to replace the old meta chips with a warm reward panel and quieter saved-date note.
+- Added focused assertions in `tests/practiceContent.test.mjs` for completed-target and core-answer latest-win states.
+
+What went well:
+
+- The change stayed inside Progress latest-win UI and a pure helper; no save logic, storage, navigation, auth, payments, APIs or dependencies changed.
+- The card now uses the same concise outcome language direction that Practice and Roleplay have been moving toward.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the reward rows still need a narrow-phone wrap check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Progress latest-win should lead with what the learner gained, then show coach detail.
+- Short reward rows are enough; avoid turning Wins back into a dashboard.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Do a narrow mobile visual QA pass on Practice, Roleplay completion and Progress reward rows to catch wrapping before adding more polish.
+
 ## 2026-07-07: Roleplay Saved Outcome Card
 
 Made one focused Roleplay completion polish: the saved state now uses one compact `After save` outcome card with `Today`, `Path` and `Level` rows.

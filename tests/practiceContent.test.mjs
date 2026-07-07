@@ -4213,6 +4213,7 @@ test('creates a more motivational latest-win recap for Progress', async () => {
       readinessLabel: 'Ready for feedback',
       roleplayTitle: 'Meeting Practice',
       wordCount: 44,
+      xpReward: 60,
     },
   });
 
@@ -4227,6 +4228,11 @@ test('creates a more motivational latest-win recap for Progress', async () => {
   );
   assert.equal(completedTargetWin.recapLabel, 'Why it counts');
   assert.ok(completedTargetWin.recapText.includes('real workplace conversation'));
+  assert.deepEqual(completedTargetWin.rewardRows, [
+    { label: 'Today', value: 'Target complete, +60 XP' },
+    { label: 'Practice', value: 'Two-turn workplace rep' },
+    { label: 'Coach', value: 'Correction ready' },
+  ]);
 
   const coreWin = createProgressLatestWinState({
     isDailyTargetComplete: false,
@@ -4238,6 +4244,7 @@ test('creates a more motivational latest-win recap for Progress', async () => {
       readinessLabel: 'Good start',
       roleplayTitle: 'Job Interview',
       wordCount: 18,
+      xpReward: 30,
     },
   });
 
@@ -4251,6 +4258,11 @@ test('creates a more motivational latest-win recap for Progress', async () => {
     'Good start. Add one result or next step to make it stronger.',
   );
   assert.ok(coreWin.recapText.includes('streak, XP and coach history'));
+  assert.deepEqual(coreWin.rewardRows, [
+    { label: 'Today', value: '+30 XP banked' },
+    { label: 'Practice', value: '18 words practiced' },
+    { label: 'Coach', value: 'Recap saved' },
+  ]);
 
   const activeFocusCue = createProgressSpeakingFocusCue({
     isDailyTargetComplete: false,

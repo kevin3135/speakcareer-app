@@ -9,6 +9,12 @@ export type ProgressLatestWinState = {
   eyebrow: string;
   recapLabel: string;
   recapText: string;
+  rewardRows: ProgressLatestWinRewardRow[];
+};
+
+export type ProgressLatestWinRewardRow = {
+  label: string;
+  value: string;
 };
 
 export type ProgressSpeakingFocusCue = {
@@ -29,6 +35,7 @@ type CreateProgressLatestWinStateInput = {
     | 'readinessLabel'
     | 'roleplayTitle'
     | 'wordCount'
+    | 'xpReward'
   >;
 };
 
@@ -70,6 +77,7 @@ export function createProgressLatestWinState({
     eyebrow: isDailyTargetComplete ? 'Review this win first' : 'Saved today',
     recapLabel: 'Why it counts',
     recapText: createRecapText(session),
+    rewardRows: createRewardRows({ hasCoachFocus, isDailyTargetComplete, session }),
   };
 }
 
@@ -149,6 +157,35 @@ function createRecapText(
   }
 
   return 'Short saved answers still grow your streak, XP and coach history.';
+}
+
+function createRewardRows({
+  hasCoachFocus,
+  isDailyTargetComplete,
+  session,
+}: {
+  hasCoachFocus: boolean;
+  isDailyTargetComplete: boolean;
+  session: Pick<PracticeSession, 'includedFollowUp' | 'wordCount' | 'xpReward'>;
+}): ProgressLatestWinRewardRow[] {
+  return [
+    {
+      label: 'Today',
+      value: isDailyTargetComplete
+        ? `Target complete, +${session.xpReward} XP`
+        : `+${session.xpReward} XP banked`,
+    },
+    {
+      label: 'Practice',
+      value: session.includedFollowUp
+        ? 'Two-turn workplace rep'
+        : `${session.wordCount} words practiced`,
+    },
+    {
+      label: 'Coach',
+      value: hasCoachFocus ? 'Correction ready' : 'Recap saved',
+    },
+  ];
 }
 
 function createSpeakingFocusText(text: string) {
