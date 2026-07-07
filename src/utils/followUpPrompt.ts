@@ -8,6 +8,7 @@ export type AdaptiveFollowUpPrompt = {
   focusLabel: string;
   coachingNote: string;
   prompt: string;
+  stepLabel: string;
   starterAnswer: string;
 };
 
@@ -47,6 +48,7 @@ export function createAdaptiveFollowUpPrompt(
   const hasResult = hasAnyMarker(normalizedAnswer, resultMarkers) || /\d|%/.test(normalizedAnswer);
   const hasStructure = hasAnyMarker(normalizedAnswer, structureMarkers);
   const hasHesitation = hasAnyMarker(normalizedAnswer, hesitantMarkers);
+  const stepLabel = createStepLabel(roleplay.aiPersona);
 
   if (!review.isReadyForFeedback) {
     return {
@@ -54,6 +56,7 @@ export function createAdaptiveFollowUpPrompt(
       focusLabel: 'Add detail',
       coachingNote: 'Your first answer needs one concrete workplace example before it sounds complete.',
       prompt: `Can you add one specific action you took or would take in this ${roleplay.title.toLowerCase()} situation?`,
+      stepLabel,
       starterAnswer: 'One specific action I would take is to clarify the goal and take ownership of the next step.',
     };
   }
@@ -64,6 +67,7 @@ export function createAdaptiveFollowUpPrompt(
       focusLabel: 'Add impact',
       coachingNote: 'A result makes your answer sound more credible and career-ready.',
       prompt: createResultPrompt(roleplay),
+      stepLabel,
       starterAnswer: 'As a result, the team had a clearer next step and could move faster.',
     };
   }
@@ -74,6 +78,7 @@ export function createAdaptiveFollowUpPrompt(
       focusLabel: 'Tighten structure',
       coachingNote: 'Structure helps the listener follow your thinking under pressure.',
       prompt: 'Can you answer the same point using this flow: context, action, result?',
+      stepLabel,
       starterAnswer: 'The context was clear, my action was focused, and the result helped the team move forward.',
     };
   }
@@ -84,6 +89,7 @@ export function createAdaptiveFollowUpPrompt(
       focusLabel: 'Sound confident',
       coachingNote: 'Replacing hesitant phrases makes your English sound more decisive.',
       prompt: 'How would you say the same idea again without using "maybe", "I think" or similar softeners?',
+      stepLabel,
       starterAnswer: 'I would handle it by choosing one clear next step and communicating it directly.',
     };
   }
@@ -93,6 +99,7 @@ export function createAdaptiveFollowUpPrompt(
     focusLabel: 'Go deeper',
     coachingNote: 'Your first answer is ready, so the next step is handling a realistic follow-up.',
     prompt: roleplay.followUpPrompts[0],
+    stepLabel,
     starterAnswer: 'The next step I would suggest is to confirm the priority and agree who owns it.',
   };
 }
@@ -114,4 +121,8 @@ function createResultPrompt(roleplay: RoleplayScenario) {
     case 'workplace-small-talk':
       return 'What friendly follow-up question would keep the conversation moving naturally?';
   }
+}
+
+function createStepLabel(aiPersona: string) {
+  return `${aiPersona} follow-up`;
 }

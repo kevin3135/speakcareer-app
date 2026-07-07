@@ -3992,6 +3992,7 @@ test('adapts follow-up prompts to the first answer weakness', async () => {
 
   assert.equal(vaguePrompt.focus, 'result');
   assert.ok(vaguePrompt.prompt.includes('result') || vaguePrompt.prompt.includes('impact'));
+  assert.equal(vaguePrompt.stepLabel, 'Hiring Manager follow-up');
   assert.ok(vaguePrompt.starterAnswer.includes('As a result'));
 
   const strongAnswer = [
@@ -4003,6 +4004,7 @@ test('adapts follow-up prompts to the first answer weakness', async () => {
 
   assert.equal(strongPrompt.focus, 'next-step');
   assert.equal(strongPrompt.prompt, roleplay.followUpPrompts[0]);
+  assert.equal(strongPrompt.stepLabel, 'Hiring Manager follow-up');
   assert.ok(strongPrompt.starterAnswer.includes('next step'));
 });
 
@@ -4024,12 +4026,14 @@ test('explains when the bonus follow-up turn is worth doing', async () => {
     focus: 'next-step',
     progressTitle: 'One more sprint after this',
     review: { wordCount: 41 },
+    stepLabel: 'Hiring Manager follow-up',
   });
 
   assert.equal(deeperRepCue.tone, 'success');
   assert.equal(deeperRepCue.badgeLabel, 'Worth doing');
   assert.equal(deeperRepCue.title, 'This adds a real follow-up rep');
-  assert.ok(deeperRepCue.chipLine.includes('realistic second turn'));
+  assert.ok(deeperRepCue.chipLine.includes('hiring manager follow-up'));
+  assert.ok(deeperRepCue.body.includes('hiring manager follow-up'));
 
   const bonusDayCue = createFollowUpReadinessCue({
     focus: 'confidence',

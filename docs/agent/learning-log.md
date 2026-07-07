@@ -1,5 +1,98 @@
 # Agent Learning Log
 
+## 2026-07-07: Bonus Turn Labels Are Role-Specific
+
+Made one focused Roleplay improvement: the optional bonus follow-up turn now reads like a concrete persona follow-up instead of a generic `Bonus step`.
+
+Why it changed:
+
+- The current branch is focused on making feedback and save feel like one calm reward moment.
+- Generic bonus-turn copy made the optional follow-up feel abstract, even when the prompt itself was realistic.
+- The smallest useful fix was to keep the same flow and use role-specific follow-up labels in the save step.
+
+What changed:
+
+- Updated `src/utils/followUpPrompt.ts` so adaptive follow-up prompts now carry a shared persona-based step label such as `Hiring Manager follow-up`.
+- Updated `src/utils/followUpReadinessCue.ts` so strong ready-state bonus guidance can mention that concrete follow-up label.
+- Updated `src/screens/RoleplayScreen.tsx` so the collapsed and expanded bonus-turn UI now uses the role-specific label and clearer accessibility copy.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new follow-up labels and readiness cue wording.
+
+What went well:
+
+- The bonus turn now feels more like realistic career practice and less like a generic extra action.
+- The change stayed inside local mock Roleplay helpers and screen copy without touching navigation, storage, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the longer persona-based follow-up labels still need a quick phone-width check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional bonus practice feels clearer when it is framed as a concrete workplace follow-up from the active persona.
+- Keep the bonus turn secondary, but make its label specific enough that motivated learners know what extra rep they would get.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the review/save flow and check whether the persona-based labels need tighter wrapping on smaller screens.
+
+## 2026-07-07: Expanded Follow-Up Box Is Softer
+
+Made one focused Roleplay save-step polish: the expanded optional follow-up box now uses the same softer secondary treatment as the collapsed chip.
+
+Why it changed:
+
+- The save card should keep Save as the dominant reward action.
+- The collapsed optional follow-up chip was softened in the previous run, but opening it still produced a bright accent box with a heavier decision callout.
+- The smallest useful fix was to soften the expanded box styling only, not change the bonus turn flow or copy.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the expanded follow-up container uses a muted surface and neutral border.
+- Reduced the bonus label weight and tightened the expanded box spacing.
+- Made the follow-up decision callout calmer with a white surface, neutral left border and softer body text.
+
+What went well:
+
+- The optional follow-up remains available, but no longer visually competes as strongly with the main Save reward moment.
+- The change stayed inside one visible style cluster and did not touch content data, storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the expanded follow-up box still needs a phone-width screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Expanded optional flows should stay visibly secondary inside the save step.
+- Keep the Save CTA and reward summary as the visual anchors of the post-feedback moment.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the review/save flow and check whether the optional details toggle should use a similarly calmer secondary treatment.
+
 ## 2026-07-07: Optional Follow-Up Chip Is Softer
 
 Made one focused Roleplay save-step polish: the collapsed optional follow-up turn now reads as a softer secondary choice instead of competing with the main Save CTA.

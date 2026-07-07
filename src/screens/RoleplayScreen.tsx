@@ -343,6 +343,7 @@ export function RoleplayScreen({
       focus: followUpPrompt.focus,
       progressTitle: targetPreview.title,
       review: answerReview,
+      stepLabel: followUpPrompt.stepLabel,
     })
     : null;
   const savePrompt = answerReview?.isReadyForFeedback
@@ -1590,7 +1591,7 @@ export function RoleplayScreen({
             isFollowUpExpanded ? (
               <View style={styles.followUpPromptBox}>
                 <View style={styles.oneThingHeader}>
-                  <Text style={styles.followUpPromptLabel}>Bonus step</Text>
+                  <Text style={styles.followUpPromptLabel}>{followUpPrompt.stepLabel}</Text>
                   <Badge
                     label={includedFollowUp ? `+${FOLLOW_UP_BONUS_XP} XP ready` : followUpReadinessCue?.badgeLabel ?? followUpPrompt.focusLabel}
                     tone={includedFollowUp ? 'success' : followUpReadinessCue?.tone ?? 'secondary'}
@@ -1639,8 +1640,8 @@ export function RoleplayScreen({
               </View>
             ) : (
               <Pressable
-                accessibilityHint={`Starts the optional follow-up focused on ${followUpPrompt.focusLabel.toLowerCase()}`}
-                accessibilityLabel="Try optional bonus turn"
+                accessibilityHint={`Starts the optional ${followUpPrompt.stepLabel.toLowerCase()} focused on ${followUpPrompt.focusLabel.toLowerCase()}`}
+                accessibilityLabel={`Try optional ${followUpPrompt.stepLabel.toLowerCase()}`}
                 accessibilityRole="button"
                 onPress={startFollowUpWithStarter}
                 style={({ pressed }) => [
@@ -1651,10 +1652,10 @@ export function RoleplayScreen({
                 <View style={styles.followUpBonusCopy}>
                   <Text style={styles.followUpSummaryLabel}>Optional turn</Text>
                   <Text numberOfLines={1} style={styles.followUpBonusTitle}>
-                    {followUpReadinessCue?.title ?? `Bonus step: ${followUpPrompt.focusLabel}`}
+                    {followUpReadinessCue?.title ?? followUpPrompt.stepLabel}
                   </Text>
                   <Text numberOfLines={2} style={styles.followUpBonusFocus}>
-                    {followUpReadinessCue?.chipLine ?? `Bonus step: ${followUpPrompt.focusLabel}`}
+                    {followUpReadinessCue?.chipLine ?? `Optional ${followUpPrompt.stepLabel.toLowerCase()}.`}
                   </Text>
                 </View>
                 <View style={styles.followUpBonusReward}>
@@ -2846,28 +2847,28 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   followUpPromptBox: {
-    backgroundColor: colors.white,
-    borderColor: colors.accent,
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
     borderRadius: radius.lg,
     borderWidth: 1,
-    marginTop: spacing.lg,
-    padding: spacing.md,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
   },
   followUpPromptLabel: {
-    color: colors.accentDark,
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
   },
   followUpDecisionBox: {
-    backgroundColor: colors.surfaceMuted,
+    backgroundColor: colors.white,
     borderColor: colors.border,
-    borderLeftColor: colors.accent,
-    borderLeftWidth: 4,
+    borderLeftColor: colors.borderStrong,
+    borderLeftWidth: 2,
     borderRadius: radius.md,
     borderWidth: 1,
-    marginTop: spacing.md,
-    paddingHorizontal: spacing.md,
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
   },
   followUpDecisionTitle: {
@@ -2878,21 +2879,21 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
   },
   followUpDecisionBody: {
-    color: colors.text,
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
+  followUpPromptNote: {
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
-  followUpPromptNote: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.sm,
-  },
   followUpPromptText: {
-    color: colors.ink,
+    color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.body,
     fontWeight: '900',

@@ -13,6 +13,7 @@ type CreateFollowUpReadinessCueInput = {
   focus: FollowUpFocus;
   progressTitle: string;
   review: Pick<AnswerReview, 'wordCount'>;
+  stepLabel?: string;
 };
 
 const STRONG_ANSWER_WORD_TARGET = 35;
@@ -21,8 +22,10 @@ export function createFollowUpReadinessCue({
   focus,
   progressTitle,
   review,
+  stepLabel,
 }: CreateFollowUpReadinessCueInput): FollowUpReadinessCue {
   const focusBlurb = createFocusBlurb(focus);
+  const lowerStepLabel = stepLabel?.trim().toLowerCase();
 
   if (progressTitle === 'Daily target already complete') {
     return {
@@ -47,8 +50,12 @@ export function createFollowUpReadinessCue({
   if (focus === 'next-step') {
     return {
       badgeLabel: 'Worth doing',
-      body: 'Your main answer is already strong. This bonus turn adds one realistic second question before you save.',
-      chipLine: 'Adds one realistic second turn.',
+      body: lowerStepLabel
+        ? `Your main answer is already strong. This bonus turn adds one realistic ${lowerStepLabel} before you save.`
+        : 'Your main answer is already strong. This bonus turn adds one realistic second question before you save.',
+      chipLine: lowerStepLabel
+        ? `Adds one realistic ${lowerStepLabel}.`
+        : 'Adds one realistic second turn.',
       title: 'This adds a real follow-up rep',
       tone: 'success',
     };
