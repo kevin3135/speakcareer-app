@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Optional Follow-Up Chip Is Softer
+
+Made one focused Roleplay save-step polish: the collapsed optional follow-up turn now reads as a softer secondary choice instead of competing with the main Save CTA.
+
+Why it changed:
+
+- The save card should feel like one clear reward moment with Save as the dominant action.
+- The optional follow-up chip was collapsed, but its surface, spacing and reward badge still made it feel too much like a second action card.
+- The smallest useful fix was to soften only the collapsed chip styling, not change the follow-up flow or copy.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the optional follow-up chip uses muted surfaces, smaller padding and softer pressed state colors.
+- Reduced the visual weight of the optional reward label and focus copy.
+- Kept the `+15 XP` affordance visible inside a calmer white reward pill.
+
+What went well:
+
+- Save remains visually dominant while the bonus turn still feels available for motivated learners.
+- The change stayed inside one visible style cluster and did not touch content data, storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the softened chip still needs a phone-width screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Optional bonus turns should look clearly secondary after the save card appears.
+- Keep the Save CTA visually dominant in the reward moment.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the review/save flow and check whether the expanded follow-up box should use the same softer secondary treatment.
+
 ## 2026-07-07: Save Lock-In Summary Is Calmer
 
 Made one focused Roleplay save-step polish: the save card now shows one compact lock-in summary instead of three stacked reward rows.
