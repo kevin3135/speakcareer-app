@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Coach Prompt Is Lighter
+
+Made one focused Roleplay viewport polish: the coach prompt bubble keeps the same question hierarchy, but uses less surrounding chrome before the answer box.
+
+Why it changed:
+
+- The latest first-roleplay runs made progress, warmup and starter guidance more compact.
+- The coach question still used generous padding, a large `SC` badge and extra label spacing, which made the first card feel taller.
+- The safest useful fix was to lighten the bubble around the prompt, not reduce or truncate the actual question.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the coach prompt bubble uses smaller padding and gap tokens.
+- Reduced the `SC` badge from 40px to 34px and made the badge text use the micro text token.
+- Reduced the prompt label size and the top gap before the question.
+
+What went well:
+
+- The prompt remains readable and coach-like, while the answer box should sit a bit closer on small phone screens.
+- The change stayed inside one visible style cluster and did not touch content data, storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the prompt bubble still needs a live phone-width screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the coach question itself prominent; reduce chrome around it before changing the copy or hiding content.
+- The first-roleplay answer box remains the main viewport goal.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width visual QA on the first Job Interview answer step and check whether the answer input shell should get a stronger active-state header.
+
 ## 2026-07-07: First Roleplay Starter Row Is Calmer
 
 Made one focused first-roleplay viewport polish: the Lesson 1 loaded-starter handoff is now one compact row instead of a small stacked mini-card.
