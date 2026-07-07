@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Starter Row Is Calmer
+
+Made one focused first-roleplay viewport polish: the Lesson 1 loaded-starter handoff is now one compact row instead of a small stacked mini-card.
+
+Why it changed:
+
+- The latest Roleplay work already compressed the progress runway and warmup coach cue.
+- The remaining loaded-starter box still used a header row plus a separate hint line before the answer box.
+- The smallest useful fix was to keep the action button but make the handoff read as one quiet status row.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the loaded-starter label and hint sit in one compact text group.
+- Moved the existing `Edit answer` / `Reload starter` action to the right side of that row.
+- Shortened the hint copy to `Edit task and result below.` or `Reload the starter below.`.
+
+What went well:
+
+- The change stayed in one visible component group and did not touch content data, storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The first Job Interview screen should feel less stacked before the learner reaches the answer box.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the compact row still needs a phone-width screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Keep the first-roleplay warmup as one coach handoff plus one starter status row; avoid adding another helper card above the answer box.
+- The answer box should remain the visual destination of the first roleplay card.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width visual QA on the first Job Interview answer step and check whether the prompt typography can be slightly smaller without losing coach energy.
+
 ## 2026-07-07: First Answer Step Uses A Compact Progress Pill
 
 Made one focused first-roleplay polish: the answer step now shows a slimmer progress pill instead of the full three-block runway, while still previewing `Review -> Save`.

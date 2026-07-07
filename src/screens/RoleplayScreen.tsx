@@ -1011,27 +1011,27 @@ export function RoleplayScreen({
                   </View>
                 </View>
                 <View style={styles.foundationWarmupStarterBox}>
-                  <View style={styles.foundationWarmupStarterHeader}>
+                  <View style={styles.foundationWarmupStarterCopy}>
                     <Text style={styles.foundationWarmupStarterLabel}>
                       {foundationWarmupPanel.starterLabel}
                     </Text>
-                    <AppButton
-                      accessibilityHint={
-                        foundationStarterAction.mode === 'loaded'
-                          ? 'Moves focus to the answer box so you can edit the starter'
-                          : 'Loads the original Lesson 1 starter into the answer box again'
-                      }
-                      label={foundationStarterAction.ctaLabel}
-                      onPress={runFoundationStarterAction}
-                      size="small"
-                      variant="quiet"
-                    />
+                    <Text numberOfLines={1} style={styles.foundationWarmupStarterHint}>
+                      {foundationStarterAction.mode === 'loaded'
+                        ? 'Edit task and result below.'
+                        : 'Reload the starter below.'}
+                    </Text>
                   </View>
-                  <Text numberOfLines={1} style={styles.foundationWarmupStarterHint}>
-                    {foundationStarterAction.mode === 'loaded'
-                      ? 'Starter is in the answer box below. Edit the task and result there.'
-                      : 'Reload the Lesson 1 starter into the answer box below.'}
-                  </Text>
+                  <AppButton
+                    accessibilityHint={
+                      foundationStarterAction.mode === 'loaded'
+                        ? 'Moves focus to the answer box so you can edit the starter'
+                        : 'Loads the original Lesson 1 starter into the answer box again'
+                    }
+                    label={foundationStarterAction.ctaLabel}
+                    onPress={runFoundationStarterAction}
+                    size="small"
+                    variant="quiet"
+                  />
                 </View>
               </View>
             </View>
@@ -1981,14 +1981,17 @@ const styles = StyleSheet.create({
     marginTop: spacing.xxs,
   },
   foundationWarmupStarterBox: {
-    backgroundColor: colors.white,
-    padding: spacing.sm,
-  },
-  foundationWarmupStarterHeader: {
     alignItems: 'center',
+    backgroundColor: colors.white,
     flexDirection: 'row',
     gap: spacing.sm,
     justifyContent: 'space-between',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  foundationWarmupStarterCopy: {
+    flex: 1,
+    minWidth: 0,
   },
   foundationWarmupStarterLabel: {
     color: colors.secondaryDark,
