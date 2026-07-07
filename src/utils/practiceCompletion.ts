@@ -449,7 +449,9 @@ export function createSavedRoleplayMilestone({
   const previewSessions = sessions.some((session) => session.id === savedSession.id)
     ? sessions
     : [savedSession, ...sessions];
-  const localProgress = createLocalProgressStats(summary, previewSessions, dailyTarget);
+  const localProgress = createLocalProgressStats(summary, previewSessions, dailyTarget, {
+    now: new Date(savedSession.completedAt),
+  });
   const milestone = createPracticeCompletionMilestone({
     dailyTarget,
     progress: localProgress,

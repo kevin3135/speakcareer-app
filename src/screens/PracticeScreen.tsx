@@ -21,6 +21,7 @@ import { createPracticeTargetPreview } from '../utils/practiceCompletion';
 import { createPracticeDailySprint } from '../utils/practiceDailySprint';
 import { createPracticeLibraryState } from '../utils/practiceLibraryState';
 import { createPracticeLevelPayoff } from '../utils/practiceLevelPayoff';
+import { createPracticeTimeline } from '../utils/practiceTimeline';
 
 type PracticeScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -37,6 +38,7 @@ export function PracticeScreen({
 }: PracticeScreenProps) {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
+  const practiceTimeline = createPracticeTimeline(sessions);
   const libraryState = createPracticeLibraryState({
     draft,
     roleplays: practiceContent.roleplays,
@@ -60,7 +62,7 @@ export function PracticeScreen({
     xpReward: recommendedRoleplay.durationMinutes * 4,
   });
   const targetPreview = createPracticeTargetPreview({
-    completedSessions: sessions.length,
+    completedSessions: practiceTimeline.sessionsTodayCount,
     dailyTarget,
   });
   const afterSavePreview = createPracticeAfterSavePreview({

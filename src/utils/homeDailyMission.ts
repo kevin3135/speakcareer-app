@@ -28,22 +28,25 @@ export function createHomeDailyMissionCard({
   localProgress,
   sessions,
 }: HomeDailyMissionInput): HomeDailyMissionCard {
-  const completed = Math.min(sessions.length, dailyTarget);
+  const completed = localProgress.targetSessionsCompleted;
   const remaining = Math.max(dailyTarget - completed, 0);
   const targetLabel = `${completed}/${dailyTarget} saved`;
+  const hasSavedPractice = sessions.length > 0;
 
   if (completed === 0) {
     return {
-      body: hasCompletedFoundation
-        ? 'Foundation is done. Save one guided answer now to start your streak.'
-        : 'Finish the short foundation step, then save one guided answer to start your streak.',
-      meta: '5-minute sprint',
+      body: hasSavedPractice
+        ? 'New day. Save one guided answer now to keep the streak active.'
+        : hasCompletedFoundation
+          ? 'Foundation is done. Save one guided answer now to start your streak.'
+          : 'Finish the short foundation step, then save one guided answer to start your streak.',
+      meta: hasSavedPractice ? 'Fresh start' : '5-minute sprint',
       progressLabel: 'Mission progress',
       progressPercent: 0,
       reason: 'A small daily answer makes real interview English easier when it matters.',
       rewardLabel: dailyMission.rewardLabel,
       targetLabel,
-      title: 'Save your first practice answer',
+      title: hasSavedPractice ? "Start today's mission" : 'Save your first practice answer',
     };
   }
 

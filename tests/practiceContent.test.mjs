@@ -990,9 +990,11 @@ test('turns the profile daily target into a clear weekly pace summary', async ()
 
 test('creates a Profile current-focus handoff back to the next roleplay', async () => {
   const { createProfileCurrentFocus } = await import('../src/utils/profileCurrentFocus.ts');
+  const practiceNow = new Date('2026-06-26T12:00:00.000Z');
 
   const firstFocus = createProfileCurrentFocus({
     dailyTarget: 1,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
     sessions: [],
   });
@@ -1007,8 +1009,9 @@ test('creates a Profile current-focus handoff back to the next roleplay', async 
 
   const nextFocus = createProfileCurrentFocus({
     dailyTarget: 2,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
-    sessions: [{ roleplayId: 'job-interview' }],
+    sessions: [{ completedAt: '2026-06-26T10:00:00.000Z', roleplayId: 'job-interview' }],
   });
 
   assert.equal(nextFocus.title, 'Next: Meeting Practice');
@@ -1019,12 +1022,23 @@ test('creates a Profile current-focus handoff back to the next roleplay', async 
 
   const bonusFocus = createProfileCurrentFocus({
     dailyTarget: 1,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
-    sessions: [{ roleplayId: 'job-interview' }],
+    sessions: [{ completedAt: '2026-06-26T10:00:00.000Z', roleplayId: 'job-interview' }],
   });
 
   assert.equal(bonusFocus.badgeLabel, 'Target done');
   assert.ok(bonusFocus.body.includes('Optional Meeting Practice'));
+
+  const freshDayFocus = createProfileCurrentFocus({
+    dailyTarget: 2,
+    now: new Date('2026-06-27T12:00:00.000Z'),
+    roleplays: practiceContent.roleplays,
+    sessions: [{ completedAt: '2026-06-26T10:00:00.000Z', roleplayId: 'job-interview' }],
+  });
+
+  assert.equal(freshDayFocus.badgeLabel, '0/2 today');
+  assert.ok(freshDayFocus.body.includes("today's first short work rep"));
 });
 
 test('creates a friendly Profile privacy cue for local preview practice', async () => {
@@ -2698,6 +2712,7 @@ test('creates one clear Home daily mission card', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createHomeDailyMissionCard } = await import('../src/utils/homeDailyMission.ts');
   const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');
+  const practiceNow = new Date('2026-06-26T12:00:00.000Z');
   const savedSession = {
     id: 'job-interview-1',
     roleplayId: 'job-interview',
@@ -2739,10 +2754,10 @@ test('creates one clear Home daily mission card', async () => {
   assert.ok(!postFoundationMission.body.includes('Finish the short foundation step'));
 
   const partialMission = createHomeDailyMissionCard({
-    dailyMission: createDailyMission(progressMock.summary, [savedSession], 3),
+    dailyMission: createDailyMission(progressMock.summary, [savedSession], 3, { now: practiceNow }),
     dailyTarget: 3,
     hasCompletedFoundation: true,
-    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 3),
+    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 3, { now: practiceNow }),
     sessions: [savedSession],
   });
 
@@ -2753,10 +2768,10 @@ test('creates one clear Home daily mission card', async () => {
   assert.ok(partialMission.body.includes('Finish 2 more'));
 
   const completeMission = createHomeDailyMissionCard({
-    dailyMission: createDailyMission(progressMock.summary, [savedSession], 1),
+    dailyMission: createDailyMission(progressMock.summary, [savedSession], 1, { now: practiceNow }),
     dailyTarget: 1,
     hasCompletedFoundation: true,
-    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 1),
+    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 1, { now: practiceNow }),
     sessions: [savedSession],
   });
 
@@ -2764,6 +2779,23 @@ test('creates one clear Home daily mission card', async () => {
   assert.equal(completeMission.meta, 'Done today');
   assert.equal(completeMission.targetLabel, '1/1 saved');
   assert.equal(completeMission.progressPercent, 100);
+
+  const freshDayMission = createHomeDailyMissionCard({
+    dailyMission: createDailyMission(progressMock.summary, [savedSession], 1, {
+      now: new Date('2026-06-27T12:00:00.000Z'),
+    }),
+    dailyTarget: 1,
+    hasCompletedFoundation: true,
+    localProgress: createLocalProgressStats(progressMock.summary, [savedSession], 1, {
+      now: new Date('2026-06-27T12:00:00.000Z'),
+    }),
+    sessions: [savedSession],
+  });
+
+  assert.equal(freshDayMission.title, "Start today's mission");
+  assert.equal(freshDayMission.meta, 'Fresh start');
+  assert.equal(freshDayMission.targetLabel, '0/1 saved');
+  assert.ok(freshDayMission.body.includes('New day'));
 });
 
 test('creates a clear Home start payoff preview', async () => {
@@ -3327,8 +3359,10 @@ test('creates a compact earlier-save history for returning progress users', asyn
 
 test('creates a guided next step for progress states', async () => {
   const { createProgressNextStepGuide } = await import('../src/utils/progressNextStep.ts');
+  const practiceNow = new Date('2026-06-26T12:00:00.000Z');
   const firstTimeGuide = createProgressNextStepGuide({
     dailyTarget: 2,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
     sessions: [],
   });
@@ -3355,6 +3389,7 @@ test('creates a guided next step for progress states', async () => {
   ];
   const returningGuide = createProgressNextStepGuide({
     dailyTarget: 3,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
     sessions: oneSavedSession,
   });
@@ -3369,6 +3404,7 @@ test('creates a guided next step for progress states', async () => {
 
   const offPathGuide = createProgressNextStepGuide({
     dailyTarget: 3,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
     sessions: [
       {
@@ -3394,6 +3430,7 @@ test('creates a guided next step for progress states', async () => {
 
   const completeGuide = createProgressNextStepGuide({
     dailyTarget: 1,
+    now: practiceNow,
     roleplays: practiceContent.roleplays,
     sessions: oneSavedSession,
   });
@@ -3404,6 +3441,17 @@ test('creates a guided next step for progress states', async () => {
   assert.equal(completeGuide.statusTone, 'success');
   assert.ok(completeGuide.body.includes('1/1 target'));
   assert.ok(completeGuide.steps.some((step) => step.includes('Meeting Practice')));
+
+  const freshDayGuide = createProgressNextStepGuide({
+    dailyTarget: 3,
+    now: new Date('2026-06-27T12:00:00.000Z'),
+    roleplays: practiceContent.roleplays,
+    sessions: oneSavedSession,
+  });
+
+  assert.equal(freshDayGuide.title, 'Save 3 sprints today');
+  assert.equal(freshDayGuide.statusLabel, 'Fresh day');
+  assert.ok(freshDayGuide.body.includes('Start Meeting Practice today'));
 });
 
 test('creates an actionable mistake practice drill', async () => {
@@ -3463,6 +3511,7 @@ test('creates an actionable mistake practice drill', async () => {
 test('adds saved sessions to local progress and daily mission', async () => {
   const { createDailyMission } = await import('../src/utils/gamification.ts');
   const { createLocalProgressStats } = await import('../src/utils/localProgress.ts');
+  const practiceNow = new Date('2026-06-26T12:00:00.000Z');
   const sessions = [
     {
       id: 'sales-call-1',
@@ -3476,8 +3525,8 @@ test('adds saved sessions to local progress and daily mission', async () => {
       xpReward: 55,
     },
   ];
-  const localProgress = createLocalProgressStats(progressMock.summary, sessions);
-  const mission = createDailyMission(progressMock.summary, sessions);
+  const localProgress = createLocalProgressStats(progressMock.summary, sessions, 1, { now: practiceNow });
+  const mission = createDailyMission(progressMock.summary, sessions, 1, { now: practiceNow });
 
   assert.equal(localProgress.sessionsCompleted, progressMock.summary.sessionsCompleted + 1);
   assert.equal(localProgress.minutesPracticed, progressMock.summary.minutesPracticed + 5);
@@ -3485,8 +3534,8 @@ test('adds saved sessions to local progress and daily mission', async () => {
   assert.equal(mission.rewardLabel, '+55 XP');
   assert.equal(mission.xpToday, mission.xpGoal);
 
-  const twoRoleplayMission = createDailyMission(progressMock.summary, sessions, 2);
-  const twoRoleplayProgress = createLocalProgressStats(progressMock.summary, sessions, 2);
+  const twoRoleplayMission = createDailyMission(progressMock.summary, sessions, 2, { now: practiceNow });
+  const twoRoleplayProgress = createLocalProgressStats(progressMock.summary, sessions, 2, { now: practiceNow });
 
   assert.equal(twoRoleplayMission.title, 'Complete 2 career roleplays');
   assert.equal(twoRoleplayMission.xpGoal, 120);
@@ -3495,6 +3544,13 @@ test('adds saved sessions to local progress and daily mission', async () => {
   assert.equal(twoRoleplayProgress.targetSessionsRemaining, 1);
   assert.equal(twoRoleplayProgress.targetCompletionPercent, 50);
   assert.ok(twoRoleplayMission.progressPercent < 100);
+
+  const nextDayProgress = createLocalProgressStats(progressMock.summary, sessions, 2, {
+    now: new Date('2026-06-27T12:00:00.000Z'),
+  });
+
+  assert.equal(nextDayProgress.targetSessionsCompleted, 0);
+  assert.equal(nextDayProgress.targetSessionsRemaining, 2);
 });
 
 test('filters roleplays by category and target level', async () => {
@@ -4543,11 +4599,13 @@ test('keeps the Practice tab focused on one recommended roleplay first', async (
 
 test('creates a focused daily sprint cue for the Practice screen', async () => {
   const { createPracticeDailySprint } = await import('../src/utils/practiceDailySprint.ts');
+  const practiceNow = new Date('2026-06-26T12:00:00.000Z');
 
   const firstSprint = createPracticeDailySprint({
     dailyTarget: 1,
     isResumeMode: false,
     nextUnlockTitle: 'Meeting Practice',
+    now: practiceNow,
     recommendedRoleplayTitle: 'Job Interview',
     recommendedXpLabel: '+48 XP',
     sessions: [],
@@ -4565,9 +4623,10 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     dailyTarget: 2,
     isResumeMode: false,
     nextUnlockTitle: 'Sales Call',
+    now: practiceNow,
     recommendedRoleplayTitle: 'Presentation Practice',
     recommendedXpLabel: '+32 XP',
-    sessions: [{ id: 'session-1' }],
+    sessions: [{ completedAt: '2026-06-26T09:00:00.000Z' }],
   });
 
   assert.equal(almostDoneSprint.title, 'One more save finishes today');
@@ -4582,9 +4641,10 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     dailyTarget: 3,
     isResumeMode: true,
     nextUnlockTitle: null,
+    now: practiceNow,
     recommendedRoleplayTitle: 'Meeting Practice',
     recommendedXpLabel: '+28 XP',
-    sessions: [{ id: 'session-1' }],
+    sessions: [{ completedAt: '2026-06-26T09:00:00.000Z' }],
   });
 
   assert.equal(resumeSprint.eyebrow, 'Finish today');
@@ -4598,9 +4658,13 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     dailyTarget: 1,
     isResumeMode: false,
     nextUnlockTitle: 'Workplace Small Talk',
+    now: practiceNow,
     recommendedRoleplayTitle: 'Sales Call',
     recommendedXpLabel: '+24 XP',
-    sessions: [{ id: 'session-1' }, { id: 'session-2' }],
+    sessions: [
+      { completedAt: '2026-06-26T09:00:00.000Z' },
+      { completedAt: '2026-06-26T11:00:00.000Z' },
+    ],
   });
 
   assert.equal(bonusSprint.eyebrow, 'Target complete');
@@ -4610,6 +4674,19 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(bonusSprint.statusTone, 'success');
   assert.equal(bonusSprint.afterSavePayoff, 'Bonus XP, faster path to Workplace Small Talk');
   assert.ok(bonusSprint.body.includes('extra XP'));
+
+  const freshDaySprint = createPracticeDailySprint({
+    dailyTarget: 1,
+    isResumeMode: false,
+    nextUnlockTitle: 'Meeting Practice',
+    now: new Date('2026-06-27T12:00:00.000Z'),
+    recommendedRoleplayTitle: 'Job Interview',
+    recommendedXpLabel: '+48 XP',
+    sessions: [{ completedAt: '2026-06-26T09:00:00.000Z' }],
+  });
+
+  assert.equal(freshDaySprint.title, "Start today's practice");
+  assert.equal(freshDaySprint.progressLabel, '0/1 saved today');
 });
 
 test('preserves the correct return screen for roleplay navigation', async () => {

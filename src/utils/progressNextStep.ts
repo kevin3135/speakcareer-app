@@ -1,6 +1,8 @@
 import type { DailyPracticeTarget, PracticeSession, RoleplayId, RoleplayScenario } from '../types';
 // @ts-expect-error Node test imports require the explicit .ts extension here.
 import { createPracticeCareerPath } from './practiceCareerPath.ts';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createPracticeTimeline } from './practiceTimeline.ts';
 
 export type ProgressNextStepGuide = {
   eyebrow: string;
@@ -15,12 +17,14 @@ export type ProgressNextStepGuide = {
 
 type ProgressNextStepInput = {
   dailyTarget: DailyPracticeTarget;
+  now?: Date;
   roleplays: Pick<RoleplayScenario, 'category' | 'durationMinutes' | 'id' | 'targetLevel' | 'title'>[];
   sessions: PracticeSession[];
 };
 
 export function createProgressNextStepGuide({
   dailyTarget,
+  now,
   roleplays,
   sessions,
 }: ProgressNextStepInput): ProgressNextStepGuide {
@@ -52,16 +56,33 @@ export function createProgressNextStepGuide({
   );
   const isOffPathLatestSave =
     firstIncompleteIndex !== -1 && latestRoleplayIndex > firstIncompleteIndex;
-  const remainingSprints = Math.max(dailyTarget - sessions.length, 0);
+  const completedToday = Math.min(
+    createPracticeTimeline(sessions, { now }).sessionsTodayCount,
+    dailyTarget,
+  );
+  const remainingSprints = Math.max(dailyTarget - completedToday, 0);
 
   if (remainingSprints === 0) {
     return {
       eyebrow: 'Today is done',
       title: 'Daily target complete',
-      body: `Your ${Math.min(sessions.length, dailyTarget)}/${dailyTarget} target is complete. Keep it light: review one correction or do an optional ${nextRoleplayTitle} sprint.`,
+      body: `Your ${completedToday}/${dailyTarget} target is complete. Keep it light: review one correction or do an optional ${nextRoleplayTitle} sprint.`,
       steps: ['Read one saved feedback note', 'Repeat one correction out loud', `${path.progressPercent === 100 ? 'Replay' : 'Practice'} ${nextRoleplayTitle}`],
       statusLabel: path.progressPercent === 100 ? 'Optional replay' : 'Target done',
       statusTone: 'success',
+      ctaLabel: path.ctaLabel,
+      roleplayId: nextRoleplayId,
+    };
+  }
+
+  if (completedToday === 0) {
+    return {
+      eyebrow: 'Start today',
+      title: dailyTarget === 1 ? 'Save one sprint today' : `Save ${dailyTarget} sprints today`,
+      body: `Your last saved answer was ${latestSession.roleplayTitle}. Start ${nextRoleplayTitle} today to keep the guided path active.`,
+      steps: ['Review one saved feedback note', `Start ${nextRoleplayTitle}`, 'Save one answer for XP'],
+      statusLabel: 'Fresh day',
+      statusTone: isOffPathLatestSave ? 'accent' : 'info',
       ctaLabel: path.ctaLabel,
       roleplayId: nextRoleplayId,
     };
