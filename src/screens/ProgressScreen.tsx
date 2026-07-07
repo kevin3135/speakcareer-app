@@ -134,6 +134,9 @@ export function ProgressScreen({
   const visibleMistakeQueueItems = mistakeQueue && isMistakeQueueOpen
     ? mistakeQueue.items
     : [];
+  const collapsedMistakeQueuePreview = mistakeQueue && !isMistakeQueueOpen
+    ? mistakeQueue.items[0]
+    : null;
   const hiddenMistakeQueueCount = mistakeQueue
     ? Math.max(0, mistakeQueue.items.length - visibleMistakeQueueItems.length)
     : 0;
@@ -607,15 +610,27 @@ export function ProgressScreen({
                       {hiddenMistakeQueueCount > 0 ? (
                         <View style={styles.queueCollapsedCue}>
                           <View style={styles.queueCollapsedIcon}>
-                            <Text style={styles.queueCollapsedIconText}>Q</Text>
+                            <Text style={styles.queueCollapsedIconText}>NEXT</Text>
                           </View>
                           <View style={styles.flexOne}>
                             <Text style={styles.queueMoreLabel}>
                               {hiddenMistakeQueueCount} saved for later
                             </Text>
-                            <Text numberOfLines={1} style={styles.queueMoreHint}>
-                              Open only when you want the full queue.
-                            </Text>
+                            {collapsedMistakeQueuePreview ? (
+                              <View style={styles.queueCollapsedPreview}>
+                                <Badge
+                                  label={collapsedMistakeQueuePreview.category}
+                                  tone={collapsedMistakeQueuePreview.isPracticed ? 'success' : 'secondary'}
+                                />
+                                <Text numberOfLines={2} style={styles.queuePreviewCorrection}>
+                                  {collapsedMistakeQueuePreview.correction}
+                                </Text>
+                              </View>
+                            ) : (
+                              <Text numberOfLines={1} style={styles.queueMoreHint}>
+                                Open only when you want the full queue.
+                              </Text>
+                            )}
                           </View>
                         </View>
                       ) : null}
@@ -1191,16 +1206,20 @@ const styles = StyleSheet.create({
   queueCollapsedIcon: {
     alignItems: 'center',
     backgroundColor: colors.correction,
-    borderRadius: radius.pill,
+    borderRadius: radius.md,
     height: 34,
     justifyContent: 'center',
-    width: 34,
+    width: 44,
   },
   queueCollapsedIconText: {
     color: colors.white,
     fontFamily: fonts.rounded,
-    fontSize: typography.small,
+    fontSize: typography.micro,
     fontWeight: '900',
+  },
+  queueCollapsedPreview: {
+    alignItems: 'flex-start',
+    marginTop: spacing.sm,
   },
   queueList: {
     gap: spacing.sm,
@@ -1216,6 +1235,14 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  queuePreviewCorrection: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },

@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: Mistake Bank Queue Has A Preview
+
+Made one focused Progress/Wins polish: the collapsed Mistake Bank queue now previews the next saved correction instead of only showing a generic saved-for-later count.
+
+Why it changed:
+
+- The design audit says Wins/Progress should show one mistake to fix and hide full lists.
+- The Mistake Bank already keeps the full queue collapsed, but the closed state felt a little abstract.
+- The smallest useful fix was to show one calm preview while keeping the full list behind the existing toggle.
+
+What changed:
+
+- Updated `src/screens/ProgressScreen.tsx` so the collapsed correction queue shows the first queued category and correction.
+- Changed the small queue icon from `Q` to `NEXT` so the preview reads as a guided next correction.
+- Kept the full mistake list hidden behind `See all mistakes`.
+
+What went well:
+
+- Progress still focuses on one active correction first.
+- The saved queue now feels more concrete and useful without becoming a long report.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the collapsed queue preview should be checked on a real phone-width screen.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+- A separate Roleplay starter-kit polish landed while this run was in progress; this commit stays scoped to the Progress queue preview.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Mistake Bank should stay focused on one active correction, but a tiny queue preview helps the saved value feel real.
+- Keep long Progress lists behind toggles until the user asks for them.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the Progress Mistake Bank queue preview and confirm the new `NEXT` label plus correction preview fit cleanly.
+
 ## 2026-07-07: First Interview Starter Kit Is Inline
 
 Made one focused practice-flow improvement: the first Job Interview answer step now shows a level-matched starter kit inline, so onboarding/Foundation guidance carries directly into the first career answer instead of being split across multiple areas.
