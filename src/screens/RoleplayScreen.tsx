@@ -1347,10 +1347,14 @@ export function RoleplayScreen({
                 <Text style={styles.betterEnglishCoachBadgeText}>SC</Text>
               </View>
               <View style={styles.betterEnglishHeaderCopy}>
-                <Text style={styles.betterEnglishLabel}>Best fix</Text>
+                <View style={styles.betterEnglishLabelRow}>
+                  <Text style={styles.betterEnglishLabel}>Best fix</Text>
+                  <View style={styles.betterEnglishPill}>
+                    <Text style={styles.betterEnglishPillText}>Model line</Text>
+                  </View>
+                </View>
                 <Text style={styles.betterEnglishHint}>Say this instead</Text>
               </View>
-              <Badge label="Use this" tone="info" />
             </View>
             <Text style={styles.betterEnglishText}>{feedbackResult.feedback.suggestedRewrite}</Text>
           </View>
@@ -2393,6 +2397,12 @@ const styles = StyleSheet.create({
     fontSize: typography.micro,
     fontWeight: '900',
   },
+  betterEnglishLabelRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+  },
   betterEnglishHint: {
     color: colors.ink,
     fontFamily: fonts.rounded,
@@ -2400,6 +2410,21 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xxs,
+  },
+  betterEnglishPill: {
+    backgroundColor: colors.infoSoft,
+    borderColor: colors.info,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
+  },
+  betterEnglishPillText: {
+    color: colors.infoDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   betterEnglishText: {
     color: colors.ink,

@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Compact Roleplay Best Fix Header
+
+Made one focused Roleplay review polish: the `Best fix` card header is now calmer on narrow screens by moving the action cue into an inline `Model line` pill.
+
+Why it changed:
+
+- The previous run made the rewrite the most important review item, but the separate `Use this` badge could crowd the header on a 390px phone.
+- The rewrite should feel like the main event, not compete with a badge that looks like another action.
+- The smallest useful fix was to keep the card structure and make only the header more flexible.
+
+What changed:
+
+- Removed the separate right-side `Use this` badge from the Roleplay `Best fix` header.
+- Added a compact inline `Model line` pill beside `Best fix` inside the text column.
+- Allowed the label row to wrap cleanly while leaving more horizontal room for the rewrite.
+
+What went well:
+
+- The change stayed inside `src/screens/RoleplayScreen.tsx` and did not touch feedback logic, saved sessions, navigation, auth, payments, APIs or dependencies.
+- The card still uses existing correction and info theme roles.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the final spacing still needs a live 390px check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 100 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Non-interactive badges in a primary feedback card can look like extra CTAs; prefer small descriptive pills when space is tight.
+- The rewrite text should keep the most visual breathing room in the Roleplay review state.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Do a real mobile preview of the Roleplay review state and adjust the rewrite text size only if it feels too large after the header cleanup.
+
 ## 2026-07-07: Roleplay Best Fix Card
 
 Made one focused Roleplay review polish: the suggested rewrite now appears as a stronger `Best fix` coach card before the recap and optional detail.
