@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Save Main Win CTA
+
+Made one focused Roleplay save-step polish: normal saves now get a compact `Main win` CTA box before the lock-in details.
+
+Why it changed:
+
+- The latest Practice work made the pre-save payoff clearer, but the Roleplay save step still placed the normal save button after the detail rows.
+- After checking an answer, the learner should see the main save action before optional rewrite/edit choices.
+- The first-quest save already had a strong primary box, so the smallest useful fix was to give regular saves the same hierarchy without changing save logic.
+
+What changed:
+
+- Moved the normal save CTA above the `Locks in` detail box in `src/screens/RoleplayScreen.tsx`.
+- Added a compact `Main win` / `One tap` primary action box using existing accent tokens and soft shadow.
+- Removed the lower duplicate save action area for regular saves, keeping rewrite and edit as secondary actions below.
+
+What went well:
+
+- The change stayed inside the Roleplay save UI and did not touch session creation, saved data, navigation, auth, payments, APIs or dependencies.
+- The save step now has a clearer primary action before explanatory detail.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new `Main win` box still needs a live narrow-phone check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 101 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In save states, put the primary save CTA before detail rows so the user sees the decision first.
+- First-quest and normal save flows should share hierarchy even when their copy differs.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Preview the Roleplay save step on mobile and reduce duplicated XP/payoff text if it feels too repetitive above the CTA.
+
 ## 2026-07-07: Practice Level Payoff Preview
 
 Made one focused Practice-flow improvement: the Practice screen now shows a compact level payoff preview tied to the recommended roleplay, so the learner can see the exact XP and level movement before starting the next save.

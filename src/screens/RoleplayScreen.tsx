@@ -1489,6 +1489,18 @@ export function RoleplayScreen({
           <Text style={styles.followUpBody}>
             {firstQuestSaveRecap?.primaryBody ?? savePrompt.body}
           </Text>
+          {!firstQuestSaveRecap ? (
+            <View style={styles.savePrimaryBox}>
+              <View style={styles.oneThingHeader}>
+                <Text style={styles.savePrimaryLabel}>Main win</Text>
+                <Badge label="One tap" tone="accent" />
+              </View>
+              <AppButton
+                label={savePrompt.ctaLabel}
+                onPress={saveSession}
+              />
+            </View>
+          ) : null}
           {firstQuestSaveRecap ? (
             <View style={styles.firstQuestSavePrimaryBox}>
               <View style={styles.oneThingHeader}>
@@ -1521,16 +1533,6 @@ export function RoleplayScreen({
                   <Text numberOfLines={1} style={styles.saveLockInItemValue}>{item.value}</Text>
                 </View>
               ))}
-            </View>
-          ) : null}
-          {!firstQuestSaveRecap ? (
-            <View style={styles.feedbackActions}>
-              <View style={styles.feedbackActionItem}>
-                <AppButton
-                  label={savePrompt.ctaLabel}
-                  onPress={saveSession}
-                />
-              </View>
             </View>
           ) : null}
           {hasAppliedBetterEnglish ? null : (
@@ -2837,6 +2839,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     minHeight: 24,
+  },
+  savePrimaryBox: {
+    ...shadows.soft,
+    backgroundColor: colors.white,
+    borderColor: colors.accent,
+    borderRadius: radius.lg,
+    borderWidth: 2,
+    gap: spacing.md,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+  },
+  savePrimaryLabel: {
+    color: colors.accentDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
   },
   followUpInput: {
     backgroundColor: colors.white,
