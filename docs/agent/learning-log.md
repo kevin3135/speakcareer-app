@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Edit Step Is Explicit
+
+Made one focused first-roleplay practice-flow improvement: the auto-loaded Lesson 1 answer now surfaces the exact next edit step inside the answer-box handoff instead of generic "edit this" language.
+
+Why it changed:
+
+- The current branch is already focused on reducing first-roleplay friction before the learner's first saved answer.
+- The app already knows the active Lesson 1 edit step for each starting level, but the guided cue still used broad copy that made the next action less concrete.
+- The smallest useful fix was to reuse the existing starter-edit plan in the answer-box cue rather than adding another card or flow step.
+
+What changed:
+
+- Updated `src/utils/foundationAnswerBoxCue.ts` so the guided answer-box cue now shows the current Lesson 1 step label for loaded and partially edited starter answers.
+- Updated `src/screens/RoleplayScreen.tsx` so the inline answer-box header shows that exact edit step, while the primary action box now avoids repeating the same generic sentence.
+- Refreshed focused assertions in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- The first Job Interview handoff now gives one precise edit action such as swapping in a real task or ending with a clear result, which makes the next step feel more coach-like and less abstract.
+- The change stayed small and local to the first guided roleplay experience; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the revised answer-box header still needs a quick phone-width check in the live UI.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When the first roleplay is guided, surface the exact edit step the learner should do now instead of generic edit language.
+- Keep the answer-box header responsible for the specific edit instruction and let the lower CTA stay short.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Compress the remaining Lesson 1 warmup title/body into one shorter line so the answer box starts even higher on mobile.
+
 ## 2026-07-07: First Roleplay Starter Preview Is Compact
 
 Made one focused first-roleplay mobile polish: the Lesson 1 warmup no longer repeats the full starter answer before the answer box.

@@ -296,6 +296,7 @@ export function RoleplayScreen({
     ? createFoundationAnswerBoxCue({
       draftAnswer,
       isReadyForFeedback: liveAnswerReview.isReadyForFeedback,
+      steps: foundationWarmupPanel.editPlanSteps,
       starterAnswer: foundationWarmupPanel.starterAnswer,
     })
     : null;
@@ -1069,7 +1070,7 @@ export function RoleplayScreen({
                   {foundationAnswerBoxCue.badgeLabel}
                 </Text>
                 <Text style={styles.answerInputFrameMeta}>
-                  {foundationAnswerBoxCue.body}
+                  {foundationAnswerBoxCue.title}
                 </Text>
               </View>
             ) : null}
@@ -1119,7 +1120,11 @@ export function RoleplayScreen({
                 : answerReadinessCue.title}
             </Text>
             <Text style={styles.answerPrimaryActionBody}>
-              {foundationAnswerBoxCue?.body ?? answerReadinessCue.note}
+              {foundationAnswerBoxCue
+                ? foundationAnswerBoxCue.tone === 'success'
+                  ? foundationAnswerBoxCue.body
+                  : 'Make the edit in the answer box, then tap Check.'
+                : answerReadinessCue.note}
             </Text>
             <View style={styles.answerAction}>
               <AppButton

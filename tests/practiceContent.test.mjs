@@ -1400,12 +1400,13 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createFoundationAnswerBoxCue({
       draftAnswer: starterPanel.starterAnswer,
       isReadyForFeedback: true,
+      steps: starterPanel.editPlanSteps,
       starterAnswer: starterPanel.starterAnswer,
     }),
     {
-      badgeLabel: 'Edit first',
-      body: 'Replace the task and result with your own work example in the answer box.',
-      title: 'Edit the loaded starter below',
+      badgeLabel: 'Step 2 of 3',
+      body: 'Make this one change in the answer box before you check.',
+      title: 'Swap in your real task.',
       tone: 'secondary',
     },
   );
@@ -1439,6 +1440,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createFoundationAnswerBoxCue({
       draftAnswer: '',
       isReadyForFeedback: false,
+      steps: starterPanel.editPlanSteps,
       starterAnswer: starterPanel.starterAnswer,
     }),
     {
@@ -1479,12 +1481,13 @@ test('creates a foundation handoff cue for the first interview answer', async ()
     createFoundationAnswerBoxCue({
       draftAnswer: 'I led onboarding.',
       isReadyForFeedback: false,
+      steps: starterPanel.editPlanSteps,
       starterAnswer: starterPanel.starterAnswer,
     }),
     {
-      badgeLabel: 'Add detail',
-      body: 'Keep editing below. Add one clearer result or next step before you check.',
-      title: 'Your answer is moving in the right direction',
+      badgeLabel: 'Step 3 of 3',
+      body: 'Add this final line in the answer box before you check.',
+      title: 'End with one clear result.',
       tone: 'accent',
     },
   );
@@ -1526,6 +1529,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       draftAnswer:
         'I worked on customer onboarding, and I helped the team reply faster. The result was happier customers.',
       isReadyForFeedback: true,
+      steps: starterPanel.editPlanSteps,
       starterAnswer: starterPanel.starterAnswer,
     }),
     {

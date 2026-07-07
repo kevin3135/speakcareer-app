@@ -8,12 +8,14 @@ export type FoundationAnswerBoxCue = {
 type CreateFoundationAnswerBoxCueInput = {
   draftAnswer: string;
   isReadyForFeedback: boolean;
+  steps: [string, string, string];
   starterAnswer: string;
 };
 
 export function createFoundationAnswerBoxCue({
   draftAnswer,
   isReadyForFeedback,
+  steps,
   starterAnswer,
 }: CreateFoundationAnswerBoxCueInput): FoundationAnswerBoxCue {
   const normalizedDraft = normalizeAnswer(draftAnswer);
@@ -30,9 +32,9 @@ export function createFoundationAnswerBoxCue({
 
   if (normalizedDraft === normalizedStarter) {
     return {
-      badgeLabel: 'Edit first',
-      body: 'Replace the task and result with your own work example in the answer box.',
-      title: 'Edit the loaded starter below',
+      badgeLabel: 'Step 2 of 3',
+      body: 'Make this one change in the answer box before you check.',
+      title: steps[1],
       tone: 'secondary',
     };
   }
@@ -47,9 +49,9 @@ export function createFoundationAnswerBoxCue({
   }
 
   return {
-    badgeLabel: 'Add detail',
-    body: 'Keep editing below. Add one clearer result or next step before you check.',
-    title: 'Your answer is moving in the right direction',
+    badgeLabel: 'Step 3 of 3',
+    body: 'Add this final line in the answer box before you check.',
+    title: steps[2],
     tone: 'accent',
   };
 }
