@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Uses One Edit Handoff
+
+Made one focused first-roleplay practice-flow improvement: the auto-loaded Lesson 1 interview answer now uses one compact edit handoff inside the answer box instead of repeating the same instruction in multiple separate panels.
+
+Why it changed:
+
+- The previous run moved the starter checklist into optional help, but the first Job Interview flow still repeated the same "edit this starter" message above and around the input.
+- The English MVP should make the answer box feel like the obvious next action as quickly as possible.
+- The smallest useful fix was to remove duplicate starter guidance, not add more onboarding or logic.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` to remove the extra warmup action box and the extra pre-input edit cue block.
+- Kept the Lesson 1 starter preview and reload/edit button, but moved the active instruction into the answer box header only.
+- Simplified `src/utils/foundationStarterAction.ts` so it now only returns the state still used by the UI.
+- Updated `src/utils/foundationWarmupPanel.ts` copy and refreshed focused assertions in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- The first interview flow now has less repeated guidance before the learner types, while still preserving the starter draft and reload path.
+- The implementation stayed small and local to the first-roleplay handoff; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the tighter first-roleplay spacing still needs a live phone-width check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In the first auto-loaded interview flow, keep only one active edit instruction near the answer box.
+- `createFoundationStarterAction` does not need descriptive copy unless the UI brings back a separate status panel.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Compress the remaining first-roleplay warmup card by combining the coach cue and unlock strip into one calmer summary row.
+
 ## 2026-07-07: Profile Privacy Cards Wrap Better
 
 Made one focused Profile/Me mobile polish: the privacy preview cards now wrap cleanly on narrow screens instead of being forced into an overly tight two-column row.

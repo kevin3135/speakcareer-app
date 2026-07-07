@@ -1383,7 +1383,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   });
   assert.equal(
     starterPanel.body,
-    'Lesson 1 starter is loaded. Edit the task and result, then check.',
+    'Starter is loaded below. Edit the task and result in the answer box, then check.',
   );
   assert.ok(starterPanel.starterAnswer.includes('The result was'));
   assert.deepEqual(
@@ -1392,12 +1392,8 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       starterAnswer: starterPanel.starterAnswer,
     }),
     {
-      badgeLabel: 'Loaded',
-      body: 'Change the task and result in the answer box, then tap Check.',
       ctaLabel: 'Edit answer',
       mode: 'loaded',
-      title: 'Starter is already in your answer',
-      tone: 'secondary',
     },
   );
   assert.deepEqual(
@@ -1435,12 +1431,8 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       starterAnswer: starterPanel.starterAnswer,
     }),
     {
-      badgeLabel: 'Cleared',
-      body: 'Reload the starter or write your own version from scratch before you check.',
       ctaLabel: 'Reload starter',
       mode: 'cleared',
-      title: 'Starter was cleared',
-      tone: 'accent',
     },
   );
   assert.deepEqual(
@@ -1479,12 +1471,8 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       starterAnswer: starterPanel.starterAnswer,
     }),
     {
-      badgeLabel: 'Edited',
-      body: 'Good. Do one final clarity pass, then tap Check.',
       ctaLabel: 'Reload starter',
       mode: 'edited',
-      title: 'This answer already sounds more like you',
-      tone: 'success',
     },
   );
   assert.deepEqual(

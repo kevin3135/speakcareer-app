@@ -1009,20 +1009,6 @@ export function RoleplayScreen({
                   </Text>
                 </View>
               </View>
-              <View style={styles.foundationWarmupActionBox}>
-                <View style={styles.oneThingHeader}>
-                  <Text style={styles.foundationWarmupActionTitle}>
-                    {foundationStarterAction.title}
-                  </Text>
-                  <Badge
-                    label={foundationStarterAction.badgeLabel}
-                    tone={foundationStarterAction.tone}
-                  />
-                </View>
-                <Text style={styles.foundationWarmupActionBody}>
-                  {foundationStarterAction.body}
-                </Text>
-              </View>
             </View>
           ) : null}
           {hasRestoredDraft ? (
@@ -1044,22 +1030,6 @@ export function RoleplayScreen({
           <Text style={styles.answerSectionLabel}>
             {hasRestoredDraft ? 'Finish your answer' : 'Your answer'}
           </Text>
-          {foundationAnswerBoxCue ? (
-            <View
-              style={[
-                styles.answerInputCueBox,
-                foundationAnswerBoxCue.tone === 'accent' && styles.answerInputCueBoxAccent,
-                foundationAnswerBoxCue.tone === 'success' && styles.answerInputCueBoxSuccess,
-              ]}
-            >
-              <View style={styles.oneThingHeader}>
-                <Text style={styles.answerInputCueLabel}>Edit in the answer box</Text>
-                <Badge label={foundationAnswerBoxCue.badgeLabel} tone={foundationAnswerBoxCue.tone} />
-              </View>
-              <Text style={styles.answerInputCueTitle}>{foundationAnswerBoxCue.title}</Text>
-              <Text style={styles.answerInputCueBody}>{foundationAnswerBoxCue.body}</Text>
-            </View>
-          ) : null}
           {answerStarter ? (
             <View style={styles.answerStarterBox}>
               <View style={styles.oneThingHeader}>
@@ -1097,12 +1067,10 @@ export function RoleplayScreen({
             {foundationAnswerBoxCue ? (
               <View style={styles.answerInputFrameHeader}>
                 <Text style={styles.answerInputFrameLabel}>
-                  {foundationStarterAction?.mode === 'loaded' ? 'Loaded starter' : 'Your editable draft'}
+                  {foundationAnswerBoxCue.badgeLabel}
                 </Text>
                 <Text style={styles.answerInputFrameMeta}>
-                  {foundationStarterAction?.mode === 'loaded'
-                    ? 'Tap into the text below and replace it with your own example.'
-                    : 'Keep shaping the answer directly here before you check.'}
+                  {foundationAnswerBoxCue.body}
                 </Text>
               </View>
             ) : null}
@@ -1844,42 +1812,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     marginTop: spacing.md,
   },
-  answerInputCueBox: {
-    backgroundColor: colors.secondarySoft,
-    borderColor: colors.secondary,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    gap: spacing.xs,
-    marginTop: spacing.sm,
-    padding: spacing.sm,
-  },
-  answerInputCueBoxAccent: {
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-  },
-  answerInputCueBoxSuccess: {
-    backgroundColor: colors.successSoft,
-    borderColor: colors.success,
-  },
-  answerInputCueLabel: {
-    color: colors.secondaryDark,
-    fontFamily: fonts.rounded,
-    fontSize: typography.micro,
-    fontWeight: '900',
-  },
-  answerInputCueTitle: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.body,
-    fontWeight: '900',
-    lineHeight: typography.lineBody,
-  },
-  answerInputCueBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
-  },
   promptText: {
     color: colors.ink,
     fontFamily: fonts.rounded,
@@ -2541,29 +2473,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
-    lineHeight: typography.lineSmall,
-    marginTop: spacing.xs,
-  },
-  foundationWarmupActionBox: {
-    backgroundColor: colors.white,
-    borderColor: colors.secondary,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    padding: spacing.sm,
-  },
-  foundationWarmupActionTitle: {
-    color: colors.ink,
-    flex: 1,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    lineHeight: typography.lineSmall,
-    marginRight: spacing.sm,
-  },
-  foundationWarmupActionBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
