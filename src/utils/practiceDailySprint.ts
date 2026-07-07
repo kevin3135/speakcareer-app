@@ -1,4 +1,6 @@
 import type { DailyPracticeTarget, PracticeSession } from '../types';
+// @ts-expect-error Node test imports require the explicit .ts extension here.
+import { createPracticeTimeline } from './practiceTimeline.ts';
 
 export type PracticeDailySprintState = {
   afterSavePayoff: string;
@@ -16,20 +18,31 @@ type CreatePracticeDailySprintInput = {
   dailyTarget: DailyPracticeTarget;
   isResumeMode: boolean;
   nextUnlockTitle?: string | null;
+  now?: Date;
   recommendedRoleplayTitle: string;
   recommendedXpLabel: string;
-  sessions: Pick<PracticeSession, 'id'>[];
+  sessions: Pick<PracticeSession, 'completedAt'>[];
 };
 
 export function createPracticeDailySprint({
   dailyTarget,
   isResumeMode,
   nextUnlockTitle,
+  now,
   recommendedRoleplayTitle,
   recommendedXpLabel,
   sessions,
 }: CreatePracticeDailySprintInput): PracticeDailySprintState {
-  const completed = Math.min(sessions.length, dailyTarget);
+  const completed = Math.min(
+    createPracticeTimeline(
+      sessions.map((session) => ({
+        completedAt: session.completedAt,
+        xpReward: 0,
+      })),
+      { now },
+    ).sessionsTodayCount,
+    dailyTarget,
+  );
   const nextSavedCount = Math.min(completed + 1, dailyTarget);
   const progressPercent = Math.round((completed / dailyTarget) * 100);
   const progressLabel = `${completed}/${dailyTarget} saved today`;

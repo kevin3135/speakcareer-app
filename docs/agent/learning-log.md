@@ -1,5 +1,54 @@
 # Agent Learning Log
 
+## 2026-07-07: Date-Aware Daily Progress Reset
+
+Made one focused habit-loop improvement: daily target progress now resets by saved-session date instead of treating every historical local save as "today."
+
+Why it changed:
+
+- The app had started to feel more habit-forming, but several "today" labels were still driven by total saved-session count.
+- That made Home, Practice, Progress, Profile and Roleplay save states overcount old work instead of showing a fresh daily restart.
+- The smallest useful fix was to add one shared local timeline helper and route the core daily-progress cues through it.
+
+What changed:
+
+- Added `src/utils/practiceTimeline.ts` to calculate local sessions saved today, today's local XP, and an active recent streak extension from saved session dates.
+- Updated `src/utils/gamification.ts` and `src/utils/localProgress.ts` so streak, XP-today, and daily target progress are date-aware.
+- Updated `src/utils/homeDailyMission.ts`, `src/utils/practiceDailySprint.ts`, `src/utils/progressNextStep.ts`, `src/utils/profileCurrentFocus.ts`, and `src/utils/practiceCompletion.ts` so "today" copy uses the new daily reset model.
+- Updated `src/screens/PracticeScreen.tsx` and `src/screens/RoleplayScreen.tsx` so pre-save and post-save "today" previews pass date-aware counts instead of total saved sessions.
+- Added focused test coverage in `tests/practiceContent.test.mjs` for same-day progress, next-day reset states, and fresh-day guidance.
+
+What went well:
+
+- The change stayed local-only and did not add any backend, auth, analytics, payments, secrets, or device-breaking dependencies.
+- One shared helper was enough to fix the main daily-loop copy across multiple screens without rewriting the app structure.
+- `npm.cmd run typecheck`, `npm.cmd run lint`, and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- The first check run failed TypeScript on `practiceTimeline.ts` nullability and failed the Node test runner because the new helper imports needed explicit `.ts` extensions in utility files.
+- This run did not include fresh Expo/browser visual QA, so the next run should still sanity-check the updated "fresh day" copy on a phone-sized viewport.
+- Tests still show the existing harmless Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Any UI copy that says "today" should never read from total saved-session count directly; use one shared date-aware helper instead.
+- The Node test runner in this repo still needs explicit `.ts` imports for utility-to-utility dependencies that are exercised in tests.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a compact "saved yesterday / start today" restart cue on Home or Progress so the fresh-day reset feels even more intentional.
+
 ## 2026-07-07: Reward Row Mobile Wrapping
 
 Made one focused visual polish across the compact reward rows: outcome values can now wrap cleanly instead of being clipped or right-wrapped on narrow screens.

@@ -61,6 +61,7 @@ import { createRoleplayAnswerStarterState } from '../utils/roleplayAnswerStarter
 import { createRoleplayResumeCue } from '../utils/roleplayResumeCue';
 import { createRoleplayStarterReminder } from '../utils/roleplayStarterReminder';
 import { createReviewDecisionCue } from '../utils/reviewDecisionCue';
+import { createPracticeTimeline } from '../utils/practiceTimeline';
 import { createWritingSupportState } from '../utils/writingSupportHelper';
 
 type RoleplayScreenProps = {
@@ -132,6 +133,7 @@ export function RoleplayScreen({
     : null;
   const includedFollowUp = Boolean(followUpReview?.isReadyForFeedback);
   const totalXpReward = baseXpReward + (includedFollowUp ? FOLLOW_UP_BONUS_XP : 0);
+  const practiceTimeline = createPracticeTimeline(sessions);
   const savedPathProgress = savedSession
     ? createSavedRoleplayPathProgress({
       roleplays: practiceContent.roleplays,
@@ -140,10 +142,13 @@ export function RoleplayScreen({
     })
     : null;
   const savedSessionCountAfterSave = savedSession
-    ? sessions.some((session) => session.id === savedSession.id)
-      ? sessions.length
-      : sessions.length + 1
-    : sessions.length;
+    ? createPracticeTimeline(
+      sessions.some((session) => session.id === savedSession.id)
+        ? sessions
+        : [savedSession, ...sessions],
+      { now: new Date(savedSession.completedAt) },
+    ).sessionsTodayCount
+    : practiceTimeline.sessionsTodayCount;
   const savedHandoff = createSavedRoleplayHandoff({
     dailyTarget,
     isPathComplete: savedPathProgress?.isPathComplete,
@@ -328,7 +333,7 @@ export function RoleplayScreen({
     ? createAdaptiveFollowUpPrompt(roleplay, draftAnswer, answerReview)
     : null;
   const targetPreview = createPracticeTargetPreview({
-    completedSessions: sessions.length,
+    completedSessions: practiceTimeline.sessionsTodayCount,
     dailyTarget,
   });
   const followUpReadinessCue = followUpPrompt && answerReview
