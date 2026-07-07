@@ -4002,6 +4002,48 @@ test('creates level progress labels from total XP', async () => {
   });
 });
 
+test('creates a concrete Practice level payoff before save', async () => {
+  const { createPracticeLevelPayoff } = await import('../src/utils/practiceLevelPayoff.ts');
+
+  const closerPreview = createPracticeLevelPayoff({
+    currentTotalXp: 218,
+    xpReward: 48,
+  });
+
+  assert.deepEqual(closerPreview, {
+    afterSaveLevelLabel: 'Level 2',
+    afterSaveProgressLabel: '86/180 XP',
+    afterSaveTotalXpLabel: '266 total XP',
+    badgeLabel: '+48 XP',
+    body: 'Save this sprint to move from 38/180 XP to 86/180 XP toward Level 3.',
+    currentLevelLabel: 'Level 2',
+    currentProgressLabel: '38/180 XP',
+    currentTotalXpLabel: '218 total XP',
+    progressLabel: '86/180 XP after save',
+    progressPercent: 48,
+    title: 'Move closer to Level 3',
+  });
+
+  const levelUpPreview = createPracticeLevelPayoff({
+    currentTotalXp: 350,
+    xpReward: 48,
+  });
+
+  assert.deepEqual(levelUpPreview, {
+    afterSaveLevelLabel: 'Level 3',
+    afterSaveProgressLabel: '38/180 XP',
+    afterSaveTotalXpLabel: '398 total XP',
+    badgeLabel: '+48 XP',
+    body: 'Save this sprint to move from Level 2 at 170/180 XP to Level 3 at 38/180 XP.',
+    currentLevelLabel: 'Level 2',
+    currentProgressLabel: '170/180 XP',
+    currentTotalXpLabel: '350 total XP',
+    progressLabel: 'Level 3 unlocked',
+    progressPercent: 100,
+    title: 'Reach Level 3 with this save',
+  });
+});
+
 test('creates a compact Home level rail state', async () => {
   const { createHomeLevelRail } = await import('../src/utils/homeLevelRail.ts');
   const { createLevelProgress } = await import('../src/utils/levelProgress.ts');

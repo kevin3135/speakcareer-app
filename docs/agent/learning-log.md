@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Practice Level Payoff Preview
+
+Made one focused Practice-flow improvement: the Practice screen now shows a compact level payoff preview tied to the recommended roleplay, so the learner can see the exact XP and level movement before starting the next save.
+
+Why it changed:
+
+- Practice already showed the next unlock in the path, but it did not make the personal XP payoff equally concrete at the moment of action.
+- The product direction for this loop is habit-forming but still professional, so the user should see what today’s save does for both path progress and level momentum.
+- The smallest useful fix was to reuse the existing local XP model and add one compact before-save preview under the recommended roleplay.
+
+What changed:
+
+- Added `src/utils/practiceLevelPayoff.ts` to calculate a deterministic `now` versus `after save` level preview from current XP and the recommended roleplay reward.
+- Updated `src/screens/PracticeScreen.tsx` to show a compact `Level payoff` block under the existing recommended action, including current level, after-save level state and a progress bar for the expected outcome.
+- Added focused coverage in `tests/practiceContent.test.mjs` for both move-closer and level-up payoff states.
+
+What went well:
+
+- The change stayed inside the Practice screen and one pure helper, so it did not touch navigation, storage, auth, payments, APIs, backend plans or dependencies.
+- The new payoff complements the existing unlock strip instead of replacing it, which keeps both the path reward and the personal XP reward visible.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the new two-column payoff block still needs a narrow-phone check for wrapping.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 101 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Practice benefits from showing both rewards at once: what unlocks next in the path and what the save does to the user’s level progress.
+- Keep pre-save payoff UI concrete and numeric when the underlying mock XP model already exists.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Improve the Roleplay save step with one clearer final CTA/payoff block so the learner sees the save reward before deciding between save and retry.
+
 ## 2026-07-07: Compact Roleplay Best Fix Header
 
 Made one focused Roleplay review polish: the `Best fix` card header is now calmer on narrow screens by moving the action cue into an inline `Model line` pill.

@@ -12,11 +12,13 @@ import {
   SectionHeader,
   XPBadge,
 } from '../components/ui';
-import { practiceContent } from '../data/content';
+import { practiceContent, progressData } from '../data/content';
 import { colors, fonts, radius, spacing, typography } from '../theme';
 import type { DailyPracticeTarget, PracticeSession, RoleplayDraft, RoleplayId } from '../types';
+import { createDailyMission } from '../utils/gamification';
 import { createPracticeDailySprint } from '../utils/practiceDailySprint';
 import { createPracticeLibraryState } from '../utils/practiceLibraryState';
+import { createPracticeLevelPayoff } from '../utils/practiceLevelPayoff';
 
 type PracticeScreenProps = {
   dailyTarget: DailyPracticeTarget;
@@ -32,11 +34,16 @@ export function PracticeScreen({
   sessions,
 }: PracticeScreenProps) {
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+  const mission = createDailyMission(progressData.summary, sessions, dailyTarget);
   const libraryState = createPracticeLibraryState({
     draft,
     roleplays: practiceContent.roleplays,
     sessions,
   });
+  const recommendedRoleplay =
+    practiceContent.roleplays.find(
+      (roleplay) => roleplay.id === libraryState.recommendedCard.roleplayId,
+    ) ?? practiceContent.roleplays[0];
   const nextUnlockTitle = libraryState.runway?.items.find((item) => item.state === 'locked')?.title;
   const dailySprint = createPracticeDailySprint({
     dailyTarget,
@@ -45,6 +52,10 @@ export function PracticeScreen({
     recommendedRoleplayTitle: libraryState.recommendedCard.title,
     recommendedXpLabel: libraryState.recommendedCard.xp,
     sessions,
+  });
+  const levelPayoff = createPracticeLevelPayoff({
+    currentTotalXp: mission.xpTotal,
+    xpReward: recommendedRoleplay.durationMinutes * 4,
   });
   const sprintProgressTone = dailySprint.statusTone === 'success' ? 'success' : 'secondary';
 
@@ -144,6 +155,41 @@ export function PracticeScreen({
           <Text style={styles.recommendedPayoffProgress}>
             {libraryState.recommendedPayoff.progressLabel}
           </Text>
+        </View>
+      </View>
+
+      <View style={styles.levelPayoffBox}>
+        <View style={styles.levelPayoffHeader}>
+          <View style={styles.flexOne}>
+            <Text style={styles.levelPayoffEyebrow}>Level payoff</Text>
+            <Text style={styles.levelPayoffTitle}>{levelPayoff.title}</Text>
+          </View>
+          <XPBadge label={levelPayoff.badgeLabel} />
+        </View>
+        <Text style={styles.levelPayoffBody}>{levelPayoff.body}</Text>
+        <View style={styles.levelPayoffStats}>
+          <View style={styles.levelPayoffStat}>
+            <Text style={styles.levelPayoffStatLabel}>Now</Text>
+            <Text style={styles.levelPayoffStatTitle}>{levelPayoff.currentLevelLabel}</Text>
+            <Text style={styles.levelPayoffStatMeta}>{levelPayoff.currentProgressLabel}</Text>
+            <Text style={styles.levelPayoffStatSubtle}>{levelPayoff.currentTotalXpLabel}</Text>
+          </View>
+          <View style={styles.levelPayoffArrow}>
+            <Text style={styles.levelPayoffArrowText}>{'->'}</Text>
+          </View>
+          <View style={[styles.levelPayoffStat, styles.levelPayoffStatAccent]}>
+            <Text style={styles.levelPayoffStatLabel}>After save</Text>
+            <Text style={styles.levelPayoffStatTitle}>{levelPayoff.afterSaveLevelLabel}</Text>
+            <Text style={styles.levelPayoffStatMeta}>{levelPayoff.afterSaveProgressLabel}</Text>
+            <Text style={styles.levelPayoffStatSubtle}>{levelPayoff.afterSaveTotalXpLabel}</Text>
+          </View>
+        </View>
+        <View style={styles.levelPayoffProgress}>
+          <ProgressBar
+            label={levelPayoff.progressLabel}
+            tone="accent"
+            value={levelPayoff.progressPercent}
+          />
         </View>
       </View>
 
@@ -352,6 +398,100 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  levelPayoffArrow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  levelPayoffArrowText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+  },
+  levelPayoffBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.sm,
+  },
+  levelPayoffBox: {
+    backgroundColor: colors.surface,
+    borderColor: colors.borderStrong,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    padding: spacing.md,
+  },
+  levelPayoffEyebrow: {
+    color: colors.primary,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+  },
+  levelPayoffHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  levelPayoffProgress: {
+    marginTop: spacing.md,
+  },
+  levelPayoffStat: {
+    backgroundColor: colors.white,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    padding: spacing.sm,
+  },
+  levelPayoffStatAccent: {
+    backgroundColor: colors.accentSoft,
+    borderColor: colors.accent,
+  },
+  levelPayoffStatLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  levelPayoffStatMeta: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
+  levelPayoffStatSubtle: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '800',
+    marginTop: spacing.xs,
+  },
+  levelPayoffStats: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  levelPayoffStatTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
+  },
+  levelPayoffTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.h3,
+    fontWeight: '900',
+    lineHeight: typography.lineH3,
+    marginTop: spacing.xs,
   },
   libraryBody: {
     color: colors.text,
