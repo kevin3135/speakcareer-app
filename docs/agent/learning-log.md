@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Answer Step Uses A Compact Progress Pill
+
+Made one focused first-roleplay polish: the answer step now shows a slimmer progress pill instead of the full three-block runway, while still previewing `Review -> Save`.
+
+Why it changed:
+
+- The current branch is already focused on making the first Job Interview answer feel like the obvious next action.
+- The full `Answer / Review / Save` runway repeated step framing and took extra vertical space before the prompt and input.
+- The smallest useful fix was to compress only the answer-step flow indicator, not redesign review, save, or navigation.
+
+What changed:
+
+- Updated `src/utils/roleplayFlowRunway.ts` so the flow helper now exposes a compact `nextStepsLabel` such as `Then Review -> Save`.
+- Updated `src/screens/RoleplayScreen.tsx` so the answer step renders a single compact progress row with the current status plus the next-step payoff chip.
+- Updated `tests/practiceContent.test.mjs` with focused assertions for the new compact next-step labels.
+
+What went well:
+
+- The first answer card should now reach the coach prompt and answer box a bit sooner without losing the sense of path progress.
+- The change stayed local to the roleplay flow helper and screen; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the compact pill still needs a quick phone-width check in the live UI.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- On the first answer step, path progress should stay visible but lighter than the prompt and input.
+- Keep fuller runway detail for review/save where the learner is already deeper in the flow.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run a phone-width visual QA pass on the first Job Interview screen and decide whether the warmup starter box can also collapse into one calmer row.
+
 ## 2026-07-07: First Roleplay Warmup Cue Is More Compact
 
 Made one focused first-roleplay viewport polish: the Lesson 1 warmup keeps its coach identity, but the coach cue and starter hint now take less vertical space before the answer box.

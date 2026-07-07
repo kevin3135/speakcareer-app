@@ -440,6 +440,7 @@ test('creates a three-step runway for the roleplay flow', async () => {
 
   assert.equal(answerRunway.progressLabel, 'Step 1 of 3');
   assert.equal(answerRunway.currentStepLabel, 'Answer now');
+  assert.equal(answerRunway.nextStepsLabel, 'Then Review -> Save');
   assert.equal(answerRunway.progressPercent, 33);
   assert.deepEqual(
     answerRunway.steps.map((step) => `${step.numberLabel}-${step.label}-${step.state}`),
@@ -448,6 +449,7 @@ test('creates a three-step runway for the roleplay flow', async () => {
 
   assert.equal(reviewRunway.progressLabel, 'Step 2 of 3');
   assert.equal(reviewRunway.currentStepLabel, 'Review now');
+  assert.equal(reviewRunway.nextStepsLabel, 'Then Save');
   assert.equal(reviewRunway.progressPercent, 67);
   assert.deepEqual(
     reviewRunway.steps.map((step) => step.state),
@@ -456,6 +458,7 @@ test('creates a three-step runway for the roleplay flow', async () => {
 
   assert.equal(saveRunway.progressLabel, 'Step 3 of 3');
   assert.equal(saveRunway.currentStepLabel, 'Save now');
+  assert.equal(saveRunway.nextStepsLabel, null);
   assert.equal(saveRunway.progressPercent, 100);
   assert.deepEqual(
     saveRunway.steps.map((step) => step.state),

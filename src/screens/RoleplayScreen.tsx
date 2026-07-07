@@ -732,6 +732,29 @@ export function RoleplayScreen({
     );
   }
 
+  function renderCompactAnswerRunway(
+    runway: RoleplayFlowRunway,
+    currentStepMeta: string,
+  ) {
+    return (
+      <View style={styles.flowRunwayCompact}>
+        <View style={styles.flowRunwayCompactLead}>
+          <Text style={styles.flowRunwayProgressLabel}>{runway.progressLabel}</Text>
+          <Text numberOfLines={1} style={styles.flowRunwayCompactMeta}>
+            {currentStepMeta}
+          </Text>
+        </View>
+        {runway.nextStepsLabel ? (
+          <View style={styles.flowRunwayCompactNextChip}>
+            <Text numberOfLines={1} style={styles.flowRunwayCompactNextText}>
+              {runway.nextStepsLabel}
+            </Text>
+          </View>
+        ) : null}
+      </View>
+    );
+  }
+
   if (savedSession) {
     return (
       <ScreenContainer>
@@ -943,7 +966,10 @@ export function RoleplayScreen({
 
       {!feedbackResult ? (
         <Card tone="strong">
-          {renderFlowRunway(answerRunway, visibleFirstQuestState?.progressLabel ?? answerRunway.currentStepLabel)}
+          {renderCompactAnswerRunway(
+            answerRunway,
+            visibleFirstQuestState?.progressLabel ?? answerRunway.currentStepLabel,
+          )}
           <View style={styles.coachPromptBubble}>
             <View style={styles.coachPromptBadge}>
               <Text style={styles.coachPromptBadgeText}>SC</Text>
@@ -1687,6 +1713,47 @@ const styles = StyleSheet.create({
   },
   flowRunway: {
     marginBottom: spacing.md,
+  },
+  flowRunwayCompact: {
+    alignItems: 'center',
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  flowRunwayCompactLead: {
+    flex: 1,
+    minWidth: 0,
+  },
+  flowRunwayCompactMeta: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+    marginTop: spacing.xxs,
+  },
+  flowRunwayCompactNextChip: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderColor: colors.primary,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    justifyContent: 'center',
+    minHeight: 30,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  flowRunwayCompactNextText: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
   },
   flowRunwayHeader: {
     alignItems: 'center',
