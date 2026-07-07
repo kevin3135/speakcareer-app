@@ -41,15 +41,15 @@ export function createFoundationWarmupPanel({
 
   return {
     body: hasCoachNote
-      ? 'Starter is loaded below. Edit the task and result in the answer box, then check.'
-      : 'Starter is loaded below. Make it yours in the answer box, then check.',
+      ? 'Edit the task and result in the answer box, then check.'
+      : 'Make it yours in the answer box, then check.',
     coachCueLabel,
     coachCueMessage,
     editPlanLabel: 'Make it yours',
     editPlanSteps,
     starterAnswer,
     starterLabel: 'Loaded starter',
-    title: 'Lesson 1 starter is ready',
+    title: 'Starter ready: edit below',
     unlockProgress: unlockProgress && unlockBody
       ? {
         body: unlockBody,

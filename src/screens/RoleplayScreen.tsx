@@ -960,7 +960,6 @@ export function RoleplayScreen({
                 <Badge label={warmupCue.badgeLabel} tone="secondary" />
               </View>
               <Text style={styles.foundationWarmupTitle}>{foundationWarmupPanel.title}</Text>
-              <Text numberOfLines={2} style={styles.foundationWarmupBody}>{foundationWarmupPanel.body}</Text>
               <View style={styles.foundationWarmupSequence}>
                 <View style={styles.foundationWarmupCoachCue}>
                   <View style={styles.foundationWarmupCoachBadge}>
@@ -1851,12 +1850,6 @@ const styles = StyleSheet.create({
     fontSize: typography.body,
     fontWeight: '900',
     lineHeight: typography.lineBody,
-  },
-  foundationWarmupBody: {
-    color: colors.text,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    lineHeight: typography.lineSmall,
   },
   foundationWarmupSequence: {
     backgroundColor: colors.white,

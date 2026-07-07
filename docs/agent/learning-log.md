@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Warmup Copy Is Shorter
+
+Made one focused first-roleplay visual simplification: the Lesson 1 warmup now uses one short headline above the guided sequence instead of a title plus body paragraph.
+
+Why it changed:
+
+- The previous run made the edit step more explicit, but the warmup still used extra text before the learner reached the answer box.
+- Roleplay should make the answer box feel central and visible early on mobile.
+- The smallest useful fix was to shorten the existing warmup copy, not change the flow or add another component.
+
+What changed:
+
+- Updated `src/utils/foundationWarmupPanel.ts` so the warmup title is now `Starter ready: edit below` and the helper body is shorter.
+- Updated `src/screens/RoleplayScreen.tsx` so the guided warmup no longer renders a separate body paragraph above the sequence.
+- Refreshed the focused assertions in `tests/practiceContent.test.mjs` for the shorter warmup copy.
+
+What went well:
+
+- The change stayed local to the first-roleplay warmup and helper copy; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The first Job Interview warmup now gives the same guidance with less vertical text before the answer box.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the exact phone-height win still needs a live screenshot check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- The first-roleplay warmup should not use paragraph copy above the guided sequence.
+- Keep Lesson 1 handoff copy short so the answer box can appear as early as possible.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run mobile visual QA on the first-roleplay viewport and measure whether the answer box is visible without scrolling on 390x844.
+
 ## 2026-07-07: First Roleplay Edit Step Is Explicit
 
 Made one focused first-roleplay practice-flow improvement: the auto-loaded Lesson 1 answer now surfaces the exact next edit step inside the answer-box handoff instead of generic "edit this" language.

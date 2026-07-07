@@ -1369,7 +1369,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
       unlockLabel: firstQuestState.unlockLabel,
     },
   });
-  assert.equal(starterPanel.title, 'Lesson 1 starter is ready');
+  assert.equal(starterPanel.title, 'Starter ready: edit below');
   assert.equal(starterPanel.coachCueLabel, 'A1-A2 path coach');
   assert.ok(starterPanel.coachCueMessage.includes(foundationStart.title));
   assert.ok(starterPanel.coachCueMessage.includes('Job Interview'));
@@ -1383,7 +1383,7 @@ test('creates a foundation handoff cue for the first interview answer', async ()
   });
   assert.equal(
     starterPanel.body,
-    'Starter is loaded below. Edit the task and result in the answer box, then check.',
+    'Edit the task and result in the answer box, then check.',
   );
   assert.ok(starterPanel.starterAnswer.includes('The result was'));
   assert.deepEqual(
