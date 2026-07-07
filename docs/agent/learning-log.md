@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: First Roleplay Starter Preview Is Compact
+
+Made one focused first-roleplay mobile polish: the Lesson 1 warmup no longer repeats the full starter answer before the answer box.
+
+Why it changed:
+
+- The design audit says Roleplay should show the answer box early and avoid too many modules before typing.
+- The starter answer is already loaded into the answer box, so repeating it in the warmup preview made the first viewport feel heavier.
+- The smallest useful fix was to keep the reload/edit control but replace the duplicate starter text with one short status cue.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the warmup starter area now says the starter is in the answer box below.
+- Kept the existing reload starter action and accessibility hints.
+- Replaced the heavier starter preview text style with a quieter status-hint style.
+
+What went well:
+
+- The change stayed inside one screen and only reduced duplicated pre-answer UI; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The answer box now carries the full editable starter, making the first roleplay feel more focused.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the first-roleplay viewport still needs a live phone-width screenshot pass.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Do not repeat the loaded starter answer above the answer box; the answer box should own the full editable text.
+- Keep the first Job Interview path visually centered on one edit action.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run mobile visual QA on the first-roleplay viewport and verify the answer box appears early enough after the compact warmup.
+
 ## 2026-07-07: First Roleplay Warmup Is More Compact
 
 Made one focused first-roleplay visual simplification: the Lesson 1 warmup now combines the coach cue and unlock progress into one calmer summary row.

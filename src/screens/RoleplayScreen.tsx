@@ -1001,8 +1001,10 @@ export function RoleplayScreen({
                       variant="quiet"
                     />
                   </View>
-                  <Text numberOfLines={3} style={styles.foundationWarmupStarterText}>
-                    {foundationWarmupPanel.starterAnswer}
+                  <Text numberOfLines={2} style={styles.foundationWarmupStarterHint}>
+                    {foundationStarterAction.mode === 'loaded'
+                      ? 'Starter is in the answer box below. Edit the task and result there.'
+                      : 'Reload the Lesson 1 starter into the answer box below.'}
                   </Text>
                 </View>
               </View>
@@ -1930,11 +1932,11 @@ const styles = StyleSheet.create({
     fontSize: typography.micro,
     fontWeight: '900',
   },
-  foundationWarmupStarterText: {
-    color: colors.ink,
+  foundationWarmupStarterHint: {
+    color: colors.textMuted,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
-    fontWeight: '900',
+    fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
   },
