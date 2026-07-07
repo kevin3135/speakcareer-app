@@ -16,6 +16,10 @@ export type HomeDailyMissionCard = {
   progressLabel: string;
   progressPercent: number;
   reason: string;
+  restartCue?: {
+    label: string;
+    value: string;
+  };
   rewardLabel: string;
   targetLabel: string;
   title: string;
@@ -44,6 +48,12 @@ export function createHomeDailyMissionCard({
       progressLabel: 'Mission progress',
       progressPercent: 0,
       reason: 'A small daily answer makes real interview English easier when it matters.',
+      restartCue: hasSavedPractice
+        ? {
+          label: 'Fresh day',
+          value: `Earlier wins stay saved. Today starts at ${targetLabel}.`,
+        }
+        : undefined,
       rewardLabel: dailyMission.rewardLabel,
       targetLabel,
       title: hasSavedPractice ? "Start today's mission" : 'Save your first practice answer',

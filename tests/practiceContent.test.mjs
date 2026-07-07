@@ -2739,6 +2739,7 @@ test('creates one clear Home daily mission card', async () => {
   assert.equal(firstRunMission.progressPercent, 0);
   assert.ok(firstRunMission.body.includes('foundation'));
   assert.ok(firstRunMission.reason.includes('interview English'));
+  assert.equal(firstRunMission.restartCue, undefined);
 
   const postFoundationMission = createHomeDailyMissionCard({
     dailyMission: createDailyMission(progressMock.summary, [], 1),
@@ -2796,6 +2797,10 @@ test('creates one clear Home daily mission card', async () => {
   assert.equal(freshDayMission.meta, 'Fresh start');
   assert.equal(freshDayMission.targetLabel, '0/1 saved');
   assert.ok(freshDayMission.body.includes('New day'));
+  assert.deepEqual(freshDayMission.restartCue, {
+    label: 'Fresh day',
+    value: 'Earlier wins stay saved. Today starts at 0/1 saved.',
+  });
 });
 
 test('creates a clear Home start payoff preview', async () => {

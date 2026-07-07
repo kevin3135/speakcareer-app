@@ -166,6 +166,7 @@ export function HomeScreen({
           pathKickerLabel={startCardKickerLabel}
           pathLabel={startCardPathLabel}
           preview={startPreview}
+          restartCue={missionCard.restartCue}
           title={startCardTitle}
           xpLabel={startCardXpLabel}
         />
@@ -257,6 +258,7 @@ function AnimatedStartCard({
   pathKickerLabel,
   pathLabel,
   preview,
+  restartCue,
   title,
   xpLabel,
 }: {
@@ -269,6 +271,10 @@ function AnimatedStartCard({
   pathKickerLabel: string;
   pathLabel: string;
   preview: HomeStartPreview;
+  restartCue?: {
+    label: string;
+    value: string;
+  };
   title: string;
   xpLabel: string;
 }) {
@@ -363,6 +369,12 @@ function AnimatedStartCard({
           {habitValue}
         </Text>
       </View>
+      {restartCue ? (
+        <View style={styles.startRestartCue}>
+          <Text style={styles.startRestartLabel}>{restartCue.label}</Text>
+          <Text style={styles.startRestartValue}>{restartCue.value}</Text>
+        </View>
+      ) : null}
       <View style={styles.startPreviewBox}>
         <Text style={styles.startPreviewEyebrow}>{preview.eyebrow}</Text>
         <Text numberOfLines={1} style={styles.startPreviewTitle}>
@@ -566,6 +578,30 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  startRestartCue: {
+    alignItems: 'flex-start',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.secondarySoft,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.xs,
+    marginTop: -spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  startRestartLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  startRestartValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   startPreviewBox: {
     backgroundColor: 'rgba(8, 26, 18, 0.28)',

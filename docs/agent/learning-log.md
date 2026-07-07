@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Home Fresh-Day Restart Cue
+
+Made one focused Home polish: returning users who saved before but have 0 saves today now see a compact `Fresh day` cue on the main start card.
+
+Why it changed:
+
+- Date-aware daily progress now resets correctly, but the fresh-day state needed a small visual explanation.
+- A learner should understand that earlier wins are still saved while today's mission starts at 0.
+- The smallest useful fix was to add one optional cue to the existing Home start card, not another full card or screen.
+
+What changed:
+
+- Added an optional `restartCue` to `src/utils/homeDailyMission.ts` for returning fresh-day states.
+- Rendered the cue in `src/screens/HomeScreen.tsx` as a quiet success-toned strip under the pace pill.
+- Added focused assertions in `tests/practiceContent.test.mjs` so first-run users do not see the cue and returning fresh-day users do.
+
+What went well:
+
+- The change stayed inside Home and a pure helper; no storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The cue makes the daily reset feel intentional without competing with the primary Start action.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the cue still needs a phone-width spacing check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Fresh-day copy should reassure learners that previous wins remain saved while today's target starts clean.
+- Keep restart cues compact and visually secondary to the main Start action.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Retry phone-sized browser QA on the Home start card and reward-row wrapping once the in-app browser connection is responsive.
+
 ## 2026-07-07: Date-Aware Daily Progress Reset
 
 Made one focused habit-loop improvement: daily target progress now resets by saved-session date instead of treating every historical local save as "today."
