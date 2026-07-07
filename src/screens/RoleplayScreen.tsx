@@ -175,6 +175,26 @@ export function RoleplayScreen({
       title: 'App unlocked',
     }
     : null;
+  const savedOutcomeRows = savedSession
+    ? [
+      {
+        label: 'Today',
+        value: savedMilestone?.progressLabel ?? `${Math.min(savedSessionCountAfterSave, dailyTarget)}/${dailyTarget} today`,
+      },
+      {
+        label: 'Path',
+        value: savedPathProgress?.isPathComplete
+          ? 'Career path complete'
+          : savedPathProgress?.nextTitle
+            ? `${savedPathProgress.nextTitle} unlocks`
+            : savedHandoff.payoffLine,
+      },
+      {
+        label: 'Level',
+        value: savedLevelUpRecap ? `${savedLevelUpRecap.badgeLabel} unlocked` : `${savedHandoff.xpLabel} banked`,
+      },
+    ]
+    : [];
   const levelProfile = getStartingLevelProfile(startingLevelId);
   const levelLabel =
     levelAssessment.choices.find((choice) => choice.id === startingLevelId)?.label ?? 'B1';
@@ -760,11 +780,26 @@ export function RoleplayScreen({
               </View>
             ) : null}
           </Animated.View>
-          <View style={styles.savedPayoffStrip}>
-            <Text numberOfLines={2} style={styles.savedPayoffText}>
-              <Text style={styles.savedPayoffLabel}>After save </Text>
-              {savedHandoff.payoffLine}
-            </Text>
+          <View style={styles.savedOutcomeBox}>
+            <View style={styles.savedOutcomeHeader}>
+              <View style={styles.savedOutcomeHeaderCopy}>
+                <Text style={styles.savedOutcomeEyebrow}>After save</Text>
+                <Text numberOfLines={1} style={styles.savedOutcomeTitle}>
+                  Your next momentum
+                </Text>
+              </View>
+              <XPBadge label={savedHandoff.xpLabel} />
+            </View>
+            <View style={styles.savedOutcomeRows}>
+              {savedOutcomeRows.map((row) => (
+                <View key={row.label} style={styles.savedOutcomeRow}>
+                  <Text style={styles.savedOutcomeRowLabel}>{row.label}</Text>
+                  <Text numberOfLines={1} style={styles.savedOutcomeRowValue}>
+                    {row.value}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
           {appUnlockedHandoff ? (
             <View style={styles.appUnlockedStrip}>
@@ -786,14 +821,6 @@ export function RoleplayScreen({
               <Text numberOfLines={1} style={styles.savedCoachStripText}>
                 <Text style={styles.savedCoachStripLabel}>Coach target </Text>
                 {savedCoachRecap.badgeLabel}: {savedCoachRecap.text}
-              </Text>
-            </View>
-          ) : null}
-          {savedLevelUpRecap ? (
-            <View style={styles.levelUpStrip}>
-              <Text numberOfLines={1} style={styles.levelUpStripText}>
-                <Text style={styles.levelUpStripLabel}>Level up </Text>
-                {savedLevelUpRecap.text}
               </Text>
             </View>
           ) : null}
@@ -3127,49 +3154,67 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineSmall,
     marginTop: spacing.xxs,
   },
-  savedPayoffStrip: {
-    backgroundColor: colors.successSoft,
+  savedOutcomeBox: {
+    backgroundColor: colors.white,
     borderColor: colors.success,
     borderRadius: radius.lg,
     borderWidth: 1,
+    gap: spacing.sm,
     marginTop: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    padding: spacing.md,
   },
-  savedPayoffLabel: {
+  savedOutcomeEyebrow: {
     color: colors.successDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  savedPayoffText: {
-    color: colors.ink,
-    fontFamily: fonts.rounded,
-    fontSize: typography.small,
-    fontWeight: '900',
-    lineHeight: typography.lineSmall,
+  savedOutcomeHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
   },
-  levelUpStrip: {
-    backgroundColor: colors.accentSoft,
-    borderColor: colors.accent,
-    borderRadius: radius.pill,
+  savedOutcomeHeaderCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  savedOutcomeRow: {
+    alignItems: 'center',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.md,
     borderWidth: 1,
-    marginTop: spacing.xs,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.sm,
   },
-  levelUpStripLabel: {
-    color: colors.accentDark,
+  savedOutcomeRowLabel: {
+    color: colors.successDark,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
   },
-  levelUpStripText: {
+  savedOutcomeRows: {
+    gap: spacing.sm,
+  },
+  savedOutcomeRowValue: {
     color: colors.ink,
+    flex: 1,
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
     lineHeight: typography.lineSmall,
+    marginLeft: spacing.md,
+    textAlign: 'right',
+  },
+  savedOutcomeTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.xs,
   },
   savedNextLabel: {
     color: colors.successDark,

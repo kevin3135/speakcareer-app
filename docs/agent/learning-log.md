@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-07: Roleplay Saved Outcome Card
+
+Made one focused Roleplay completion polish: the saved state now uses one compact `After save` outcome card with `Today`, `Path` and `Level` rows.
+
+Why it changed:
+
+- Practice now has a compact after-save preview, but saved Roleplay completion still showed payoff and level-up as separate strips.
+- The post-save moment should feel like a clear reward summary, not a stack of small report lines.
+- The smallest useful fix was to reuse existing saved-session state and consolidate the visible outcome hierarchy in the Roleplay screen.
+
+What changed:
+
+- Added `savedOutcomeRows` inside `src/screens/RoleplayScreen.tsx` from existing milestone, path, handoff and level-up data.
+- Replaced the old `After save` payoff strip and separate level-up strip with one `After save` card.
+- Kept the existing app-unlocked, coach target and path runway sections below for detail.
+
+What went well:
+
+- The change stayed inside the saved Roleplay completion UI and did not touch saved-session creation, storage, navigation, auth, payments, APIs or dependencies.
+- The completion state now mirrors the newer Practice `Today / Path / Level` payoff language more closely.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser mobile visual QA, so the outcome rows still need a narrow-phone wrap check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Save-completion screens should summarize outcome in one compact card before showing detail sections.
+- `Today / Path / Level` is becoming a useful shared reward language across Practice and Roleplay.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Polish the Progress latest-win card so it uses the same reward language and feels less like a saved-session report.
+
 ## 2026-07-07: Practice After-Save Outcome Preview
 
 Made one focused Practice-flow improvement: the Practice screen now uses one compact `After this save` preview under the recommended roleplay instead of separate unlock and level payoff blocks.
