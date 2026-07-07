@@ -1,4 +1,5 @@
 type WritingSupportInput = {
+  hasStarterEditPlan?: boolean;
   isExpanded: boolean;
   isAnswerPlanOpen: boolean;
   phraseLabel: string;
@@ -17,6 +18,7 @@ export type WritingSupportState = {
 };
 
 export function createWritingSupportState({
+  hasStarterEditPlan = false,
   isExpanded,
   isAnswerPlanOpen,
   phraseLabel,
@@ -24,13 +26,17 @@ export function createWritingSupportState({
   quickStartPhrase,
 }: WritingSupportInput): WritingSupportState {
   const hasQuickStartPhrase = Boolean(quickStartPhrase?.trim());
-  const summaryLabel = isExpanded || !hasQuickStartPhrase
+  const summaryLabel = hasStarterEditPlan && !isExpanded
+    ? `Starter edit plan + ${planLabel}`
+    : isExpanded || !hasQuickStartPhrase
     ? `${phraseLabel} + ${planLabel}`
     : `1 starter + ${planLabel}`;
 
   return {
     helperText:
-      isExpanded || isAnswerPlanOpen
+      hasStarterEditPlan && !isExpanded
+        ? 'Edit the loaded starter in the answer box first. Open this only if you need the Lesson 1 steps again.'
+        : isExpanded || isAnswerPlanOpen
         ? 'Use only what helps, then write your own short answer.'
         : 'Use one short starter first. Open more support only if you get stuck.',
     quickStartLabel: 'Quick starter',

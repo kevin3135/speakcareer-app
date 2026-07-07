@@ -3113,6 +3113,7 @@ test('creates a combined writing support helper state', async () => {
   const { createWritingSupportState } = await import('../src/utils/writingSupportHelper.ts');
 
   const closedSupport = createWritingSupportState({
+    hasStarterEditPlan: true,
     isExpanded: false,
     isAnswerPlanOpen: false,
     phraseLabel: '3 phrases',
@@ -3121,14 +3122,15 @@ test('creates a combined writing support helper state', async () => {
   });
 
   assert.equal(closedSupport.title, 'Writing support');
-  assert.equal(closedSupport.summaryLabel, '1 starter + 3-step plan');
+  assert.equal(closedSupport.summaryLabel, 'Starter edit plan + 3-step plan');
   assert.equal(closedSupport.quickStartLabel, 'Quick starter');
   assert.equal(closedSupport.quickStartText, 'I can give a short update on that.');
   assert.equal(closedSupport.toggleLabel, 'More');
   assert.equal(closedSupport.toggleAccessibilityLabel, 'Show writing support');
-  assert.ok(closedSupport.helperText.includes('get stuck'));
+  assert.ok(closedSupport.helperText.includes('Lesson 1 steps again'));
 
   const openSupport = createWritingSupportState({
+    hasStarterEditPlan: true,
     isExpanded: true,
     isAnswerPlanOpen: true,
     phraseLabel: '3 phrases',

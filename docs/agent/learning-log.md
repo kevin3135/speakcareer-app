@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-07: First Interview Answer Surfaces Sooner
+
+Made one focused first-roleplay flow improvement: the Lesson 1 starter checklist is now moved into optional writing support, so the first Job Interview answer box appears sooner on the screen.
+
+Why it changed:
+
+- The first-interview warmup already had the right starter answer, but it still stacked too many guidance blocks before the learner could type.
+- The first English MVP loop should keep one clear next action: edit the loaded answer and check it.
+- The smallest useful fix was to keep the warmup visible, but move the three-step Lesson 1 edit plan behind optional support below the answer box.
+
+What changed:
+
+- Updated `src/screens/RoleplayScreen.tsx` so the foundation warmup no longer renders the edit checklist above the input.
+- Reused the existing writing-support panel to show the Lesson 1 edit checklist only when optional help is opened.
+- Updated `src/utils/writingSupportHelper.ts` so the collapsed helper explains that the Lesson 1 plan is available if the learner needs the steps again.
+- Added focused assertions in `tests/practiceContent.test.mjs` for the new collapsed starter-edit support summary copy.
+
+What went well:
+
+- The change stayed inside the first roleplay flow and one helper; no save logic, storage, navigation, auth, payments, APIs or dependencies changed.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+- The first typing surface now becomes visible sooner while the starter plan still remains available on demand.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the first-roleplay viewport still needs a live phone-width check.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- In the first interview flow, the answer box should appear before optional editing scaffolding.
+- Keep Lesson 1 starter guidance available, but collapse it unless the learner asks for help.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run a phone-width QA pass on the first-roleplay viewport and trim any remaining pre-answer vertical clutter.
+
 ## 2026-07-07: Home Fresh-Day Restart Cue
 
 Made one focused Home polish: returning users who saved before but have 0 saves today now see a compact `Fresh day` cue on the main start card.

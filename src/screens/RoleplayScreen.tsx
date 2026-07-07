@@ -221,6 +221,7 @@ export function RoleplayScreen({
   });
   const writingSupportQuickStart = starterReminder ? undefined : suggestedPhrases[0];
   const writingSupport = createWritingSupportState({
+    hasStarterEditPlan: Boolean(warmupCue?.autoApplyStarter),
     isExpanded: isWritingSupportOpen,
     isAnswerPlanOpen: isWritingSupportOpen,
     phraseLabel: phraseHelper.summaryLabel,
@@ -1022,44 +1023,6 @@ export function RoleplayScreen({
                   {foundationStarterAction.body}
                 </Text>
               </View>
-              <View style={styles.foundationWarmupEditBox}>
-                <View style={styles.foundationWarmupEditHeader}>
-                  <Text style={styles.foundationWarmupEditLabel}>{foundationWarmupPanel.editPlanLabel}</Text>
-                  <Badge label={foundationStarterChecklist.progressLabel} tone="secondary" />
-                </View>
-                <View style={styles.foundationWarmupEditList}>
-                  {foundationStarterChecklist.items.map((step, index) => (
-                    <View
-                      key={`${index + 1}-${step.text}`}
-                      style={[
-                        styles.foundationWarmupEditStep,
-                        step.state === 'current' && styles.foundationWarmupEditStepCurrent,
-                        step.state === 'done' && styles.foundationWarmupEditStepDone,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          styles.foundationWarmupEditStepNumber,
-                          step.state === 'current' && styles.foundationWarmupEditStepNumberCurrent,
-                          step.state === 'done' && styles.foundationWarmupEditStepNumberDone,
-                        ]}
-                      >
-                        {index + 1}
-                      </Text>
-                      <Text style={styles.foundationWarmupEditStepText}>{step.text}</Text>
-                      <Text
-                        style={[
-                          styles.foundationWarmupEditStepStatus,
-                          step.state === 'current' && styles.foundationWarmupEditStepStatusCurrent,
-                          step.state === 'done' && styles.foundationWarmupEditStepStatusDone,
-                        ]}
-                      >
-                        {step.statusLabel}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
             </View>
           ) : null}
           {hasRestoredDraft ? (
@@ -1220,6 +1183,46 @@ export function RoleplayScreen({
           </Pressable>
           {isWritingSupportOpen ? (
             <View style={styles.writingSupportBox}>
+              {foundationWarmupPanel && foundationStarterChecklist ? (
+                <View style={styles.writingSupportSection}>
+                  <View style={styles.foundationWarmupEditHeader}>
+                    <Text style={styles.foundationWarmupEditLabel}>{foundationWarmupPanel.editPlanLabel}</Text>
+                    <Badge label={foundationStarterChecklist.progressLabel} tone="secondary" />
+                  </View>
+                  <View style={styles.foundationWarmupEditList}>
+                    {foundationStarterChecklist.items.map((step, index) => (
+                      <View
+                        key={`${index + 1}-${step.text}`}
+                        style={[
+                          styles.foundationWarmupEditStep,
+                          step.state === 'current' && styles.foundationWarmupEditStepCurrent,
+                          step.state === 'done' && styles.foundationWarmupEditStepDone,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.foundationWarmupEditStepNumber,
+                            step.state === 'current' && styles.foundationWarmupEditStepNumberCurrent,
+                            step.state === 'done' && styles.foundationWarmupEditStepNumberDone,
+                          ]}
+                        >
+                          {index + 1}
+                        </Text>
+                        <Text style={styles.foundationWarmupEditStepText}>{step.text}</Text>
+                        <Text
+                          style={[
+                            styles.foundationWarmupEditStepStatus,
+                            step.state === 'current' && styles.foundationWarmupEditStepStatusCurrent,
+                            step.state === 'done' && styles.foundationWarmupEditStepStatusDone,
+                          ]}
+                        >
+                          {step.statusLabel}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ) : null}
               {warmupCue && !isAutoWarmupCue ? (
                 <View style={styles.writingSupportSection}>
                   <View style={styles.oneThingHeader}>
@@ -2018,14 +2021,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: typography.lineSmall,
     marginTop: spacing.xs,
-  },
-  foundationWarmupEditBox: {
-    backgroundColor: colors.white,
-    borderColor: colors.secondary,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
   },
   foundationWarmupEditLabel: {
     color: colors.secondaryDark,
