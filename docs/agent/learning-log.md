@@ -1,5 +1,96 @@
 # Agent Learning Log
+## 2026-07-08: Home Resume Payoff Is Specific
 
+Made one focused Home practice-flow improvement: when a saved roleplay draft exists, the start-card payoff preview now switches from generic after-save copy to draft-specific coach, today and path guidance.
+
+Why it changed:
+
+- Home already made the saved draft the primary CTA, but the preview rows underneath still sounded like a normal next-lesson state.
+- That made resume mode less concrete than the matching Practice resume flow, especially for returning users who need one obvious next action.
+- The smallest useful fix was to keep the same Home card and only make its preview state specific when a draft exists.
+
+What changed:
+
+- Updated `src/utils/homeStartPreview.ts` so saved drafts use a dedicated `Saved draft` preview state.
+- Added resume-specific rows for the coach cue, today-after-save progress and next path unlock.
+- Updated `src/screens/HomeScreen.tsx` to pass the existing resume cue into the Home payoff preview.
+- Refreshed focused coverage in `tests/practiceContent.test.mjs`.
+
+What went well:
+
+- Home now matches the app-led resume behavior already used in Practice instead of falling back to generic payoff text.
+- The change stayed inside Home helper/copy logic and did not touch storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the saved-draft preview rows should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a screen is in resume mode, every supporting cue under the primary CTA should also read like resume mode.
+- Reuse the existing draft coach cue instead of inventing parallel Home-only resume messaging.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Add a small post-save unlock accent on Home so the next path step feels visibly activated after a saved answer.
+
+## 2026-07-07: Home Resume Draft Strip Is Clearer
+
+Made one focused Home polish: when a roleplay draft exists, the primary start card now shows a compact saved-draft strip with the draft status and answer preview.
+
+Why it changed:
+
+- The latest Roleplay starter-kit work made first drafts more useful, but Home still showed the resume cue like ordinary meta copy.
+- A saved draft should be visibly one tap away without adding another standalone card or competing CTA.
+- The smallest useful fix was to make the existing primary Home start card clearer in resume mode only.
+
+What changed:
+
+- Updated `src/screens/HomeScreen.tsx` so resume mode passes a saved-draft cue into the animated start card.
+- Replaced the generic habit pill with a white saved-draft strip when a draft exists.
+- The strip shows `Saved draft`, word count, the resume cue and a short answer preview.
+
+What went well:
+
+- Home keeps one obvious primary action while making unfinished work harder to miss.
+- The change stayed inside the Home start-card presentation and did not touch storage, navigation, auth, payments, APIs or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the saved-draft strip should be checked at 390px width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Resume cues work best when they sit inside the single primary action instead of becoming a second card.
+- Saved draft previews should be short, concrete and visibly tied to finishing the active lesson.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the Home resume state and confirm the saved-draft preview does not crowd the level rail.
 ## 2026-07-07: Mistake Bank Queue Has A Preview
 
 Made one focused Progress/Wins polish: the collapsed Mistake Bank queue now previews the next saved correction instead of only showing a generic saved-for-later count.

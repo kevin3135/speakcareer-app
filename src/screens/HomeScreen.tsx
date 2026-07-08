@@ -134,6 +134,7 @@ export function HomeScreen({
     hasResumeDraft: Boolean(resumeRoleplay),
     isMissionComplete,
     nextUnlockTitle: nextUnlock?.title ?? null,
+    resumeDraftCoachText: resumeCue?.body,
     targetSessionsCompleted: localProgress.targetSessionsCompleted,
   });
   const runway = createHomeRunway({

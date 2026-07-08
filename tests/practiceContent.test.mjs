@@ -2823,6 +2823,7 @@ test('creates a clear Home start payoff preview', async () => {
     hasResumeDraft: false,
     isMissionComplete: false,
     nextUnlockTitle: 'Job Interview',
+    resumeDraftCoachText: null,
     targetSessionsCompleted: 0,
   });
 
@@ -2842,6 +2843,7 @@ test('creates a clear Home start payoff preview', async () => {
     hasResumeDraft: false,
     isMissionComplete: false,
     nextUnlockTitle: 'Meeting Practice',
+    resumeDraftCoachText: null,
     targetSessionsCompleted: 0,
   });
 
@@ -2861,15 +2863,16 @@ test('creates a clear Home start payoff preview', async () => {
     hasResumeDraft: true,
     isMissionComplete: false,
     nextUnlockTitle: 'Meeting Practice',
+    resumeDraftCoachText: 'Ready to check. Save XP next.',
     targetSessionsCompleted: 1,
   });
 
-  assert.equal(resumePreview.eyebrow, 'After save');
+  assert.equal(resumePreview.eyebrow, 'Saved draft');
   assert.equal(resumePreview.title, 'Meeting Practice unlocks');
   assert.deepEqual(resumePreview.rows, [
-    { label: 'Today', value: '2/3 today after save' },
+    { label: 'Coach', value: 'Ready to check. Save XP next.' },
+    { label: 'Today', value: '2/3 after save' },
     { label: 'Path', value: 'Meeting Practice unlocks' },
-    { label: 'Reward', value: '1 more later' },
   ]);
 
   const bonusPreview = createHomeStartPreview({
@@ -2880,6 +2883,7 @@ test('creates a clear Home start payoff preview', async () => {
     hasResumeDraft: false,
     isMissionComplete: true,
     nextUnlockTitle: 'Workplace Small Talk',
+    resumeDraftCoachText: null,
     targetSessionsCompleted: 1,
   });
 
@@ -2903,6 +2907,7 @@ test('creates a clear Home start payoff preview', async () => {
     hasResumeDraft: false,
     isMissionComplete: false,
     nextUnlockTitle: 'Presentation Practice',
+    resumeDraftCoachText: null,
     targetSessionsCompleted: 1,
   });
 
