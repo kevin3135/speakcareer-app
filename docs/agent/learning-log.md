@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-08: Onboarding Pace Details Stay Calm
+
+Made one focused onboarding polish: the expanded first-week details no longer repeat the daily pace selector now that the same `1/day`, `2/day` and `3/day` chips are visible in the main `Daily rhythm` preview.
+
+Why it changed:
+
+- The visible pace picker made commitment changes one tap, but the expanded details still showed the same selector again.
+- Duplicate controls can make onboarding feel more like settings than an app-led first path.
+- The smallest useful fix was to keep one pace selector in the visible preview and let the expanded details explain the choice.
+
+What changed:
+
+- Updated `src/screens/OnboardingScreen.tsx` to remove the duplicate segmented pace control from the expanded daily rhythm details.
+- Kept the coach pick, selected pace summary, first-week stats and preview explanation in the details section.
+
+What went well:
+
+- Onboarding now has one obvious place to change daily pace while the details area stays calmer.
+- The change stayed inside one screen and did not touch storage, navigation, backend, auth, APIs, payments or dependencies.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the onboarding details state should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When moving a control above the fold, remove the older duplicate control if it becomes redundant.
+- Details sections should explain the plan, not reintroduce the same decision.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the onboarding details-open state and confirm the coach pick, selected pace summary and first-week stats fit cleanly.
+
 ## 2026-07-08: Onboarding Pace Picker Is Immediate
 
 Made one focused onboarding UX polish: the visible `Daily rhythm` preview now includes the `1/day`, `2/day` and `3/day` pace chips directly, so the learner can change the commitment without opening full first-week details.

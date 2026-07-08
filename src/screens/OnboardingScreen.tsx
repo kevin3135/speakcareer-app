@@ -335,41 +335,6 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                     </View>
                   </View>
                 ) : null}
-                <View style={styles.segmentedControl}>
-                  {dailyTargetOptions.map((target) => {
-                    const isActive = target === selectedDailyTarget;
-                    const isRecommended = target === dailyTargetGuide?.recommendedTarget;
-                    const showRecommendedMarker = isActive && isRecommended;
-
-                    return (
-                      <Pressable
-                        accessibilityHint="Sets how many short roleplays you want each day"
-                        accessibilityLabel={`Set onboarding daily target to ${target} ${target === 1 ? 'roleplay' : 'roleplays'}`}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: isActive }}
-                        key={target}
-                        onPress={() => {
-                          setSelectedDailyTarget(target);
-                          setHasManualDailyTargetSelection(true);
-                        }}
-                        style={({ pressed }) => [
-                          styles.segment,
-                          isActive && styles.segmentActive,
-                          pressed && styles.segmentPressed,
-                        ]}
-                      >
-                        <View style={styles.segmentContent}>
-                          <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
-                            {target}/day
-                          </Text>
-                          {showRecommendedMarker ? (
-                            <Text style={styles.segmentMarker}>Best pick</Text>
-                          ) : null}
-                        </View>
-                      </Pressable>
-                    );
-                  })}
-                </View>
                 {dailyTargetGuide ? (
                   <View style={styles.targetSelectionBox}>
                     <View style={styles.targetSelectionHeader}>
