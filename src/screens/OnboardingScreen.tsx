@@ -186,6 +186,31 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
             {planPreview.coachNote}
           </Text>
 
+          {dailyTargetGuide ? (
+            <View style={styles.planHabitPreview}>
+              <View style={styles.planHabitPreviewHeader}>
+                <Text style={styles.planHabitPreviewLabel}>Daily rhythm</Text>
+                <Badge label={dailyTargetGuide.selectedTargetLabel} tone="accent" />
+              </View>
+              <Text style={styles.planHabitPreviewTitle}>{dailyTargetGuide.habitTitle}</Text>
+              <Text style={styles.planHabitPreviewBody}>{dailyTargetGuide.habitBody}</Text>
+              <View style={styles.planHabitPreviewSelection}>
+                <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
+                <Text numberOfLines={1} style={styles.planHabitPreviewSelectionText}>
+                  {dailyTargetGuide.selectionBody}
+                </Text>
+              </View>
+              <View style={styles.planHabitPreviewStats}>
+                {dailyTargetGuide.previewStats.map((stat) => (
+                  <View key={stat.label} style={styles.planHabitPreviewStat}>
+                    <Text style={styles.planHabitPreviewStatLabel}>{stat.label}</Text>
+                    <Text style={styles.planHabitPreviewStatValue}>{stat.value}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          ) : null}
+
           {planSummary ? (
             <View style={styles.planSummaryBox}>
               <View style={styles.planSummaryHeader}>
@@ -538,6 +563,87 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: typography.lineSmall,
     marginTop: spacing.md,
+  },
+  planHabitPreview: {
+    backgroundColor: colors.white,
+    borderColor: colors.primaryGlow,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+  },
+  planHabitPreviewBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  planHabitPreviewHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  planHabitPreviewLabel: {
+    color: colors.primaryDark,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    marginRight: spacing.sm,
+  },
+  planHabitPreviewSelection: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+  },
+  planHabitPreviewSelectionText: {
+    color: colors.textMuted,
+    flex: 1,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    minWidth: 0,
+  },
+  planHabitPreviewStat: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flex: 1,
+    minWidth: 0,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  planHabitPreviewStatLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  planHabitPreviewStats: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  planHabitPreviewStatValue: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  planHabitPreviewTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.body,
+    fontWeight: '900',
+    lineHeight: typography.lineBody,
+    marginTop: spacing.sm,
   },
   planDetailsToggle: {
     backgroundColor: colors.surface,

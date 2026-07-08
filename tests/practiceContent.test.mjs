@@ -886,9 +886,15 @@ test('recommends a starting daily target based on onboarding level', async () =>
   const starterGuide = createOnboardingDailyTargetGuide('starter', 1);
   assert.equal(starterGuide.recommendedTarget, 1);
   assert.equal(starterGuide.recommendationLabel, '1/day');
+  assert.equal(starterGuide.selectedTargetLabel, '1/day');
   assert.equal(starterGuide.selectionLabel, 'Best fit');
   assert.equal(starterGuide.selectionTone, 'success');
   assert.ok(starterGuide.recommendationBody.includes('habit'));
+  assert.equal(starterGuide.habitTitle, 'One save closes Day 1');
+  assert.equal(
+    starterGuide.habitBody,
+    "First save starts your streak and completes today's target.",
+  );
   assert.deepEqual(starterGuide.previewStats, [
     { label: 'First week', value: '7 reps' },
     { label: 'Daily time', value: '5 min' },
@@ -907,6 +913,12 @@ test('recommends a starting daily target based on onboarding level', async () =>
   assert.equal(fasterGuide.selectionLabel, 'Faster push');
   assert.equal(fasterGuide.selectionTone, 'accent');
   assert.ok(fasterGuide.selectionBody.includes('extra short reps'));
+  assert.equal(fasterGuide.selectedTargetLabel, '3/day');
+  assert.equal(fasterGuide.habitTitle, 'Start with one, finish with two more');
+  assert.equal(
+    fasterGuide.habitBody,
+    'First save starts your streak. Two more short reps close today.',
+  );
   assert.deepEqual(fasterGuide.previewStats, [
     { label: 'First week', value: '21 reps' },
     { label: 'Daily time', value: '15 min' },

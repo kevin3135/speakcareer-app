@@ -11,12 +11,15 @@ type DailyTargetPreviewStat = {
 };
 
 export type OnboardingDailyTargetGuide = {
+  habitBody: string;
+  habitTitle: string;
   previewBody: string;
   previewStats: [DailyTargetPreviewStat, DailyTargetPreviewStat];
   recommendationBody: string;
   recommendationLabel: string;
   recommendationTitle: string;
   recommendedTarget: DailyPracticeTarget;
+  selectedTargetLabel: string;
   selectionBody: string;
   selectionLabel: string;
   selectionTone: 'accent' | 'info' | 'success';
@@ -42,18 +45,23 @@ export function createOnboardingDailyTargetGuide(
   selectedTarget: DailyPracticeTarget,
 ): OnboardingDailyTargetGuide {
   const config = DAILY_TARGET_GUIDE_CONFIG[startingLevelId];
+  const habitPreview = createHabitPreview(selectedTarget);
   const previewStats = createPreviewStats(selectedTarget);
   const recommendationLabel = `${config.recommendedTarget}/day`;
   const recommendationTitle = `Start with ${recommendationLabel}`;
+  const selectedTargetLabel = `${selectedTarget}/day`;
 
   if (selectedTarget === config.recommendedTarget) {
     return {
+      habitBody: habitPreview.body,
+      habitTitle: habitPreview.title,
       previewBody: createPreviewBody(selectedTarget),
       previewStats,
       recommendationBody: config.recommendationBody,
       recommendationLabel,
       recommendationTitle,
       recommendedTarget: config.recommendedTarget,
+      selectedTargetLabel,
       selectionBody: 'Best fit for your level.',
       selectionLabel: 'Best fit',
       selectionTone: 'success',
@@ -62,12 +70,15 @@ export function createOnboardingDailyTargetGuide(
 
   if (selectedTarget < config.recommendedTarget) {
     return {
+      habitBody: habitPreview.body,
+      habitTitle: habitPreview.title,
       previewBody: createPreviewBody(selectedTarget),
       previewStats,
       recommendationBody: config.recommendationBody,
       recommendationLabel,
       recommendationTitle,
       recommendedTarget: config.recommendedTarget,
+      selectedTargetLabel,
       selectionBody: 'Lighter pace: consistency first.',
       selectionLabel: 'Lighter start',
       selectionTone: 'info',
@@ -75,12 +86,15 @@ export function createOnboardingDailyTargetGuide(
   }
 
   return {
+    habitBody: habitPreview.body,
+    habitTitle: habitPreview.title,
     previewBody: createPreviewBody(selectedTarget),
     previewStats,
     recommendationBody: config.recommendationBody,
     recommendationLabel,
     recommendationTitle,
     recommendedTarget: config.recommendedTarget,
+    selectedTargetLabel,
     selectionBody: 'Faster push: extra short reps today.',
     selectionLabel: 'Faster push',
     selectionTone: 'accent',
@@ -130,4 +144,25 @@ function createPreviewBody(dailyTarget: DailyPracticeTarget) {
   }
 
   return 'A stronger sprint for extra interview repetition this week.';
+}
+
+function createHabitPreview(dailyTarget: DailyPracticeTarget) {
+  if (dailyTarget === 1) {
+    return {
+      body: "First save starts your streak and completes today's target.",
+      title: 'One save closes Day 1',
+    };
+  }
+
+  if (dailyTarget === 2) {
+    return {
+      body: 'First save starts your streak. One more short rep closes today.',
+      title: 'Save once now, once later',
+    };
+  }
+
+  return {
+    body: 'First save starts your streak. Two more short reps close today.',
+    title: 'Start with one, finish with two more',
+  };
 }

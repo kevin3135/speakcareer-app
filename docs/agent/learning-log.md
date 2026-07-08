@@ -1,5 +1,52 @@
 # Agent Learning Log
 
+## 2026-07-08: Onboarding Daily Rhythm Preview Is Visible
+
+Made one focused onboarding improvement: the selected daily rhythm now appears in the main onboarding plan card before the user opens the deeper first-week details.
+
+Why it changed:
+
+- Onboarding already recommended a daily target, but the concrete day-one habit payoff lived behind the expanded plan details.
+- That made the selected pace feel less real before Continue, especially for first-time users deciding how much English practice to commit to.
+- The smallest useful fix was to surface one compact daily rhythm preview above the fold instead of changing the overall onboarding flow.
+
+What changed:
+
+- Updated `src/utils/onboardingDailyTargetGuide.ts` to add selected-target labels plus concrete day-one habit preview copy for `1/day`, `2/day` and `3/day`.
+- Updated `src/screens/OnboardingScreen.tsx` to render a visible `Daily rhythm` preview card with the selected pace, fit state and first-week stats before the full details toggle.
+- Added focused coverage in `tests/practiceContent.test.mjs` for the new onboarding habit preview fields.
+
+What went well:
+
+- Onboarding now makes the first streak/payoff easier to understand without adding another screen or step.
+- The change reused the existing daily-target helper and stats instead of creating a parallel onboarding-only model.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the new onboarding preview card should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+- Opening a draft PR is still blocked because `gh` is not installed in this environment.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If onboarding asks the user to commit to a daily pace, show the day-one habit payoff before hiding deeper controls.
+- Reuse the same helper data for above-fold summaries and expanded details so pace messaging stays consistent.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Let the visible onboarding daily rhythm preview open the pace selector directly, so changing `1/day`, `2/day` or `3/day` takes one tap instead of opening the full first-week details.
+
 ## 2026-07-08: Practice Sprint Shows Streak Stakes
 
 Made one focused Practice card polish: the daily sprint card now has a compact habit strip that shows the current streak state and what the next save does for the user's practice rhythm.
