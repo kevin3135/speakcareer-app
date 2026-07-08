@@ -26,7 +26,7 @@ What went wrong:
 
 - This run did not include fresh Expo/browser visual QA, so the new onboarding preview card should still be checked at phone width.
 - Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
-- Opening a draft PR is still blocked because `gh` is not installed in this environment.
+- Draft PR creation is still blocked because the GitHub app returned `403 Resource not accessible by integration`, and `gh` is not installed here for fallback.
 
 Rubric self-evaluation:
 
