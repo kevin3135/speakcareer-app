@@ -19,6 +19,7 @@ type CreateHomeStartPreviewInput = {
   hasResumeDraft: boolean;
   isMissionComplete: boolean;
   nextUnlockTitle: string | null;
+  resumeDraftCoachText?: string | null;
   targetSessionsCompleted: number;
 };
 
@@ -30,12 +31,14 @@ export function createHomeStartPreview({
   hasResumeDraft,
   isMissionComplete,
   nextUnlockTitle,
+  resumeDraftCoachText,
   targetSessionsCompleted,
 }: CreateHomeStartPreviewInput): HomeStartPreview {
   const safeDailyTarget = Math.max(1, dailyTarget);
   const nextSavedCount = Math.min(targetSessionsCompleted + 1, safeDailyTarget);
   const remainingAfterSave = Math.max(safeDailyTarget - nextSavedCount, 0);
   const afterSaveLabel = `${nextSavedCount}/${safeDailyTarget} today`;
+  const resumeAfterSaveLabel = `${nextSavedCount}/${safeDailyTarget}`;
   const currentProgressLabel = `${Math.min(targetSessionsCompleted, safeDailyTarget)}/${safeDailyTarget} saved`;
   const firstUnlockTitle = nextUnlockTitle ?? 'Job Interview';
 
@@ -78,6 +81,29 @@ export function createHomeStartPreview({
         },
       ],
       title: firstWinTomorrowPreview.title,
+    };
+  }
+
+  if (hasResumeDraft) {
+    return {
+      eyebrow: 'Saved draft',
+      rows: [
+        {
+          label: 'Coach',
+          value: resumeDraftCoachText ?? 'Finish the draft, then save XP.',
+        },
+        {
+          label: 'Today',
+          value: remainingAfterSave === 0
+            ? `${resumeAfterSaveLabel} complete`
+            : `${resumeAfterSaveLabel} after save`,
+        },
+        {
+          label: 'Path',
+          value: nextUnlockTitle ? `${nextUnlockTitle} unlocks` : `${currentTitle} stays ready`,
+        },
+      ],
+      title: nextUnlockTitle ? `${nextUnlockTitle} unlocks` : 'Finish this answer first',
     };
   }
 
