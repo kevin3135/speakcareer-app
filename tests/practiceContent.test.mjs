@@ -4634,6 +4634,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     recommendedRoleplayTitle: 'Job Interview',
     recommendedXpLabel: '+48 XP',
     sessions: [],
+    streakDays: 0,
   });
 
   assert.equal(firstSprint.eyebrow, "Today's sprint");
@@ -4642,6 +4643,9 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(firstSprint.statusLabel, 'Then Meeting Practice');
   assert.equal(firstSprint.statusTone, 'accent');
   assert.equal(firstSprint.afterSavePayoff, 'Target complete, Meeting Practice unlocks');
+  assert.equal(firstSprint.streakBadgeLabel, 'New streak');
+  assert.equal(firstSprint.streakLabel, 'Habit loop');
+  assert.equal(firstSprint.streakText, 'First save starts a 1 day streak.');
   assert.ok(firstSprint.body.includes('start your streak'));
 
   const almostDoneSprint = createPracticeDailySprint({
@@ -4652,6 +4656,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     recommendedRoleplayTitle: 'Presentation Practice',
     recommendedXpLabel: '+32 XP',
     sessions: [{ completedAt: '2026-06-26T09:00:00.000Z' }],
+    streakDays: 5,
   });
 
   assert.equal(almostDoneSprint.title, 'One more save finishes today');
@@ -4659,6 +4664,12 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(almostDoneSprint.statusLabel, 'Finish target');
   assert.equal(almostDoneSprint.statusTone, 'success');
   assert.equal(almostDoneSprint.afterSavePayoff, 'Target complete, Sales Call unlocks');
+  assert.equal(almostDoneSprint.streakBadgeLabel, '5 day streak');
+  assert.equal(almostDoneSprint.streakLabel, 'Finish with momentum');
+  assert.equal(
+    almostDoneSprint.streakText,
+    '5 day streak is active. Save again if you want another short rep today.',
+  );
   assert.ok(almostDoneSprint.body.includes('2/2 today'));
   assert.ok(almostDoneSprint.body.includes('Sales Call'));
 
@@ -4670,6 +4681,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     recommendedRoleplayTitle: 'Meeting Practice',
     recommendedXpLabel: '+28 XP',
     sessions: [{ completedAt: '2026-06-26T09:00:00.000Z' }],
+    streakDays: 4,
   });
 
   assert.equal(resumeSprint.eyebrow, 'Finish today');
@@ -4677,7 +4689,13 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(resumeSprint.statusLabel, '2/3 after save');
   assert.equal(resumeSprint.statusTone, 'accent');
   assert.equal(resumeSprint.afterSavePayoff, '2/3 saved today');
-  assert.ok(resumeSprint.body.includes('keep your streak alive'));
+  assert.equal(resumeSprint.streakBadgeLabel, '4 day streak');
+  assert.equal(resumeSprint.streakLabel, 'Habit active');
+  assert.equal(
+    resumeSprint.streakText,
+    '4 day streak is active. Save again if you want another short rep today.',
+  );
+  assert.ok(resumeSprint.body.includes('keep your 4 day streak active'));
 
   const bonusSprint = createPracticeDailySprint({
     dailyTarget: 1,
@@ -4690,6 +4708,7 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
       { completedAt: '2026-06-26T09:00:00.000Z' },
       { completedAt: '2026-06-26T11:00:00.000Z' },
     ],
+    streakDays: 6,
   });
 
   assert.equal(bonusSprint.eyebrow, 'Target complete');
@@ -4698,6 +4717,12 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
   assert.equal(bonusSprint.statusLabel, 'Bonus XP');
   assert.equal(bonusSprint.statusTone, 'success');
   assert.equal(bonusSprint.afterSavePayoff, 'Bonus XP, faster path to Workplace Small Talk');
+  assert.equal(bonusSprint.streakBadgeLabel, '6 day streak');
+  assert.equal(bonusSprint.streakLabel, 'Habit protected');
+  assert.equal(
+    bonusSprint.streakText,
+    '6 day streak is protected today. Bonus practice is optional.',
+  );
   assert.ok(bonusSprint.body.includes('extra XP'));
 
   const freshDaySprint = createPracticeDailySprint({
@@ -4708,10 +4733,18 @@ test('creates a focused daily sprint cue for the Practice screen', async () => {
     recommendedRoleplayTitle: 'Job Interview',
     recommendedXpLabel: '+48 XP',
     sessions: [{ completedAt: '2026-06-26T09:00:00.000Z' }],
+    streakDays: 3,
   });
 
   assert.equal(freshDaySprint.title, "Start today's practice");
   assert.equal(freshDaySprint.progressLabel, '0/1 saved today');
+  assert.equal(freshDaySprint.streakBadgeLabel, '3 day streak');
+  assert.equal(freshDaySprint.streakLabel, 'Streak on the line');
+  assert.equal(
+    freshDaySprint.streakText,
+    'Save once today to keep 3 day streak active.',
+  );
+  assert.ok(freshDaySprint.body.includes('keep your 3 day streak active'));
 });
 
 test('preserves the correct return screen for roleplay navigation', async () => {

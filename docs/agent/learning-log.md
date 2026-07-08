@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-08: Practice Sprint Shows Streak Stakes
+
+Made one focused Practice card polish: the daily sprint card now has a compact habit strip that shows the current streak state and what the next save does for the user's practice rhythm.
+
+Why it changed:
+
+- Practice already recommended one roleplay first, but the sprint card leaned on path/progress copy and did not make the streak consequence easy to scan.
+- Streak motivation should feel useful and professional, not noisy or childish.
+- The smallest useful fix was to add one streak-aware strip inside the existing daily sprint card.
+
+What changed:
+
+- Updated `src/utils/practiceDailySprint.ts` to calculate streak badge, label and helper text for first save, active streak, resume mode, fresh-day and bonus states.
+- Updated `src/screens/PracticeScreen.tsx` to render the streak/habit strip with existing `StreakBadge`, success tokens and wrap-safe mobile layout.
+- Refreshed focused coverage in `tests/practiceContent.test.mjs` for the new streak-aware sprint states.
+
+What went well:
+
+- Practice now makes the daily habit loop more visible without adding a second CTA or opening the library.
+- The visual change stayed inside the Practice daily sprint card and reused existing theme tokens/components.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the streak strip should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 4
+- Feedback quality: 5
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- Streak copy should explain the learner's next save, not just display a number.
+- If a badge sits beside explanatory text, allow wrapping and `minWidth: 0` so phone layouts do not squeeze the message.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the Practice daily sprint card and confirm the habit strip, after-save payoff and reward row still scan cleanly before the recommended roleplay card.
+
 ## 2026-07-08: Home Unlock Preview Feels Active
 
 Made one focused Home payoff polish: when today's target is already complete, the start-card preview now reads like the next career step is active instead of framing the next tap as only bonus practice.

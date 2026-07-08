@@ -10,6 +10,7 @@ import {
   RoleplayCard,
   ScreenContainer,
   SectionHeader,
+  StreakBadge,
   XPBadge,
 } from '../components/ui';
 import { practiceContent, progressData } from '../data/content';
@@ -56,6 +57,7 @@ export function PracticeScreen({
     recommendedRoleplayTitle: libraryState.recommendedCard.title,
     recommendedXpLabel: libraryState.recommendedCard.xp,
     sessions,
+    streakDays: mission.streakDays,
   });
   const levelPayoff = createPracticeLevelPayoff({
     currentTotalXp: mission.xpTotal,
@@ -109,6 +111,13 @@ export function PracticeScreen({
           <Badge label={dailySprint.statusLabel} tone={dailySprint.statusTone} />
         </View>
         <Text style={styles.dailySprintBody}>{dailySprint.body}</Text>
+        <View style={styles.dailySprintHabitStrip}>
+          <View style={styles.flexOne}>
+            <Text style={styles.dailySprintHabitLabel}>{dailySprint.streakLabel}</Text>
+            <Text style={styles.dailySprintHabitText}>{dailySprint.streakText}</Text>
+          </View>
+          <StreakBadge label={dailySprint.streakBadgeLabel} />
+        </View>
         <View style={styles.dailySprintPayoff}>
           <Text style={styles.dailySprintPayoffLabel}>After save</Text>
           <Text numberOfLines={1} style={styles.dailySprintPayoffText}>
@@ -299,6 +308,33 @@ const styles = StyleSheet.create({
     lineHeight: typography.lineBody,
     marginTop: spacing.md,
   },
+  dailySprintHabitLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  dailySprintHabitStrip: {
+    alignItems: 'center',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.success,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  dailySprintHabitText: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xxs,
+  },
   dailySprintKicker: {
     color: colors.primary,
     fontFamily: fonts.rounded,
@@ -353,6 +389,7 @@ const styles = StyleSheet.create({
   },
   flexOne: {
     flex: 1,
+    minWidth: 0,
   },
   heroProgressCard: {
     backgroundColor: colors.scrim,
