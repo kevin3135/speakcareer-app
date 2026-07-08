@@ -2887,12 +2887,12 @@ test('creates a clear Home start payoff preview', async () => {
     targetSessionsCompleted: 1,
   });
 
-  assert.equal(bonusPreview.eyebrow, 'Bonus after this');
-  assert.equal(bonusPreview.title, 'Workplace Small Talk stays ready');
+  assert.equal(bonusPreview.eyebrow, 'Unlocked now');
+  assert.equal(bonusPreview.title, 'Start Workplace Small Talk');
   assert.deepEqual(bonusPreview.rows, [
     { label: 'Today', value: '1/1 complete' },
-    { label: 'Path', value: 'Workplace Small Talk stays ready' },
-    { label: 'Reward', value: 'Bonus XP only' },
+    { label: 'Path', value: 'Workplace Small Talk is active' },
+    { label: 'Reward', value: 'Bonus XP can stack' },
   ]);
 
   const firstWinTomorrowPreview = createHomeStartPreview({

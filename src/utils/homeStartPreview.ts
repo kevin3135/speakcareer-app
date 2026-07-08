@@ -109,7 +109,7 @@ export function createHomeStartPreview({
 
   if (isMissionComplete) {
     return {
-      eyebrow: 'Bonus after this',
+      eyebrow: 'Unlocked now',
       rows: [
         {
           label: 'Today',
@@ -117,14 +117,14 @@ export function createHomeStartPreview({
         },
         {
           label: 'Path',
-          value: nextUnlockTitle ? `${nextUnlockTitle} stays ready` : `${currentTitle} stays warm`,
+          value: nextUnlockTitle ? `${nextUnlockTitle} is active` : `${currentTitle} is ready`,
         },
         {
           label: 'Reward',
-          value: 'Bonus XP only',
+          value: 'Bonus XP can stack',
         },
       ],
-      title: nextUnlockTitle ? `${nextUnlockTitle} stays ready` : 'Bonus XP banked',
+      title: nextUnlockTitle ? `Start ${nextUnlockTitle}` : 'Bonus XP is ready',
     };
   }
 

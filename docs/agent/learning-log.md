@@ -1,4 +1,50 @@
 # Agent Learning Log
+
+## 2026-07-08: Home Unlock Preview Feels Active
+
+Made one focused Home payoff polish: when today's target is already complete, the start-card preview now reads like the next career step is active instead of framing the next tap as only bonus practice.
+
+Why it changed:
+
+- The Home start card already uses `Unlocked now` once a practice save exists, but the supporting preview still said `Bonus after this`.
+- That made the next path step feel less activated than the main CTA suggested.
+- The smallest useful fix was copy-only inside the existing Home payoff helper.
+
+What changed:
+
+- Updated `src/utils/homeStartPreview.ts` so mission-complete preview copy uses `Unlocked now`, `Start [next step]`, active path language and stackable bonus XP.
+- Updated `tests/practiceContent.test.mjs` to cover the clearer mission-complete preview state.
+
+What went well:
+
+- Home now has a stronger post-save unlock accent without new layout, storage, navigation, backend, API, auth, payment or dependency changes.
+- The change stayed in one helper and one focused test.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the mission-complete Home state should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 5
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If the primary Home card says a step is unlocked, the supporting preview should use the same active language.
+- Copy-only helper changes are useful when the visual hierarchy is already doing most of the work.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the Home mission-complete state and confirm `Start Workplace Small Talk` plus the preview rows fit cleanly without crowding the level rail.
+
 ## 2026-07-08: Home Resume Payoff Is Specific
 
 Made one focused Home practice-flow improvement: when a saved roleplay draft exists, the start-card payoff preview now switches from generic after-save copy to draft-specific coach, today and path guidance.
