@@ -200,6 +200,44 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
                   {dailyTargetGuide.selectionBody}
                 </Text>
               </View>
+              <View style={styles.planHabitPreviewPace}>
+                <Text style={styles.planHabitPreviewPaceLabel}>Pick your pace</Text>
+                <View style={styles.segmentedControl}>
+                  {dailyTargetOptions.map((target) => {
+                    const isActive = target === selectedDailyTarget;
+                    const isRecommended = target === dailyTargetGuide.recommendedTarget;
+                    const showRecommendedMarker = isActive && isRecommended;
+
+                    return (
+                      <Pressable
+                        accessibilityHint="Sets how many short roleplays you want each day"
+                        accessibilityLabel={`Set onboarding daily target to ${target} ${target === 1 ? 'roleplay' : 'roleplays'}`}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: isActive }}
+                        key={target}
+                        onPress={() => {
+                          setSelectedDailyTarget(target);
+                          setHasManualDailyTargetSelection(true);
+                        }}
+                        style={({ pressed }) => [
+                          styles.segment,
+                          isActive && styles.segmentActive,
+                          pressed && styles.segmentPressed,
+                        ]}
+                      >
+                        <View style={styles.segmentContent}>
+                          <Text style={[styles.segmentValue, isActive && styles.segmentValueActive]}>
+                            {target}/day
+                          </Text>
+                          {showRecommendedMarker ? (
+                            <Text style={styles.segmentMarker}>Best pick</Text>
+                          ) : null}
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
               <View style={styles.planHabitPreviewStats}>
                 {dailyTargetGuide.previewStats.map((stat) => (
                   <View key={stat.label} style={styles.planHabitPreviewStat}>
@@ -592,6 +630,15 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     marginRight: spacing.sm,
+  },
+  planHabitPreviewPace: {
+    marginTop: spacing.sm,
+  },
+  planHabitPreviewPaceLabel: {
+    color: colors.primaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
   },
   planHabitPreviewSelection: {
     alignItems: 'center',

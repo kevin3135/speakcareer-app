@@ -1,5 +1,50 @@
 # Agent Learning Log
 
+## 2026-07-08: Onboarding Pace Picker Is Immediate
+
+Made one focused onboarding UX polish: the visible `Daily rhythm` preview now includes the `1/day`, `2/day` and `3/day` pace chips directly, so the learner can change the commitment without opening full first-week details.
+
+Why it changed:
+
+- The previous onboarding polish made the daily rhythm visible above the fold, but changing that rhythm still lived inside the expanded details section.
+- Daily pace is a commitment decision, so it should be easy to adjust at the moment the preview explains the habit payoff.
+- The smallest useful fix was to reuse the existing segmented pace control inside the visible preview card.
+
+What changed:
+
+- Updated `src/screens/OnboardingScreen.tsx` so the selected plan's daily rhythm preview now renders direct pace chips.
+- Reused the existing daily target state, accessibility labels, recommended `Best pick` marker and segmented-control styling.
+
+What went well:
+
+- Onboarding now lets users adjust pace in one tap without adding another screen, dependency, storage path, auth, API or backend logic.
+- The change stayed in one screen and reused existing theme tokens/components.
+- `npm.cmd run typecheck`, `npm.cmd run lint` and `npm.cmd run test` all passed.
+
+What went wrong:
+
+- This run did not include fresh Expo/browser visual QA, so the visible pace chips should still be checked at phone width.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- If a preview explains a commitment, the control for that commitment should live beside the preview rather than behind details.
+- Reusing the same segmented control keeps onboarding and deeper plan details consistent.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the onboarding plan card and confirm the daily rhythm chips, preview stats and full-details toggle fit cleanly before the Continue button.
+
 ## 2026-07-08: Onboarding Daily Rhythm Preview Is Visible
 
 Made one focused onboarding improvement: the selected daily rhythm now appears in the main onboarding plan card before the user opens the deeper first-week details.
