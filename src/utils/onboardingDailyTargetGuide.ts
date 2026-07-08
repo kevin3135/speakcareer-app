@@ -13,6 +13,9 @@ type DailyTargetPreviewStat = {
 export type OnboardingDailyTargetGuide = {
   habitBody: string;
   habitTitle: string;
+  nextActionBody: string;
+  nextActionLabel: string;
+  nextActionTitle: string;
   previewBody: string;
   previewStats: [DailyTargetPreviewStat, DailyTargetPreviewStat];
   recommendationBody: string;
@@ -46,6 +49,7 @@ export function createOnboardingDailyTargetGuide(
 ): OnboardingDailyTargetGuide {
   const config = DAILY_TARGET_GUIDE_CONFIG[startingLevelId];
   const habitPreview = createHabitPreview(selectedTarget);
+  const nextAction = createNextAction(selectedTarget);
   const previewStats = createPreviewStats(selectedTarget);
   const recommendationLabel = `${config.recommendedTarget}/day`;
   const recommendationTitle = `Start with ${recommendationLabel}`;
@@ -55,6 +59,9 @@ export function createOnboardingDailyTargetGuide(
     return {
       habitBody: habitPreview.body,
       habitTitle: habitPreview.title,
+      nextActionBody: nextAction.body,
+      nextActionLabel: nextAction.label,
+      nextActionTitle: nextAction.title,
       previewBody: createPreviewBody(selectedTarget),
       previewStats,
       recommendationBody: config.recommendationBody,
@@ -72,6 +79,9 @@ export function createOnboardingDailyTargetGuide(
     return {
       habitBody: habitPreview.body,
       habitTitle: habitPreview.title,
+      nextActionBody: nextAction.body,
+      nextActionLabel: nextAction.label,
+      nextActionTitle: nextAction.title,
       previewBody: createPreviewBody(selectedTarget),
       previewStats,
       recommendationBody: config.recommendationBody,
@@ -88,6 +98,9 @@ export function createOnboardingDailyTargetGuide(
   return {
     habitBody: habitPreview.body,
     habitTitle: habitPreview.title,
+    nextActionBody: nextAction.body,
+    nextActionLabel: nextAction.label,
+    nextActionTitle: nextAction.title,
     previewBody: createPreviewBody(selectedTarget),
     previewStats,
     recommendationBody: config.recommendationBody,
@@ -164,5 +177,29 @@ function createHabitPreview(dailyTarget: DailyPracticeTarget) {
   return {
     body: 'First save starts your streak. Two more short reps close today.',
     title: 'Start with one, finish with two more',
+  };
+}
+
+function createNextAction(dailyTarget: DailyPracticeTarget) {
+  if (dailyTarget === 1) {
+    return {
+      body: 'Continue opens Lesson 1, then one Job Interview save closes today.',
+      label: 'Start next',
+      title: 'One focused answer',
+    };
+  }
+
+  if (dailyTarget === 2) {
+    return {
+      body: 'Continue opens Lesson 1, then save Job Interview and one short follow-up.',
+      label: 'Start next',
+      title: 'First save, then one more',
+    };
+  }
+
+  return {
+    body: 'Continue opens Lesson 1, then save Job Interview and two short reps.',
+    label: 'Start next',
+    title: 'One strong start, two extra reps',
   };
 }

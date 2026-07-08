@@ -194,6 +194,21 @@ export function OnboardingScreen({ dailyTarget, onContinue }: OnboardingScreenPr
               </View>
               <Text style={styles.planHabitPreviewTitle}>{dailyTargetGuide.habitTitle}</Text>
               <Text style={styles.planHabitPreviewBody}>{dailyTargetGuide.habitBody}</Text>
+              <View style={styles.planHabitNextAction}>
+                <View style={styles.planHabitNextActionBadge}>
+                  <Text style={styles.planHabitNextActionBadgeText}>
+                    {dailyTargetGuide.nextActionLabel}
+                  </Text>
+                </View>
+                <View style={styles.planHabitNextActionCopy}>
+                  <Text style={styles.planHabitNextActionTitle}>
+                    {dailyTargetGuide.nextActionTitle}
+                  </Text>
+                  <Text style={styles.planHabitNextActionBody}>
+                    {dailyTargetGuide.nextActionBody}
+                  </Text>
+                </View>
+              </View>
               <View style={styles.planHabitPreviewSelection}>
                 <Badge label={dailyTargetGuide.selectionLabel} tone={dailyTargetGuide.selectionTone} />
                 <Text numberOfLines={1} style={styles.planHabitPreviewSelectionText}>
@@ -595,6 +610,50 @@ const styles = StyleSheet.create({
     fontSize: typography.small,
     fontWeight: '900',
     marginRight: spacing.sm,
+  },
+  planHabitNextAction: {
+    alignItems: 'flex-start',
+    backgroundColor: colors.successSoft,
+    borderColor: colors.secondarySoft,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+  },
+  planHabitNextActionBadge: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondarySoft,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  planHabitNextActionBadgeText: {
+    color: colors.secondaryDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  planHabitNextActionBody: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
+    marginTop: spacing.xs,
+  },
+  planHabitNextActionCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  planHabitNextActionTitle: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
   },
   planHabitPreviewPace: {
     marginTop: spacing.sm,

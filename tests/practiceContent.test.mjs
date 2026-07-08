@@ -895,6 +895,9 @@ test('recommends a starting daily target based on onboarding level', async () =>
     starterGuide.habitBody,
     "First save starts your streak and completes today's target.",
   );
+  assert.equal(starterGuide.nextActionLabel, 'Start next');
+  assert.equal(starterGuide.nextActionTitle, 'One focused answer');
+  assert.ok(starterGuide.nextActionBody.includes('one Job Interview save'));
   assert.deepEqual(starterGuide.previewStats, [
     { label: 'First week', value: '7 reps' },
     { label: 'Daily time', value: '5 min' },
@@ -919,6 +922,8 @@ test('recommends a starting daily target based on onboarding level', async () =>
     fasterGuide.habitBody,
     'First save starts your streak. Two more short reps close today.',
   );
+  assert.equal(fasterGuide.nextActionTitle, 'One strong start, two extra reps');
+  assert.ok(fasterGuide.nextActionBody.includes('two short reps'));
   assert.deepEqual(fasterGuide.previewStats, [
     { label: 'First week', value: '21 reps' },
     { label: 'Daily time', value: '15 min' },

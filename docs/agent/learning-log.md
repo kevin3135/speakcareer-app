@@ -1,5 +1,51 @@
 # Agent Learning Log
 
+## 2026-07-08: Onboarding Daily Rhythm Shows First Action
+
+Made one focused onboarding improvement: the visible `Daily rhythm` card now includes a compact `Start next` cue that explains the exact first action after Continue for the selected daily pace.
+
+Why it changed:
+
+- Recent onboarding work made the pace picker visible, but the card still relied on deeper plan copy to connect the pace to the first action.
+- The user should understand that Continue starts Lesson 1 and then the first Job Interview save begins the habit loop.
+- The smallest useful fix was to add one pace-aware next-action row inside the existing Daily rhythm preview.
+
+What changed:
+
+- Updated `src/utils/onboardingDailyTargetGuide.ts` to return pace-specific next-action label, title and body copy for `1/day`, `2/day` and `3/day`.
+- Updated `src/screens/OnboardingScreen.tsx` to render the new `Start next` row inside the visible Daily rhythm card.
+- Updated `tests/practiceContent.test.mjs` to cover the new next-action copy.
+
+What went well:
+
+- The onboarding card now connects commitment, streak payoff and first action without adding another screen or storage path.
+- The change stayed in one helper, one screen and one focused test.
+- `npm.cmd run typecheck`, `npm.cmd run test` and `npm.cmd run lint` all passed.
+
+What went wrong:
+
+- Expo web started on `http://localhost:8093`, but the in-app browser smoke check timed out while attaching to the local webview, so fresh visual QA is still blocked.
+- Tests still show the existing Node module-type warning for `guidedIntro.ts`, but all 102 tests pass.
+
+Rubric self-evaluation:
+
+- Career usefulness: 4
+- MVP focus: 5
+- Professional tone: 5
+- Simplicity: 5
+- Feedback quality: 4
+- Safety and privacy: 5
+
+Agent memory for next time:
+
+- When onboarding asks for a daily pace, pair the pace with the next concrete action after Continue.
+- Keep habit motivation professional by explaining the first save and remaining reps, not by adding noisy rewards.
+- Kevin's Expo Go compatibility remains unchanged in this run.
+
+Next suggested task:
+
+- Run phone-width QA on the onboarding Daily rhythm card once the browser attach issue is clear, especially the new `Start next` row and pace chips.
+
 ## 2026-07-08: Onboarding Pace Details Stay Calm
 
 Made one focused onboarding polish: the expanded first-week details no longer repeat the daily pace selector now that the same `1/day`, `2/day` and `3/day` chips are visible in the main `Daily rhythm` preview.
