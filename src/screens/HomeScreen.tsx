@@ -114,6 +114,13 @@ export function HomeScreen({
   const startCardXpLabel = resumeRoleplay
     ? `+${resumeRoleplay.durationMinutes * 4} XP`
     : activeLesson.xpLabel;
+  const startCardResumeCue = resumeRoleplay && resumeCue && draft
+    ? {
+        answerPreview: draft.draftAnswer,
+        badgeLabel: resumeCue.badgeLabel,
+        body: resumeCue.body,
+      }
+    : null;
   const firstWinTomorrowCue = sessions.length === 1 && !resumeRoleplay
     ? createFirstWinReturnCue({
       ctaLabel: `Start ${startCardTitle}`,
@@ -167,6 +174,7 @@ export function HomeScreen({
           pathLabel={startCardPathLabel}
           preview={startPreview}
           restartCue={missionCard.restartCue}
+          resumeCue={startCardResumeCue}
           title={startCardTitle}
           xpLabel={startCardXpLabel}
         />
@@ -259,6 +267,7 @@ function AnimatedStartCard({
   pathLabel,
   preview,
   restartCue,
+  resumeCue,
   title,
   xpLabel,
 }: {
@@ -275,6 +284,11 @@ function AnimatedStartCard({
     label: string;
     value: string;
   };
+  resumeCue?: {
+    answerPreview: string;
+    badgeLabel: string;
+    body: string;
+  } | null;
   title: string;
   xpLabel: string;
 }) {
@@ -363,12 +377,25 @@ function AnimatedStartCard({
           </View>
         </View>
       </View>
-      <View style={styles.startHabitPill}>
-        <Text style={styles.startHabitLabel}>{habitLabel}</Text>
-        <Text numberOfLines={1} style={styles.startHabitValue}>
-          {habitValue}
-        </Text>
-      </View>
+      {resumeCue ? (
+        <View style={styles.startResumeStrip}>
+          <View style={styles.startResumeHeader}>
+            <Text style={styles.startResumeLabel}>Saved draft</Text>
+            <Badge label={resumeCue.badgeLabel} tone="secondary" />
+          </View>
+          <Text style={styles.startResumeBody}>{resumeCue.body}</Text>
+          <Text numberOfLines={2} style={styles.startResumePreview}>
+            {resumeCue.answerPreview}
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.startHabitPill}>
+          <Text style={styles.startHabitLabel}>{habitLabel}</Text>
+          <Text numberOfLines={1} style={styles.startHabitValue}>
+            {habitValue}
+          </Text>
+        </View>
+      )}
       {restartCue ? (
         <View style={styles.startRestartCue}>
           <Text style={styles.startRestartLabel}>{restartCue.label}</Text>
@@ -578,6 +605,42 @@ const styles = StyleSheet.create({
     fontFamily: fonts.rounded,
     fontSize: typography.small,
     fontWeight: '900',
+  },
+  startResumeStrip: {
+    backgroundColor: colors.white,
+    borderColor: colors.secondarySoft,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  startResumeHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  startResumeLabel: {
+    color: colors.successDark,
+    fontFamily: fonts.rounded,
+    fontSize: typography.micro,
+    fontWeight: '900',
+  },
+  startResumeBody: {
+    color: colors.ink,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '900',
+    lineHeight: typography.lineSmall,
+  },
+  startResumePreview: {
+    color: colors.text,
+    fontFamily: fonts.rounded,
+    fontSize: typography.small,
+    fontWeight: '800',
+    lineHeight: typography.lineSmall,
   },
   startRestartCue: {
     alignItems: 'flex-start',
